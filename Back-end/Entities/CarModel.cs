@@ -13,7 +13,10 @@ namespace Back_end.Entities
 
         public string? Discript { get; set; }
 
-      
+        public ParkingPrice ParkingPrice { get; set; }
+
+        [ForeignKey("ParkingPrice")]
+        public Guid ParkingPriceID { get; set; }
 
         public DateTime? LastModifyAt { get; set; }
 

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
+    
     public class Role
     {
         [Key]
@@ -11,6 +12,9 @@ namespace Back_end.Entities
 
         public Role Name { get; set; }
 
-        public User User { get; set; }
+        public DateTime? LastModifyAt { get; set; }
+
+       
+        public  ICollection<UserRole> UserRoles { get; set; }
     }
 }

@@ -69,9 +69,14 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ParkingPriceID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ID");
 
                     b.HasIndex("LastModifyByID");
+
+                    b.HasIndex("ParkingPriceID");
 
                     b.ToTable("CarModels");
                 });
@@ -376,17 +381,15 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("NameID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime?>("LastModifyAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid>("NameID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
                     b.HasIndex("NameID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Roles");
                 });
@@ -451,12 +454,17 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ParkingPriceID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
                     b.HasIndex("LastModifyByID");
+
+                    b.HasIndex("ParkingPriceID");
 
                     b.ToTable("TimeFrame");
                 });
@@ -503,17 +511,35 @@ namespace Backend.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Back_end.Entities.UserRole", b =>
+                {
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid>("RoleID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.HasKey("UserID", "RoleID");
+
+                    b.HasIndex("RoleID");
+
+                    b.ToTable("UserRoles");
+                });
+
             modelBuilder.Entity("Back_end.Entities.Car", b =>
                 {
                     b.HasOne("Back_end.Entities.CarModel", "CarModel")
                         .WithMany()
                         .HasForeignKey("CarModelID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany("Cars")
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("CarModel");
 
@@ -524,16 +550,26 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Back_end.Entities.ParkingPrice", "ParkingPrice")
+                        .WithMany()
+                        .HasForeignKey("ParkingPriceID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("LastModifyBy");
+
+                    b.Navigation("ParkingPrice");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Dashboard", b =>
                 {
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("LastModifyBy");
                 });
@@ -543,13 +579,13 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.User", "FeedbackBy")
                         .WithMany("Feedback")
                         .HasForeignKey("FeedbackByID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.Parking", "Parking")
                         .WithMany("Feedbacks")
                         .HasForeignKey("ParkingID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("FeedbackBy");
@@ -561,22 +597,24 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Back_end.Entities.Feedback", "Feedback")
                         .WithMany("Images")
-                        .HasForeignKey("FeedbackID");
+                        .HasForeignKey("FeedbackID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.Parking", "Parking")
                         .WithMany()
                         .HasForeignKey("ParkingID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.Slot", null)
                         .WithMany("Images")
-                        .HasForeignKey("SlotID");
+                        .HasForeignKey("SlotID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.User", "User")
                         .WithMany("Images")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Feedback");
@@ -591,13 +629,13 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.Parking", "Parking")
                         .WithOne("Location")
                         .HasForeignKey("Back_end.Entities.Location", "ParkingID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.User", "User")
                         .WithOne("Location")
                         .HasForeignKey("Back_end.Entities.Location", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Parking");
@@ -610,7 +648,7 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.User", "SubcribeBy")
                         .WithOne("MembershipPackage")
                         .HasForeignKey("Back_end.Entities.MembershipPackage", "UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("SubcribeBy");
@@ -621,17 +659,18 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.Dashboard", "Dashboard")
                         .WithMany()
                         .HasForeignKey("DashboardID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.TimeFrame", "TimeFrame")
                         .WithMany("Parkings")
                         .HasForeignKey("TimeFrameID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Dashboard");
@@ -646,23 +685,24 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany("ParkingDetails")
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.Slot", "Slot")
                         .WithMany("ParkingDetail")
                         .HasForeignKey("SlotID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.TimeFrame", "TimeFrame")
                         .WithMany()
                         .HasForeignKey("TimeFrameID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Car");
@@ -678,16 +718,18 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.Parking", null)
                         .WithMany("Bookings")
-                        .HasForeignKey("ParkingID");
+                        .HasForeignKey("ParkingID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.User", "Requestby")
                         .WithMany()
                         .HasForeignKey("RequestbyID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("LastModifyBy");
@@ -700,18 +742,10 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.Role", "Name")
                         .WithMany()
                         .HasForeignKey("NameID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Back_end.Entities.User", "User")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Name");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Slot", b =>
@@ -719,22 +753,24 @@ namespace Backend.Migrations
                     b.HasOne("Back_end.Entities.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Back_end.Entities.Parking", "Parking")
                         .WithMany("Slots")
                         .HasForeignKey("ParkingID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Back_end.Entities.ParkingPrice", "ParkingPrice")
                         .WithMany()
-                        .HasForeignKey("ParkingPriceID");
+                        .HasForeignKey("ParkingPriceID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Car");
 
@@ -749,16 +785,45 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
-                        .HasForeignKey("LastModifyByID");
+                        .HasForeignKey("LastModifyByID")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Back_end.Entities.ParkingPrice", "ParkingPrice")
+                        .WithMany()
+                        .HasForeignKey("ParkingPriceID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("LastModifyBy");
+
+                    b.Navigation("ParkingPrice");
                 });
 
             modelBuilder.Entity("Back_end.Entities.User", b =>
                 {
                     b.HasOne("Back_end.Entities.Parking", null)
                         .WithMany("Users")
-                        .HasForeignKey("ParkingID");
+                        .HasForeignKey("ParkingID")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("Back_end.Entities.UserRole", b =>
+                {
+                    b.HasOne("Back_end.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Back_end.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Feedback", b =>
@@ -778,6 +843,11 @@ namespace Backend.Migrations
                     b.Navigation("Slots");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Back_end.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Slot", b =>
@@ -808,7 +878,7 @@ namespace Backend.Migrations
 
                     b.Navigation("ParkingDetails");
 
-                    b.Navigation("Roles");
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

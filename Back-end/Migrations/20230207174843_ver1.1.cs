@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class ver11 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,18 +25,42 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NameID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LastModifyAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Roles_Roles_NameID",
+                        column: x => x.NameID,
+                        principalTable: "Roles",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CarModels",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discript = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ParkingPriceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LastModifyAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifyByID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CarModels", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_CarModels_ParkingPrices_ParkingPriceID",
+                        column: x => x.ParkingPriceID,
+                        principalTable: "ParkingPrices",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -56,8 +80,7 @@ namespace Backend.Migrations
                         name: "FK_Cars_CarModels_CarModelID",
                         column: x => x.CarModelID,
                         principalTable: "CarModels",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -165,8 +188,7 @@ namespace Backend.Migrations
                         name: "FK_ParkingDetail_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -189,8 +211,7 @@ namespace Backend.Migrations
                         name: "FK_Parkings_Dashboards_DashboardID",
                         column: x => x.DashboardID,
                         principalTable: "Dashboards",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -247,33 +268,7 @@ namespace Backend.Migrations
                         name: "FK_Requests_Users_RequestbyID",
                         column: x => x.RequestbyID,
                         principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NameID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Roles_Roles_NameID",
-                        column: x => x.NameID,
-                        principalTable: "Roles",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Roles_Users_UserID",
-                        column: x => x.UserID,
-                        principalTable: "Users",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -296,8 +291,7 @@ namespace Backend.Migrations
                         name: "FK_Slots_Cars_CarID",
                         column: x => x.CarID,
                         principalTable: "Cars",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Slots_ParkingPrices_ParkingPriceID",
                         column: x => x.ParkingPriceID,
@@ -307,8 +301,7 @@ namespace Backend.Migrations
                         name: "FK_Slots_Parkings_ParkingID",
                         column: x => x.ParkingID,
                         principalTable: "Parkings",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ID");
                     table.ForeignKey(
                         name: "FK_Slots_Users_LastModifyByID",
                         column: x => x.LastModifyByID,
@@ -324,6 +317,7 @@ namespace Backend.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ParkingPriceID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LastModifyAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifyByID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -331,8 +325,35 @@ namespace Backend.Migrations
                 {
                     table.PrimaryKey("PK_TimeFrame", x => x.ID);
                     table.ForeignKey(
+                        name: "FK_TimeFrame_ParkingPrices_ParkingPriceID",
+                        column: x => x.ParkingPriceID,
+                        principalTable: "ParkingPrices",
+                        principalColumn: "ID");
+                    table.ForeignKey(
                         name: "FK_TimeFrame_Users_LastModifyByID",
                         column: x => x.LastModifyByID,
+                        principalTable: "Users",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserID, x.RoleID });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleID",
+                        column: x => x.RoleID,
+                        principalTable: "Roles",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserID",
+                        column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "ID");
                 });
@@ -341,6 +362,11 @@ namespace Backend.Migrations
                 name: "IX_CarModels_LastModifyByID",
                 table: "CarModels",
                 column: "LastModifyByID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarModels_ParkingPriceID",
+                table: "CarModels",
+                column: "ParkingPriceID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cars_CarModelID",
@@ -461,11 +487,6 @@ namespace Backend.Migrations
                 column: "NameID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_UserID",
-                table: "Roles",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Slots_CarID",
                 table: "Slots",
                 column: "CarID");
@@ -489,6 +510,16 @@ namespace Backend.Migrations
                 name: "IX_TimeFrame_LastModifyByID",
                 table: "TimeFrame",
                 column: "LastModifyByID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TimeFrame_ParkingPriceID",
+                table: "TimeFrame",
+                column: "ParkingPriceID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleID",
+                table: "UserRoles",
+                column: "RoleID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ParkingID",
@@ -521,24 +552,21 @@ namespace Backend.Migrations
                 table: "Feedbacks",
                 column: "ParkingID",
                 principalTable: "Parkings",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Feedbacks_Users_FeedbackByID",
                 table: "Feedbacks",
                 column: "FeedbackByID",
                 principalTable: "Users",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Images_Parkings_ParkingID",
                 table: "Images",
                 column: "ParkingID",
                 principalTable: "Parkings",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Images_Slots_SlotID",
@@ -552,48 +580,42 @@ namespace Backend.Migrations
                 table: "Images",
                 column: "UserID",
                 principalTable: "Users",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Locations_Parkings_ParkingID",
                 table: "Locations",
                 column: "ParkingID",
                 principalTable: "Parkings",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Locations_Users_UserID",
                 table: "Locations",
                 column: "UserID",
                 principalTable: "Users",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MembershipPackages_Users_UserID",
                 table: "MembershipPackages",
                 column: "UserID",
                 principalTable: "Users",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ParkingDetail_Slots_SlotID",
                 table: "ParkingDetail",
                 column: "SlotID",
                 principalTable: "Slots",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ParkingDetail_TimeFrame_TimeFrameID",
                 table: "ParkingDetail",
                 column: "TimeFrameID",
                 principalTable: "TimeFrame",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ParkingDetail_Users_LastModifyByID",
@@ -607,8 +629,7 @@ namespace Backend.Migrations
                 table: "Parkings",
                 column: "TimeFrameID",
                 principalTable: "TimeFrame",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "ID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Parkings_Users_LastModifyByID",
@@ -621,6 +642,10 @@ namespace Backend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_TimeFrame_ParkingPrices_ParkingPriceID",
+                table: "TimeFrame");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Dashboards_Users_LastModifyByID",
                 table: "Dashboards");
@@ -649,7 +674,7 @@ namespace Backend.Migrations
                 name: "Requests");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Feedbacks");
@@ -658,13 +683,16 @@ namespace Backend.Migrations
                 name: "Slots");
 
             migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
                 name: "Cars");
 
             migrationBuilder.DropTable(
-                name: "ParkingPrices");
+                name: "CarModels");
 
             migrationBuilder.DropTable(
-                name: "CarModels");
+                name: "ParkingPrices");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -7,11 +7,14 @@ namespace Back_end.Helper
     {
         public ParkingDbContext(DbContextOptions options) : base(options)
         {
+           
         }
 
         protected ParkingDbContext()
         {
         }
+
+        
 
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<CarModel> CarModels { get; set; }
@@ -28,12 +31,37 @@ namespace Back_end.Helper
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
+        public virtual DbSet<UserRole> UserRoles { get; set; }
+
         public virtual DbSet<MembershipPackage> MembershipPackages { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
 
         public virtual DbSet<ParkingPrice> ParkingPrices { get; set; }
 
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
 
+            if (modelBuilder == null)
+                throw new ArgumentNullException("modelBuilder");
+
+            
+
+            modelBuilder.Entity<UserRole>()
+             .HasKey(m => new { m.UserID, m.RoleID });
+
+           
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var fk in entityType.GetForeignKeys())
+                {
+                    fk.DeleteBehavior = DeleteBehavior.NoAction;
+                }
+            }
+
+            base.OnModelCreating(modelBuilder);
+
+        }
     }
 }

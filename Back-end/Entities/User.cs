@@ -27,7 +27,8 @@ namespace Back_end.Entities
 
         public ICollection<Image> Images { get; set; }
 
-        public ICollection<Role> Roles { get; set; }
+        
+        public ICollection<UserRole> UserRoles { get; set; }
 
         public ICollection<Car> Cars { get; set; }
 
