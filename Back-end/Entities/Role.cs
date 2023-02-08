@@ -10,7 +10,7 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
-        public Role Name { get; set; }
+        public string RoleName { get; set; }
 
         public DateTime? LastModifyAt { get; set; }
 
