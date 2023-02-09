@@ -15,14 +15,12 @@ namespace Back_end.Entities
         public ICollection<Slot> Slots { get; set; }
 
         public Status Status { get; set; }
-
-        public Location Location { get; set; }
         
         public string Discription { get; set; }
 
         public ICollection<Request>  Bookings { get; set; }
 
-        public TimeFrame TimeFrame { get; set; }
+        public ICollection<TimeFrame> TimeFrames { get; set; }
 
         public ICollection<User> Users  { get; set; }
       
@@ -35,6 +33,10 @@ namespace Back_end.Entities
         public User? LastModifyBy { get; set; }
 
         public ICollection<Feedback> Feedbacks { get; set; }
+
+        public double LON { get; set; }
+
+        public double LAT { get; set; }
 
     }
 }

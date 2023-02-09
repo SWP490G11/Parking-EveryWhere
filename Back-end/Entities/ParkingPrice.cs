@@ -13,6 +13,9 @@ namespace Back_end.Entities
 
         public double Price { get; set; }
 
-        
+        public DateTime LastModifyAt { get; set; }
+
+        public User? LastModifyBy { get; set; }
+
     }
 }

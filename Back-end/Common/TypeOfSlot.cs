@@ -1,7 +1,7 @@
 ﻿namespace Back_end.Common
 {
-    public class TypeOfSlot
+    public enum TypeOfSlot
     {
-
+        ROOFED,NONROOF
     }
 }

@@ -4,6 +4,7 @@ using Back_end.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    partial class ParkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230208135116_ver1.2.1")]
+    partial class ver121
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,6 +175,39 @@ namespace Backend.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("Back_end.Entities.Location", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("LAT")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LNT")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("ParkingID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ParkingID")
+                        .IsUnique();
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("Locations");
+                });
+
             modelBuilder.Entity("Back_end.Entities.MembershipPackage", b =>
                 {
                     b.Property<Guid>("ID")
@@ -198,7 +234,13 @@ namespace Backend.Migrations
                     b.Property<DateTime>("SubcribeAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
 
                     b.ToTable("MembershipPackages");
                 });
@@ -219,12 +261,6 @@ namespace Backend.Migrations
                     b.Property<bool>("IsLegal")
                         .HasColumnType("bit");
 
-                    b.Property<double>("LAT")
-                        .HasColumnType("float");
-
-                    b.Property<double>("LON")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("LastModifyAt")
                         .HasColumnType("datetime2");
 
@@ -234,11 +270,16 @@ namespace Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("TimeFrameID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ID");
 
                     b.HasIndex("DashboardID");
 
                     b.HasIndex("LastModifyByID");
+
+                    b.HasIndex("TimeFrameID");
 
                     b.ToTable("Parkings");
                 });
@@ -286,12 +327,6 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("LastModifyAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("LastModifyByID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -300,8 +335,6 @@ namespace Backend.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("LastModifyByID");
 
                     b.ToTable("ParkingPrices");
                 });
@@ -314,6 +347,9 @@ namespace Backend.Migrations
 
                     b.Property<DateTime>("LastModifyAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LastModifyByID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -332,6 +368,8 @@ namespace Backend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("LastModifyByID");
 
                     b.HasIndex("ParkingID");
 
@@ -384,9 +422,6 @@ namespace Backend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TypeOfSlot")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -456,15 +491,9 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastModifyAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("MembershipPackageID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ParkingID")
                         .HasColumnType("uniqueidentifier");
@@ -473,37 +502,32 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("MembershipPackageID");
-
                     b.HasIndex("ParkingID");
-
-                    b.HasIndex("RoleID");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ParkingTimeFrame", b =>
+            modelBuilder.Entity("Back_end.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("ParkingsID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
 
-                    b.Property<Guid>("TimeFramesID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("RoleID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
 
-                    b.HasKey("ParkingsID", "TimeFramesID");
+                    b.HasKey("UserID", "RoleID");
 
-                    b.HasIndex("TimeFramesID");
+                    b.HasIndex("RoleID");
 
-                    b.ToTable("ParkingTimeFrame");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Car", b =>
@@ -602,6 +626,36 @@ namespace Backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Back_end.Entities.Location", b =>
+                {
+                    b.HasOne("Back_end.Entities.Parking", "Parking")
+                        .WithOne("Location")
+                        .HasForeignKey("Back_end.Entities.Location", "ParkingID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Back_end.Entities.User", "User")
+                        .WithOne("Location")
+                        .HasForeignKey("Back_end.Entities.Location", "UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Parking");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Back_end.Entities.MembershipPackage", b =>
+                {
+                    b.HasOne("Back_end.Entities.User", "SubcribeBy")
+                        .WithOne("MembershipPackage")
+                        .HasForeignKey("Back_end.Entities.MembershipPackage", "UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("SubcribeBy");
+                });
+
             modelBuilder.Entity("Back_end.Entities.Parking", b =>
                 {
                     b.HasOne("Back_end.Entities.Dashboard", "Dashboard")
@@ -615,9 +669,17 @@ namespace Backend.Migrations
                         .HasForeignKey("LastModifyByID")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Back_end.Entities.TimeFrame", "TimeFrame")
+                        .WithMany("Parkings")
+                        .HasForeignKey("TimeFrameID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Dashboard");
 
                     b.Navigation("LastModifyBy");
+
+                    b.Navigation("TimeFrame");
                 });
 
             modelBuilder.Entity("Back_end.Entities.ParkingDetail", b =>
@@ -654,18 +716,13 @@ namespace Backend.Migrations
                     b.Navigation("TimeFrame");
                 });
 
-            modelBuilder.Entity("Back_end.Entities.ParkingPrice", b =>
+            modelBuilder.Entity("Back_end.Entities.Request", b =>
                 {
                     b.HasOne("Back_end.Entities.User", "LastModifyBy")
                         .WithMany()
                         .HasForeignKey("LastModifyByID")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.Navigation("LastModifyBy");
-                });
-
-            modelBuilder.Entity("Back_end.Entities.Request", b =>
-                {
                     b.HasOne("Back_end.Entities.Parking", null)
                         .WithMany("Bookings")
                         .HasForeignKey("ParkingID")
@@ -676,6 +733,8 @@ namespace Backend.Migrations
                         .HasForeignKey("RequestbyID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("LastModifyBy");
 
                     b.Navigation("Requestby");
                 });
@@ -733,50 +792,34 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Back_end.Entities.User", b =>
                 {
-                    b.HasOne("Back_end.Entities.MembershipPackage", "MembershipPackage")
-                        .WithMany("SubcribeBy")
-                        .HasForeignKey("MembershipPackageID")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("Back_end.Entities.Parking", null)
                         .WithMany("Users")
                         .HasForeignKey("ParkingID")
                         .OnDelete(DeleteBehavior.NoAction);
+                });
 
+            modelBuilder.Entity("Back_end.Entities.UserRole", b =>
+                {
                     b.HasOne("Back_end.Entities.Role", "Role")
-                        .WithMany()
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("MembershipPackage");
+                    b.HasOne("Back_end.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Role");
-                });
 
-            modelBuilder.Entity("ParkingTimeFrame", b =>
-                {
-                    b.HasOne("Back_end.Entities.Parking", null)
-                        .WithMany()
-                        .HasForeignKey("ParkingsID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Back_end.Entities.TimeFrame", null)
-                        .WithMany()
-                        .HasForeignKey("TimeFramesID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Feedback", b =>
                 {
                     b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("Back_end.Entities.MembershipPackage", b =>
-                {
-                    b.Navigation("SubcribeBy");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Parking", b =>
@@ -785,9 +828,17 @@ namespace Backend.Migrations
 
                     b.Navigation("Feedbacks");
 
+                    b.Navigation("Location")
+                        .IsRequired();
+
                     b.Navigation("Slots");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Back_end.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Slot", b =>
@@ -795,6 +846,11 @@ namespace Backend.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("ParkingDetail");
+                });
+
+            modelBuilder.Entity("Back_end.Entities.TimeFrame", b =>
+                {
+                    b.Navigation("Parkings");
                 });
 
             modelBuilder.Entity("Back_end.Entities.User", b =>
@@ -805,7 +861,15 @@ namespace Backend.Migrations
 
                     b.Navigation("Images");
 
+                    b.Navigation("Location")
+                        .IsRequired();
+
+                    b.Navigation("MembershipPackage")
+                        .IsRequired();
+
                     b.Navigation("ParkingDetails");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

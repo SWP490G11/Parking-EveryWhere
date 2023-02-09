@@ -14,7 +14,7 @@ namespace Back_end.Entities
 
         public DateTime? LastModifyAt { get; set; }
 
-       
-        public  ICollection<UserRole> UserRoles { get; set; }
+
+        public ICollection<User> Users;
     }
 }

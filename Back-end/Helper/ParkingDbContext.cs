@@ -22,7 +22,6 @@ namespace Back_end.Helper
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<Dashboard> Dashboards { get; set; }
 
-        public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Image> Images { get; set; }
 
         public virtual DbSet<Parking> Parkings { get; set; }
@@ -30,8 +29,6 @@ namespace Back_end.Helper
 
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
-        public virtual DbSet<UserRole> UserRoles { get; set; }
 
         public virtual DbSet<MembershipPackage> MembershipPackages { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
@@ -44,11 +41,6 @@ namespace Back_end.Helper
 
             if (modelBuilder == null)
                 throw new ArgumentNullException("modelBuilder");
-
-            
-
-            modelBuilder.Entity<UserRole>()
-             .HasKey(m => new { m.UserID, m.RoleID });
 
            
 

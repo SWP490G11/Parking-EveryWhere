@@ -27,17 +27,18 @@ namespace Back_end.Entities
 
         public ICollection<Image> Images { get; set; }
 
-        
-        public ICollection<UserRole> UserRoles { get; set; }
-
         public ICollection<Car> Cars { get; set; }
 
         public ICollection<ParkingDetail> ParkingDetails  { get; set; }
 
-        public Location Location { get; set; }
-
         public ICollection<Feedback> Feedback { get; set; }
 
-        public MembershipPackage MembershipPackage { get; set; }
+        public MembershipPackage? MembershipPackage { get; set; } = null;
+
+        public Role Role { get; set; }
+
+        public DateTime LastModifyAt { get; set; }
+
+        
     }
 }

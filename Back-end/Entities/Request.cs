@@ -20,7 +20,6 @@ namespace Back_end.Entities
         public string Note { get; set; }
 
         public DateTime LastModifyAt { get; set; }
-
-        public User? LastModifyBy { get; set; }
+        
     }
 }

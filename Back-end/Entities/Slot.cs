@@ -15,6 +15,8 @@ namespace Back_end.Entities
 
         public Status Status { get; set; }
 
+        public TypeOfSlot TypeOfSlot { get; set; }
+
         public string Discription { get; set; }
 
         public ICollection<Image>? Images { get; set; }
