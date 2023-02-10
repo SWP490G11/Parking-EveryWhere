@@ -33,8 +33,6 @@ namespace Back_end.Helper
         public virtual DbSet<MembershipPackage> MembershipPackages { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
 
-        public virtual DbSet<ParkingPrice> ParkingPrices { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

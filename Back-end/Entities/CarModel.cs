@@ -5,6 +5,11 @@ namespace Back_end.Entities
 {
     public class CarModel
     {
+
+        public CarModel()
+        {
+
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
@@ -13,10 +18,8 @@ namespace Back_end.Entities
 
         public string? Discript { get; set; }
 
-        public ParkingPrice ParkingPrice { get; set; }
+        public double Price { get; set; }
 
-        [ForeignKey("ParkingPrice")]
-        public Guid ParkingPriceID { get; set; }
 
         public DateTime? LastModifyAt { get; set; }
 

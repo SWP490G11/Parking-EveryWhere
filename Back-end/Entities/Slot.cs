@@ -21,7 +21,7 @@ namespace Back_end.Entities
 
         public ICollection<Image>? Images { get; set; }
 
-        public ParkingPrice? ParkingPrice { get; set; }
+        public double Price { get; set; }
 
         public Parking Parking { get; set; }
 

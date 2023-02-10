@@ -18,7 +18,7 @@ namespace Back_end.Entities
         
         public string Discription { get; set; }
 
-        public ICollection<Request>  Bookings { get; set; }
+        public ICollection<Request>  Requests { get; set; }
 
         public ICollection<TimeFrame> TimeFrames { get; set; }
 
@@ -33,6 +33,8 @@ namespace Back_end.Entities
         public User? LastModifyBy { get; set; }
 
         public ICollection<Feedback> Feedbacks { get; set; }
+
+       
 
         public double LON { get; set; }
 

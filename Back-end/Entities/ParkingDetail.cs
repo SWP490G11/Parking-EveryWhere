@@ -20,5 +20,9 @@ namespace Back_end.Entities
         public DateTime LastModifyAt { get; set; }
 
         public User? LastModifyBy { get; set; }
+
+        public double TotalPrice { 
+         get { return TimeFrame.Price + Car.CarModel.Price + Slot.Price; }
+        }
     }
 }

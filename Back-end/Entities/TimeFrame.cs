@@ -9,7 +9,7 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
 
-        public ICollection<Parking> Parkings { get; set; }
+        public Parking Parkings { get; set; }
 
         public string Name { get; set; }
 
@@ -17,9 +17,7 @@ namespace Back_end.Entities
 
         public DateTime End { get; set; }
 
-        public ParkingPrice ParkingPrice { get; set; }
-        [ForeignKey("ParkingPrice")]
-        public Guid ParkingPriceID { get; set; }
+        public double Price { get; set; }
 
         public DateTime LastModifyAt { get; set; }
 

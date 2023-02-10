@@ -20,6 +20,8 @@ namespace Back_end.Entities
         public string Note { get; set; }
 
         public DateTime LastModifyAt { get; set; }
-        
+
+        public Parking Parking { get; set; }
+
     }
 }
