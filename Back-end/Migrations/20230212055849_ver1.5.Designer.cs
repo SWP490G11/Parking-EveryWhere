@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    [Migration("20230211142552_ver1.4.3.1")]
-    partial class ver1431
+    [Migration("20230212055849_ver1.5")]
+    partial class ver15
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -413,6 +413,10 @@ namespace Backend.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -460,42 +464,17 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("ab6de029-f760-4099-8296-37fd7b3c2b6b"),
+                            ID = new Guid("c447b3fd-7cdc-480c-94e5-ac656a1b9bc5"),
                             DateOfBirth = new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "phucnvhd772000@gmail.com",
                             FirstName = "Phuc",
                             Gender = 0,
-                            HashPasword = "$2b$10$SN0Axy2LTcHVHmWrl6BRn.J0Plj092pWemt..ItvMtjua8XnMGibi",
-                            LastModifyAt = new DateTime(2023, 2, 11, 21, 25, 52, 9, DateTimeKind.Local).AddTicks(8503),
-                            LastName = "Nguyen Van",
+                            HashPasword = "$2b$10$Y71nx2/M89fnBbVprIXUx./KKe5wkZk79H5kKICDEFuJJNRojHiPO",
+                            LastModifyAt = new DateTime(2023, 2, 12, 12, 58, 49, 617, DateTimeKind.Local).AddTicks(3951),
+                            LastName = " Nguyen Van",
                             PhoneNumber = "0966416708",
                             Role = 0,
                             UserName = "phucnv"
-                        },
-                        new
-                        {
-                            ID = new Guid("4ed83d2b-8482-4a29-b1ec-dfa568e63bde"),
-                            DateOfBirth = new DateTime(2000, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Duy",
-                            Gender = 0,
-                            HashPasword = "$2b$10$w4S73i0JCV157iepOOrPKeS31E0jFPuTeO56ltq8GFO0G2c.MGCDm",
-                            LastModifyAt = new DateTime(2023, 2, 11, 21, 25, 52, 84, DateTimeKind.Local).AddTicks(1893),
-                            LastName = "Phung Nam",
-                            PhoneNumber = "0945454587",
-                            Role = 0,
-                            UserName = "duypn"
-                        },
-                        new
-                        {
-                            ID = new Guid("e7f8fe74-ae77-48a2-8b31-a39d5d642279"),
-                            DateOfBirth = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "Phong",
-                            Gender = 0,
-                            HashPasword = "$2b$10$zbi2FWhtzgo4YyuTtulwBeQyt/Dw.ikDuw2GdlOkmTvuRmltSUlii",
-                            LastModifyAt = new DateTime(2023, 2, 11, 21, 25, 52, 153, DateTimeKind.Local).AddTicks(437),
-                            LastName = "Dao Tuan",
-                            PhoneNumber = "0832323201",
-                            Role = 0,
-                            UserName = "phongdt"
                         });
                 });
 

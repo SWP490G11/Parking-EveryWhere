@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
-    public class Feedback
+    public class Feedback  
     {
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
+        public Guid ID { get; set; } = Guid.NewGuid();
 
         public string Content { get; set; }
 

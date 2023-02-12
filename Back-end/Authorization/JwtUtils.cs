@@ -33,7 +33,7 @@ namespace Back_end.Authorization
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.ID.ToString()) }),
                 Expires = DateTime.UtcNow.AddHours(3),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.Aes128CbcHmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
@@ -41,9 +41,40 @@ namespace Back_end.Authorization
 
         public string ValidateJwtToken(string token)
         {
-            throw new NotImplementedException();
+            if (token == null)
+                return "";
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = jwtToken.Claims.First(x => x.Type == "id").Value.ToString();
+                var exp = Convert.ToDouble(jwtToken.Claims.First(e => e.Type == "exp").Value);
+                DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+                dtDateTime = dtDateTime.AddSeconds(exp).ToLocalTime();
+
+                // return user id from JWT token if validation successful
+                return userId + " " + dtDateTime;
+            }
+            catch
+            {
+                // return null if validation fails
+                return "";
+            }
         }
     }
+    
 
 
 }

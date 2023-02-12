@@ -41,7 +41,8 @@ namespace Backend.Migrations
                     b.Property<Guid?>("LastModifyByID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("CarModelID");
 
@@ -72,7 +73,8 @@ namespace Backend.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("LastModifyByID");
 
@@ -97,7 +99,8 @@ namespace Backend.Migrations
                     b.Property<double>("Revenue")
                         .HasColumnType("float");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("LastModifyByID");
 
@@ -157,7 +160,8 @@ namespace Backend.Migrations
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("FeedbackID");
 
@@ -196,7 +200,8 @@ namespace Backend.Migrations
                     b.Property<DateTime>("SubcribeAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.ToTable("MembershipPackages");
                 });
@@ -232,7 +237,8 @@ namespace Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("DashboardID");
 
@@ -265,7 +271,8 @@ namespace Backend.Migrations
                     b.Property<Guid>("TimeFrameID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("CarID");
 
@@ -303,31 +310,14 @@ namespace Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("ParkingID");
 
                     b.HasIndex("RequestbyID");
 
                     b.ToTable("Requests");
-                });
-
-            modelBuilder.Entity("Back_end.Entities.Role", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("LastModifyAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Slot", b =>
@@ -361,7 +351,8 @@ namespace Backend.Migrations
                     b.Property<int>("TypeOfSlot")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("CarID");
 
@@ -400,7 +391,8 @@ namespace Backend.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("LastModifyByID");
 
@@ -417,6 +409,10 @@ namespace Backend.Migrations
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -446,22 +442,37 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasIndex("MembershipPackageID");
 
                     b.HasIndex("ParkingID");
 
-                    b.HasIndex("RoleID");
-
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("c447b3fd-7cdc-480c-94e5-ac656a1b9bc5"),
+                            DateOfBirth = new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "phucnvhd772000@gmail.com",
+                            FirstName = "Phuc",
+                            Gender = 0,
+                            HashPasword = "$2b$10$Y71nx2/M89fnBbVprIXUx./KKe5wkZk79H5kKICDEFuJJNRojHiPO",
+                            LastModifyAt = new DateTime(2023, 2, 12, 12, 58, 49, 617, DateTimeKind.Local).AddTicks(3951),
+                            LastName = " Nguyen Van",
+                            PhoneNumber = "0966416708",
+                            Role = 0,
+                            UserName = "phucnv"
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Entities.Car", b =>
@@ -679,15 +690,7 @@ namespace Backend.Migrations
                         .HasForeignKey("ParkingID")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Back_end.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("MembershipPackage");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Feedback", b =>

@@ -3,8 +3,8 @@
 namespace Back_end.Common
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum Gender
+    public enum Role
     {
-        Male,Female,Other
+        Admin,Customer,ParkingOwner
     }
 }

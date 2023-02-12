@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
-    public class Image
+    public class Image 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
+        public Guid ID { get; set; } = Guid.NewGuid();
 
         public string URL { get; set; }
 

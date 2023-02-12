@@ -8,8 +8,7 @@ namespace Back_end.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         [Required]
         public Car? Car { get; set; }
 

@@ -3,17 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
-    public class CarModel
+    public class CarModel 
     {
 
-        public CarModel()
-        {
 
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         public string  Model { get; set; }
 
         public string? Discript { get; set; }

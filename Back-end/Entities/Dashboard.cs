@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
-    public class Dashboard
+    public class Dashboard 
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         public double Revenue { get; set; }
 
         public  long NumberOfMember { get; set; }

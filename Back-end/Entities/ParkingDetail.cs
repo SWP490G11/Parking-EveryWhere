@@ -3,12 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Back_end.Entities
 {
-    public class ParkingDetail
-    {
+    public class ParkingDetail { 
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         public Car Car { get; set; }
 
         public Slot Slot { get; set; }

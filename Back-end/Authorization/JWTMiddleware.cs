@@ -1,4 +1,7 @@
-﻿using Back_end.Helper;
+﻿using Back_end.Entities;
+using Back_end.Helper;
+using Back_end.Models.User;
+using Back_end.Respository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -18,10 +21,35 @@ namespace Back_end.Authorization
             _appSetting = appSetting.Value;
         }
 
-        public Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext context,IUserRespository userRespository,IJwtUtils jwtUtils)
         {
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            if (token != null)
+            {
+                
+                var userIdExp = jwtUtils.ValidateJwtToken(token);
+                if (userIdExp != null)
+                {
+                    // attach user to context on successful jwt validation
+                    var arr = userIdExp.Split(" ");
+                    User user = await userRespository.GetUser(Convert.ToString(arr[0]));
+                    DateTime exp = Convert.ToDateTime(arr[1]);
 
-            return _next(httpContext);
+                   
+                    //if (user != null && exp != null)
+                    if (user != null)
+                    {
+                        context.Items["UserTokenInfo"] = new MiddlewareInfo
+                        {
+                            User = user,
+                            Exp = exp,
+                            Token = token
+                        };
+                    }
+
+                }
+            }
+            await _next(context);
         }
     }
 

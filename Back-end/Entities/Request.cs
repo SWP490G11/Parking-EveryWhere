@@ -4,11 +4,11 @@ using Back_end.Common;
 
 namespace Back_end.Entities
 {
-    public class Request
+    public class Request 
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
+        public Guid ID { get; set; } = Guid.NewGuid();
 
         [Required]
         public User Requestby { get; set; }

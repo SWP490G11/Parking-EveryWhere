@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Back_end.Entities
 {
-    public class TimeFrame
+    public class TimeFrame 
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         public Parking Parkings { get; set; }
 
         public string Name { get; set; }

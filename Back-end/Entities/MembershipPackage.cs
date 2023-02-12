@@ -5,10 +5,10 @@ namespace Back_end.Entities
 {
     public class MembershipPackage
     {
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
 
         public string Discription { get; set; }
