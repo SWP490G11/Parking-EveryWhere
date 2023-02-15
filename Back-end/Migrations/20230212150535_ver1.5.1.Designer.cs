@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    [Migration("20230212055849_ver1.5")]
-    partial class ver15
+    [Migration("20230212150535_ver1.5.1")]
+    partial class ver151
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -464,16 +464,16 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("c447b3fd-7cdc-480c-94e5-ac656a1b9bc5"),
+                            ID = new Guid("09910b99-0370-4929-a377-20d52813d2a8"),
                             DateOfBirth = new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "phucnvhd772000@gmail.com",
                             FirstName = "Phuc",
                             Gender = 0,
-                            HashPasword = "$2b$10$Y71nx2/M89fnBbVprIXUx./KKe5wkZk79H5kKICDEFuJJNRojHiPO",
-                            LastModifyAt = new DateTime(2023, 2, 12, 12, 58, 49, 617, DateTimeKind.Local).AddTicks(3951),
+                            HashPasword = "$2b$10$fHDE1P8C49b4wrh5RRJHUOHAAV/3ev0ikrQNQEDCLJxctQvCrYBW2",
+                            LastModifyAt = new DateTime(2023, 2, 12, 22, 5, 35, 194, DateTimeKind.Local).AddTicks(1611),
                             LastName = " Nguyen Van",
                             PhoneNumber = "0966416708",
-                            Role = 0,
+                            Role = -772000,
                             UserName = "phucnv"
                         });
                 });

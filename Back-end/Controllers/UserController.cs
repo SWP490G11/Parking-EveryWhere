@@ -16,14 +16,12 @@ namespace Back_end.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRespository _userRespository;
-        private readonly ParkingDbContext _dbContext;
         private readonly IJwtUtils _jwtUtils;
-       public UserController(IUserRespository userRespository, ParkingDbContext dbContext
+       public UserController(IUserRespository userRespository
  , IJwtUtils jwtUtils
             )
         {
             _userRespository = userRespository;
-            _dbContext = dbContext;
             _jwtUtils = jwtUtils;
         }
 
@@ -49,17 +47,26 @@ namespace Back_end.Controllers
             return Ok(users);
         }
 
-        [HttpGet("[action]")]
-     
-        public async Task<IActionResult> Test()
+       
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(UserModel userModel)
         {
-            HttpContext context = HttpContext;
-           
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var encodetoken = _jwtUtils.ValidateJwtToken(token);
-           /* var userid = encodetoken.Split(" ")[1];
-            var user = await _userRespository.GetUser(userid);*/
-            return Ok(encodetoken.Split(" ")[1]);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed") ;
+            await _userRespository.Register(userModel);
+            return Ok("Register Success");
+        }
+
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Update(string id,UserModel userModel)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+           await _userRespository.Update(id,userModel);
+            return Ok("Register Success");
         }
 
     }

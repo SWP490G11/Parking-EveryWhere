@@ -27,6 +27,8 @@ service.AddDbContext<ParkingDbContext>(
 );
 
 service.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
 

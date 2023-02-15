@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class ver15 : Migration
+    public partial class ver151 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -287,7 +287,7 @@ namespace Backend.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "ID", "DateOfBirth", "Email", "FirstName", "Gender", "HashPasword", "LastModifyAt", "LastName", "MembershipPackageID", "ParkingID", "PhoneNumber", "Role", "UserName" },
-                values: new object[] { new Guid("c447b3fd-7cdc-480c-94e5-ac656a1b9bc5"), new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "phucnvhd772000@gmail.com", "Phuc", 0, "$2b$10$Y71nx2/M89fnBbVprIXUx./KKe5wkZk79H5kKICDEFuJJNRojHiPO", new DateTime(2023, 2, 12, 12, 58, 49, 617, DateTimeKind.Local).AddTicks(3951), " Nguyen Van", null, null, "0966416708", 0, "phucnv" });
+                values: new object[] { new Guid("09910b99-0370-4929-a377-20d52813d2a8"), new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "phucnvhd772000@gmail.com", "Phuc", 0, "$2b$10$fHDE1P8C49b4wrh5RRJHUOHAAV/3ev0ikrQNQEDCLJxctQvCrYBW2", new DateTime(2023, 2, 12, 22, 5, 35, 194, DateTimeKind.Local).AddTicks(1611), " Nguyen Van", null, null, "0966416708", -772000, "phucnv" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarModels_LastModifyByID",
