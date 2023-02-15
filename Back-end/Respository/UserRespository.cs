@@ -28,9 +28,11 @@ namespace Back_end.Respository
 
         public Task Update(string id, UserModel userModel);
 
+        public Task DisableOrActiveUser(string id);
 
 
-        public Task ChangePassword(ChangePasswordModel model);
+
+        public Task ChangePassword(string id,ChangePasswordModel model);
 
         
 
@@ -62,7 +64,7 @@ namespace Back_end.Respository
             if (model.UserName == null) throw new AppException("Username is required");
 
             var user = await _dbContext.Users.FirstOrDefaultAsync(u=>u.UserName.Trim().Equals(model.UserName.Trim()));
-            if (user == null || !BCryptNet.Verify(model.Password,user.HashPasword))
+            if (user == null || !BCryptNet.Verify(model.Password,user.HashPassword))
                 throw new AppException("Username or password is incorrect");
             string token = _jwtUtils.GenerateToken(user);
 
@@ -71,9 +73,41 @@ namespace Back_end.Respository
 
         }
 
-        public Task ChangePassword(ChangePasswordModel model)
+        public async Task ChangePassword(string userid, ChangePasswordModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (String.IsNullOrEmpty(userid) || String.IsNullOrEmpty(model.NewPassword) || String.IsNullOrEmpty(model.OldPassword)) throw new ArgumentNullException();
+                var currentUser = await _dbContext.Users.FindAsync(userid);
+                if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
+                if(!BCryptNet.Verify(model.OldPassword,currentUser.HashPassword)) throw new AppException("Your password is incorrect");
+
+                currentUser.HashPassword = BCryptNet.HashPassword(model.NewPassword);
+                currentUser.LastModifyAt = DateTime.Now;
+                _dbContext.Users.Update(currentUser);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Some Erorr orcor");
+            }
+           
+        }
+
+        public async Task DisableOrActiveUser(string id)
+        {
+            try
+            {
+                var currentUser = await _dbContext.Users.FindAsync(id);
+                currentUser.IsDisable = !currentUser.IsDisable;
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Some Erorr orcor");
+            }
         }
 
         public async Task<User> GetUser(string guidString)
@@ -100,7 +134,7 @@ namespace Back_end.Respository
                 var user = new User()
                 {
                     UserName = userModel.UserName,
-                    HashPasword = BCryptNet.HashPassword(userModel.Password),
+                    HashPassword = BCryptNet.HashPassword(userModel.Password),
                     Gender = userModel.Gender,
                     FirstName = userModel.FirstName,
                     LastName = userModel.LastName,
@@ -139,24 +173,33 @@ namespace Back_end.Respository
 
         public async Task Update(string id,UserModel userModel)
         {
-            var updateUser = await GetUser(id);
+            try
+            {
+                var updateUser = await GetUser(id);
 
-            updateUser.UserName = userModel.UserName;
-            updateUser.HashPasword = BCryptNet.HashPassword(userModel.Password);
-            updateUser.Gender = userModel.Gender;
-            updateUser.FirstName = userModel.FirstName;
-            updateUser.LastName = userModel.LastName;
-            updateUser.LastModifyAt = DateTime.Now;
-            updateUser.PhoneNumber = userModel.PhoneNumber;
-            updateUser.DateOfBirth = userModel.DateOfBirth;
-            updateUser.Email = userModel.Email;
-            updateUser.Role = userModel.Role;
+                updateUser.UserName = userModel.UserName;
+                updateUser.HashPassword = BCryptNet.HashPassword(userModel.Password);
+                updateUser.Gender = userModel.Gender;
+                updateUser.FirstName = userModel.FirstName;
+                updateUser.LastName = userModel.LastName;
+                updateUser.LastModifyAt = DateTime.Now;
+                updateUser.PhoneNumber = userModel.PhoneNumber;
+                updateUser.DateOfBirth = userModel.DateOfBirth;
+                updateUser.Email = userModel.Email;
+                updateUser.Role = userModel.Role;
 
 
-          
 
-             _dbContext.Users.Update(updateUser);
-            await _dbContext.SaveChangesAsync();
+
+                _dbContext.Users.Update(updateUser);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "An error occurred");
+            }
+           
         }
 
         public async Task<bool> UsernameExisted(string username)

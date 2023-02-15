@@ -21,8 +21,8 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpPost("[action]")]
-        [Authorize(Role.Admin)]
+        [HttpDelete("[action]")]
+        
         public async Task<IActionResult> DeleteDbAsync()
         {
 
@@ -45,7 +45,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize(Role.Admin)]
+        
         public async Task<IActionResult> DbInfor()
         {
 
@@ -90,7 +90,7 @@ namespace Back_end.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Role.Admin)]
+      
         public async Task<IActionResult> Migrate()
         {
 

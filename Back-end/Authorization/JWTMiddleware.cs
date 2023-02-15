@@ -23,7 +23,7 @@ namespace Back_end.Authorization
 
         public async Task Invoke(HttpContext context,IUserRespository userRespository,IJwtUtils jwtUtils)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers["Authorization"].SingleOrDefault()?.Split(" ").Last();
             if (token != null)
             {
                 
@@ -35,6 +35,9 @@ namespace Back_end.Authorization
                     User user = await userRespository.GetUser(Convert.ToString(arr[0]));
                     DateTime exp = Convert.ToDateTime(arr[1]);
 
+                    if (user.IsDisable) {
+                        context.Response.StatusCode = 401;
+                        return; }
                    
                     //if (user != null && exp != null)
                     if (user != null)

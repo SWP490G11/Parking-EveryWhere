@@ -47,7 +47,18 @@ namespace Back_end.Controllers
             return Ok(users);
         }
 
-       
+        [HttpGet("[action]")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetUser(string id)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var users = await _userRespository.GetUser(id);
+
+            return Ok(users);
+        }
+
+
 
         [HttpPost("[action]")]
         [AllowAnonymous]
@@ -60,14 +71,31 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpPost("[action]")]
-        [AllowAnonymous]
+        [HttpPut("[action]")]
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner)]
+        public async Task<IActionResult> ChangePassword(string id,ChangePasswordModel userModel)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _userRespository.ChangePassword(id,userModel);
+            return Ok("ChangePassword Success");
+        }
+
+        [HttpPut("[action]")]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id,UserModel userModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
            await _userRespository.Update(id,userModel);
-            return Ok("Register Success");
+            return Ok("Update Success");
         }
 
+        [HttpPut("[action]")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> DisableOrActive(string id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _userRespository.DisableOrActiveUser(id);
+            return Ok("Change state success");
+        }
     }
 }

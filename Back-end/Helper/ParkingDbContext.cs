@@ -1,5 +1,6 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper.Seeding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -77,12 +78,9 @@ namespace Back_end.Helper
         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity<User>(
-                u=>u.HasData(new List<User>() { 
-                    new User {UserName= "phucnv", HashPasword= BCrypt.HashPassword("Aa123456@")
-                    ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
-                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Admin
-                    ,LastModifyAt= DateTime.Now,
-                    } })
+                u=>u.HasData(
+                    UserSeed.Seed
+                    )
                 );
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

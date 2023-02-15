@@ -14,7 +14,7 @@ namespace Back_end.Entities
         public string   UserName { get; set; }
 
         [JsonIgnore]
-        public string HashPasword { get; set; }
+        public string HashPassword { get; set; }
 
         [Required]
         public string FirstName { get; set; }
@@ -31,6 +31,11 @@ namespace Back_end.Entities
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [RegularExpression(@"^[0-9]{12}$")]
+        public string? CitizenID { get; set; }
+
+        [Required]
+        public bool IsDisable { get; set; } = false;
         public ICollection<Image> Images { get; set; }
 
         public ICollection<Car> Cars { get; set; }
