@@ -1,11 +1,14 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class CarRepository : ICRUDSRespository<Car>
+    public class CarRepository : ICRUDSRespository<Car,CarDTO>
     {
-        public Task AddAsync()
+        
+
+        public Task AddAsync(CarDTO model)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +38,8 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+
+        public Task UpdateAsync(string id,CarDTO carDTO)
         {
             throw new NotImplementedException();
         }

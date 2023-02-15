@@ -1,10 +1,11 @@
 ﻿using Back_end.Common;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class MembershipPackage : ICRUDSRespository<MembershipPackage>
+    public class MembershipPackage : ICRUDSRespository<MembershipPackage, MembershipPackageModel>
     {
-        public Task AddAsync()
+        public Task AddAsync(MembershipPackageModel model)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +35,7 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+        public Task UpdateAsync(string idString, MembershipPackageModel updateModel)
         {
             throw new NotImplementedException();
         }

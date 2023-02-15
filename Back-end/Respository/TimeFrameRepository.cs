@@ -1,10 +1,12 @@
 ﻿using Back_end.Common;
+using Back_end.Entities;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class TimeFrameRepository : ICRUDSRespository<TimeFrameRepository>
+    public class TimeFrameRepository : ICRUDSRespository<TimeFrame, TimeFrameModel>
     {
-        public Task AddAsync()
+        public Task AddAsync(TimeFrameModel model)
         {
             throw new NotImplementedException();
         }
@@ -14,27 +16,27 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<TimeFrameRepository>> GetAllAsync()
+        public Task<ICollection<TimeFrame>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<TimeFrameRepository> GetAsync()
+        public Task<TimeFrame> GetAsync()
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<TimeFrameRepository> PaginateAsync(ICollection<TimeFrameRepository> source, int pageNo, int pageSize)
+        public ICollection<TimeFrame> PaginateAsync(ICollection<TimeFrame> source, int pageNo, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<TimeFrameRepository> SortAsync(DirectionOfSort direction, string factor)
+        public ICollection<TimeFrame> SortAsync(DirectionOfSort direction, string factor)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+        public Task UpdateAsync(string idString, TimeFrameModel updateModel)
         {
             throw new NotImplementedException();
         }

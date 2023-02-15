@@ -1,10 +1,12 @@
 ﻿using Back_end.Common;
+using Back_end.Entities;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class ImageRepository : ICRUDSRespository<ImageRepository>
+    public class ImageRepository : ICRUDSRespository<Image, ImageModel>
     {
-        public Task AddAsync()
+        public Task AddAsync(ImageModel model)
         {
             throw new NotImplementedException();
         }
@@ -14,27 +16,27 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<ImageRepository>> GetAllAsync()
+        public Task<ICollection<Image>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ImageRepository> GetAsync()
+        public Task<Image> GetAsync()
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<ImageRepository> PaginateAsync(ICollection<ImageRepository> source, int pageNo, int pageSize)
+        public ICollection<Image> PaginateAsync(ICollection<Image> source, int pageNo, int pageSize)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<ImageRepository> SortAsync(DirectionOfSort direction, string factor)
+        public ICollection<Image> SortAsync(DirectionOfSort direction, string factor)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+        public Task UpdateAsync(string idString, ImageModel updateModel)
         {
             throw new NotImplementedException();
         }

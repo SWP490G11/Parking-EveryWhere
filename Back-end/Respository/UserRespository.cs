@@ -8,10 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Back_end.Respository
 {
-    using AutoMapper;
+    
     using Back_end.Common;
-    using Microsoft.EntityFrameworkCore.Storage;
-    using System.Linq.Expressions;
     using BCryptNet = BCrypt.Net.BCrypt;
     
     public interface IUserRespository
@@ -52,7 +50,6 @@ namespace Back_end.Respository
             )
         {
             _dbContext = dbContext;
-            _dbContext.Database.EnsureCreated();
             _dbContext.Database.AutoSavepointsEnabled = true; 
             _jwtUtils = jwtUtils;
             

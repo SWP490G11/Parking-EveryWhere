@@ -1,12 +1,17 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class ParkingRespository : ICRUDSRespository<Parking>
+    public class ParkingRespository : ICRUDSRespository<Parking,ParkingModel>
     {
-        public Task AddAsync()
-        {  throw new NotImplementedException(); }
+       
+
+        public Task AddAsync(ParkingModel model)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task DeleteAsync()
         {
@@ -33,7 +38,8 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+
+        public Task UpdateAsync(string idString, ParkingModel updateModel)
         {
             throw new NotImplementedException();
         }

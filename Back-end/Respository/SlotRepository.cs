@@ -1,11 +1,14 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Models;
 
 namespace Back_end.Respository
 {
-    public class SlotRepository : ICRUDSRespository<Slot>
+    public class SlotRepository : ICRUDSRespository<Slot,SlotModel>
     {
-        public Task AddAsync()
+
+
+        public Task AddAsync(SlotModel model)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +38,9 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync()
+
+
+        public Task UpdateAsync(string idString, SlotModel updateModel)
         {
             throw new NotImplementedException();
         }
