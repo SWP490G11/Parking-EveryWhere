@@ -1,5 +1,7 @@
 using Back_end.Authorization;
+using Back_end.Entities;
 using Back_end.Helper;
+using Back_end.Models;
 using Back_end.Respository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -31,6 +33,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
+service.AddTransient<ICRUDSRespository<CarModel,CarModelx2>, CarModelRespository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
