@@ -7,8 +7,8 @@ namespace Back_end.Respository
         public Task<ICollection<T>> GetAllAsync();
 
         public Task AddAsync(M model);
-        public Task<T> GetAsync();
-        public Task DeleteAsync();
+        public Task<T> GetAsync(string idString);
+        public Task DeleteAsync(string idString);
 
         public Task UpdateAsync(string idString,M updateModel);
 

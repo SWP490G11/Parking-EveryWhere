@@ -13,7 +13,8 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync()
+    
+        public Task DeleteAsync(string idString)
         {
             throw new NotImplementedException();
         }
@@ -23,7 +24,9 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task<Slot> GetAsync()
+      
+
+        public Task<Slot> GetAsync(string idString)
         {
             throw new NotImplementedException();
         }

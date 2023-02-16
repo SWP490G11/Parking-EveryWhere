@@ -10,6 +10,7 @@ namespace Back_end.Respository
 {
     
     using Back_end.Common;
+    using Microsoft.AspNetCore.Connections.Features;
     using BCryptNet = BCrypt.Net.BCrypt;
     
     public interface IUserRespository
@@ -30,7 +31,7 @@ namespace Back_end.Respository
 
         public Task DisableOrActiveUser(string id);
 
-
+        public Task<ICollection<User>> GetUserByUserNames(string username);
 
         public Task ChangePassword(string id,ChangePasswordModel model);
 
@@ -78,7 +79,7 @@ namespace Back_end.Respository
             try
             {
                 if (String.IsNullOrEmpty(userid) || String.IsNullOrEmpty(model.NewPassword) || String.IsNullOrEmpty(model.OldPassword)) throw new ArgumentNullException();
-                var currentUser = await _dbContext.Users.FindAsync(userid);
+                var currentUser = await GetUser(userid);
                 if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
                 if(!BCryptNet.Verify(model.OldPassword,currentUser.HashPassword)) throw new AppException("Your password is incorrect");
 
@@ -117,14 +118,20 @@ namespace Back_end.Respository
                 ));
         }
 
+        public async Task<ICollection<User>> GetUserByUserNames(string username)
+        {
+            return await _dbContext.Users.Where(u=>u.UserName.ToLower().Contains(username.ToLower())).ToListAsync();
+        }
+
         public async Task<ICollection<User>> GetUsers()
         {
             return await _dbContext.Users.ToListAsync();
         }
 
-        public Task<ICollection<User>> Paginate(int pageNo = 1, int pageSize = 5)
+        public async Task<ICollection<User>> Paginate(int pageNo = 1, int pageSize = 5)
         {
-            throw new NotImplementedException();
+            
+            return await _dbContext.Users.Skip((pageNo-1)*pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task Register(UserModel userModel)
