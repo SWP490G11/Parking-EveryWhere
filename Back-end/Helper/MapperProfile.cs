@@ -13,6 +13,9 @@ namespace Back_end.Helper
             CreateMap<UserModel, User>();
             CreateMap<CarModel, CarModelx2>();
             CreateMap<CarModelx2, CarModel>();
+
+            CreateMap<TimeFrame, TimeFrameModel>();
+            CreateMap<TimeFrameModel, TimeFrame>();
         }
     }
 }

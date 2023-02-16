@@ -1,14 +1,29 @@
-﻿using Back_end.Common;
+﻿using AutoMapper;
+using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
 
 namespace Back_end.Respository
 {
     public class TimeFrameRepository : ICRUDSRespository<TimeFrame, TimeFrameModel>
     {
-        public Task AddAsync(TimeFrameModel model)
+
+        private readonly ParkingDbContext _dbContext;
+        private readonly ILogger<TimeFrameRepository> _logger;
+        private readonly IMapper _mapper;
+        public async Task AddAsync(TimeFrameModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _dbContext.TimeFrames.AddAsync(_mapper.Map<TimeFrame>(model));
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
         public Task DeleteAsync(string idString)

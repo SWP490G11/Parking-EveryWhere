@@ -52,7 +52,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _respository.AddAsync( carModel);
-            return Ok("Update Success");
+            return Ok("Add Success");
         }
 
         [HttpPut("[action]")]
@@ -75,7 +75,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _respository.DeleteAsync(id);
-            return Ok("Update Success");
+            return Ok("Deletes Success");
         }
     }
 }
