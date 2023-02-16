@@ -12,9 +12,9 @@ namespace Back_end.Respository
     public class CarModelRespository : ICRUDSRespository<CarModel,CarModelx2>
     {
         private readonly ParkingDbContext _dbContext;
-        private readonly ILogger<UserRespository> _logger;
+        private readonly ILogger<CarModelRespository> _logger;
         private readonly IMapper _mapper;
-public CarModelRespository(ParkingDbContext dbContext, ILogger<UserRespository> logger, IMapper mapper)
+public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelRespository> logger, IMapper mapper)
         {
             _dbContext = dbContext;
             _logger = logger;
