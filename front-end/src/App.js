@@ -50,6 +50,7 @@ function App() {
     
     <Context.Provider value={[loginState, setLoginState]}>
      
+     
        <Routes>
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<HomePage />} />

@@ -4,11 +4,11 @@ import { Outlet, Navigate } from 'react-router-dom'
 
 
 export default function PrivateRoutes() {
-    const token = localStorage.getItem('loginState');
+    const isLogin = localStorage.getItem('isLogin');
    
     return (
         <>
-        {!token.isLogin ? (
+        {!isLogin ? (
          <Navigate to="/login" />
            
         ) : (

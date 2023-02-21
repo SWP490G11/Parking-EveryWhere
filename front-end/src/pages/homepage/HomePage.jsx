@@ -41,6 +41,7 @@ const HomePage = () => {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
           localStorage.removeItem("loginState");
           localStorage.removeItem("role");
+          localStorage.removeItem("isLogin");
           window.location.href = `/`;
         });
       },
@@ -50,7 +51,8 @@ const HomePage = () => {
   return (
     <Layout>
       
-      <Header className="header">
+      {
+      /* <Header className="header">
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
         
@@ -98,7 +100,7 @@ const HomePage = () => {
             <Button onClick={handleConfirmLogout}>Logout</Button>
           </Content>
         </Layout>
-      </Layout>
+      </Layout> */}
     </Layout>
   );
 };
