@@ -13,6 +13,14 @@ namespace Back_end.Respository
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<TimeFrameRepository> _logger;
         private readonly IMapper _mapper;
+
+        public TimeFrameRepository(ParkingDbContext dbContext, ILogger<TimeFrameRepository> logger, IMapper mapper)
+        {
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
+        }
+
         public async Task AddAsync(TimeFrameModel model)
         {
             try
@@ -42,9 +50,9 @@ namespace Back_end.Respository
             }
         }
 
-        public Task<ICollection<TimeFrame>> GetAllAsync()
+        public async Task<ICollection<TimeFrame>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.TimeFrames.ToListAsync();
         }
 
         public async Task<TimeFrame> GetAsync(string idString)
