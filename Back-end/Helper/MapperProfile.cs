@@ -11,11 +11,21 @@ namespace Back_end.Helper
         {
             CreateMap<User, UserModel>();
             CreateMap<UserModel, User>();
+
             CreateMap<CarModel, CarModelx2>();
             CreateMap<CarModelx2, CarModel>();
 
             CreateMap<TimeFrame, TimeFrameModel>();
             CreateMap<TimeFrameModel, TimeFrame>();
+
+            CreateMap<Slot, SlotModel>();
+            CreateMap<SlotModel, Slot>();
+
+            CreateMap<Parking, ParkingModel>();
+            CreateMap<ParkingModel, Parking>();
+
+            CreateMap<Request, RequestModel>();
+            CreateMap<RequestModel, Request>();
         }
     }
 }
