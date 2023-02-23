@@ -11,7 +11,7 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; } = Guid.NewGuid();
 
-        public string   UserName { get; set; }
+        public string UserName { get; set; }
 
         [JsonIgnore]
         public string HashPassword { get; set; }
@@ -36,13 +36,20 @@ namespace Back_end.Entities
 
         [Required]
         public bool IsDisable { get; set; } = false;
-        public ICollection<Image> Images { get; set; }
+        public ICollection<Image> Images { get; set; } = new List<Image>();
 
-        public ICollection<Car> Cars { get; set; }
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
 
-        public ICollection<ParkingDetail> ParkingDetails  { get; set; }
+        public ICollection<ParkingDetail> ParkingDetails { get; set; } = new List<ParkingDetail>();
 
-        public ICollection<Feedback> Feedback { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
+        [InverseProperty("Owner")]
+        public ICollection<Parking> Parkings { get; set; } = new List<Parking>();
+
+        [InverseProperty("ParkingManager")]
+        public Parking? Parking { get; set; }
+
 
         public MembershipPackage? MembershipPackage { get; set; } = null;
 
@@ -51,6 +58,5 @@ namespace Back_end.Entities
 
         public DateTime LastModifyAt { get; set; }
 
-        
     }
 }

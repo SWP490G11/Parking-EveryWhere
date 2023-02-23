@@ -43,7 +43,10 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
             {
                 var carModel = await GetAsync(idString);
                 _dbContext.CarModels.Remove(carModel);
+               var a=  await _dbContext.Parkings.ToListAsync();
+                
                 await _dbContext.SaveChangesAsync();
+                
             }
             catch (Exception ex)
             {
