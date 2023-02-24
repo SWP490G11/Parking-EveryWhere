@@ -83,6 +83,7 @@ namespace Back_end.Controllers
             return Ok(users);
         }
 
+      
 
 
         [HttpPost("[action]")]
@@ -91,10 +92,23 @@ namespace Back_end.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed") ;
+            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
+                "registor this role");
             await _userRespository.Register(userModel);
             return Ok("Register Success");
         }
 
+        [HttpPost("[action]")]
+        [Authorization.Authorize(Role.ParkingOwner)]
+        public async Task<IActionResult> RegisterForParkingManager(UserModel userModel)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
+            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
+                "registor this role");
+            await _userRespository.Register(userModel);
+            return Ok("Register Success");
+        }
 
         [HttpPut("[action]")]
         

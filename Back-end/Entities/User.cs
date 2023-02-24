@@ -47,7 +47,7 @@ namespace Back_end.Entities
         [InverseProperty("Owner")]
         public ICollection<Parking> Parkings { get; set; } = new List<Parking>();
 
-        [InverseProperty("ParkingManager")]
+        [InverseProperty("ParkingManagers")]
         public Parking? Parking { get; set; }
 
 
