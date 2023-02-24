@@ -22,7 +22,7 @@ namespace Back_end.Entities
         public ICollection<TimeFrame> TimeFrames { get; set; }
 
         [InverseProperty("Parking")]
-        public ICollection<User> ParkingManager { get; set; } = new List<User>();
+        public ICollection<User> ParkingManagers { get; set; } = new List<User>();
 
         public Dashboard Dashboard { get; set; }
 
@@ -34,7 +34,7 @@ namespace Back_end.Entities
         [InverseProperty("Parkings")]
         public User Owner { get; set; }
 
-     
+        
         
 
         public ICollection<Feedback> Feedbacks { get; set; }
@@ -44,6 +44,8 @@ namespace Back_end.Entities
         public double LON { get; set; }
 
         public double LAT { get; set; }
+
+        public string? AddressDetail { get; set; }
 
     }
 }

@@ -50,9 +50,9 @@ namespace Back_end.Respository
             }
         }
 
-        public Task<ICollection<Slot>> GetAllAsync()
+        public async Task<ICollection<Slot>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Slots.ToListAsync();
         }
 
       

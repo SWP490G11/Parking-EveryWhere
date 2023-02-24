@@ -35,7 +35,11 @@ namespace Back_end.Respository
 
         public Task ChangePassword(string id,ChangePasswordModel model);
 
-        
+
+        public Task<ICollection<User>> GetParkingManagers();
+
+       
+
 
     }
     public class UserRespository : IUserRespository
@@ -96,6 +100,8 @@ namespace Back_end.Respository
            
         }
 
+       
+
         public async Task DisableOrActiveUser(string id)
         {
             try
@@ -110,6 +116,12 @@ namespace Back_end.Respository
                 _logger.LogError(ex, "Some Erorr orcor");
             }
         }
+
+        public Task<ICollection<User>> GetParkingManagers()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public async Task<User> GetUser(string guidString)
         {
