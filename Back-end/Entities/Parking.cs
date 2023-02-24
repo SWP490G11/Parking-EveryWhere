@@ -1,6 +1,7 @@
 ﻿using Back_end.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Back_end.Entities
 {
@@ -22,7 +23,8 @@ namespace Back_end.Entities
         public ICollection<TimeFrame> TimeFrames { get; set; }
 
         [InverseProperty("Parking")]
-        public ICollection<User> ParkingManagers { get; set; } = new List<User>();
+        [AllowNull]
+        public ICollection<User>? ParkingManagers { get; set; }
 
         public Dashboard Dashboard { get; set; }
 

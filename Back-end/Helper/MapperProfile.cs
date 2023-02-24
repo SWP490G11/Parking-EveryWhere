@@ -26,6 +26,9 @@ namespace Back_end.Helper
 
             CreateMap<Request, RequestModel>();
             CreateMap<RequestModel, Request>();
+
+            CreateMap<MembershipPackage, MembershipPackageModel>();
+            CreateMap<MembershipPackageModel, MembershipPackage>();
         }
     }
 }

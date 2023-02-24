@@ -84,6 +84,13 @@ namespace Back_end.Helper
                     UserSeed.Seed
                     )
                 );
+
+            modelBuilder.Entity<MembershipPackage>(
+               u => u.HasData(
+                   MembershipPagekageSeed.Seed
+                   )
+               );
+
             modelBuilder.Entity<CarModel>(
               u => u.HasData(new List<CarModel>() {
                     new CarModel { Discript = "Xe 2 khoang",  Model = "Mini", Price = 15000 } })

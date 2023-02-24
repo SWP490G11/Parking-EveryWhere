@@ -38,6 +38,8 @@ service.AddTransient<ICRUDSRespository<Parking, ParkingModel>, ParkingRespositor
 service.AddTransient<ICRUDSRespository<Car, CarDTO>, CarRepository>();
 service.AddTransient<ICRUDSRespository<Slot, SlotModel>, SlotRepository>();
 service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
+service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
+service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

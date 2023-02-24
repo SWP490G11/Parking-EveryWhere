@@ -36,9 +36,19 @@ namespace Back_end.Respository
 
      
 
-        public Task DeleteAsync(string idString)
+        public async Task DeleteAsync(string idString)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var parking = await GetAsync(idString);
+                _dbContext.Parkings.Remove(parking);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
         public async Task<ICollection<Parking>> GetAllAsync()
