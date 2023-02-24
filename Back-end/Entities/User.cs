@@ -1,6 +1,7 @@
 ﻿using Back_end.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Back_end.Entities
@@ -36,22 +37,26 @@ namespace Back_end.Entities
 
         [Required]
         public bool IsDisable { get; set; } = false;
-        public ICollection<Image> Images { get; set; } = new List<Image>();
+        [AllowNull]
+        public ICollection<Image> Images { get; set; }
 
-        public ICollection<Car> Cars { get; set; } = new List<Car>();
+        [AllowNull]
+        public ICollection<Car>? Cars { get; set; }
 
-        public ICollection<ParkingDetail> ParkingDetails { get; set; } = new List<ParkingDetail>();
+        [AllowNull]
+        public ICollection<ParkingDetail>? ParkingDetails { get; set; }
 
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
         [InverseProperty("Owner")]
-        public ICollection<Parking> Parkings { get; set; } = new List<Parking>();
+        [AllowNull]
+        public ICollection<Parking>? Parkings { get; set; }
 
         [InverseProperty("ParkingManagers")]
         public Parking? Parking { get; set; }
 
-
-        public MembershipPackage? MembershipPackage { get; set; } = null;
+        [InverseProperty("SubcribeBy")]
+        public MembershipPackage? MembershipPackage { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
