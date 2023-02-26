@@ -2,6 +2,7 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/
 import { Breadcrumb, Layout, Menu, theme,Button, Modal } from 'antd';
 import { LogoutOutlined } from "@ant-design/icons";
 import React from 'react';
+import {GoogleMap} from '@react-google-maps/api'
 const { Header, Content, Sider } = Layout;
 
 const items1 = ['1', '2', '3'].map((key) => ({
@@ -23,6 +24,9 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, i
     }),
   };
 });
+
+
+const center={lat:48.8565, lng:2.2945}
 const HomePage = () => {
   const {
     token: { colorBgContainer },
@@ -96,6 +100,11 @@ const HomePage = () => {
             }}
           >
             <Button onClick={handleConfirmLogout}>Logout</Button>
+            <div>
+              <GoogleMap center={center} zoom={15}  mapContainerStyle={{width:'100%', height:'100%'}} >
+
+              </GoogleMap>
+            </div>
           </Content>
         </Layout>
       </Layout>

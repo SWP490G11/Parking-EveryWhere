@@ -56,7 +56,7 @@ function LoginPage() {
           console.log(response.data);
           localStorage.setItem("role",response.data.role );
           axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
-          navigate('/home');
+          navigate('/');
         })
 
         .catch((error) => {
