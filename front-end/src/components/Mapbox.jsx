@@ -1,5 +1,4 @@
 import React from "react";
-import ReactMapGL from "react-map-gl";
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 const Map = ReactMapboxGl({
   accessToken:
@@ -9,10 +8,11 @@ const Map = ReactMapboxGl({
 function Mapbox() {
   return (
     <Map
+    
       style="mapbox://styles/mapbox/streets-v8"
-      containerStyle={{ width: "100vw", height: "100vh" }}
+      containerStyle={{ width: "100%", height: "300px" }}
       center={[106.6297, 10.8231]}
-      zoom={[11]}
+      zoom={[12]}
     ></Map>
   );
 }

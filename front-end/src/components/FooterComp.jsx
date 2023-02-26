@@ -1,84 +1,58 @@
-function FooterComp(){
-
-return(
-    <section id="team" class="team">
-        <div class="container">
-          <div class="section-title" data-aos="fade-in" data-aos-delay="100">
-            <h2>Team</h2>
+import "../style/home.css";
+import {
+  FacebookOutlined,
+  TwitterOutlined,
+  InstagramOutlined,
+} from "@ant-design/icons";
+function FooterComp() {
+  return (
+    <footer>
+      <div className="container">
+        <div id="ft-container">
+          <div id="ft-about">
+            <h3 style={{ display: "center", textAlign: "center" }}>About Us</h3>
             <p>
-             Today is good
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+              vestibulum justo nec sapien hendrerit, in lobortis erat sagittis.
+              Nunc congue eros id libero varius tristique.{" "}
             </p>
           </div>
-
-          <div class="row">
-            <div class="col-lg-4 col-md-6">
-              <div class="member" data-aos="fade-up">
-                <div class="pic">
-                  <img
-                    src="assets/img/team/team-1.jpg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
-                <div class="member-info">
-                  <h4>Walter White</h4>
-                  <span>Chief Executive Officer</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-              <div class="member" data-aos="fade-up" data-aos-delay="150">
-                <div class="pic">
-                  <img
-                    src="assets/img/team/team-2.jpg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
-                <div class="member-info">
-                  <h4>Sarah Jhonson</h4>
-                  <span>Product Manager</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-              <div class="member" data-aos="fade-up" data-aos-delay="300">
-                <div class="pic">
-                  <img
-                    src="assets/img/team/team-3.jpg"
-                    class="img-fluid"
-                    alt=""
-                  />
-                </div>
-                <div class="member-info">
-                  <h4>William Anderson</h4>
-                  <span>CTO</span>
-                  <div class="social">
-                    <a href=""><i class="bi bi-twitter"></i></a>
-                    <a href=""><i class="bi bi-facebook"></i></a>
-                    <a href=""><i class="bi bi-instagram"></i></a>
-                    <a href=""><i class="bi bi-linkedin"></i></a>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div id="ft-contact">
+            <h3 style={{ display: "center", textAlign: "center" }}>
+              Contact Us
+            </h3>
+            <ul>
+              <li>
+                <a href="#">Email : najumy1807.2k@gmail.com</a>
+              </li>
+              <li>
+                <a href="#">Phone : 0981949455</a>
+              </li>
+              <li>
+                <a href="#">Address : Mễ Trì - Hà Nội</a>
+              </li>
+            </ul>
+          </div>
+          <div id="ft-social">
+            <h3  style={{ display: "center", textAlign: "center" }}>Social Media</h3>
+            <ul id="social-icons">
+              <li>
+                <FacebookOutlined href="#" />
+                Facebook
+              </li>
+              <li>
+                <TwitterOutlined />
+                Twitter
+              </li>
+              <li>
+                <InstagramOutlined />
+                Instagram
+              </li>
+            </ul>
           </div>
         </div>
-      </section>
-);
+      </div>
+    </footer>
+  );
 }
 export default FooterComp;

@@ -6,6 +6,8 @@ import Mapbox from "../../components/Mapbox";
 
 import HeaderComp from "../../components/HeaderComp";
 import FooterComp from "../../components/FooterComp";
+import ParkingList from "../../components/ParkingList";
+import FilterComp from "../../components/FilterComp";
 // Menu
 
 const { Header, Content, Sider } = Layout;
@@ -15,10 +17,12 @@ const HomePage = () => {
     <Layout>
       {/* Header */}
       <HeaderComp />
-
+      <FilterComp />
       {/* Body */}
       <div className="body">
         {/* Map */}
+        
+        <ParkingList />
         <Mapbox />
       </div>
       {/* About */}

@@ -7,6 +7,7 @@ import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import React, { createContext, useState, useEffect } from "react";
 import PrivateRoute from "./pages/routes/PrivateRoutes";
+import ParkingDetail from './pages/parkingDetail/parkingDetail';
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -52,12 +53,12 @@ function App() {
      
      
        <Routes>
-              <Route element={<PrivateRoute />}>
+              {/* <Route element={<PrivateRoute />}>
                 <Route path="/" element={<HomePage />} />
               </Route>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-
+              <Route path="/register" element={<RegisterPage />} /> */}
+              <Route path="/" element={<ParkingDetail />} />
               
             </Routes>
   </Context.Provider>
