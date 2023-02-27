@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    [Migration("20230215141545_ver1.6")]
-    partial class ver16
+    [Migration("20230224081338_ver1.6.5")]
+    partial class ver165
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,50 @@ namespace Backend.Migrations
                     b.HasIndex("LastModifyByID");
 
                     b.ToTable("CarModels");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("f9efbedc-eae2-4a6b-a267-b27471bfbad5"),
+                            Discript = "Xe 2 khoang",
+                            Model = "Mini",
+                            Price = 15000.0
+                        },
+                        new
+                        {
+                            ID = new Guid("2c59e238-1da0-4ec0-a243-5bc5c15c90d6"),
+                            Discript = "Xe 4 chỗ du lịch",
+                            Model = "Sedan",
+                            Price = 15000.0
+                        },
+                        new
+                        {
+                            ID = new Guid("e4976a8a-35ad-4d98-9475-aa9911e30706"),
+                            Discript = "xe 5 chỗ",
+                            Model = "SUV5",
+                            Price = 20000.0
+                        },
+                        new
+                        {
+                            ID = new Guid("ccc75c1f-5c65-4896-8c2c-764906c360d2"),
+                            Discript = "Xe van con",
+                            Model = "Minivan",
+                            Price = 25000.0
+                        },
+                        new
+                        {
+                            ID = new Guid("3e97bdcc-c9ab-4e8c-806c-8a20dfa80660"),
+                            Discript = "Xe bán tải",
+                            Model = "Pickup",
+                            Price = 20000.0
+                        },
+                        new
+                        {
+                            ID = new Guid("5121a810-8032-4c0f-9b9f-ca36978a1372"),
+                            Discript = "Xe 7 chỗ",
+                            Model = "SUV7",
+                            Price = 25000.0
+                        });
                 });
 
             modelBuilder.Entity("Back_end.Entities.Dashboard", b =>
@@ -234,7 +278,7 @@ namespace Backend.Migrations
                     b.Property<DateTime>("LastModifyAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("LastModifyByID")
+                    b.Property<Guid>("OwnerID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -245,7 +289,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("DashboardID");
 
-                    b.HasIndex("LastModifyByID");
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("Parkings");
                 });
@@ -401,7 +445,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("ParkingsID");
 
-                    b.ToTable("TimeFrame");
+                    b.ToTable("TimeFrames");
                 });
 
             modelBuilder.Entity("Back_end.Entities.User", b =>
@@ -470,14 +514,14 @@ namespace Backend.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("2df427a2-c4cc-4b93-b95b-ba5ae50d3d9d"),
+                            ID = new Guid("2d00cc04-033d-45d7-b4ed-32260bf65c3e"),
                             DateOfBirth = new DateTime(2000, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "phucnvhd772000@gmail.com",
                             FirstName = "Phuc",
                             Gender = 0,
-                            HashPassword = "$2b$10$mdLJ/cFSIJ8OfXfJdo3o1eNwZW4XnGY8WQuuxnkM.OlysSXajQGky",
+                            HashPassword = "$2b$10$pzdqbkN0yC9OCONyBfKhOOrvfFhGsySXJEJvwenglGxt5koNkSDyG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 35, 863, DateTimeKind.Local).AddTicks(7104),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 529, DateTimeKind.Local).AddTicks(7661),
                             LastName = " Nguyen Van",
                             PhoneNumber = "0966416708",
                             Role = -772000,
@@ -485,15 +529,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("a81eee8e-9b74-42a3-9ab5-c16ad410079b"),
+                            ID = new Guid("78dfe61b-e986-4644-ace6-743f45cd4aa0"),
                             CitizenID = "019502501861",
                             DateOfBirth = new DateTime(2016, 11, 24, 13, 12, 53, 0, DateTimeKind.Unspecified),
                             Email = "mboustead0@businessweek.com",
                             FirstName = "Martita",
                             Gender = 0,
-                            HashPassword = "$2b$10$21LW5DH7M6bz9GyD9okWi.TlKCn83hoCOoXDzZUWikNHAQK0Vy2P6",
+                            HashPassword = "$2b$10$i7I2PjgA48AYt/z86y237eEIRPIHrCU4Ok/DsZU1UUe.tVcilxSnK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 35, 941, DateTimeKind.Local).AddTicks(240),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 594, DateTimeKind.Local).AddTicks(8807),
                             LastName = "Boustead",
                             PhoneNumber = "06868143899",
                             Role = 1,
@@ -501,15 +545,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("191905f1-f238-443c-ab09-8c942a537c6a"),
+                            ID = new Guid("293a428e-e370-4f4f-811a-1b83bf67f359"),
                             CitizenID = "014280490976",
                             DateOfBirth = new DateTime(2014, 10, 29, 23, 29, 28, 0, DateTimeKind.Unspecified),
                             Email = "istonebanks1@auda.org.au",
                             FirstName = "Ingeborg",
                             Gender = 2,
-                            HashPassword = "$2b$10$8.C8D42FHQLeanm4VBtYlOJ30GCOk8eDAGo7lfsJSh7FgnGbR7ZDK",
+                            HashPassword = "$2b$10$qZMg1vjRNxNllBPKfOcXF.0WCUZHN/s3xLxTMxQZAu7q.k0ARJrPi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 22, DateTimeKind.Local).AddTicks(6317),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 674, DateTimeKind.Local).AddTicks(2509),
                             LastName = "Stonebanks",
                             PhoneNumber = "0633691068",
                             Role = 1,
@@ -517,15 +561,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("c1cb62b8-4f18-4e0c-a6de-3b44f0b3db23"),
+                            ID = new Guid("cb29504a-79c0-4ed4-863f-aea2df1a5266"),
                             CitizenID = "052011153408",
                             DateOfBirth = new DateTime(2017, 4, 13, 21, 35, 29, 0, DateTimeKind.Unspecified),
                             Email = "astewart2@businesswire.com",
                             FirstName = "Aliza",
                             Gender = 2,
-                            HashPassword = "$2b$10$xw9oInEr/kGEVlXj6ipCceO23dCY3T1r/2xH03L/jA/p4IhZhPwn6",
+                            HashPassword = "$2b$10$b9KEGQuq5.TmtuktG38ZhO/KyymGWvZF/3VqTLkFItLIe1EsXoy5q",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 99, DateTimeKind.Local).AddTicks(9117),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 776, DateTimeKind.Local).AddTicks(7080),
                             LastName = "Stewart",
                             PhoneNumber = "07343082906",
                             Role = 1,
@@ -533,15 +577,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("98567917-69e0-4bb4-87f2-cd0c8d237b28"),
+                            ID = new Guid("01f1a277-e765-4b7f-b55f-2517241e09c6"),
                             CitizenID = "030674043571",
                             DateOfBirth = new DateTime(2006, 5, 6, 0, 28, 27, 0, DateTimeKind.Unspecified),
                             Email = "rbuzine3@pen.io",
                             FirstName = "Raviv",
                             Gender = 2,
-                            HashPassword = "$2b$10$73/OPtuQt6EnfFh2T2oXCO0CLYbVOot3c/K2dTwg8KZg8sAIq2Vaa",
+                            HashPassword = "$2b$10$pvvaPQr8Cbfh0kjtshxfxe7We8IQwl5pXcuF3z0o8UKyBxfMgvtCa",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 188, DateTimeKind.Local).AddTicks(3381),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 857, DateTimeKind.Local).AddTicks(6201),
                             LastName = "Buzine",
                             PhoneNumber = "0519358893",
                             Role = 2,
@@ -549,15 +593,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("5f2ebe99-1829-45f9-b579-b0283b6d6b84"),
+                            ID = new Guid("54607227-0140-481f-bb3e-49fa982c36d9"),
                             CitizenID = "029664078144",
                             DateOfBirth = new DateTime(2015, 10, 13, 18, 2, 20, 0, DateTimeKind.Unspecified),
                             Email = "ogreenalf4@facebook.com",
                             FirstName = "Olympia",
                             Gender = 0,
-                            HashPassword = "$2b$10$5wpNRd9e31itvkrVndDGzO5fSd2yBTgv.7S4211zf7Y3RvgMWGzhS",
+                            HashPassword = "$2b$10$NUqQbXqVpK07MMy8MtxecuJIPX/Id0hC2XVuu9nVl1aiA7GnE8Nuy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 295, DateTimeKind.Local).AddTicks(5770),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 921, DateTimeKind.Local).AddTicks(7506),
                             LastName = "Greenalf",
                             PhoneNumber = "0752660557",
                             Role = 2,
@@ -565,15 +609,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("d1e656d2-038e-4fa9-9cde-46f57400f101"),
+                            ID = new Guid("cda780ef-e3d1-44ed-b164-f5bfc83fe543"),
                             CitizenID = "084002745064",
                             DateOfBirth = new DateTime(2009, 7, 20, 0, 0, 45, 0, DateTimeKind.Unspecified),
                             Email = "cstorie5@merriam-webster.com",
                             FirstName = "Charlot",
                             Gender = 1,
-                            HashPassword = "$2b$10$6918Co1ALkcc.ooauwYC0OVAukzviaC2x6bEdH8zv/kkQ.T.58VkW",
+                            HashPassword = "$2b$10$OyVBAHGCWpbjwn/2.1jCrOBAG7YGWLSI05sHQzI09ePCx2Nj08ZWm",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 408, DateTimeKind.Local).AddTicks(758),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 27, 990, DateTimeKind.Local).AddTicks(4061),
                             LastName = "Storie",
                             PhoneNumber = "0812332458",
                             Role = 1,
@@ -581,15 +625,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f7d76f01-2a0f-4609-97fc-42c220d4cc05"),
+                            ID = new Guid("d58bc123-f067-4807-9477-2932216c5f9b"),
                             CitizenID = "093312640912",
                             DateOfBirth = new DateTime(2006, 4, 28, 13, 16, 9, 0, DateTimeKind.Unspecified),
                             Email = "cbartosek6@ebay.com",
                             FirstName = "Carmela",
                             Gender = 0,
-                            HashPassword = "$2b$10$5EpybXKJNxgHGRH3waDe7O1cW2p/pTsDpJaGKMjSbk4wgYeGAawWW",
+                            HashPassword = "$2b$10$6DhzF8Uz2okBK5GsIBO0/uULdfO6x2ruo505mN9GHq8zjakpc0PnS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 506, DateTimeKind.Local).AddTicks(17),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 55, DateTimeKind.Local).AddTicks(4202),
                             LastName = "Bartosek",
                             PhoneNumber = "0266983899",
                             Role = 1,
@@ -597,15 +641,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7a5beee1-5f97-43bc-8bf1-6583151ea1e9"),
+                            ID = new Guid("3008bf7f-2d1c-47ec-89fe-6a68cc5b9390"),
                             CitizenID = "017271291718",
                             DateOfBirth = new DateTime(2008, 3, 31, 22, 29, 54, 0, DateTimeKind.Unspecified),
                             Email = "arobley7@zdnet.com",
                             FirstName = "Andee",
                             Gender = 2,
-                            HashPassword = "$2b$10$2d9P2ATAnFOAk2.KpKaPROzEMZr92.Ffcu.OtmQhLOIWutbm4pQGm",
+                            HashPassword = "$2b$10$DwGZqzq82AZeHQ0RapkSrO/izfsjPpDN0c/eBCmMnii2fVg4H.3/y",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 607, DateTimeKind.Local).AddTicks(8808),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 145, DateTimeKind.Local).AddTicks(4711),
                             LastName = "Robley",
                             PhoneNumber = "0910759650",
                             Role = 2,
@@ -613,15 +657,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0b1611b2-f6a0-4695-a730-4cf984f664aa"),
+                            ID = new Guid("58502c4b-fbb8-488f-8ffb-f30c704ffd7d"),
                             CitizenID = "088837943287",
                             DateOfBirth = new DateTime(2004, 3, 23, 13, 15, 4, 0, DateTimeKind.Unspecified),
                             Email = "fguillet8@ft.com",
                             FirstName = "Farra",
                             Gender = 0,
-                            HashPassword = "$2b$10$eH3Z56CqU1oT0YJAr3Nt2uh9TiR3BEoSULDx1x5sPcEZHr1yu6i8e",
+                            HashPassword = "$2b$10$8X.oej8JcICehSjRjj9xNOgmkSKdi8E6SsxddoEhGPNelCl784tKC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 710, DateTimeKind.Local).AddTicks(3042),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 241, DateTimeKind.Local).AddTicks(4380),
                             LastName = "Guillet",
                             PhoneNumber = "0134210264",
                             Role = 2,
@@ -629,15 +673,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("b3910ec9-41ac-406a-b459-1bcf7de80788"),
+                            ID = new Guid("e28c8bba-f492-47df-aaa7-834445044bf4"),
                             CitizenID = "017193152173",
                             DateOfBirth = new DateTime(2020, 8, 11, 20, 40, 0, 0, DateTimeKind.Unspecified),
                             Email = "imilesap9@plala.or.jp",
                             FirstName = "Iorgo",
                             Gender = 1,
-                            HashPassword = "$2b$10$Ho.83TinRVQbDRhrir42h.3ZcaiC4qmyXY2YoIDEZ72TklRjcR0Xe",
+                            HashPassword = "$2b$10$Z94NxqucMO9jCcydPKRJr.s68HGr.HwdTndDL6fOvk.fpVkf7eLHi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 806, DateTimeKind.Local).AddTicks(5596),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 310, DateTimeKind.Local).AddTicks(7430),
                             LastName = "Milesap",
                             PhoneNumber = "08524784466",
                             Role = 1,
@@ -645,15 +689,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("59468767-35ad-4db6-87ca-e7b0e321583d"),
+                            ID = new Guid("53efc40c-1e99-4ad8-a7cb-eadfc14e0d90"),
                             CitizenID = "059220509985",
                             DateOfBirth = new DateTime(2016, 10, 25, 3, 27, 31, 0, DateTimeKind.Unspecified),
                             Email = "acookseya@storify.com",
                             FirstName = "Amie",
                             Gender = 0,
-                            HashPassword = "$2b$10$rhepD7XZRcT04fF6j4zziuugNGlHJU0EK73.g4CU7T6/yr2ZNxqbG",
+                            HashPassword = "$2b$10$6HBpGSxh9A37kAgRJFu6f.9ojnus9xo/P3BY3wt0/rZ7737VsVbuy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 36, 913, DateTimeKind.Local).AddTicks(7246),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 379, DateTimeKind.Local).AddTicks(2205),
                             LastName = "Cooksey",
                             PhoneNumber = "02935053805",
                             Role = 2,
@@ -661,15 +705,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0191d0f9-653c-4565-ba59-b92e2149a4ac"),
+                            ID = new Guid("ff9e1800-0f20-4209-8fb1-a25372e7cd63"),
                             CitizenID = "097345428208",
                             DateOfBirth = new DateTime(2005, 10, 17, 6, 16, 37, 0, DateTimeKind.Unspecified),
                             Email = "evargab@dot.gov",
                             FirstName = "Ellyn",
                             Gender = 0,
-                            HashPassword = "$2b$10$p8BzOUnf1mCARDb/CjKH2e7B8Lo4orjq0IJ0Prt0F12Yd/VF0hFXq",
+                            HashPassword = "$2b$10$Jdq80XxBCV4CMdkwNIk9j.inO.1aoaqlR1qXvaf0mViRNqxSMXmeK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 5, DateTimeKind.Local).AddTicks(1605),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 448, DateTimeKind.Local).AddTicks(5269),
                             LastName = "Varga",
                             PhoneNumber = "0652741657",
                             Role = 1,
@@ -677,15 +721,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1c94836e-d5f1-4818-bb6e-e97bec90187b"),
+                            ID = new Guid("3308ba9a-785f-410b-a086-3e603a50853a"),
                             CitizenID = "097541590766",
                             DateOfBirth = new DateTime(2016, 3, 13, 6, 14, 18, 0, DateTimeKind.Unspecified),
                             Email = "mloudc@opensource.org",
                             FirstName = "Mela",
                             Gender = 2,
-                            HashPassword = "$2b$10$nZPwOE9iTZzUHL/wU22ntOsf5n5B2iFQeDt2Je7I3dJ4hGnKRijCa",
+                            HashPassword = "$2b$10$FJoOh0dQs99g2Q600W.uH.MDvrJtSpjLxek0Sh6Bvd8KNWhzOETAO",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 91, DateTimeKind.Local).AddTicks(8563),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 518, DateTimeKind.Local).AddTicks(85),
                             LastName = "Loud",
                             PhoneNumber = "01641918486",
                             Role = 1,
@@ -693,15 +737,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("eb6a0553-37fd-4ebf-a084-cff5edbe4099"),
+                            ID = new Guid("9873c2a2-1195-4233-8576-7b0fe83e1e0c"),
                             CitizenID = "051913950498",
                             DateOfBirth = new DateTime(2020, 2, 21, 20, 25, 10, 0, DateTimeKind.Unspecified),
                             Email = "sdemeltd@cafepress.com",
                             FirstName = "Sunny",
                             Gender = 0,
-                            HashPassword = "$2b$10$eTGT2BZYTgjBrKu4r4hCzO3O9uB6UKriIvP6nAFdkqoAKkeeormpa",
+                            HashPassword = "$2b$10$Avx82Dhfald9VvPNkJp21.cCvwBwaxktXIXjfbm4SPvGiod0iZvd2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 175, DateTimeKind.Local).AddTicks(1123),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 589, DateTimeKind.Local).AddTicks(3884),
                             LastName = "Demelt",
                             PhoneNumber = "0795784606",
                             Role = 1,
@@ -709,15 +753,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("4c6ad360-55c4-45a2-ac4e-4a08398a2bb8"),
+                            ID = new Guid("a6a79e56-ab95-429d-87a4-e444e0685c19"),
                             CitizenID = "021166108883",
                             DateOfBirth = new DateTime(2015, 4, 4, 6, 17, 4, 0, DateTimeKind.Unspecified),
                             Email = "mgleesone@youtu.be",
                             FirstName = "Myrna",
                             Gender = 0,
-                            HashPassword = "$2b$10$7insAXfMAwjAoBoi7ORIMObXlr3O6Pqg9kCiMEGNR38/N1L91IeDO",
+                            HashPassword = "$2b$10$dAUI7XejN0YqwQUKv40lUOxQg1buWqJu0sBL7xGcNZ/uu0e2w44ZK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 265, DateTimeKind.Local).AddTicks(4481),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 658, DateTimeKind.Local).AddTicks(7503),
                             LastName = "Gleeson",
                             PhoneNumber = "0060336533",
                             Role = 1,
@@ -725,15 +769,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("83d8a0a9-02a7-4987-8415-749efc43d5f0"),
+                            ID = new Guid("eb064e4e-21a0-48e5-b5e5-b0b3c168263d"),
                             CitizenID = "048251664467",
                             DateOfBirth = new DateTime(2006, 4, 4, 5, 50, 12, 0, DateTimeKind.Unspecified),
                             Email = "ngrandhamf@ihg.com",
                             FirstName = "Nonna",
                             Gender = 0,
-                            HashPassword = "$2b$10$ym.U7t/SDvppTaotaaGhVuFDHcJVhspyXwapepyJNZVAjz7aU2.Uy",
+                            HashPassword = "$2b$10$V6.8akPr5iT6G0df5vvTteRXdCaMORRzaq7/UcL3Tlv1whmnXXy.m",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 368, DateTimeKind.Local).AddTicks(1532),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 727, DateTimeKind.Local).AddTicks(3567),
                             LastName = "Grandham",
                             PhoneNumber = "07995009500",
                             Role = 2,
@@ -741,15 +785,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("d12fcad1-9eef-4569-af09-65305fb73477"),
+                            ID = new Guid("7d4ac7bd-5952-4b99-8d34-71d503be0d64"),
                             CitizenID = "039352634296",
                             DateOfBirth = new DateTime(2009, 3, 26, 6, 33, 21, 0, DateTimeKind.Unspecified),
                             Email = "gtubbsg@examiner.com",
                             FirstName = "Gwyneth",
                             Gender = 2,
-                            HashPassword = "$2b$10$2WAih7GmUILBawgIDG.UFeY/.kh27KpbO2GoTSW4J60OnSRqhcSiy",
+                            HashPassword = "$2b$10$VQ2fRO6mH4CDWkxwDm0tNu/aEniIrRoovUUERRvz3sII8wlfWhiA2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 457, DateTimeKind.Local).AddTicks(9049),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 796, DateTimeKind.Local).AddTicks(1193),
                             LastName = "Tubbs",
                             PhoneNumber = "0630308378",
                             Role = 2,
@@ -757,15 +801,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("34b11ae3-b690-418a-ac80-74572bafdb47"),
+                            ID = new Guid("d4e68381-25f4-4fe3-aca4-4ba61dd5b38c"),
                             CitizenID = "027587962774",
                             DateOfBirth = new DateTime(2011, 2, 14, 16, 13, 43, 0, DateTimeKind.Unspecified),
                             Email = "rlavensh@livejournal.com",
                             FirstName = "Rosalyn",
                             Gender = 2,
-                            HashPassword = "$2b$10$iVxfV0ZYB/Aymn0k./Xynu2jliVJHaK8EXo8y7Eu0RBMl0MiqSAsu",
+                            HashPassword = "$2b$10$uYL/Rvs6QcmYRHKiPFHs7eEXyYoWlJeLsigKlpBT9oQRS/HsRHEx.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 540, DateTimeKind.Local).AddTicks(4214),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 873, DateTimeKind.Local).AddTicks(8234),
                             LastName = "Lavens",
                             PhoneNumber = "06895509784",
                             Role = 2,
@@ -773,15 +817,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("2404b888-ceee-43d9-b34f-e17efcab26e7"),
+                            ID = new Guid("c73ac387-02c4-48ed-a129-4f1790d80847"),
                             CitizenID = "041401323997",
                             DateOfBirth = new DateTime(2011, 8, 11, 17, 37, 59, 0, DateTimeKind.Unspecified),
                             Email = "nmartinyuki@g.co",
                             FirstName = "Nadine",
                             Gender = 0,
-                            HashPassword = "$2b$10$hL.H0MfUPG2nMpi4Sp6MKOirafG5E9zd54eFNOKT8WA/deEFEW4UC",
+                            HashPassword = "$2b$10$JpG.wPy/MRVQoEJvB6iJTezMacN3EjXJl2VxMaHi7Zam6YC.irAqS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 619, DateTimeKind.Local).AddTicks(2581),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 28, 939, DateTimeKind.Local).AddTicks(2038),
                             LastName = "Martinyuk",
                             PhoneNumber = "0766805261",
                             Role = 2,
@@ -789,15 +833,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7f8dd8bc-d7c2-4840-ac50-a34f35c09bb8"),
+                            ID = new Guid("2ddc20dd-13e5-49e4-9d84-ec43d64be8bc"),
                             CitizenID = "060822531573",
                             DateOfBirth = new DateTime(2014, 7, 28, 10, 33, 41, 0, DateTimeKind.Unspecified),
                             Email = "mpowdrellj@accuweather.com",
                             FirstName = "Maren",
                             Gender = 0,
-                            HashPassword = "$2b$10$ffozlrHdrtnPf09VPDY9mu5Lw2Nf17uuvdL3etIFLiZpZbutLmPza",
+                            HashPassword = "$2b$10$4sZJZaKCbNoPwkyV.3ChguzDjofY1tKBN2NLw2pi1R5SDKkbRvZz6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 697, DateTimeKind.Local).AddTicks(7999),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 7, DateTimeKind.Local).AddTicks(3960),
                             LastName = "Powdrell",
                             PhoneNumber = "0569083168",
                             Role = 1,
@@ -805,15 +849,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("d8ec356e-f2c7-4aff-a395-c0e39e6f8bfb"),
+                            ID = new Guid("6f47b522-cba9-477b-b3a9-eaa24c13f53b"),
                             CitizenID = "089699705242",
                             DateOfBirth = new DateTime(2021, 7, 17, 16, 50, 18, 0, DateTimeKind.Unspecified),
                             Email = "mgarriochk@alexa.com",
                             FirstName = "Mavra",
                             Gender = 2,
-                            HashPassword = "$2b$10$O/8DKJVOFwGtD4K3iNnHw.5wFE4DgekkkJkASFp/SV589qsOXYlpe",
+                            HashPassword = "$2b$10$n6.FrGZHRdC4FV2y6G3HL.47H/0FTsyRhaxSGoUj.Vbfg73kh.f4G",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 801, DateTimeKind.Local).AddTicks(3330),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 80, DateTimeKind.Local).AddTicks(8674),
                             LastName = "Garrioch",
                             PhoneNumber = "0072752247",
                             Role = 1,
@@ -821,15 +865,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("6942c19e-6db0-4dd0-bd0a-bbe5720d49ad"),
+                            ID = new Guid("3785ef56-0602-4d36-8962-e53644038ddb"),
                             CitizenID = "011426328012",
                             DateOfBirth = new DateTime(2008, 5, 2, 0, 20, 44, 0, DateTimeKind.Unspecified),
                             Email = "tmccloyl@sun.com",
                             FirstName = "Talya",
                             Gender = 2,
-                            HashPassword = "$2b$10$tsH1kFJneJNSUsCy2KYuLOn5QAzshnkoKgdD3FJu0ZOdNrVZsANXS",
+                            HashPassword = "$2b$10$8oQTlOiWAIZMYCPJo2yTDuaT9hqYHbmdffS74Wss3PHf9HCKXcmuC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 888, DateTimeKind.Local).AddTicks(4739),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 150, DateTimeKind.Local).AddTicks(3394),
                             LastName = "McCloy",
                             PhoneNumber = "08418620623",
                             Role = 2,
@@ -837,15 +881,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("3a4e174e-f749-4248-8274-3a5bdf80c9b6"),
+                            ID = new Guid("b6a67262-43c4-4a4a-9c33-38d9f3c45461"),
                             CitizenID = "058847964276",
                             DateOfBirth = new DateTime(2011, 4, 12, 12, 19, 15, 0, DateTimeKind.Unspecified),
                             Email = "cmaddysonm@technorati.com",
                             FirstName = "Crawford",
                             Gender = 1,
-                            HashPassword = "$2b$10$ZWQR5Etb98k4H1OwEw0GouWNW5o0UOxf34fsH1zd4EB6CkXFEevYq",
+                            HashPassword = "$2b$10$cjoo5eDiLc/w.IZnoNA3hO9yiSkAvHLcr1ibr0MsbgSniR63RxYge",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 37, 973, DateTimeKind.Local).AddTicks(8828),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 216, DateTimeKind.Local).AddTicks(1256),
                             LastName = "Maddyson",
                             PhoneNumber = "0915548406",
                             Role = 2,
@@ -853,15 +897,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7b6ee799-65ee-4fc1-bd7c-e6eba857a173"),
+                            ID = new Guid("e5659345-e564-483f-b25f-c5eca715fe9d"),
                             CitizenID = "098782331580",
                             DateOfBirth = new DateTime(2016, 11, 3, 18, 7, 41, 0, DateTimeKind.Unspecified),
                             Email = "mskirvinn@blogs.com",
                             FirstName = "Marley",
                             Gender = 1,
-                            HashPassword = "$2b$10$QojXl49XNunWXxKrjfZxwO.ldefDm1BKqaUxh2UqYYqbQ83t01VCu",
+                            HashPassword = "$2b$10$yV/Niqxox4pzEl3v4LCQ/uZ5MlWo.3swhH.urP2W7fh6gSx683eCa",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 59, DateTimeKind.Local).AddTicks(7762),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 282, DateTimeKind.Local).AddTicks(7777),
                             LastName = "Skirvin",
                             PhoneNumber = "0614302061",
                             Role = 1,
@@ -869,15 +913,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("ff888ee0-3d64-4833-9fca-f6d9764c5188"),
+                            ID = new Guid("93b43bd5-4e6c-4f3d-b776-47a83088cfcf"),
                             CitizenID = "071531684528",
                             DateOfBirth = new DateTime(2021, 5, 7, 14, 13, 30, 0, DateTimeKind.Unspecified),
                             Email = "kgoddmano@quantcast.com",
                             FirstName = "Karl",
                             Gender = 1,
-                            HashPassword = "$2b$10$iSShLIBktrI8NeF2iF9yHe9Kt674lcTzfjtxBLn0EWZOeZLGkCyOm",
+                            HashPassword = "$2b$10$PtoE59FCEUv9jF2DvnOHduO0Xlkeff63s5o4wZloYvHGWoDb.d7je",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 137, DateTimeKind.Local).AddTicks(5145),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 356, DateTimeKind.Local).AddTicks(4130),
                             LastName = "Goddman",
                             PhoneNumber = "00110582594",
                             Role = 2,
@@ -885,15 +929,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1a2d78c3-54fd-49e0-abb7-5e704f897f4b"),
+                            ID = new Guid("f1fbe8ee-d179-435e-a507-309e069d9c20"),
                             CitizenID = "003103660901",
                             DateOfBirth = new DateTime(2017, 11, 17, 20, 18, 20, 0, DateTimeKind.Unspecified),
                             Email = "rdunsfordp@wikispaces.com",
                             FirstName = "Ryon",
                             Gender = 2,
-                            HashPassword = "$2b$10$e9vmfNOGVJZbQFja.BTEYeXIPSta/vADkQzzvYYP8XhUydv8ULwWG",
+                            HashPassword = "$2b$10$6Z3DJuZ37XrnYgDlAG00.OflvUO1douQowHkR/uBZ3Dxk/zmQ8P76",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 225, DateTimeKind.Local).AddTicks(4861),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 430, DateTimeKind.Local).AddTicks(6720),
                             LastName = "Dunsford",
                             PhoneNumber = "00868235500",
                             Role = 1,
@@ -901,15 +945,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("e889d93d-a853-424f-8a07-328431336486"),
+                            ID = new Guid("cc6d2e2a-d8a0-4238-b9d5-25bbde55adc5"),
                             CitizenID = "043599301481",
                             DateOfBirth = new DateTime(2010, 8, 17, 9, 15, 10, 0, DateTimeKind.Unspecified),
                             Email = "bbolverq@geocities.com",
                             FirstName = "Brigit",
                             Gender = 1,
-                            HashPassword = "$2b$10$j6UAYMPLwWWeDJTg/E/DL.Q7qxq9ptKx.dZ4vHpGY8MVEyE/T13pK",
+                            HashPassword = "$2b$10$Ii3SNjpS8FS8Gs0LRPj27evFMYeuCCZkkH5kvd89rtjwbMKmO4gl.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 300, DateTimeKind.Local).AddTicks(6408),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 516, DateTimeKind.Local).AddTicks(6049),
                             LastName = "Bolver",
                             PhoneNumber = "0361641052",
                             Role = 2,
@@ -917,15 +961,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("4a0b85b0-5a4c-4c32-8905-b0b13d5ce1ad"),
+                            ID = new Guid("5ff5285d-dae9-4042-9af4-5d59edf4c5ec"),
                             CitizenID = "073588774155",
                             DateOfBirth = new DateTime(2007, 1, 9, 9, 16, 15, 0, DateTimeKind.Unspecified),
                             Email = "dfeatherstonhaughr@artisteer.com",
                             FirstName = "Daniella",
                             Gender = 1,
-                            HashPassword = "$2b$10$SePdO3c5sd3N.lt.IzB8Ze8j.BIfcS7DM.dKIEg9jQre9fGHKSvhq",
+                            HashPassword = "$2b$10$k6NBHO6zeinOEbpgIHjmBO6q.CQv/1kOEwbrtgS8DEbD5zm3uTS22",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 382, DateTimeKind.Local).AddTicks(4822),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 608, DateTimeKind.Local).AddTicks(1812),
                             LastName = "Featherstonhaugh",
                             PhoneNumber = "0737666977",
                             Role = 2,
@@ -933,15 +977,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("4f9f93eb-746f-4634-96b2-8825d2ba4c45"),
+                            ID = new Guid("6e0580a0-f418-427e-8722-a2bbbb3ff819"),
                             CitizenID = "086080433821",
                             DateOfBirth = new DateTime(2011, 10, 21, 9, 10, 42, 0, DateTimeKind.Unspecified),
                             Email = "obeaments@bbb.org",
                             FirstName = "Otho",
                             Gender = 2,
-                            HashPassword = "$2b$10$ht6p6h8ukwXJASvKUTbdaOtyxYXXz8AQyxBizZqiv6GkEt00sYxvq",
+                            HashPassword = "$2b$10$Vx5TaYHy6EEhuRDUR4lRrel2kJl.AkK8Dpd0.G2DHff9Sql0K1HIG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 475, DateTimeKind.Local).AddTicks(2184),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 731, DateTimeKind.Local).AddTicks(3650),
                             LastName = "Beament",
                             PhoneNumber = "0756962604",
                             Role = 2,
@@ -949,15 +993,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("46ef2159-815b-4333-b2f6-4b0df1ba5c9d"),
+                            ID = new Guid("758156bb-2a85-4913-93a1-eb16399d7dc5"),
                             CitizenID = "068384339812",
                             DateOfBirth = new DateTime(2019, 12, 19, 12, 9, 19, 0, DateTimeKind.Unspecified),
                             Email = "bgostickt@youtu.be",
                             FirstName = "Bentlee",
                             Gender = 1,
-                            HashPassword = "$2b$10$g0ldqry1AunJP6pCUqyKtelsEwhSYa2/a7kvnNL3JWer5pTW0LLJa",
+                            HashPassword = "$2b$10$rk0E1yje4iRPUfGt89p6Auy1DVhqG.D/g0Kl0.ImX1PbEb2IRWwHu",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 560, DateTimeKind.Local).AddTicks(478),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 819, DateTimeKind.Local).AddTicks(3609),
                             LastName = "Gostick",
                             PhoneNumber = "05617299637",
                             Role = 1,
@@ -965,15 +1009,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("3e63b8a6-c569-4d47-880e-adcfa21ee530"),
+                            ID = new Guid("be76fc0e-4a41-40ba-b790-f4586c3c82b4"),
                             CitizenID = "094925101592",
                             DateOfBirth = new DateTime(2012, 12, 24, 11, 22, 7, 0, DateTimeKind.Unspecified),
                             Email = "mharnottu@ibm.com",
                             FirstName = "Maressa",
                             Gender = 1,
-                            HashPassword = "$2b$10$IfvzLUmKumSoy1YL2NSHL.mEAM8WBwuYlPE1oxXDiX18L4KcOeSB6",
+                            HashPassword = "$2b$10$aOnb/ui1FasBZ.Qi8NQ78eRZ5CB/O344fHHPzB6c5I7.nPpso7yYW",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 639, DateTimeKind.Local).AddTicks(5989),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 29, 898, DateTimeKind.Local).AddTicks(7094),
                             LastName = "Harnott",
                             PhoneNumber = "00039497181",
                             Role = 2,
@@ -981,15 +1025,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("15066245-352c-4e58-9dfd-d26e98dc43b8"),
+                            ID = new Guid("b8e038fc-2939-4b4e-9ac9-7d89f626381a"),
                             CitizenID = "085576611181",
                             DateOfBirth = new DateTime(2017, 9, 4, 20, 7, 33, 0, DateTimeKind.Unspecified),
                             Email = "ewarnesv@chron.com",
                             FirstName = "Ellette",
                             Gender = 2,
-                            HashPassword = "$2b$10$0RfMbibLl.Klx9T7W2MAL.ytDZWZ8IFUWe3nm6IBV2mIyVgWeiTwq",
+                            HashPassword = "$2b$10$ydI/GldufJVibCpP4wLT0uDUuDtS0b3xJlPpwu4crUm2Ji8jyi28G",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 715, DateTimeKind.Local).AddTicks(8103),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 40, DateTimeKind.Local).AddTicks(2884),
                             LastName = "Warnes",
                             PhoneNumber = "0812419659",
                             Role = 2,
@@ -997,15 +1041,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("6da4fb95-02ee-4d30-b0fc-ee4bcd662ec8"),
+                            ID = new Guid("b0baf274-42e2-4509-a1e2-e54f5da15097"),
                             CitizenID = "016226254596",
                             DateOfBirth = new DateTime(2009, 12, 18, 14, 29, 44, 0, DateTimeKind.Unspecified),
                             Email = "rlerew@newyorker.com",
                             FirstName = "Reinaldo",
                             Gender = 2,
-                            HashPassword = "$2b$10$sAn2HKKzQyR3UYBbnSpXfe/0P6I5Pl6x/URWGhEgzVwnojPgayS1.",
+                            HashPassword = "$2b$10$jPGw8HaIM50yKwyAmf8Fium8.BU5Mrn6yVbBaYBNSneXJuwxotvdi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 789, DateTimeKind.Local).AddTicks(4469),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 132, DateTimeKind.Local).AddTicks(6538),
                             LastName = "Lere",
                             PhoneNumber = "04037990815",
                             Role = 1,
@@ -1013,15 +1057,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("b1ac8b67-fbc8-4910-9627-a53dfd1e2f39"),
+                            ID = new Guid("291abba1-019b-4b7e-adbc-09e143b9a5d5"),
                             CitizenID = "060650320572",
                             DateOfBirth = new DateTime(2016, 9, 18, 21, 57, 45, 0, DateTimeKind.Unspecified),
                             Email = "dmckinlayx@guardian.co.uk",
                             FirstName = "Dewie",
                             Gender = 2,
-                            HashPassword = "$2b$10$gz4oyjyOBhURhawxi0WeHOZBBtfDIgZigq/yuYlouTCGaNcGarZPi",
+                            HashPassword = "$2b$10$HdkyERXk9wQYkDfpcRmwk.psdoOamTNMj/sHVrpi56OCtMVMP.sw2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 862, DateTimeKind.Local).AddTicks(1455),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 231, DateTimeKind.Local).AddTicks(7322),
                             LastName = "McKinlay",
                             PhoneNumber = "03957603316",
                             Role = 2,
@@ -1029,15 +1073,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("50b94e21-35f9-4034-833e-7a68e11cd37a"),
+                            ID = new Guid("55154d4b-8204-4f43-a2b6-43df3ec6ce11"),
                             CitizenID = "037624203471",
                             DateOfBirth = new DateTime(2015, 3, 9, 13, 20, 19, 0, DateTimeKind.Unspecified),
                             Email = "sspringhamy@typepad.com",
                             FirstName = "Sinclair",
                             Gender = 1,
-                            HashPassword = "$2b$10$8XEFTdmeZ/GFr8TbZHAIg.oYOp4sbfow6zgWeccJ4jSlKeh5Pds/K",
+                            HashPassword = "$2b$10$idArOah9ymXETJMQY6RAZu8oxLHF2AxbjniIXTXhJsv5h3E0FDLC.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 38, 936, DateTimeKind.Local).AddTicks(2712),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 345, DateTimeKind.Local).AddTicks(3062),
                             LastName = "Springham",
                             PhoneNumber = "00834111266",
                             Role = 1,
@@ -1045,15 +1089,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("a4d8f3d1-ccff-496e-a6bc-c2512cb53ccc"),
+                            ID = new Guid("5e278c2c-2dcb-449a-ad04-46807782547a"),
                             CitizenID = "022302525112",
                             DateOfBirth = new DateTime(2007, 6, 25, 23, 2, 4, 0, DateTimeKind.Unspecified),
                             Email = "fmaestriniz@vistaprint.com",
                             FirstName = "Friedrick",
                             Gender = 1,
-                            HashPassword = "$2b$10$BcGysfc6S44CxOYF5ikd8OkF3m12sqs9rTMFrZEBzCoyDasPDUh4y",
+                            HashPassword = "$2b$10$eYhcuOJUetV6TPLPgr4SE.6d12JMaPHQcrllGQ1Q0YHK5oITJ.MMO",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 17, DateTimeKind.Local).AddTicks(5300),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 443, DateTimeKind.Local).AddTicks(6202),
                             LastName = "Maestrini",
                             PhoneNumber = "0312994030",
                             Role = 2,
@@ -1061,15 +1105,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("eac5a2d8-6ecf-414b-8ad2-e326609bbdb6"),
+                            ID = new Guid("faec6a79-606f-42fd-883e-646fc1db4aac"),
                             CitizenID = "009549428401",
                             DateOfBirth = new DateTime(2019, 10, 11, 14, 57, 7, 0, DateTimeKind.Unspecified),
                             Email = "cbriston10@imgur.com",
                             FirstName = "Cesar",
                             Gender = 1,
-                            HashPassword = "$2b$10$NjreXGaCY6ploydu.S1dLejdu7i/cPDwFbHimMbPgrxJzjEh3Nwia",
+                            HashPassword = "$2b$10$PnbExqdWirrGCsrZsjIAEuPrMCAkib.6yK95yWnepIuSo2pgh2BuS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 99, DateTimeKind.Local).AddTicks(8672),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 543, DateTimeKind.Local).AddTicks(2751),
                             LastName = "Briston",
                             PhoneNumber = "02637402338",
                             Role = 2,
@@ -1077,15 +1121,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("57a043e7-4544-4ba7-b140-0902f373d9c5"),
+                            ID = new Guid("8f20d302-b3ae-4b49-93f6-eae84fecceeb"),
                             CitizenID = "051040211116",
                             DateOfBirth = new DateTime(2016, 4, 12, 2, 53, 13, 0, DateTimeKind.Unspecified),
                             Email = "cdreossi11@google.com",
                             FirstName = "Cozmo",
                             Gender = 0,
-                            HashPassword = "$2b$10$SeLL2XARmGk9qK4qKTkLNePqu2V2oZy4ZLBIEEVcox6j8pAnk4UEa",
+                            HashPassword = "$2b$10$JtLJPFuyOqKTuKDeHv68zO2ArUE4/.Q1KpvFrBD.ucjaV1lIPvC1O",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 184, DateTimeKind.Local).AddTicks(3718),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 618, DateTimeKind.Local).AddTicks(4446),
                             LastName = "Dreossi",
                             PhoneNumber = "03724370545",
                             Role = 2,
@@ -1093,15 +1137,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("d0fca2a9-c251-432a-bee8-be46839a4a58"),
+                            ID = new Guid("11a9a150-0e26-4786-bae3-de299e52179c"),
                             CitizenID = "024650612878",
                             DateOfBirth = new DateTime(2020, 1, 4, 23, 10, 36, 0, DateTimeKind.Unspecified),
                             Email = "pdolder12@dailymail.co.uk",
                             FirstName = "Phillida",
                             Gender = 2,
-                            HashPassword = "$2b$10$Woz35p1QX2biv1qrNQB1QuxG5VATvTtAJTBxmO/zY73TvRWgeHFxi",
+                            HashPassword = "$2b$10$8H3N7GkbFfibnzgBIYmPgOoVnX2jzY2GHToUC6g8LbyocOApZ91bC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 264, DateTimeKind.Local).AddTicks(6215),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 707, DateTimeKind.Local).AddTicks(3691),
                             LastName = "Dolder",
                             PhoneNumber = "0857765771",
                             Role = 2,
@@ -1109,15 +1153,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("8dc3be76-ec04-472b-a531-3698999496e7"),
+                            ID = new Guid("50c4d679-d5cc-4a7c-9d8f-6ea758ca046f"),
                             CitizenID = "024065529024",
                             DateOfBirth = new DateTime(2008, 5, 18, 11, 9, 18, 0, DateTimeKind.Unspecified),
                             Email = "jcantor13@cocolog-nifty.com",
                             FirstName = "Jillayne",
                             Gender = 1,
-                            HashPassword = "$2b$10$G102HP7LTJCw2SYlXlhjOuLqlSQjlb526hJOEW11atpmFJOxipZQ.",
+                            HashPassword = "$2b$10$8j4yvJSGE4YvD8rt1CwtO./84jv/Xg3ElsY2NOqxLVU/q5X3qFmO.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 341, DateTimeKind.Local).AddTicks(6595),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 845, DateTimeKind.Local).AddTicks(949),
                             LastName = "Cantor",
                             PhoneNumber = "0218299981",
                             Role = 1,
@@ -1125,15 +1169,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0a924832-ac54-4595-96a9-8316bf7d5f2e"),
+                            ID = new Guid("cdb93948-be86-44d1-8f84-7039ad1a4fd6"),
                             CitizenID = "094290985539",
                             DateOfBirth = new DateTime(2005, 10, 19, 23, 47, 55, 0, DateTimeKind.Unspecified),
                             Email = "aoconnor14@e-recht24.de",
                             FirstName = "Almeta",
                             Gender = 0,
-                            HashPassword = "$2b$10$b5Nw50tfOR2Hgy9yS2sq1uXl4uKMe0na7GTP/aOkXC53SytbE14sG",
+                            HashPassword = "$2b$10$sHjoWiipqJr9k7Vg0cr6ceMfVEJlQR1tzs8HZdFXIUixlBCu/3a9O",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 415, DateTimeKind.Local).AddTicks(9258),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 30, 989, DateTimeKind.Local).AddTicks(473),
                             LastName = "O'Connor",
                             PhoneNumber = "0750854688",
                             Role = 1,
@@ -1141,15 +1185,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7d5ffe34-c6b3-4dc5-8caa-885761230552"),
+                            ID = new Guid("a525ef3e-b706-41b4-a8ec-2facd4a36a8f"),
                             CitizenID = "036525634125",
                             DateOfBirth = new DateTime(2009, 6, 7, 18, 22, 1, 0, DateTimeKind.Unspecified),
                             Email = "afilipchikov15@flickr.com",
                             FirstName = "Alric",
                             Gender = 0,
-                            HashPassword = "$2b$10$9gT78wxvDX43xwponoPZGOpQ6KvS8Zn.l8pdxLzzlawxu8bTMn5Rq",
+                            HashPassword = "$2b$10$y2PzPXl9PuJT/6pKsEKcQeMXm7cMjbnKDJ95qRMzyLhhJfZNnWBeG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 488, DateTimeKind.Local).AddTicks(265),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 70, DateTimeKind.Local).AddTicks(6217),
                             LastName = "Filipchikov",
                             PhoneNumber = "0663461504",
                             Role = 2,
@@ -1157,15 +1201,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("3de98be4-9ef7-4225-9179-4e7bce8dd1db"),
+                            ID = new Guid("b97698af-84af-402c-ac7d-c7f9ffd4d1af"),
                             CitizenID = "092881420122",
                             DateOfBirth = new DateTime(2017, 10, 31, 19, 50, 36, 0, DateTimeKind.Unspecified),
                             Email = "okroch16@amazon.com",
                             FirstName = "Olenka",
                             Gender = 2,
-                            HashPassword = "$2b$10$c/Dgac58n7NOmEUQHA/VWuZ6J32D7eZkCWb3TSahBNT3/ofyaxsJO",
+                            HashPassword = "$2b$10$bMAq2w0kuqrY076CllN3s.l9yzbRZK4.lRhHivT7wGgjpeUmfuH.K",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 558, DateTimeKind.Local).AddTicks(7867),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 160, DateTimeKind.Local).AddTicks(7026),
                             LastName = "Kroch",
                             PhoneNumber = "09201855247",
                             Role = 1,
@@ -1173,15 +1217,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("deecd186-b905-4c91-a356-577922859e5b"),
+                            ID = new Guid("7db6fe35-00a3-401c-96d1-af884fafc71d"),
                             CitizenID = "042819995246",
                             DateOfBirth = new DateTime(2004, 9, 30, 14, 11, 23, 0, DateTimeKind.Unspecified),
                             Email = "mmcmechan17@lycos.com",
                             FirstName = "Malinde",
                             Gender = 1,
-                            HashPassword = "$2b$10$oS.RGa1Qjtvy4thBYOTPX.PWP0.AU0HoZqasJUwqLW7nPxmD/jYbm",
+                            HashPassword = "$2b$10$Bdz634LW7GT5JFfo7E0cD.gDKcv/KtmT5s7y767TLyAxP1xZBynky",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 633, DateTimeKind.Local).AddTicks(6383),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 263, DateTimeKind.Local).AddTicks(8303),
                             LastName = "McMechan",
                             PhoneNumber = "0613503781",
                             Role = 2,
@@ -1189,15 +1233,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1477a11d-5241-4cfb-8dae-d317c3d95933"),
+                            ID = new Guid("7752e1ab-8cb1-4ad9-bff2-85ed8b1e80a6"),
                             CitizenID = "017928584847",
                             DateOfBirth = new DateTime(2011, 4, 24, 12, 40, 5, 0, DateTimeKind.Unspecified),
                             Email = "tstrooband18@yolasite.com",
                             FirstName = "Tawsha",
                             Gender = 2,
-                            HashPassword = "$2b$10$Z32Fj1li7dr1TzjzTWedKOe7pQe8yfyD3Ssi5gK037rmGvVnACocW",
+                            HashPassword = "$2b$10$t8XlM3HkbqmZoTwz0yaUY.1Aox10/mCd69BVBTG1dc60oO8I2yb9i",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 707, DateTimeKind.Local).AddTicks(4481),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 361, DateTimeKind.Local).AddTicks(2170),
                             LastName = "Strooband",
                             PhoneNumber = "0129884328",
                             Role = 1,
@@ -1205,15 +1249,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("53eb9abc-39fb-4192-bf9e-677911d122c0"),
+                            ID = new Guid("15536165-4744-4fa9-82a9-1468a6917258"),
                             CitizenID = "072336544246",
                             DateOfBirth = new DateTime(2007, 4, 27, 6, 19, 46, 0, DateTimeKind.Unspecified),
                             Email = "smartugin19@springer.com",
                             FirstName = "Sinclair",
                             Gender = 1,
-                            HashPassword = "$2b$10$DJ.DQ2R1dQCi2zZPEawV9uy3FqfpL7L3nMCeZpcARfAYU6r7rSIk6",
+                            HashPassword = "$2b$10$V.U7LMUMqrvuBec2AqOlWupatCBT82brx5nkB/VMzZW5RqcuEH9he",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 802, DateTimeKind.Local).AddTicks(9733),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 454, DateTimeKind.Local).AddTicks(4909),
                             LastName = "Martugin",
                             PhoneNumber = "02340159874",
                             Role = 2,
@@ -1221,15 +1265,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("97a77be0-596f-4642-88e8-cc5574722b76"),
+                            ID = new Guid("b40ce9c1-8fb8-463c-846d-086d7184841e"),
                             CitizenID = "025425126590",
                             DateOfBirth = new DateTime(2016, 11, 11, 3, 36, 31, 0, DateTimeKind.Unspecified),
                             Email = "jmiltonwhite1a@com.com",
                             FirstName = "Justine",
                             Gender = 1,
-                            HashPassword = "$2b$10$sxLOZrO7PmvMZrBU3WibZ.Nujo50oT2WkjO5sRa/P4MUPXgaPiXD6",
+                            HashPassword = "$2b$10$A103TfN.owKU4xyaYYF7Xe.9RSVz4YqlMAd.IqqT.puINPsxdmKbC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 886, DateTimeKind.Local).AddTicks(6242),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 576, DateTimeKind.Local).AddTicks(2889),
                             LastName = "Milton-White",
                             PhoneNumber = "0602588523",
                             Role = 2,
@@ -1237,15 +1281,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("b59640b8-8319-44f2-b7e6-4e9e3cd7e769"),
+                            ID = new Guid("c260b105-5531-42ac-af12-dbd8b968791e"),
                             CitizenID = "040760923509",
                             DateOfBirth = new DateTime(2016, 11, 21, 23, 37, 37, 0, DateTimeKind.Unspecified),
                             Email = "spetteford1b@jugem.jp",
                             FirstName = "Sean",
                             Gender = 2,
-                            HashPassword = "$2b$10$lddTdZqnEs2N8kD9lvmCiOO..123NhLg/6r.A6Lv1Pb/Bb.VZPnjq",
+                            HashPassword = "$2b$10$0LLkC2hlc4Ulz7ZgsfUPwuysaKi2jyQ/kghuM9Nvwx2groXEgw/I2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 39, 969, DateTimeKind.Local).AddTicks(7422),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 651, DateTimeKind.Local).AddTicks(5363),
                             LastName = "Petteford",
                             PhoneNumber = "0939882707",
                             Role = 2,
@@ -1253,15 +1297,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1f3d8df4-8fdf-483c-a699-4a9f0e6d7938"),
+                            ID = new Guid("6d6517e2-d699-4129-9d14-ee85f2f220f4"),
                             CitizenID = "013013528487",
                             DateOfBirth = new DateTime(2015, 12, 3, 8, 15, 12, 0, DateTimeKind.Unspecified),
                             Email = "dmiddlehurst1c@paginegialle.it",
                             FirstName = "Davis",
                             Gender = 0,
-                            HashPassword = "$2b$10$ueIQRnYnILtlAoTNniQ8Ku/yV9SsgBogd.UC/Zs2vJr/PYTjeImhm",
+                            HashPassword = "$2b$10$HFUotd2P2AL62zC5..3oG.8XErrEIqqM9DAHdLj8pI/lHzjWGtyMK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 48, DateTimeKind.Local).AddTicks(8031),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 779, DateTimeKind.Local).AddTicks(6882),
                             LastName = "Middlehurst",
                             PhoneNumber = "03494633510",
                             Role = 2,
@@ -1269,15 +1313,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1fd79796-1776-49a7-bbba-63abaef8d354"),
+                            ID = new Guid("e82e00a2-21ef-429b-87ba-e89e43b603f4"),
                             CitizenID = "021177218653",
                             DateOfBirth = new DateTime(2018, 1, 18, 15, 2, 2, 0, DateTimeKind.Unspecified),
                             Email = "kmacgorrie1d@quantcast.com",
                             FirstName = "Koren",
                             Gender = 2,
-                            HashPassword = "$2b$10$A.JiWtWQ2eFYlMujrdZzMeOqDvoXX9F049CzgTDLIwX5E6akpx7Ci",
+                            HashPassword = "$2b$10$867W2u6mPE77F2huXJgpI.0uqEfCb/SC1TfjI5vAbVJewFLct43Du",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 124, DateTimeKind.Local).AddTicks(5532),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 900, DateTimeKind.Local).AddTicks(3260),
                             LastName = "MacGorrie",
                             PhoneNumber = "0259328059",
                             Role = 2,
@@ -1285,15 +1329,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f30830bc-ddb5-418f-9177-8cf03be5b1b4"),
+                            ID = new Guid("93d24d75-0c45-44c6-a1f8-4b7f8bb45515"),
                             CitizenID = "001109382787",
                             DateOfBirth = new DateTime(2021, 10, 26, 16, 18, 3, 0, DateTimeKind.Unspecified),
                             Email = "blaidel1e@ucla.edu",
                             FirstName = "Betsey",
                             Gender = 2,
-                            HashPassword = "$2b$10$9DS.v2YVJ1IEm0CBRdvtgeKGD1V.mtUohFW7Cysh0sKg1pCCIpTf6",
+                            HashPassword = "$2b$10$fm3lSJcO8HWU41R6CSKHEOB6FB9RPjZj5hSGtXmffsGE4/cKf8OZy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 197, DateTimeKind.Local).AddTicks(8142),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 31, 991, DateTimeKind.Local).AddTicks(1758),
                             LastName = "Laidel",
                             PhoneNumber = "06837677860",
                             Role = 2,
@@ -1301,15 +1345,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("281c4945-b186-4cd2-9cec-77e4f052fb8b"),
+                            ID = new Guid("f3ff20fb-9337-4d4c-86d7-87f0f8a1a89e"),
                             CitizenID = "003413126760",
                             DateOfBirth = new DateTime(2011, 8, 20, 12, 3, 46, 0, DateTimeKind.Unspecified),
                             Email = "emattam1f@opensource.org",
                             FirstName = "Elmo",
                             Gender = 1,
-                            HashPassword = "$2b$10$NRNLtsz9iK3IonPgiAeLPucud/yomYWQ7UR.BkaJEKRrBr9IF8.hi",
+                            HashPassword = "$2b$10$pmG7d6ueBm.eUb6q/JxIFuyZJwcIlMFSV3fZq1HTfV0imoHXKZPO6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 269, DateTimeKind.Local).AddTicks(2408),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 98, DateTimeKind.Local).AddTicks(466),
                             LastName = "Mattam",
                             PhoneNumber = "0865586458",
                             Role = 2,
@@ -1317,15 +1361,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("e1fe15c6-cdb7-43be-85ee-dc177347a34a"),
+                            ID = new Guid("c563aea4-df53-4d0e-9ac6-234d2aca1442"),
                             CitizenID = "033840798257",
                             DateOfBirth = new DateTime(2007, 9, 30, 12, 3, 49, 0, DateTimeKind.Unspecified),
                             Email = "tgareisr1g@theglobeandmail.com",
                             FirstName = "Tina",
                             Gender = 2,
-                            HashPassword = "$2b$10$j8ZlYZa3cdcZnImSNnLjquHm49X0VNznwflQQzjXE6v2ere0qnzVO",
+                            HashPassword = "$2b$10$qi.f4iEntWpXQAJykBXnm.AnlKlwH0I7/HbBoCcTDLwTVBGIfKAUi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 339, DateTimeKind.Local).AddTicks(4064),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 206, DateTimeKind.Local).AddTicks(3540),
                             LastName = "Gareisr",
                             PhoneNumber = "07314447051",
                             Role = 2,
@@ -1333,15 +1377,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("29230107-d802-4b1f-815f-f138b64b5442"),
+                            ID = new Guid("d9d180b9-8692-4cdc-86bc-87fb583cf9bb"),
                             CitizenID = "039542282063",
                             DateOfBirth = new DateTime(2017, 7, 26, 22, 10, 59, 0, DateTimeKind.Unspecified),
                             Email = "kashpole1h@nifty.com",
                             FirstName = "Kirstin",
                             Gender = 1,
-                            HashPassword = "$2b$10$ZRiJaNgw.Q/hsAEH55X6WOdnTipVLGlmXffcnfCv2qnBKA7ceRfFi",
+                            HashPassword = "$2b$10$ZnnesI25OFfQqYmCWdRDp.h1FXdx/5IPHlQlJgDkmjyXdMhMPFs46",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 410, DateTimeKind.Local).AddTicks(427),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 302, DateTimeKind.Local).AddTicks(6213),
                             LastName = "Ashpole",
                             PhoneNumber = "03667705539",
                             Role = 1,
@@ -1349,15 +1393,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("33087c4e-80e6-4ce2-98f8-9ca550170e14"),
+                            ID = new Guid("856ea2c3-ba93-4b9b-9ea9-eb198ecca5c1"),
                             CitizenID = "077582527961",
                             DateOfBirth = new DateTime(2007, 12, 6, 5, 32, 27, 0, DateTimeKind.Unspecified),
                             Email = "smackieson1i@microsoft.com",
                             FirstName = "Sande",
                             Gender = 1,
-                            HashPassword = "$2b$10$WzgaTPcrjlrXawPBDBdu8.1Y4gjklBl9BUfwunfB6OshP827O72uS",
+                            HashPassword = "$2b$10$xaPBJPFSaX8o3YPDbclsWegvwhKWm22Ia1/M8c3HAyPPtaf8GC1Q6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 494, DateTimeKind.Local).AddTicks(1595),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 420, DateTimeKind.Local).AddTicks(7581),
                             LastName = "Mackieson",
                             PhoneNumber = "07046670689",
                             Role = 2,
@@ -1365,15 +1409,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f59e637a-e1b7-4f26-8bf1-e73f6dd88eb6"),
+                            ID = new Guid("c20f4963-6ddd-4cbb-91d7-0657c7f84052"),
                             CitizenID = "013377261786",
                             DateOfBirth = new DateTime(2020, 1, 8, 12, 55, 9, 0, DateTimeKind.Unspecified),
                             Email = "pshufflebotham1j@hatena.ne.jp",
                             FirstName = "Pavlov",
                             Gender = 0,
-                            HashPassword = "$2b$10$zZwTzGMepqTx9rTfqFawheq/wxO/LN3jwpEKAPEM89b/KSnOdNZze",
+                            HashPassword = "$2b$10$7soIf9RtwLmFY6hqoNw2M.zWxHRJXqjq7E8GCeWStU8qjkmB.AOou",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 577, DateTimeKind.Local).AddTicks(4912),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 542, DateTimeKind.Local).AddTicks(162),
                             LastName = "Shufflebotham",
                             PhoneNumber = "0960301131",
                             Role = 2,
@@ -1381,15 +1425,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7d23273f-eed1-4065-baef-38f7e0569306"),
+                            ID = new Guid("8e01c3a4-8f40-4c57-b179-e2f51f493c27"),
                             CitizenID = "021190690053",
                             DateOfBirth = new DateTime(2015, 5, 10, 0, 52, 10, 0, DateTimeKind.Unspecified),
                             Email = "kdroghan1k@netscape.com",
                             FirstName = "Koressa",
                             Gender = 1,
-                            HashPassword = "$2b$10$11WBncJeipPPY3mFM5LMceeVGU2mLHqmvjQKMrGD9GXyhYq/20GVG",
+                            HashPassword = "$2b$10$eBMuAiwcmhDb1bkv0vp9T.2TAQwiGbjXjYOmmUrSxfTXYj0HwL.RC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 657, DateTimeKind.Local).AddTicks(5152),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 642, DateTimeKind.Local).AddTicks(6708),
                             LastName = "Droghan",
                             PhoneNumber = "0910618733",
                             Role = 2,
@@ -1397,15 +1441,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("1a417cef-d5ea-4ffe-95d7-66e07fca1311"),
+                            ID = new Guid("25edd851-cae6-4ad4-81ee-3a2562e61dd6"),
                             CitizenID = "043469299501",
                             DateOfBirth = new DateTime(2011, 5, 18, 0, 29, 35, 0, DateTimeKind.Unspecified),
                             Email = "fberks1l@yelp.com",
                             FirstName = "Fianna",
                             Gender = 2,
-                            HashPassword = "$2b$10$8//Uhaddl4uGD.DuTAYJZ.T3Baz.7Z1.s4A0fPGz.nWluosC/ZP4K",
+                            HashPassword = "$2b$10$mN3iS/XlQIZNuXPh4NidPeoyVuNUgBOreMdLqNomBCbrtKirYqo92",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 738, DateTimeKind.Local).AddTicks(3425),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 735, DateTimeKind.Local).AddTicks(8695),
                             LastName = "Berks",
                             PhoneNumber = "04613021719",
                             Role = 2,
@@ -1413,15 +1457,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("c6d0fa87-1dec-4403-8ac1-ca97806bc49e"),
+                            ID = new Guid("0b4866de-e8d1-4cab-b33f-35ddefaa3133"),
                             CitizenID = "000896471415",
                             DateOfBirth = new DateTime(2017, 9, 15, 15, 0, 13, 0, DateTimeKind.Unspecified),
                             Email = "cmargrie1m@last.fm",
                             FirstName = "Charmine",
                             Gender = 0,
-                            HashPassword = "$2b$10$AdOfXuMXY4iqQwMYfGIa3eyfVHF2PEXtTou7Ev6oTTkXrd/upZByu",
+                            HashPassword = "$2b$10$rXBlDG03cuZffz0En/KSmeSRMDIM73xZcfX5JKDXzDuKHlXAtwLWe",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 818, DateTimeKind.Local).AddTicks(4548),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 852, DateTimeKind.Local).AddTicks(5527),
                             LastName = "Margrie",
                             PhoneNumber = "0153784673",
                             Role = 1,
@@ -1429,15 +1473,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("2721694d-d215-4fa4-9a80-50d581fcdedc"),
+                            ID = new Guid("b78f228b-61a6-49bf-9e6b-754b6c588c1e"),
                             CitizenID = "070158745130",
                             DateOfBirth = new DateTime(2013, 3, 26, 2, 47, 36, 0, DateTimeKind.Unspecified),
                             Email = "channen1n@ihg.com",
                             FirstName = "Catarina",
                             Gender = 0,
-                            HashPassword = "$2b$10$VWWixSFD05VZ8h1V/sKjsu8iKq4pZ.iNl9LkfM/DWPsamK89WPKSe",
+                            HashPassword = "$2b$10$1Fl8hYDswFwFAoA3KQfgeOkWRekXk..pWS5Lkcz3BCvpnzBHee2SS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 895, DateTimeKind.Local).AddTicks(645),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 32, 980, DateTimeKind.Local).AddTicks(9403),
                             LastName = "Hannen",
                             PhoneNumber = "06533305742",
                             Role = 2,
@@ -1445,15 +1489,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("46336c72-528c-45fb-bc41-c44d7564ec53"),
+                            ID = new Guid("13543eb1-49f6-4c87-8117-21dc26a0d477"),
                             CitizenID = "054250845949",
                             DateOfBirth = new DateTime(2021, 7, 15, 13, 52, 50, 0, DateTimeKind.Unspecified),
                             Email = "oormerod1o@businesswire.com",
                             FirstName = "Ophelie",
                             Gender = 2,
-                            HashPassword = "$2b$10$Xy7NEHkrME9PDdcEWLmpt.VPT0Gnaj7jq2A0ABRKnLYaowjn0ZLna",
+                            HashPassword = "$2b$10$RWurQJ5iZQ6plo89HRmZoOv35HllSaPmGVG0X3xM6Eord9d315fPy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 40, 969, DateTimeKind.Local).AddTicks(3235),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 78, DateTimeKind.Local).AddTicks(5089),
                             LastName = "Ormerod",
                             PhoneNumber = "02807987147",
                             Role = 1,
@@ -1461,15 +1505,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("2905988b-1f19-4944-928f-0d7c712f7ec3"),
+                            ID = new Guid("5289ec61-bbc3-4ebc-a9bc-9f8d15e0f8b1"),
                             CitizenID = "058831865897",
                             DateOfBirth = new DateTime(2011, 1, 2, 20, 27, 50, 0, DateTimeKind.Unspecified),
                             Email = "vrameaux1p@histats.com",
                             FirstName = "Vern",
                             Gender = 2,
-                            HashPassword = "$2b$10$9468BT8kNcdLnsZC7ipAlOOQZ0HntRethvv4SyRDQHWFNI0bOsQKC",
+                            HashPassword = "$2b$10$OYXgY/JpDpiebU/RFxhhdunlgc6Ggzq4KM/KClnK2Srn9SH0YovbS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 42, DateTimeKind.Local).AddTicks(3245),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 169, DateTimeKind.Local).AddTicks(6077),
                             LastName = "Rameaux",
                             PhoneNumber = "0213510408",
                             Role = 2,
@@ -1477,15 +1521,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("e12ef976-5a5d-4fa7-a449-5522ee4088e2"),
+                            ID = new Guid("321af58e-99bd-4c01-9afc-d74864b7e9fd"),
                             CitizenID = "044342332159",
                             DateOfBirth = new DateTime(2013, 4, 16, 14, 16, 11, 0, DateTimeKind.Unspecified),
                             Email = "jbrockelsby1q@etsy.com",
                             FirstName = "Jeramie",
                             Gender = 2,
-                            HashPassword = "$2b$10$JldQlw0jY0xr8y3XuPh9Oe9DBFr/jxk2nR6ZOjDKesaRLkn7P/e7u",
+                            HashPassword = "$2b$10$WmQoYVvZcSY73RaAWJqaLujW.RaxuOOBb3lvycAtGudP9UF0dqLNK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 113, DateTimeKind.Local).AddTicks(4476),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 257, DateTimeKind.Local).AddTicks(6087),
                             LastName = "Brockelsby",
                             PhoneNumber = "04963800585",
                             Role = 1,
@@ -1493,15 +1537,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("b6131fc1-5a69-4bcf-8a8e-48e43c70deaf"),
+                            ID = new Guid("9e67e714-97e1-4d06-b7a4-223bf67995fa"),
                             CitizenID = "004140346503",
                             DateOfBirth = new DateTime(2015, 5, 3, 9, 24, 20, 0, DateTimeKind.Unspecified),
                             Email = "mhallard1r@bbc.co.uk",
                             FirstName = "Madelyn",
                             Gender = 0,
-                            HashPassword = "$2b$10$SvsrX4QnykUGWlQH1xi7XO9QHTtfRyyYbQD0LnuusUDV1fuW7o40S",
+                            HashPassword = "$2b$10$5MauEfo1JpS5Ml4dmpPGeuapSdtd3M68yJqA.ZFiUBCFUev3CdTKW",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 184, DateTimeKind.Local).AddTicks(843),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 361, DateTimeKind.Local).AddTicks(5853),
                             LastName = "Hallard",
                             PhoneNumber = "03332477053",
                             Role = 2,
@@ -1509,15 +1553,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0f53a993-10c8-4817-8d9d-1da720c282a2"),
+                            ID = new Guid("9534d522-45cb-4485-aadc-d568dec879f9"),
                             CitizenID = "056534722467",
                             DateOfBirth = new DateTime(2018, 8, 13, 15, 36, 44, 0, DateTimeKind.Unspecified),
                             Email = "bwebling1s@google.co.jp",
                             FirstName = "Blinni",
                             Gender = 0,
-                            HashPassword = "$2b$10$jQw9GqU7XsXCorj6o56ldO5AM9qIzjXiZALf3OCl8DY5TTHVqE1Sq",
+                            HashPassword = "$2b$10$gCXhxhLHFaNU9Q54RJx2cOg8r.1x3gDyxZVvPyDXJN/oC/WkPYoXC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 253, DateTimeKind.Local).AddTicks(5586),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 456, DateTimeKind.Local).AddTicks(7432),
                             LastName = "Webling",
                             PhoneNumber = "0390471753",
                             Role = 2,
@@ -1525,15 +1569,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("668ea8bc-4155-47d1-9a84-7b9d83d9f260"),
+                            ID = new Guid("6cfc4e86-c586-4377-ae57-de5a8375ef4a"),
                             CitizenID = "083356691455",
                             DateOfBirth = new DateTime(2011, 12, 5, 2, 47, 25, 0, DateTimeKind.Unspecified),
                             Email = "atrippitt1t@unblog.fr",
                             FirstName = "Arnaldo",
                             Gender = 1,
-                            HashPassword = "$2b$10$U/YjTAwKfQWsve4zPG572u/vVKNrd.xheIUWZfHDi7H0yURdHkn/W",
+                            HashPassword = "$2b$10$Dl.crxaNbzM8e3DWr4PGl.JyyPf9TN5TupAcPV3q7FJ4fGKfrFzH6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 323, DateTimeKind.Local).AddTicks(2095),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 557, DateTimeKind.Local).AddTicks(2933),
                             LastName = "Trippitt",
                             PhoneNumber = "00615614760",
                             Role = 1,
@@ -1541,15 +1585,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("ff33f64b-dab7-4841-9d0c-252ee04fde77"),
+                            ID = new Guid("05602db6-37f9-4720-9347-1198bf4120d9"),
                             CitizenID = "051569747161",
                             DateOfBirth = new DateTime(2020, 3, 3, 11, 52, 30, 0, DateTimeKind.Unspecified),
                             Email = "ascirman1u@berkeley.edu",
                             FirstName = "Annmaria",
                             Gender = 0,
-                            HashPassword = "$2b$10$NumWMGwuuYW2JBnBsf.xMOfVEYTvR2RF./Y11PMxcgJ6V/QlfNQUe",
+                            HashPassword = "$2b$10$7eOs816OG2JsAxA3tfpHyu87gV3vgXXT9XKrNn.g8noLHUDyUe/wi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 401, DateTimeKind.Local).AddTicks(1842),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 653, DateTimeKind.Local).AddTicks(8290),
                             LastName = "Scirman",
                             PhoneNumber = "0195375651",
                             Role = 1,
@@ -1557,15 +1601,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f3050092-c4b6-4131-8279-3f6b4373fecf"),
+                            ID = new Guid("7d68b131-beff-4509-8a5a-f1da99b1799e"),
                             CitizenID = "094844289819",
                             DateOfBirth = new DateTime(2011, 9, 8, 19, 44, 33, 0, DateTimeKind.Unspecified),
                             Email = "czamorano1v@sakura.ne.jp",
                             FirstName = "Christophorus",
                             Gender = 2,
-                            HashPassword = "$2b$10$DnMeNI3xYJrEuWbfwGEgLecI7maB8hXvSiH5kyI56PHBL/3K4W8xG",
+                            HashPassword = "$2b$10$/uPseGx2sGr6kABTobkRMOjSGhLnoK21TG09r7SIJueFPYBgqFTj6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 498, DateTimeKind.Local).AddTicks(8984),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 745, DateTimeKind.Local).AddTicks(4310),
                             LastName = "Zamorano",
                             PhoneNumber = "0619225384",
                             Role = 2,
@@ -1573,15 +1617,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("ebf297e3-df49-428c-92d4-2712066df317"),
+                            ID = new Guid("f97aab1b-e473-410e-9d4b-1dadca9d9888"),
                             CitizenID = "061656096074",
                             DateOfBirth = new DateTime(2016, 8, 21, 2, 23, 29, 0, DateTimeKind.Unspecified),
                             Email = "rpolden1w@pinterest.com",
                             FirstName = "Randy",
                             Gender = 1,
-                            HashPassword = "$2b$10$w2A/847bKCWhcNLvxmve5ODXlSUuxq75SDCk9anNEbmYjrDRdIM5W",
+                            HashPassword = "$2b$10$PzRmGSYXMuSxuJVJLIz2x.uISiuhbSdUzZEl.sPCzBMhwLkja2R9.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 584, DateTimeKind.Local).AddTicks(3490),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 833, DateTimeKind.Local).AddTicks(1422),
                             LastName = "Polden",
                             PhoneNumber = "0831072797",
                             Role = 1,
@@ -1589,15 +1633,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("222e89ac-3e48-411f-a74d-29e7b61ecd24"),
+                            ID = new Guid("af9642b0-0042-4bac-9c07-5aa6079d1abb"),
                             CitizenID = "009972130313",
                             DateOfBirth = new DateTime(2020, 2, 18, 3, 49, 41, 0, DateTimeKind.Unspecified),
                             Email = "gstranger1x@github.io",
                             FirstName = "Grantley",
                             Gender = 1,
-                            HashPassword = "$2b$10$Wf8lyKr7eVSrpKtNMt9FOuRjdtqoEPevyRNrTQcE8zGBWnVZz3PHW",
+                            HashPassword = "$2b$10$mpDRDsEhuJhog4rvljwOu.5KQt.VkpOvemU5PCWz.KqQjRlLSORo2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 676, DateTimeKind.Local).AddTicks(9843),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 33, 916, DateTimeKind.Local).AddTicks(9378),
                             LastName = "Stranger",
                             PhoneNumber = "03239623484",
                             Role = 2,
@@ -1605,15 +1649,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0d6704ae-42ff-4aec-9189-38c7a979d0f7"),
+                            ID = new Guid("11cfb069-2c32-4f09-9bd3-00ef78f1f823"),
                             CitizenID = "066323560698",
                             DateOfBirth = new DateTime(2017, 9, 25, 16, 3, 27, 0, DateTimeKind.Unspecified),
                             Email = "abatrip1y@opensource.org",
                             FirstName = "Ashlen",
                             Gender = 2,
-                            HashPassword = "$2b$10$k.4riMZ6ibtT79BLcpm40eKdjjIdsX391lMBUVEqAmOUGkUVgDKjS",
+                            HashPassword = "$2b$10$.TMs2uSwgUCLo0M8Cr/fV.GZdAacxlZsc4Yw4LA7eNDecfCsnYAKC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 766, DateTimeKind.Local).AddTicks(3595),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 2, DateTimeKind.Local).AddTicks(7026),
                             LastName = "Batrip",
                             PhoneNumber = "0734926905",
                             Role = 1,
@@ -1621,15 +1665,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("ccef67ca-4b01-4ee2-bdaf-ece3e1ea23d0"),
+                            ID = new Guid("fc97937c-45d6-4cbf-adfa-c5053760562f"),
                             CitizenID = "067750080669",
                             DateOfBirth = new DateTime(2014, 11, 30, 22, 35, 53, 0, DateTimeKind.Unspecified),
                             Email = "skearns1z@soup.io",
                             FirstName = "Sela",
                             Gender = 2,
-                            HashPassword = "$2b$10$4TUXcSCgJg8i0hqZPfOK.u9m/5ZLBWyfbZ5W1GWBgd7ChCeO9HO5.",
+                            HashPassword = "$2b$10$xrjBKG8bY/LMGyCdNB3mX.cg/KoWTSsfGmR3NLpcP.rxv4c2oL962",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 864, DateTimeKind.Local).AddTicks(5827),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 89, DateTimeKind.Local).AddTicks(8542),
                             LastName = "Kearns",
                             PhoneNumber = "0461097167",
                             Role = 1,
@@ -1637,15 +1681,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7f4f65b9-0598-496b-ae12-c6d0f4ae18a1"),
+                            ID = new Guid("18185f2a-1ed1-4a4f-9821-153117f00133"),
                             CitizenID = "030636956184",
                             DateOfBirth = new DateTime(2011, 5, 25, 22, 45, 0, 0, DateTimeKind.Unspecified),
                             Email = "koliffe20@hp.com",
                             FirstName = "Keefer",
                             Gender = 1,
-                            HashPassword = "$2b$10$kShQoiZb92qerCPe2ux3eeRqM80ebMGPF0WVY9lpFBO0QJoJe8Qvm",
+                            HashPassword = "$2b$10$ANbSdxTg7av5WF1z0dbqbe0ZBCo7dSZr8MDooVKrJNreKHa7ppmBG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 41, 952, DateTimeKind.Local).AddTicks(2940),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 171, DateTimeKind.Local).AddTicks(8846),
                             LastName = "Oliffe",
                             PhoneNumber = "0002143579",
                             Role = 1,
@@ -1653,15 +1697,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f252544b-bacc-4aba-b944-1bddce02dbca"),
+                            ID = new Guid("f348671e-ea32-4d34-91cf-92281b268ac0"),
                             CitizenID = "074563912201",
                             DateOfBirth = new DateTime(2018, 10, 29, 20, 37, 6, 0, DateTimeKind.Unspecified),
                             Email = "rlatan21@google.de",
                             FirstName = "Rorke",
                             Gender = 2,
-                            HashPassword = "$2b$10$BTd9H0dHLAQ5tojOizVFzOIxuiV8BwVvGjfUfe131bdD4SjqFO3dy",
+                            HashPassword = "$2b$10$sE8GCahQI6lh/SE15pJZuOTIDMOWgypRXbLagMBpNWiOuw20U5z26",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 41, DateTimeKind.Local).AddTicks(8827),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 251, DateTimeKind.Local).AddTicks(171),
                             LastName = "Latan",
                             PhoneNumber = "07949258154",
                             Role = 1,
@@ -1669,15 +1713,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("9c166b29-6933-470a-a937-86b8916ec3dd"),
+                            ID = new Guid("3ec16b51-9704-4451-b80a-e09f053a0741"),
                             CitizenID = "081889240844",
                             DateOfBirth = new DateTime(2019, 2, 10, 16, 11, 1, 0, DateTimeKind.Unspecified),
                             Email = "jwebley22@shareasale.com",
                             FirstName = "Jethro",
                             Gender = 2,
-                            HashPassword = "$2b$10$BuVxRXlvIvHWdJz9Nh5HGOHv3JOvXs8AmahFKBGbAw2ctwa5k3nda",
+                            HashPassword = "$2b$10$0flHiKLK.6PlKpq5SX8P/utCMicUjixZHWtMZN3H9eh08Us81Bi/W",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 147, DateTimeKind.Local).AddTicks(7417),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 332, DateTimeKind.Local).AddTicks(9306),
                             LastName = "Webley",
                             PhoneNumber = "0821411907",
                             Role = 1,
@@ -1685,15 +1729,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("db9652e7-ada7-479e-b413-16fd406faddb"),
+                            ID = new Guid("58cf397e-c6cb-4639-b1ea-bb3b4dd63dcc"),
                             CitizenID = "070259732553",
                             DateOfBirth = new DateTime(2009, 7, 23, 1, 45, 40, 0, DateTimeKind.Unspecified),
                             Email = "hscheffel23@salon.com",
                             FirstName = "Hayden",
                             Gender = 1,
-                            HashPassword = "$2b$10$nQXJRqIutmnd8NZLz6mCM.Ex57hF6DALD9E0M9MDImsTE4UjpR8o.",
+                            HashPassword = "$2b$10$eRgUUsDlIYT9XS5/SMiTOOla7ddBjD3H0MZVp7/Cw1NGUWyQwtjm2",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 240, DateTimeKind.Local).AddTicks(7698),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 415, DateTimeKind.Local).AddTicks(3027),
                             LastName = "Scheffel",
                             PhoneNumber = "0355632555",
                             Role = 2,
@@ -1701,15 +1745,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("357db707-2476-4c36-b4ec-1d56b446b204"),
+                            ID = new Guid("6e53457f-5191-4720-8c65-d95bb6a49128"),
                             CitizenID = "035388482385",
                             DateOfBirth = new DateTime(2010, 11, 22, 14, 55, 17, 0, DateTimeKind.Unspecified),
                             Email = "gswanson24@umn.edu",
                             FirstName = "Gray",
                             Gender = 2,
-                            HashPassword = "$2b$10$sdzxwvg80z6uB3JcWVLG2eQ4l69nCvrIm83MQSOmJ2gP4Nz9KJvkm",
+                            HashPassword = "$2b$10$TcxWjnRCPuBXQf/wNyzmGuO5cl0qVRrNX13PQUHmmVtz70GGYlV62",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 327, DateTimeKind.Local).AddTicks(7288),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 506, DateTimeKind.Local).AddTicks(4677),
                             LastName = "Swanson",
                             PhoneNumber = "09572022187",
                             Role = 1,
@@ -1717,15 +1761,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("6fc8dbcd-df0a-40fb-9f55-b0fd7dc31d03"),
+                            ID = new Guid("b0e56e12-8fd7-41c6-90aa-e9dafb893d76"),
                             CitizenID = "057500382194",
                             DateOfBirth = new DateTime(2020, 10, 20, 16, 48, 58, 0, DateTimeKind.Unspecified),
                             Email = "dlannen25@godaddy.com",
                             FirstName = "Drake",
                             Gender = 2,
-                            HashPassword = "$2b$10$HmROZ3mLNQ2hfelArw/FU.1wx7vB1KdmWK8I7kPQ.x./VxXaNiZYq",
+                            HashPassword = "$2b$10$BfbPHsSPeABeNp.oeX4uF.t5Afa3meNYLy1QCN5zpfsf/yyMrSacm",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 423, DateTimeKind.Local).AddTicks(9341),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 609, DateTimeKind.Local).AddTicks(9484),
                             LastName = "Lannen",
                             PhoneNumber = "04000508789",
                             Role = 1,
@@ -1733,15 +1777,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("3796ebbc-d5a3-4f54-b13c-a6846d361eee"),
+                            ID = new Guid("047bfd41-f27a-4e4f-a0a0-0a127e5dfae0"),
                             CitizenID = "067204083505",
                             DateOfBirth = new DateTime(2010, 12, 9, 5, 42, 45, 0, DateTimeKind.Unspecified),
                             Email = "wmackegg26@acquirethisname.com",
                             FirstName = "Wilek",
                             Gender = 1,
-                            HashPassword = "$2b$10$yQaNVyNgXC90LQGMdaEoX.isy9UFl3ROArnV.n1llWRFX1kfmApcy",
+                            HashPassword = "$2b$10$RMcoeVNt3ZR5h.Gkhe.3hOKLGPDujhpfMjd8USPd0VkTenwvmDKuy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 538, DateTimeKind.Local).AddTicks(8177),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 725, DateTimeKind.Local).AddTicks(7363),
                             LastName = "MacKegg",
                             PhoneNumber = "05989129010",
                             Role = 2,
@@ -1749,15 +1793,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("7bed76d9-feed-4636-9d7c-3821f52426e3"),
+                            ID = new Guid("f772b82c-62bf-4cde-a8bd-ddaa7aec743e"),
                             CitizenID = "044455502617",
                             DateOfBirth = new DateTime(2018, 2, 7, 1, 51, 37, 0, DateTimeKind.Unspecified),
                             Email = "rglison27@cbslocal.com",
                             FirstName = "Renee",
                             Gender = 1,
-                            HashPassword = "$2b$10$mYUzuEpJ3i6.0CkvQJqYu.AlRFtMuHlCj92MZpuTYzEJA.0R8M3VO",
+                            HashPassword = "$2b$10$UIGu8/BFaM0WYzQqfUwNxemE8s9IK.25u37C.8JJj29VIdCgjsrmK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 644, DateTimeKind.Local).AddTicks(3666),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 840, DateTimeKind.Local).AddTicks(7075),
                             LastName = "Glison",
                             PhoneNumber = "06769810772",
                             Role = 1,
@@ -1765,15 +1809,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("90eafef8-71bf-484c-86b4-9ce0c815c19d"),
+                            ID = new Guid("8d351e77-1850-4555-bb2f-26a7010f515d"),
                             CitizenID = "037904808301",
                             DateOfBirth = new DateTime(2006, 8, 30, 9, 3, 21, 0, DateTimeKind.Unspecified),
                             Email = "gcanti28@ucoz.ru",
                             FirstName = "Gram",
                             Gender = 1,
-                            HashPassword = "$2b$10$gDlSSA6tXXAUp9.tq0ntouotoBR/ddfZvmklLks9dxpI6MxLJerIe",
+                            HashPassword = "$2b$10$c215G7cNw7B3XJxgL5QFGe3ByDfbOmLTwu2N6BwpC8MstzDuZRb4y",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 733, DateTimeKind.Local).AddTicks(9093),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 34, 963, DateTimeKind.Local).AddTicks(6388),
                             LastName = "Canti",
                             PhoneNumber = "07734012207",
                             Role = 1,
@@ -1781,15 +1825,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("cf00843e-e3a3-4168-ac72-2ca922523626"),
+                            ID = new Guid("32fe22c9-429c-476b-87a2-a76b52ab4a29"),
                             CitizenID = "092508260671",
                             DateOfBirth = new DateTime(2007, 11, 16, 8, 30, 13, 0, DateTimeKind.Unspecified),
                             Email = "ahargitt29@nyu.edu",
                             FirstName = "Adan",
                             Gender = 1,
-                            HashPassword = "$2b$10$RQ8RibtXly76CCj5nQAyoOhaBSOP94h8037G.rmAbFzCfbpWFJs5.",
+                            HashPassword = "$2b$10$QIhvjlyfFq2oGJFj.se5hOunytEL10cAcKVCzmHdyakk6NGT.7Ig.",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 817, DateTimeKind.Local).AddTicks(8060),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 96, DateTimeKind.Local).AddTicks(7585),
                             LastName = "Hargitt",
                             PhoneNumber = "04664308348",
                             Role = 1,
@@ -1797,15 +1841,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("0d4b7252-8390-41b3-a550-df399e276adb"),
+                            ID = new Guid("96da5712-5866-4ebd-b969-6e3d2d83baee"),
                             CitizenID = "045861002417",
                             DateOfBirth = new DateTime(2021, 3, 10, 15, 21, 20, 0, DateTimeKind.Unspecified),
                             Email = "fainscow2a@cnbc.com",
                             FirstName = "Falkner",
                             Gender = 2,
-                            HashPassword = "$2b$10$qKNah79UQ7NtpQ.Hiy8x8.2Dzflf4yKLfk1347R/j.cCED/IeRKQm",
+                            HashPassword = "$2b$10$Q1LBhlQQMt.aOQ8YWt9quOR/JKpBUiXf1xoHTAjPZD4ODBz21VJXy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 898, DateTimeKind.Local).AddTicks(8279),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 248, DateTimeKind.Local).AddTicks(9461),
                             LastName = "Ainscow",
                             PhoneNumber = "0878444767",
                             Role = 1,
@@ -1813,15 +1857,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("4b6c2ba1-7843-49ed-b2f6-2bb1f7a0f505"),
+                            ID = new Guid("86251e4a-6c64-4cab-ae2e-6c114714f3cf"),
                             CitizenID = "078854231390",
                             DateOfBirth = new DateTime(2010, 9, 16, 18, 2, 55, 0, DateTimeKind.Unspecified),
                             Email = "mspaldin2b@oakley.com",
                             FirstName = "Maud",
                             Gender = 0,
-                            HashPassword = "$2b$10$Imfx2.CaYaw2YrXvCgGMie2mb849b.s0hlTIh5Ah7AVXPtngySDfq",
+                            HashPassword = "$2b$10$IdKntlVh.wNXJ8K1V4j6B.tndZsw9EF2.3NaG9fLzWZioeCSlK2KG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 42, 986, DateTimeKind.Local).AddTicks(3644),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 391, DateTimeKind.Local).AddTicks(6257),
                             LastName = "Spaldin",
                             PhoneNumber = "0596030481",
                             Role = 1,
@@ -1829,15 +1873,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("92175a2e-0915-4875-9d3c-1ba0d07a6ad0"),
+                            ID = new Guid("608dd82d-a129-4413-acd3-2a083aea14a1"),
                             CitizenID = "088913475479",
                             DateOfBirth = new DateTime(2011, 1, 2, 5, 9, 22, 0, DateTimeKind.Unspecified),
                             Email = "bjilkes2c@google.nl",
                             FirstName = "Boot",
                             Gender = 1,
-                            HashPassword = "$2b$10$3mMVPQfDKku4XNOTb8E0TOiuX9Mxl8q9uKf7GdU2VR6wv/swWO23q",
+                            HashPassword = "$2b$10$u2GngBi9i84LCvlVIveVquPVQ1pn39hUsA/VqY00KZ/AcrUQ8GWgm",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 96, DateTimeKind.Local).AddTicks(3511),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 545, DateTimeKind.Local).AddTicks(4575),
                             LastName = "Jilkes",
                             PhoneNumber = "00677856497",
                             Role = 2,
@@ -1845,15 +1889,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("600d9fe6-6463-4f89-9688-e5a353afe027"),
+                            ID = new Guid("9b0f16ed-6c5b-42eb-b6f7-59d370590259"),
                             CitizenID = "094191070869",
                             DateOfBirth = new DateTime(2017, 7, 13, 6, 59, 37, 0, DateTimeKind.Unspecified),
                             Email = "afaber2d@ed.gov",
                             FirstName = "Allison",
                             Gender = 0,
-                            HashPassword = "$2b$10$p.QplhZ6Tt1hT6c7YVaW8eAISdlyVCbzF2c97TbjUj69kmIcEqiZ.",
+                            HashPassword = "$2b$10$QSV3a0jwQCxFaTwr3YCLdugyRzCZUMMSdmaIEco58LjzNBs2jNvZ6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 183, DateTimeKind.Local).AddTicks(9041),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 681, DateTimeKind.Local).AddTicks(1776),
                             LastName = "Faber",
                             PhoneNumber = "08586159848",
                             Role = 2,
@@ -1861,15 +1905,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("19d153d6-c0dd-4c4c-972d-8eaa8a4cfbd1"),
+                            ID = new Guid("1b46d3f6-c4ab-4b95-883d-d260f223f3f8"),
                             CitizenID = "089891343248",
                             DateOfBirth = new DateTime(2011, 2, 28, 6, 24, 40, 0, DateTimeKind.Unspecified),
                             Email = "cizhakov2e@ed.gov",
                             FirstName = "Crysta",
                             Gender = 2,
-                            HashPassword = "$2b$10$CGt4V2412nevuXeVPIowGeCgFzgv7khvrvr3PC0DHWyCCiOOmT0kS",
+                            HashPassword = "$2b$10$URUK0q7rHbYb4J0j6ZCJAuWKlLSYGBpEpawtYv5oxi7.QWHvmusXq",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 266, DateTimeKind.Local).AddTicks(2009),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 800, DateTimeKind.Local).AddTicks(3469),
                             LastName = "Izhakov",
                             PhoneNumber = "05872358652",
                             Role = 1,
@@ -1877,15 +1921,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("22ded830-2898-4f45-b8d8-12774c5a56ca"),
+                            ID = new Guid("72b4cd5c-dd2f-4133-9a27-b69d94ee9892"),
                             CitizenID = "087469312826",
                             DateOfBirth = new DateTime(2009, 10, 2, 1, 14, 43, 0, DateTimeKind.Unspecified),
                             Email = "jeliassen2f@github.com",
                             FirstName = "Jack",
                             Gender = 1,
-                            HashPassword = "$2b$10$ABDCvAbBGBGUdt5IvnNn4.3/pUVh8Q22m6oaXBTb2EWBp3F/uViD2",
+                            HashPassword = "$2b$10$0C.jy5sbebv5AhYN/1e5m.SM17vRiaX3W/yUeBFPzoraXH4spM.Vm",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 344, DateTimeKind.Local).AddTicks(7342),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 901, DateTimeKind.Local).AddTicks(343),
                             LastName = "Eliassen",
                             PhoneNumber = "06497524328",
                             Role = 1,
@@ -1893,15 +1937,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("10241350-2f9b-4ff6-926c-b5a04ebd7baf"),
+                            ID = new Guid("a712c413-4aad-4143-a382-3d542400f533"),
                             CitizenID = "097057026915",
                             DateOfBirth = new DateTime(2005, 11, 24, 5, 43, 18, 0, DateTimeKind.Unspecified),
                             Email = "afitzhenry2g@weibo.com",
                             FirstName = "Alexis",
                             Gender = 1,
-                            HashPassword = "$2b$10$sXx4puU8D54L6SO9OMhekOIzgAMg9cGHpSyYkMBmdEpvIxHO/HYj6",
+                            HashPassword = "$2b$10$lipYfNpEv1.XFpW9j9IF4uPHvrhtMiPW8oW3TtDgZkkpYDLjHxjL6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 420, DateTimeKind.Local).AddTicks(531),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 35, 999, DateTimeKind.Local).AddTicks(957),
                             LastName = "Fitzhenry",
                             PhoneNumber = "04780696921",
                             Role = 1,
@@ -1909,15 +1953,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("c0e1e585-51b3-406e-b3e3-06c4f7c19c83"),
+                            ID = new Guid("99b75264-7f92-4755-bd22-69e52c9e7f50"),
                             CitizenID = "016258873676",
                             DateOfBirth = new DateTime(2019, 10, 21, 10, 25, 58, 0, DateTimeKind.Unspecified),
                             Email = "eoubridge2h@jiathis.com",
                             FirstName = "Ezra",
                             Gender = 2,
-                            HashPassword = "$2b$10$Ab5OUJyKPpyrn90C759nBel5QaXF8znMrdgZH9Rz/3iDPcBkedahW",
+                            HashPassword = "$2b$10$dU7aWBONGBs0pRVQ3hgUieWGzLB5DWgjmvf8/nK1/PcJZJpG/tahK",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 504, DateTimeKind.Local).AddTicks(5192),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 104, DateTimeKind.Local).AddTicks(4637),
                             LastName = "Oubridge",
                             PhoneNumber = "0429461131",
                             Role = 2,
@@ -1925,15 +1969,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("833a6638-50ab-427c-a1e8-50c6a30a6e79"),
+                            ID = new Guid("65bb6295-736f-4e7e-9bde-f1c0ff7d5349"),
                             CitizenID = "033336925033",
                             DateOfBirth = new DateTime(2005, 1, 8, 19, 2, 19, 0, DateTimeKind.Unspecified),
                             Email = "dhaney2i@ox.ac.uk",
                             FirstName = "Dalli",
                             Gender = 0,
-                            HashPassword = "$2b$10$cJmnARkQ6BJ/7SMihN6K7OxKMmvqIW54rjqQj0EidvhtJocWLei36",
+                            HashPassword = "$2b$10$MSAcdKiYQgCN6W1hNkeHJesOSNuRhV7O.erILnUVrPCIW6ldLB9oe",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 585, DateTimeKind.Local).AddTicks(2842),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 211, DateTimeKind.Local).AddTicks(6637),
                             LastName = "Haney",
                             PhoneNumber = "0041887086",
                             Role = 2,
@@ -1941,15 +1985,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("5cbd2e4c-2a59-4127-a913-96c1d07b5a46"),
+                            ID = new Guid("823261ad-e66d-4f63-8926-291c5459ed84"),
                             CitizenID = "067016693206",
                             DateOfBirth = new DateTime(2011, 2, 26, 17, 55, 50, 0, DateTimeKind.Unspecified),
                             Email = "bpetrescu2j@walmart.com",
                             FirstName = "Brook",
                             Gender = 2,
-                            HashPassword = "$2b$10$sagK6.Uc4LC3an1iD1v5JeOu0OZsdQbexecgHX8B1o/SEseY5SfUa",
+                            HashPassword = "$2b$10$cRpqjWTdymFP3ncs3zaR1eVntOLnRP5sobr4yruyB1Qw0sajN2E16",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 671, DateTimeKind.Local).AddTicks(1800),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 340, DateTimeKind.Local).AddTicks(785),
                             LastName = "Petrescu",
                             PhoneNumber = "0719013924",
                             Role = 1,
@@ -1957,15 +2001,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("c645a735-4798-4e13-bdc2-483410881c43"),
+                            ID = new Guid("21524e98-f755-43f4-8d98-1b35475d7970"),
                             CitizenID = "072383893429",
                             DateOfBirth = new DateTime(2009, 8, 3, 22, 43, 42, 0, DateTimeKind.Unspecified),
                             Email = "lhowland2k@state.tx.us",
                             FirstName = "Leila",
                             Gender = 0,
-                            HashPassword = "$2b$10$qza94pJmJ45VM6exvT9DH.BFYTLpOOJmb/LrIyrYfmKcGkzGqeoe.",
+                            HashPassword = "$2b$10$.OVbrPybCb.ZpSIBgzI1k.wn5QQ/ic5Zmm2wPHxQWbYETuYDGei0q",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 756, DateTimeKind.Local).AddTicks(8462),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 456, DateTimeKind.Local).AddTicks(3413),
                             LastName = "Howland",
                             PhoneNumber = "00133370415",
                             Role = 1,
@@ -1973,15 +2017,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("a5ba7e82-6f98-45d4-b662-4e63f056cf41"),
+                            ID = new Guid("aa78c7bc-c42e-40c6-89cb-9305191b283b"),
                             CitizenID = "063520674382",
                             DateOfBirth = new DateTime(2020, 7, 27, 16, 29, 14, 0, DateTimeKind.Unspecified),
                             Email = "ogasperi2l@furl.net",
                             FirstName = "Orson",
                             Gender = 2,
-                            HashPassword = "$2b$10$T89HrCfzUC0mQokLJH4xFeZETRe8lWDPKMdyzEWHt93UEqcb329xq",
+                            HashPassword = "$2b$10$Yj4IRpdu3jcEk2uMbzBNG.P8u2/E3LVWg5tlEhNaK63MayWlehZcm",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 839, DateTimeKind.Local).AddTicks(1779),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 560, DateTimeKind.Local).AddTicks(1371),
                             LastName = "Gasperi",
                             PhoneNumber = "03723162025",
                             Role = 2,
@@ -1989,15 +2033,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("bc4d9594-9802-4d11-8409-24756f9f6127"),
+                            ID = new Guid("3060c0ad-cb26-45f2-bad7-09a18888885d"),
                             CitizenID = "010958057874",
                             DateOfBirth = new DateTime(2013, 9, 15, 4, 55, 53, 0, DateTimeKind.Unspecified),
                             Email = "sbarhem2m@barnesandnoble.com",
                             FirstName = "Sukey",
                             Gender = 1,
-                            HashPassword = "$2b$10$PfhscLYZ.OdPVkFvVLIhdOYjftg77u3d6nkSgt9UHuicBavjqu2FO",
+                            HashPassword = "$2b$10$aFgQiVF4UF/1pY6q852FmOFwb0.g0K4jzBT.Jk2cvkxsCY2s6Dk7S",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 918, DateTimeKind.Local).AddTicks(7704),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 665, DateTimeKind.Local).AddTicks(4796),
                             LastName = "Barhem",
                             PhoneNumber = "08054760577",
                             Role = 1,
@@ -2005,15 +2049,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("64946dcc-f230-43de-9862-8300f9e3e8ef"),
+                            ID = new Guid("dbcd87c9-2184-46d0-9064-0b0bebd53c4a"),
                             CitizenID = "078923959822",
                             DateOfBirth = new DateTime(2005, 9, 1, 0, 43, 2, 0, DateTimeKind.Unspecified),
                             Email = "csaban2n@admin.ch",
                             FirstName = "Cobbie",
                             Gender = 0,
-                            HashPassword = "$2b$10$xyups6C6FFc7uLDatRv/OOZuzh3iTZdI3s2Ps2OckM66.L/TYpm2q",
+                            HashPassword = "$2b$10$Z2ak5VsWKPSK4qADAARetOG039y9l4vzUgWMh5BMH6n3r/R.VbKFi",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 43, 996, DateTimeKind.Local).AddTicks(1598),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 768, DateTimeKind.Local).AddTicks(7534),
                             LastName = "Saban",
                             PhoneNumber = "02156386100",
                             Role = 1,
@@ -2021,15 +2065,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("11c875c3-a252-445e-88ba-72ce868ace78"),
+                            ID = new Guid("f40d44e7-59b1-4f6d-ad4c-b9805be3c356"),
                             CitizenID = "022362093227",
                             DateOfBirth = new DateTime(2010, 7, 29, 22, 50, 40, 0, DateTimeKind.Unspecified),
                             Email = "candriessen2o@myspace.com",
                             FirstName = "Clair",
                             Gender = 0,
-                            HashPassword = "$2b$10$KkYXJSOudI3C/AEvW4.An.dI5KxJTMeSKoi7Vl6IijtwAyV3fvgl.",
+                            HashPassword = "$2b$10$CNq/Fp39VNzRGbY6f6ZkjeJaENm/qUfWYtecQdBFOF25m2J73lXxG",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 71, DateTimeKind.Local).AddTicks(9608),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 36, 882, DateTimeKind.Local).AddTicks(259),
                             LastName = "Andriessen",
                             PhoneNumber = "05873824805",
                             Role = 2,
@@ -2037,15 +2081,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("49a890c4-e192-4c7a-9eb6-0bb23072116b"),
+                            ID = new Guid("d77dbf2c-72e4-48f8-be29-c244e0d32c0a"),
                             CitizenID = "074959046988",
                             DateOfBirth = new DateTime(2017, 2, 22, 11, 44, 21, 0, DateTimeKind.Unspecified),
                             Email = "overnall2p@ameblo.jp",
                             FirstName = "Oneida",
                             Gender = 1,
-                            HashPassword = "$2b$10$W8XHXjM2Ttg6dxvcn8pZ3OXlmTKvjQ89jK5PGhC7WxJFqEf5OBE/2",
+                            HashPassword = "$2b$10$jUi7XtFSuutiL2xCgnvYkuGvxYV8OkdDlklukfbe6RjuKGZwlIb5y",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 148, DateTimeKind.Local).AddTicks(2341),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 4, DateTimeKind.Local).AddTicks(8290),
                             LastName = "Vernall",
                             PhoneNumber = "05157407415",
                             Role = 1,
@@ -2053,15 +2097,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("61703653-6219-4b95-9961-f68c8d95c530"),
+                            ID = new Guid("804fd8d9-6535-4733-997c-17197b970b73"),
                             CitizenID = "089749871106",
                             DateOfBirth = new DateTime(2011, 12, 5, 0, 28, 56, 0, DateTimeKind.Unspecified),
                             Email = "mbaldacchino2q@alexa.com",
                             FirstName = "Marcus",
                             Gender = 0,
-                            HashPassword = "$2b$10$9Yvgsv8Cznn2yYmMD9s/6euC/.578wxhNgMOpqwq7cJqlqImFuotS",
+                            HashPassword = "$2b$10$9KjS2mIID3nnwkJa3uvUXuNKUKh03cXkJqqWSO0fPDFAUQUk1MB26",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 228, DateTimeKind.Local).AddTicks(8118),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 152, DateTimeKind.Local).AddTicks(7884),
                             LastName = "Baldacchino",
                             PhoneNumber = "05380625199",
                             Role = 1,
@@ -2069,15 +2113,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("129d9a2f-00b5-477b-9ec7-af30df883df4"),
+                            ID = new Guid("db7b141e-c7c2-437f-a2c6-49aa0d735de2"),
                             CitizenID = "016396077329",
                             DateOfBirth = new DateTime(2018, 3, 20, 9, 6, 41, 0, DateTimeKind.Unspecified),
                             Email = "siacovacci2r@seattletimes.com",
                             FirstName = "Shanna",
                             Gender = 0,
-                            HashPassword = "$2b$10$OcZ1ycGQoCglLjuzwr8Xauu9bpT0Rr3HizJ6uKhz98Bx/138VONG2",
+                            HashPassword = "$2b$10$z7.oKuOmtVagjdvBWbIwieag97KYpbPfa20zyj1D94QusvvWUYgdy",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 322, DateTimeKind.Local).AddTicks(7690),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 308, DateTimeKind.Local).AddTicks(1695),
                             LastName = "Iacovacci",
                             PhoneNumber = "0770070777",
                             Role = 1,
@@ -2085,15 +2129,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("2ab36151-2d9f-4952-9cb5-b7f09c6b6651"),
+                            ID = new Guid("104260c1-4162-4ade-84bc-f9acf18ecbbb"),
                             CitizenID = "010529649645",
                             DateOfBirth = new DateTime(2007, 3, 4, 14, 18, 34, 0, DateTimeKind.Unspecified),
                             Email = "ryuille2s@naver.com",
                             FirstName = "Rafaela",
                             Gender = 1,
-                            HashPassword = "$2b$10$bSFpEM7eaO8VskuZ8Wb8lO0x3Pw9Di2XzSEOp5K/TzfgJNFQYYZ9m",
+                            HashPassword = "$2b$10$7qoJ9q6yenF303foGmess.lEEdKYJLB232.tQQ5yt.lsXyP282ySC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 416, DateTimeKind.Local).AddTicks(1787),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 438, DateTimeKind.Local).AddTicks(7044),
                             LastName = "Yuille",
                             PhoneNumber = "00670067189",
                             Role = 2,
@@ -2101,15 +2145,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("c9eb36ea-dc98-4767-9a09-d47b9eebff0b"),
+                            ID = new Guid("ea4e3a10-4fdc-4816-8c81-20d2b1f66368"),
                             CitizenID = "098716602446",
                             DateOfBirth = new DateTime(2009, 11, 27, 8, 32, 15, 0, DateTimeKind.Unspecified),
                             Email = "lbrechin2t@myspace.com",
                             FirstName = "Lisette",
                             Gender = 1,
-                            HashPassword = "$2b$10$9VLWnAXy1aftAGFfRet7qOT6IElPeVjNNDaVzrcT1f.7dXKdcTES6",
+                            HashPassword = "$2b$10$Z5Vs3TFP2ENZjHYat4.I1eeXfeejuuXzCGyN0RDU.WkjdjnNLFC0a",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 500, DateTimeKind.Local).AddTicks(3496),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 604, DateTimeKind.Local).AddTicks(6012),
                             LastName = "Brechin",
                             PhoneNumber = "0285671009",
                             Role = 1,
@@ -2117,15 +2161,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("f43ec52a-d735-4b17-9f00-c8bedffb7fe1"),
+                            ID = new Guid("136d6c21-b9a7-41ce-ab11-8792d068dbaf"),
                             CitizenID = "083968511675",
                             DateOfBirth = new DateTime(2013, 10, 15, 2, 51, 11, 0, DateTimeKind.Unspecified),
                             Email = "lgonzalo2u@netlog.com",
                             FirstName = "Lilllie",
                             Gender = 0,
-                            HashPassword = "$2b$10$VF9F0yGVcJGNtKRgc/hHxuUduM7G2cQxt5bp176Bx97/.NHzdOVAK",
+                            HashPassword = "$2b$10$Dm28Ykv0Uux/X.xdNukRb.A8tYi4/hh5CLeKXCWDngEZUOG3Cd0ES",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 592, DateTimeKind.Local).AddTicks(5738),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 715, DateTimeKind.Local).AddTicks(5801),
                             LastName = "Gonzalo",
                             PhoneNumber = "0459531972",
                             Role = 2,
@@ -2133,15 +2177,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("5bdaebeb-74d2-47ea-84de-384215d8c801"),
+                            ID = new Guid("e2120919-b44e-4ef2-a2cf-833851488923"),
                             CitizenID = "096684216299",
                             DateOfBirth = new DateTime(2021, 10, 9, 9, 27, 7, 0, DateTimeKind.Unspecified),
                             Email = "smasser2v@virginia.edu",
                             FirstName = "Sandie",
                             Gender = 0,
-                            HashPassword = "$2b$10$lz/njSgUY1HgKHDyx2aG9.delRB2.q7QUrIARIte.7kirQBnymhEi",
+                            HashPassword = "$2b$10$B48FMwEUAt1yxaCxqYxZGu7h3XMS9SBIaoxcqQduoaJiE97N3.Bii",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 674, DateTimeKind.Local).AddTicks(7179),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 819, DateTimeKind.Local).AddTicks(7154),
                             LastName = "Masser",
                             PhoneNumber = "0612845922",
                             Role = 2,
@@ -2149,15 +2193,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("421ae115-c5c6-4c3b-b6e4-50b770f444c3"),
+                            ID = new Guid("05d20112-70a8-4d16-aa12-3fa7f1e51e77"),
                             CitizenID = "049818254726",
                             DateOfBirth = new DateTime(2015, 4, 14, 12, 38, 32, 0, DateTimeKind.Unspecified),
                             Email = "sbolliver2w@webnode.com",
                             FirstName = "Suzanne",
                             Gender = 1,
-                            HashPassword = "$2b$10$5l45cYBDXGcW29ckWlOtYeY0AsY14fooRNibwAhs1R/rSlqNrYbX6",
+                            HashPassword = "$2b$10$XqH7gg3m.whJ367Ne/YSZ.esR7GR8fepxk8O.u8U7JpjKqv7.bzfS",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 756, DateTimeKind.Local).AddTicks(5103),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 37, 939, DateTimeKind.Local).AddTicks(6648),
                             LastName = "Bolliver",
                             PhoneNumber = "0699230163",
                             Role = 2,
@@ -2165,15 +2209,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("65fc5bcc-7fbb-45a2-b248-db23ef56b5cc"),
+                            ID = new Guid("05c4e3e3-4c4d-4b65-be48-3804f1835f6d"),
                             CitizenID = "027126621016",
                             DateOfBirth = new DateTime(2005, 5, 17, 5, 32, 10, 0, DateTimeKind.Unspecified),
                             Email = "melgee2x@smugmug.com",
                             FirstName = "Miriam",
                             Gender = 0,
-                            HashPassword = "$2b$10$ITfDdgibEne.WR5IKzIIi.QQq1chsBSRuD1qMgCe3HB1WgIbniCPy",
+                            HashPassword = "$2b$10$h1DfyAadD3I9ID/CIvfpbe6jXByGR/X7o.gSCbQmYBEtcnAmblxly",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 836, DateTimeKind.Local).AddTicks(844),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 43, DateTimeKind.Local).AddTicks(4356),
                             LastName = "Elgee",
                             PhoneNumber = "0961523438",
                             Role = 2,
@@ -2181,15 +2225,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("34ec130a-05fc-429a-9234-17dd6f7521a4"),
+                            ID = new Guid("3eaba745-569b-4a30-a25c-971561cee38d"),
                             CitizenID = "029228944870",
                             DateOfBirth = new DateTime(2015, 11, 23, 16, 33, 31, 0, DateTimeKind.Unspecified),
                             Email = "babrahamsohn2y@diigo.com",
                             FirstName = "Broddie",
                             Gender = 1,
-                            HashPassword = "$2b$10$0cvIuVCBiTGjqNslcWP6DOPD/tpdjtcwGt1Zd/.1FHCl7gs4VikCa",
+                            HashPassword = "$2b$10$P4YFHl3DgZI4wPKyh7BfR.QDVR/EiyGGf/Y4F8.kxIjjzbkkOBiNC",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 44, 917, DateTimeKind.Local).AddTicks(6997),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 154, DateTimeKind.Local).AddTicks(9543),
                             LastName = "Abrahamsohn",
                             PhoneNumber = "08144581503",
                             Role = 1,
@@ -2197,15 +2241,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("022bcd1d-fa20-4a5f-880d-d03b31907841"),
+                            ID = new Guid("72df9ffc-3437-4041-ae4b-6f1f77eace37"),
                             CitizenID = "058273945153",
                             DateOfBirth = new DateTime(2012, 5, 7, 16, 43, 46, 0, DateTimeKind.Unspecified),
                             Email = "kbeamson2z@a8.net",
                             FirstName = "Kathy",
                             Gender = 1,
-                            HashPassword = "$2b$10$PxZuVEBIQ7coOpsADKIWaeH6ebCkY6jWsjJW6OlPQjEl7eBDf1ayy",
+                            HashPassword = "$2b$10$vzqseqfpmiI1Nd8r8ljN4eFJAjbLxfOdZoe5cwhdnnjc93yJJ6Ff6",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 45, 2, DateTimeKind.Local).AddTicks(7575),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 255, DateTimeKind.Local).AddTicks(8429),
                             LastName = "Beamson",
                             PhoneNumber = "07242980517",
                             Role = 1,
@@ -2213,15 +2257,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("d3e66c67-1195-459f-aca4-35ffe53167ba"),
+                            ID = new Guid("395aa456-610f-407c-819c-02a48537b1ef"),
                             CitizenID = "034993466710",
                             DateOfBirth = new DateTime(2019, 3, 21, 8, 13, 47, 0, DateTimeKind.Unspecified),
                             Email = "rgerrish30@typepad.com",
                             FirstName = "Rhianon",
                             Gender = 2,
-                            HashPassword = "$2b$10$fXDh.NnDdFpfZTTkyrFgcOZw1OvVWbON/zhme3nPq6OemwvMi0UlG",
+                            HashPassword = "$2b$10$4h2JRmemYVW59aafAuZh9uRyf4OK.C2E7mUVo9U6JoamKR/oxCoOe",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 45, 100, DateTimeKind.Local).AddTicks(9492),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 355, DateTimeKind.Local).AddTicks(2980),
                             LastName = "Gerrish",
                             PhoneNumber = "04944713025",
                             Role = 1,
@@ -2229,15 +2273,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("e3f12146-52b4-43c7-a046-43f3905b5fa2"),
+                            ID = new Guid("9b2b52fd-2770-4017-8f6e-97fa320b6653"),
                             CitizenID = "048688112760",
                             DateOfBirth = new DateTime(2012, 7, 16, 20, 33, 8, 0, DateTimeKind.Unspecified),
                             Email = "astruss31@apache.org",
                             FirstName = "Alfons",
                             Gender = 0,
-                            HashPassword = "$2b$10$3hgep9HReC3aozEeYXmVsO16lFjgg.c.YoR6R7iBpMqOYO9fzGvky",
+                            HashPassword = "$2b$10$J.UyMR9j3qo5b8X/svu7ceXTpwEjmeoDr6YMoLp.40lBwTkenYl4K",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 45, 188, DateTimeKind.Local).AddTicks(3871),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 449, DateTimeKind.Local).AddTicks(4582),
                             LastName = "Struss",
                             PhoneNumber = "06928824187",
                             Role = 2,
@@ -2245,15 +2289,15 @@ namespace Backend.Migrations
                         },
                         new
                         {
-                            ID = new Guid("4ffb8833-3d41-4f4f-bf8b-e5d00e1b33d1"),
+                            ID = new Guid("f3b52c02-07b9-4337-94a0-94c2ef6519d5"),
                             CitizenID = "023468783438",
                             DateOfBirth = new DateTime(2020, 3, 25, 1, 18, 42, 0, DateTimeKind.Unspecified),
                             Email = "tprater32@squarespace.com",
                             FirstName = "Trev",
                             Gender = 0,
-                            HashPassword = "$2b$10$OlNoH9khJ7A23go9Ks.R9uM6DFkBlHwFUJtGut9HPo.qawwIydeJO",
+                            HashPassword = "$2b$10$tAIkn6wDsNSGkGI1b3ld4.Wchpta8OuuMSFMJ2n7o5aCZQ0tOKFOe",
                             IsDisable = false,
-                            LastModifyAt = new DateTime(2023, 2, 15, 21, 15, 45, 275, DateTimeKind.Local).AddTicks(1180),
+                            LastModifyAt = new DateTime(2023, 2, 24, 15, 13, 38, 538, DateTimeKind.Local).AddTicks(7898),
                             LastName = "Prater",
                             PhoneNumber = "0629137900",
                             Role = 1,
@@ -2302,7 +2346,7 @@ namespace Backend.Migrations
             modelBuilder.Entity("Back_end.Entities.Feedback", b =>
                 {
                     b.HasOne("Back_end.Entities.User", "FeedbackBy")
-                        .WithMany("Feedback")
+                        .WithMany("Feedbacks")
                         .HasForeignKey("FeedbackByID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -2357,14 +2401,15 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Back_end.Entities.User", "LastModifyBy")
-                        .WithMany()
-                        .HasForeignKey("LastModifyByID")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("Back_end.Entities.User", "Owner")
+                        .WithMany("Parkings")
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Dashboard");
 
-                    b.Navigation("LastModifyBy");
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Back_end.Entities.ParkingDetail", b =>
@@ -2471,12 +2516,14 @@ namespace Backend.Migrations
                         .HasForeignKey("MembershipPackageID")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Back_end.Entities.Parking", null)
-                        .WithMany("Users")
+                    b.HasOne("Back_end.Entities.Parking", "Parking")
+                        .WithMany("ParkingManagers")
                         .HasForeignKey("ParkingID")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("MembershipPackage");
+
+                    b.Navigation("Parking");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Feedback", b =>
@@ -2493,13 +2540,13 @@ namespace Backend.Migrations
                 {
                     b.Navigation("Feedbacks");
 
+                    b.Navigation("ParkingManagers");
+
                     b.Navigation("Requests");
 
                     b.Navigation("Slots");
 
                     b.Navigation("TimeFrames");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Back_end.Entities.Slot", b =>
@@ -2513,11 +2560,13 @@ namespace Backend.Migrations
                 {
                     b.Navigation("Cars");
 
-                    b.Navigation("Feedback");
+                    b.Navigation("Feedbacks");
 
                     b.Navigation("Images");
 
                     b.Navigation("ParkingDetails");
+
+                    b.Navigation("Parkings");
                 });
 #pragma warning restore 612, 618
         }

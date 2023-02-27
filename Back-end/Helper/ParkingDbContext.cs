@@ -36,6 +36,8 @@ namespace Back_end.Helper
         public virtual DbSet<MembershipPackage> MembershipPackages { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
 
+        public virtual DbSet<TimeFrame> TimeFrames { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,6 +84,43 @@ namespace Back_end.Helper
                     UserSeed.Seed
                     )
                 );
+
+            modelBuilder.Entity<MembershipPackage>(
+               u => u.HasData(
+                   MembershipPagekageSeed.Seed
+                   )
+               );
+
+            modelBuilder.Entity<CarModel>(
+              u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "Xe 2 khoang",  Model = "Mini", Price = 15000 } })
+
+              );
+            modelBuilder.Entity<CarModel>(
+             u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "Xe 4 chỗ du lịch", Model = "Sedan", Price = 15000 } })
+
+             );
+            modelBuilder.Entity<CarModel>(
+             u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "xe 5 chỗ", Model = "SUV5", Price = 20000 } })
+
+             );
+            modelBuilder.Entity<CarModel>(
+             u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "Xe van con",  Model = "Minivan", Price = 25000 } })
+
+             );
+            modelBuilder.Entity<CarModel>(
+             u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "Xe bán tải",  Model = "Pickup", Price = 20000 } })
+
+             );
+            modelBuilder.Entity<CarModel>(
+            u => u.HasData(new List<CarModel>() {
+                    new CarModel { Discript = "Xe 7 chỗ",  Model = "SUV7", Price = 25000 } })
+
+            );
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

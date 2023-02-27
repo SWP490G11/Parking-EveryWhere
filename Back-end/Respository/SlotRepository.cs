@@ -1,31 +1,68 @@
-﻿using Back_end.Common;
+﻿using AutoMapper;
+using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back_end.Respository
 {
     public class SlotRepository : ICRUDSRespository<Slot,SlotModel>
     {
+        private readonly ParkingDbContext _dbContext;
+        private readonly ILogger<SlotRepository> _logger;
+        private readonly IMapper _mapper;
 
-
-        public Task AddAsync(SlotModel model)
+        public SlotRepository(ParkingDbContext dbContext, ILogger<SlotRepository> logger, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
         }
 
-        public Task DeleteAsync()
+        public async Task AddAsync(SlotModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _dbContext.Slots.AddAsync(_mapper.Map<Slot>(model));
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
-        public Task<ICollection<Slot>> GetAllAsync()
+    
+        public async Task DeleteAsync(string idString)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var timeFrame = await GetAsync(idString);
+                _dbContext.Slots.Remove(timeFrame);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
-        public Task<Slot> GetAsync()
+        public async Task<ICollection<Slot>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Slots.ToListAsync();
+        }
+
+      
+
+        public async Task<Slot> GetAsync(string idString)
+        {
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+            return await _dbContext.Slots.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(idString.ToUpper().Trim()
+                ));
         }
 
         public ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize)

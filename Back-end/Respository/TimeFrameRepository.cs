@@ -1,29 +1,67 @@
-﻿using Back_end.Common;
+﻿using AutoMapper;
+using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back_end.Respository
 {
     public class TimeFrameRepository : ICRUDSRespository<TimeFrame, TimeFrameModel>
     {
-        public Task AddAsync(TimeFrameModel model)
+
+        private readonly ParkingDbContext _dbContext;
+        private readonly ILogger<TimeFrameRepository> _logger;
+        private readonly IMapper _mapper;
+
+        public TimeFrameRepository(ParkingDbContext dbContext, ILogger<TimeFrameRepository> logger, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
         }
 
-        public Task DeleteAsync()
+        public async Task AddAsync(TimeFrameModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _dbContext.TimeFrames.AddAsync(_mapper.Map<TimeFrame>(model));
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
-        public Task<ICollection<TimeFrame>> GetAllAsync()
+        public async Task DeleteAsync(string idString)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var timeFrame = await GetAsync(idString);
+                _dbContext.TimeFrames.Remove(timeFrame);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Has error:");
+            }
         }
 
-        public Task<TimeFrame> GetAsync()
+        public async Task<ICollection<TimeFrame>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.TimeFrames.ToListAsync();
+        }
+
+        public async Task<TimeFrame> GetAsync(string idString)
+        {
+
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+            return await _dbContext.TimeFrames.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(idString.ToUpper().Trim()
+                ));
         }
 
         public ICollection<TimeFrame> PaginateAsync(ICollection<TimeFrame> source, int pageNo, int pageSize)
@@ -36,9 +74,22 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(string idString, TimeFrameModel updateModel)
+        public async Task UpdateAsync(string idString, TimeFrameModel updateModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var updateTimeFrame = await GetAsync(idString);
+                updateTimeFrame.Start = updateModel.Start;
+                updateTimeFrame.Price = updateModel.Price;
+                updateTimeFrame.End = updateModel.End;
+                updateTimeFrame.Name = updateModel.Name;
+                updateTimeFrame.LastModifyAt = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, "Error");
+            }
         }
     }
 }
