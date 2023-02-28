@@ -14,29 +14,33 @@ namespace Back_end.Controllers
     public class ParkingController : ControllerBase
     {
         private readonly IJwtUtils _jwtUtils;
-        private readonly ICRUDSRespository<Parking, ParkingModel> _respository;
+        private readonly IParkingRespository _respository;
 
-        public ParkingController(IJwtUtils jwtUtils, ICRUDSRespository<Parking, ParkingModel> respository)
+        public ParkingController(IJwtUtils jwtUtils, IParkingRespository respository)
         {
             _jwtUtils = jwtUtils;
             _respository = respository;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/parkings-of-owner")]
         [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
-        public IActionResult GetParkingsOfOwner()
+        public async Task<IActionResult> GetParkingsOfOwnerAsync()
         {
+
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
 
             var user = mwi.User;
             if (user == null) return NotFound();
 
+            var all = await _respository.GetAllAsync();
+            var parkings = all.Where(p => p.Owner.ID.ToString().ToLower().Equals(user.ID.ToString().ToLower())).ToList();
+           
 
-            return Ok(user.Parkings);
+            return Ok(parkings);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/parking-manager-of-parking/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> GetParkingManagerOfParking(string id)
         {
@@ -52,7 +56,7 @@ namespace Back_end.Controllers
             return Ok(parking.ParkingManagers);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/parkings")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetAll()
         {
@@ -63,7 +67,7 @@ namespace Back_end.Controllers
             return Ok(carModels);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/parking/{id}")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Get(string id)
         {
@@ -74,18 +78,19 @@ namespace Back_end.Controllers
             return Ok(carModel);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Add(ParkingModel model)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _respository.AddAsync(model);
+            
+            await _respository.AddAsync(model,mwi.User);
             return Ok("Add Success");
         }
 
-        [HttpPut("[action]")]
+        [HttpPut("/parking/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id, ParkingModel model)
         {
@@ -97,7 +102,7 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpDelete("[action]")]
+        [HttpDelete("/parking/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Delete(string id)
         {

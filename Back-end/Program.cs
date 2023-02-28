@@ -5,6 +5,7 @@ using Back_end.Models;
 using Back_end.Respository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+    // serialize enums as strings in api responses (e.g. Role)
+    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 
 var service = builder.Services;
@@ -34,12 +42,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
 service.AddTransient<ICRUDSRespository<CarModel,CarModelx2>, CarModelRespository>();
-service.AddTransient<ICRUDSRespository<Parking, ParkingModel>, ParkingRespository>();
+service.AddTransient<IParkingRespository,ParkingRespository>();
 service.AddTransient<ICRUDSRespository<Car, CarDTO>, CarRepository>();
-service.AddTransient<ICRUDSRespository<Slot, SlotModel>, SlotRepository>();
+service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
 service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
+service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

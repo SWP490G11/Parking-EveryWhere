@@ -23,29 +23,29 @@ namespace Back_end.Controllers
         }
 
        
-        [HttpGet("[action]")]
+        [HttpGet("/timeframes")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetAll()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var carModels = await _respository.GetAllAsync();
+            var timeFrames = await _respository.GetAllAsync();
 
-            return Ok(carModels);
+            return Ok(timeFrames);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/timeframe/{id}")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Get(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var carModel = await _respository.GetAsync(id);
+            var timeFrame = await _respository.GetAsync(id);
 
-            return Ok(carModel);
+            return Ok(timeFrame);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("/timeframe/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Add(TimeFrameModel model)
         {
@@ -56,7 +56,7 @@ namespace Back_end.Controllers
             return Ok("Add Success");
         }
 
-        [HttpPut("[action]")]
+        [HttpPut("/timeframe/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id, TimeFrameModel model)
         {
@@ -68,7 +68,7 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpDelete("[action]")]
+        [HttpDelete("/timeframe/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Delete(string id)
         {

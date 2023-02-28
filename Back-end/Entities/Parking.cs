@@ -18,15 +18,15 @@ namespace Back_end.Entities
 
         public string Discription { get; set; }
 
-        public ICollection<Request> Requests { get; set; }
+        public ICollection<Request>? Requests { get; set; }
 
-        public ICollection<TimeFrame> TimeFrames { get; set; }
+        public ICollection<TimeFrame>? TimeFrames { get; set; }
 
         [InverseProperty("Parking")]
         [AllowNull]
         public ICollection<User>? ParkingManagers { get; set; }
 
-        public Dashboard Dashboard { get; set; }
+        public Dashboard? Dashboard { get; set; }
 
         public bool IsLegal { get; set; }
 
