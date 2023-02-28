@@ -22,7 +22,7 @@ namespace Back_end.Controllers
             _jwtUtils = jwtUtils;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/carmodels")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetAll()
         {
@@ -33,9 +33,10 @@ namespace Back_end.Controllers
             return Ok(carModels);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("/carmodel/{id}")]
+        [ValidateAntiForgeryToken]
         [Authorization.Authorize(Role.Admin)]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get( string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
@@ -44,7 +45,8 @@ namespace Back_end.Controllers
             return Ok(carModel);
         }
 
-        [HttpPost("[action]")]
+        [HttpPost("/carmodel/{id}")]
+        [ValidateAntiForgeryToken]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Add( CarModelx2 carModel)
         {
@@ -55,9 +57,10 @@ namespace Back_end.Controllers
             return Ok("Add Success");
         }
 
-        [HttpPut("[action]")]
+        [HttpPut("/carmodel/{id}")]
+        [ValidateAntiForgeryToken]
         [Authorization.Authorize(Role.Admin)]
-        public async Task<IActionResult> Update(string id, CarModelx2 carModel)
+        public async Task<IActionResult> Update( string id, CarModelx2 carModel)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
@@ -67,9 +70,10 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpDelete("[action]")]
+        [HttpDelete("/carmodel/{id}")]
+        [ValidateAntiForgeryToken]
         [Authorization.Authorize(Role.Admin)]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete( string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");

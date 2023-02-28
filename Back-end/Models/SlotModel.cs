@@ -8,9 +8,7 @@ namespace Back_end.Models
     public class SlotModel
     {
         
-        public Guid ID { get; set; } 
-       
-        public CarDTO? Car { get; set; }
+        
 
         public Status Status { get; set; }
 
@@ -18,15 +16,13 @@ namespace Back_end.Models
 
         public string Discription { get; set; }
 
-        public ICollection<Image>? Images { get; set; }
 
         public double Price { get; set; }
 
-        public Parking Parking { get; set; }
+        public string ParkingID { get; set; }
 
-        public ICollection<ParkingDetail> ParkingDetail { get; set; }
+        public string CarModelID { get; set; }
 
-        public DateTime LastModifyAt { get; set; }
-
+        public string LastModifyByID { get; set; }
     }
 }

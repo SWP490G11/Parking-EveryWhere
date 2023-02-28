@@ -1,6 +1,7 @@
 ﻿using Back_end.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Back_end.Entities
 {
@@ -8,10 +9,7 @@ namespace Back_end.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; } = Guid.NewGuid();
-        [Required]
-        public Car? Car { get; set; }
-
+        public Guid ID { get; set; } = Guid.NewGuid();      
         public Status Status { get; set; }
 
         public TypeOfSlot TypeOfSlot { get; set; }
@@ -24,7 +22,9 @@ namespace Back_end.Entities
 
         public Parking Parking { get; set; }
 
-        public ICollection<ParkingDetail> ParkingDetail { get; set; }
+        public CarModel CarModel { get; set; }
+
+        public ICollection<ParkingDetail>? ParkingDetail { get; set; }
 
         public DateTime LastModifyAt { get; set; }
 
