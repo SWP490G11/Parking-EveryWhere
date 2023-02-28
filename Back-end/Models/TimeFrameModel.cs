@@ -4,8 +4,7 @@ namespace Back_end.Models
 {
     public class TimeFrameModel
     {
-        public Parking Parkings { get; set; }
-
+        public string ParkingID { get; set; }
         public string Name { get; set; }
 
         public DateTime Start { get; set; }

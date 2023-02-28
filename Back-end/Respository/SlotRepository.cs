@@ -7,7 +7,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Back_end.Respository
 {
-    public class SlotRepository : ICRUDSRespository<Slot,SlotModel>
+    public interface ISlotRepository
+    {
+        Task AddAsync(uint quantity, SlotModel model);
+        Task DeleteAsync(string idString);
+        Task<ICollection<Slot>> GetAllAsync();
+        Task<Slot> GetAsync(string idString);
+        ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize);
+        ICollection<Slot> SortAsync(DirectionOfSort direction, string factor);
+        Task UpdateAsync(string idString, SlotModel updateModel);
+    }
+
+    public class SlotRepository : ISlotRepository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<SlotRepository> _logger;
@@ -20,11 +31,32 @@ namespace Back_end.Respository
             _mapper = mapper;
         }
 
-        public async Task AddAsync(SlotModel model)
+        public async Task AddAsync(uint quantity, SlotModel model)
         {
             try
             {
-                await _dbContext.Slots.AddAsync(_mapper.Map<Slot>(model));
+                var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Equals(model.CarModelID.ToLower()));
+                var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Equals(model.ParkingID.ToLower()));
+                var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Equals(model.LastModifyByID.ToLower()));
+                if (carmodel == null) throw new NullReferenceException();
+                if (parking == null) throw new NullReferenceException();
+                
+                    var slot = new Slot()
+                    {
+                        CarModel = carmodel,
+                        Parking = parking,
+                        Discription = model.Discription,
+                        LastModifyAt = DateTime.Now,
+                        Price = model.Price,
+                        Status = model.Status,
+                        TypeOfSlot = model.TypeOfSlot,
+                        LastModifyBy = modifyuer,
+                    };
+
+                await _dbContext.AddAsync(slot);
+
+
+
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -34,7 +66,7 @@ namespace Back_end.Respository
             }
         }
 
-    
+
         public async Task DeleteAsync(string idString)
         {
             try
@@ -55,7 +87,7 @@ namespace Back_end.Respository
             return await _dbContext.Slots.ToListAsync();
         }
 
-      
+
 
         public async Task<Slot> GetAsync(string idString)
         {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Back_end.Respository
 {
-    public class ParkingRespository : ICRUDSRespository<Parking,ParkingModel>
+    public class ParkingRespository : IParkingRespository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<ParkingRespository> _logger;
@@ -20,11 +20,26 @@ namespace Back_end.Respository
             _mapper = mapper;
         }
 
-        public async Task AddAsync(ParkingModel model)
+        public async Task AddAsync(ParkingModel model,User owner)
         {
             try
             {
-                await _dbContext.Parkings.AddAsync(_mapper.Map<Parking>(model));
+                
+                var parking = new Parking()
+                {
+                    AddressDetail = model.AddressDetail,
+                    IsLegal = model.IsLegal,
+                    LAT = model.LAT,
+                    LON = model.LON,
+                    Owner = owner,
+                    Status = Status.Available,
+                    Discription = model.Discription,
+                    LastModifyAt = DateTime.Now,
+
+                };
+
+                await _dbContext.Parkings.AddAsync(parking);
+
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)
