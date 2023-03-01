@@ -15,7 +15,7 @@ namespace Back_end.Helper
             CreateMap<CarModel, CarModelx2>();
             CreateMap<CarModelx2, CarModel>();
 
-            CreateMap<TimeFrame, TimeFrameModel>();
+            CreateMap<TimeFrame, TimeFrameModel>().ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()));
             CreateMap<TimeFrameModel, TimeFrame>();
 
             CreateMap<Slot, SlotModel>()
