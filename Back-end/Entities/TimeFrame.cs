@@ -9,13 +9,14 @@ namespace Back_end.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; } = Guid.NewGuid();
-        public Parking Parkings { get; set; }
+       
+        public Parking Parking { get; set; }
 
         public string Name { get; set; }
 
-        public DateTime Start { get; set; }
+        public double Start { get; set; }
 
-        public DateTime End { get; set; }
+        public double End { get; set; }
 
         public double Price { get; set; }
 

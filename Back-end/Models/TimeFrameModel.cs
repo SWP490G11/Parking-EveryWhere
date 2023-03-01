@@ -7,9 +7,9 @@ namespace Back_end.Models
         public string ParkingID { get; set; }
         public string Name { get; set; }
 
-        public DateTime Start { get; set; }
+        public double Start { get; set; }
 
-        public DateTime End { get; set; }
+        public double End { get; set; }
 
         public double Price { get; set; }
 

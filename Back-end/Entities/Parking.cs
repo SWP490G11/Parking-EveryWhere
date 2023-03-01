@@ -22,7 +22,7 @@ namespace Back_end.Entities
         public string Discription { get; set; }
 
         public ICollection<Request> Requests { get; set; } = new List<Request>();
-
+       
         public ICollection<TimeFrame> TimeFrames { get; set; } = new List<TimeFrame>();
 
         [InverseProperty("Parking")]
