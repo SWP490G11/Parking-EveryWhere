@@ -9,7 +9,7 @@ namespace Back_end.Helper
     {
         public MapperProfile()
         {
-            CreateMap<User, UserModel>();
+            CreateMap<User, UserModel>().ForMember(um=>um.Password,u=>u.MapFrom(u=>u.HashPassword));
             CreateMap<UserModel, User>();
 
             CreateMap<CarModel, CarModelx2>();
@@ -18,7 +18,12 @@ namespace Back_end.Helper
             CreateMap<TimeFrame, TimeFrameModel>();
             CreateMap<TimeFrameModel, TimeFrame>();
 
-            CreateMap<Slot, SlotModel>();
+            CreateMap<Slot, SlotModel>()
+                .ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()))
+                .ForMember(sm => sm.CarModelID, opt => opt.MapFrom(s => s.CarModel.ID.ToString()))
+                .ForMember(sm => sm.LastModifyByID, opt => opt.MapFrom(s => s.LastModifyBy.ID.ToString()));
+
+
             CreateMap<SlotModel, Slot>();
 
             CreateMap<Parking, ParkingModel>();

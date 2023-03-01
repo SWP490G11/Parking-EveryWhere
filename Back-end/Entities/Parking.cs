@@ -10,9 +10,9 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; } = Guid.NewGuid();
 
-        [Required]
+       
 
-        public ICollection<Slot> Slots { get; set; }
+        public ICollection<Slot>? Slots { get; set; }
 
         public Status Status { get; set; }
 

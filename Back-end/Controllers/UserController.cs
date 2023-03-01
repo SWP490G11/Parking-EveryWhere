@@ -1,4 +1,5 @@
-﻿using Back_end.Authorization;
+﻿using AutoMapper;
+using Back_end.Authorization;
 using Back_end.Common;
 using Back_end.Entities;
 using Back_end.Helper;
@@ -17,12 +18,15 @@ namespace Back_end.Controllers
     {
         private readonly IUserRespository _userRespository;
         private readonly IJwtUtils _jwtUtils;
-       public UserController(IUserRespository userRespository
- , IJwtUtils jwtUtils
+        private readonly IMapper _mapper;
+
+        public UserController(IUserRespository userRespository
+ , IJwtUtils jwtUtils,IMapper mapper
             )
         {
             _userRespository = userRespository;
             _jwtUtils = jwtUtils;
+             _mapper = mapper;
         }
 
         [AllowAnonymous]
@@ -44,7 +48,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var users = await _userRespository.GetUsers();
            
-            return Ok(users);
+            return Ok(_mapper.Map<IList<UserModel>>(users));
         }
 
         [HttpGet("[action]")]
