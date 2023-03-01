@@ -128,6 +128,7 @@ namespace Back_end.Respository
             return await _dbContext.Users.FirstAsync(u=>u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()            
                 ));
+         
         }
 
         public async Task<ICollection<User>> GetUserByUserNames(string username)
@@ -137,7 +138,23 @@ namespace Back_end.Respository
 
         public async Task<ICollection<User>> GetUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            var users = await _dbContext.Users.ToListAsync();
+            try
+            {
+               
+                foreach (var user in users)
+                {
+                    user.Parkings = _dbContext.Parkings.Where(p => p.Owner.ID.ToString().ToLower().Trim().Equals(user.ID.ToString().ToLower().Trim())).ToList();
+                }
+               
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex,"Eror: ") ;
+            }
+            return users;
+
         }
 
         public async Task<ICollection<User>> Paginate(int pageNo = 1, int pageSize = 5)
@@ -150,6 +167,8 @@ namespace Back_end.Respository
         {
             try
             {
+                
+
                 var user = new User()
                 {
                     UserName = userModel.UserName,
@@ -162,7 +181,7 @@ namespace Back_end.Respository
                     DateOfBirth = userModel.DateOfBirth,
                     Email = userModel.Email,
                     Role = userModel.Role,
-
+                    Parkings = new List<Parking>()
 
                 };
 

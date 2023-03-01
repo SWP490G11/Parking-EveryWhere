@@ -38,19 +38,19 @@ namespace Back_end.Entities
         [Required]
         public bool IsDisable { get; set; } = false;
         [AllowNull]
-        public ICollection<Image> Images { get; set; }
+        public ICollection<Image> Images { get; set; } =new List<Image>();
 
         [AllowNull]
-        public ICollection<Car>? Cars { get; set; }
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
 
         [AllowNull]
-        public ICollection<ParkingDetail>? ParkingDetails { get; set; }
+        public ICollection<ParkingDetail>? ParkingDetails { get; set; } = new List<ParkingDetail>();
 
         public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
         [InverseProperty("Owner")]
         [AllowNull]
-        public ICollection<Parking>? Parkings { get; set; }
+        public ICollection<Parking>? Parkings { get; set; } = new List<Parking>();
 
         [InverseProperty("ParkingManagers")]
         public Parking? Parking { get; set; }

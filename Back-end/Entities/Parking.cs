@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Back_end.Entities
 {
@@ -10,21 +11,22 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; } = Guid.NewGuid();
 
-        [Required]
+       
 
-        public ICollection<Slot> Slots { get; set; }
+        public ICollection<Slot>? Slots { get; set; }
 
         public Status Status { get; set; }
 
+        public string ParkingName { get; set; }
+
         public string Discription { get; set; }
 
-        public ICollection<Request>? Requests { get; set; }
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
 
-        public ICollection<TimeFrame>? TimeFrames { get; set; }
+        public ICollection<TimeFrame> TimeFrames { get; set; } = new List<TimeFrame>();
 
         [InverseProperty("Parking")]
-        [AllowNull]
-        public ICollection<User>? ParkingManagers { get; set; }
+        public ICollection<User> ParkingManagers { get; set; } = new List<User>();
 
         public Dashboard? Dashboard { get; set; }
 
@@ -36,8 +38,10 @@ namespace Back_end.Entities
         [InverseProperty("Parkings")]
         public User Owner { get; set; }
 
-        
-        
+       
+
+
+
 
         public ICollection<Feedback> Feedbacks { get; set; }
 

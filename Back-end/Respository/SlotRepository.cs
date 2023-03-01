@@ -35,12 +35,16 @@ namespace Back_end.Respository
         {
             try
             {
-                var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Equals(model.CarModelID.ToLower()));
-                var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Equals(model.ParkingID.ToLower()));
-                var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Equals(model.LastModifyByID.ToLower()));
+                var carmodel = await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
+                var parking = await _dbContext.Parkings.FirstAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
+                var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.LastModifyByID.ToLower().Trim()));
                 if (carmodel == null) throw new NullReferenceException();
                 if (parking == null) throw new NullReferenceException();
-                
+
+                ICollection<Slot> slots = new List<Slot>();
+
+                for (int i = 0; i < quantity; i++)
+                {
                     var slot = new Slot()
                     {
                         CarModel = carmodel,
@@ -53,7 +57,11 @@ namespace Back_end.Respository
                         LastModifyBy = modifyuer,
                     };
 
-                await _dbContext.AddAsync(slot);
+                    slots.Add(slot);
+                }
+                   
+
+                await _dbContext.AddRangeAsync(slots);
 
 
 
