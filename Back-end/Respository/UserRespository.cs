@@ -125,7 +125,7 @@ namespace Back_end.Respository
 
         public async Task<User> GetUser(string guidString)
         {
-            return await _dbContext.Users.FirstAsync(u=>u.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Users.Include(u=>u.Parkings).FirstAsync(u=>u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()            
                 ));
          
@@ -138,21 +138,8 @@ namespace Back_end.Respository
 
         public async Task<ICollection<User>> GetUsers()
         {
-            var users = await _dbContext.Users.ToListAsync();
-            try
-            {
-               
-                foreach (var user in users)
-                {
-                    user.Parkings = _dbContext.Parkings.Where(p => p.Owner.ID.ToString().ToLower().Trim().Equals(user.ID.ToString().ToLower().Trim())).ToList();
-                }
-               
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex,"Eror: ") ;
-            }
+            var users = await _dbContext.Users.Include(u=>u.Parking).Include(u => u.Parkings).ToListAsync();
+           
             return users;
 
         }

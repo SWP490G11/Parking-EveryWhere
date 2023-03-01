@@ -35,11 +35,10 @@ namespace Back_end.Respository
         {
             try
             {
-                var carmodel = await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
-                var parking = await _dbContext.Parkings.FirstAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
+                var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
+                var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
                 var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.LastModifyByID.ToLower().Trim()));
-                if (carmodel == null) throw new NullReferenceException();
-                if (parking == null) throw new NullReferenceException();
+                
 
                 ICollection<Slot> slots = new List<Slot>();
 
@@ -92,7 +91,9 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Slot>> GetAllAsync()
         {
-            return await _dbContext.Slots.ToListAsync();
+            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(s=>s.CarModel).ToListAsync();
+
+            return slots;
         }
 
 
