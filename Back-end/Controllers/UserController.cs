@@ -8,6 +8,7 @@ using Back_end.Respository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using AuthorizeAttribute = Back_end.Authorization.AuthorizeAttribute;
 
 namespace Back_end.Controllers
@@ -19,14 +20,17 @@ namespace Back_end.Controllers
         private readonly IUserRespository _userRespository;
         private readonly IJwtUtils _jwtUtils;
         private readonly IMapper _mapper;
+        
 
         public UserController(IUserRespository userRespository
- , IJwtUtils jwtUtils,IMapper mapper
+ , IJwtUtils jwtUtils,IMapper mapper, ParkingDbContext dbContext
             )
         {
             _userRespository = userRespository;
             _jwtUtils = jwtUtils;
              _mapper = mapper;
+          
+            
         }
 
         [AllowAnonymous]
@@ -47,8 +51,12 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             var users = await _userRespository.GetUsers();
+
+            
+
+            
            
-            return Ok(_mapper.Map<IList<UserModel>>(users));
+            return Ok(users);
         }
 
         [HttpGet("[action]")]

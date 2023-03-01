@@ -24,6 +24,7 @@ namespace Back_end.Respository
         {
             try
             {
+             
                 
                 var parking = new Parking()
                 {
@@ -35,8 +36,11 @@ namespace Back_end.Respository
                     Status = Status.Available,
                     Discription = model.Discription,
                     LastModifyAt = DateTime.Now,
+                    ParkingName = model.ParkingName,
 
                 };
+
+                owner.Parkings.Add(parking);
 
                 await _dbContext.Parkings.AddAsync(parking);
 

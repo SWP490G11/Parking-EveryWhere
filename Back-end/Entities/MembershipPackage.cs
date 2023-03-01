@@ -22,7 +22,7 @@ namespace Back_end.Entities
 
         [InverseProperty("MembershipPackage")]
         [AllowNull]
-        public ICollection<User>? SubcribeBy { get; set; }
+        public ICollection<User> SubcribeBy { get; set; } = new List<User>();
 
         public DateTime LastModifyAt { get; set; }
 

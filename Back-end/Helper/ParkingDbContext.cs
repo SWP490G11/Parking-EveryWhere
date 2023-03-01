@@ -121,6 +121,11 @@ namespace Back_end.Helper
                     new CarModel { Discript = "Xe 7 chỗ",  Model = "SUV7", Price = 25000 } })
 
             );
+            /*modelBuilder.Entity<Parking>(
+               u => u.HasData(ParkingSeed.Seed)
+
+               );*/
+
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
