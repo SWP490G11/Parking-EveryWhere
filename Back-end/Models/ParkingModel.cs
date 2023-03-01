@@ -6,6 +6,7 @@ namespace Back_end.Models
 {
     public class ParkingModel
     {
+        public string ParkingName { get; set; }
         public Status Status { get; set; }
 
         public string Discription { get; set; }

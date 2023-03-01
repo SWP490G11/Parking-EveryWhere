@@ -33,11 +33,10 @@ namespace Back_end.Controllers
             var user = mwi.User;
             if (user == null) return NotFound();
 
-            var all = await _respository.GetAllAsync();
-            var parkings = all.Where(p => p.Owner.ID.ToString().ToLower().Equals(user.ID.ToString().ToLower())).ToList();
+           
            
 
-            return Ok(parkings);
+            return Ok(user.Parkings);
         }
 
         [HttpGet("/parking-manager-of-parking/{id}")]
@@ -85,6 +84,7 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            
             
             await _respository.AddAsync(model,mwi.User);
             return Ok("Add Success");

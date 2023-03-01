@@ -1,5 +1,6 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using System.Runtime.CompilerServices;
 
 namespace Back_end.Helper.Seeding
 {
@@ -17,7 +18,8 @@ namespace Back_end.Helper.Seeding
                     new User {UserName= "phucnv", HashPassword= BCrypt.HashPassword("Aa123456@")
                     ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
                     ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Admin
-                    ,LastModifyAt= DateTime.Now,
+                    ,LastModifyAt= DateTime.Now
+                    
                     },
 
                      new User { UserName="mboustead0" ,HashPassword= BCrypt.HashPassword("bY5rZNeJ4Us"),  FirstName="Martita", LastName="Boustead", DateOfBirth=Convert.ToDateTime("2016-11-24 13:12:53" ),Gender=Gender.Male,PhoneNumber="06868143899" ,Email="mboustead0@businessweek.com", CitizenID="019502501861" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},

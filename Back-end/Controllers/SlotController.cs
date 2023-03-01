@@ -24,6 +24,7 @@ namespace Back_end.Controllers
             _respository = slotRepository;
             _jwtUtils = jwtUtils;
             _mapper=mapper;
+            
         }
 
 
