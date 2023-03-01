@@ -19,10 +19,10 @@ namespace Back_end.Models
 
         public double Price { get; set; }
 
-        public string ParkingID { get; set; }
+        public string? ParkingID { get; set; }
 
-        public string CarModelID { get; set; }
+        public string? CarModelID { get; set; }
 
-        public string LastModifyByID { get; set; }
+        public string? LastModifyByID { get; set; }
     }
 }

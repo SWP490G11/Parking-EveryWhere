@@ -45,7 +45,7 @@ namespace Back_end.Controllers
             return Ok(carModel);
         }
 
-        [HttpPost("/carmodel/{id}")]
+        [HttpPost("/carmodel")]
         [ValidateAntiForgeryToken]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Add( CarModelx2 carModel)
