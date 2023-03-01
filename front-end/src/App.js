@@ -1,12 +1,13 @@
 
 import './App.css';
-import LoginPage from './pages/loginpage/LoginPage';
-import RegisterPage from './pages/loginpage/Register';
 import HomePage from './pages/homepage/HomePage'
 import axios from "axios";
-import { Routes, Route } from "react-router-dom";
 import React, { createContext, useState, useEffect } from "react";
-import PrivateRoute from "./pages/routes/PrivateRoutes";
+import AuthRoutes from './routes/AuthRoutes';
+import RouteComponent from './components/RouteComp';
+import HeaderComp from './components/HeaderComp';
+import { AppRoutes } from './routes/AppRoutes';
+import FooterComp from './components/FooterComp';
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -14,7 +15,7 @@ function App() {
     role: localStorage.role,
     username: localStorage.username,
     id: localStorage.id,
-
+    isLogin:false,
   });
   
   axios.defaults.baseURL = `${process.env.REACT_APP_UNSPLASH_BASEURL}`;
@@ -49,14 +50,44 @@ function App() {
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
-     
-       <Routes>
+       
+      {loginState.isLogin === false ? (
+           <RouteComponent routes={AuthRoutes} />
+          // <LoginPage/>
+        ) : (localStorage.getItem("role") === "Admin"  ? (
+          <>
+            <HeaderComp
+              username={loginState.username}
+            />
+            {/* <GridComponent
+              leftComp={
+                <div>
+                  <ChangePasswordUser
+                    isOpen={loginState.isfirstlogin === "True"}
+                    userName={loginState.username}
+                  />
+                  <MenuComponent routes={NavRoutes} />
+                  
+                </div>
+              }
+              
+              rightComp={<RouteComponent routes={AppRoutes} />}
+            /> */}
+            <RouteComponent routes={AppRoutes} />
+            <FooterComp/>
+          </>
+        ):(<></>))}
+       {/* <Routes>
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/parking/detail" element={<ParkingDetail />} />
               </Route>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-            </Routes>
+              <Route path="/map" element={<Map />} />
+              
+            </Routes> */}
+    
   </Context.Provider>
    
    

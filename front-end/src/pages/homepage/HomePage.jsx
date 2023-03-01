@@ -1,113 +1,34 @@
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme,Button, Modal } from 'antd';
-import { LogoutOutlined } from "@ant-design/icons";
-import React from 'react';
-import {GoogleMap} from '@react-google-maps/api'
-const { Header, Content, Sider } = Layout;
+import { Layout, Col, Row  } from "antd";
 
-const items1 = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-  const key = String(index + 1);
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
-
-
-const center={lat:48.8565, lng:2.2945}
-const HomePage = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-  const handleConfirmLogout = () => {
-    Modal.confirm({
-      title: "Are you sure?",
-      icon: <LogoutOutlined style={{ color: "red" }} />,
-      content: "Do you want to log out?",
-      okText: "Logout",
-      cancelText: "Cancel",
-      okButtonProps: { style: { background: "#e30c18", color: "white" } },
-
-      onOk() {
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
-          localStorage.removeItem("loginState");
-          localStorage.removeItem("role");
-          window.location.href = `/`;
-        });
-      },
-      onCancel() {},
-    });
-  };
+import React from "react";
+import "../../style/home.css";
+import Mapbox from "../../components/Mapbox";
+import ParkingList from "../parkingPage/ParkingList";
+import FilterComp from "../../components/FilterComp";
+// Menu
+const HomePage = ({routers}) => {
   return (
     <Layout>
+      {/* Header */}
+      {/* <HeaderComp /> */}
+      <FilterComp />
+      {/* Body */}
+      <div className="body">
+      <Row>
+        {/*ParkingList*/}
+      <Col span={10}>
+      <ParkingList />
+      </Col>
+        {/* Map */}
+      <Col span={14}>
+      <Mapbox />
+      </Col>
+    </Row>
+    
+   
+      </div>
+    
       
-      <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
-        
-      </Header>
-      <Layout>
-        <Sider
-          width={200}
-          style={{
-            background: colorBgContainer,
-          }}
-        >
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{
-              height: '100%',
-              borderRight: 0,
-            }}
-            items={items2}
-          />
-        </Sider>
-        <Layout
-          style={{
-            padding: '0 24px 24px',
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: '16px 0',
-            }}
-          >
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }}
-          >
-            <Button onClick={handleConfirmLogout}>Logout</Button>
-            <div>
-              <GoogleMap center={center} zoom={15}  mapContainerStyle={{width:'100%', height:'100%'}} >
-
-              </GoogleMap>
-            </div>
-          </Content>
-        </Layout>
-      </Layout>
     </Layout>
   );
 };

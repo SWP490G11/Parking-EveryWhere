@@ -1,0 +1,129 @@
+.header {
+  background-color: chocolate;
+  display: flex;
+  width: 100%;
+  padding: 0;
+  position: relative;
+  height: 8vh;
+}
+
+#left-side {
+  display: block;
+  /* text-align: center; */
+  padding: 34px;
+}
+#right-side {
+  margin: 23px 0px 0px auto;
+}
+
+#right-side ul {
+  text-align: center;
+  height: 100%;
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+#right-side li {
+  padding: 17px;
+}
+.body{
+  display: inline-block;
+}
+/* filter  */
+.filter {
+  display: flex;
+  position: relative;
+
+}
+
+
+.filter input{
+  width: 30vw;
+  
+}
+
+.parking_list{
+  margin: 0px 50% 0px 0px;
+}
+.maps_box{
+  margin: 0px 0px 0px 50%;
+}
+/* Footer */
+footer {
+  background-color: #f8f9fa;
+  padding: 40px 0;
+ 
+}
+
+footer h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+footer p {
+  font-size: 14px;
+  line-height: 24px;
+  color: #6c757d;
+}
+
+footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+footer li {
+  margin-bottom: 10px;
+}
+
+footer a {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #007bff;
+}
+
+#ft-container{
+  display: flex;
+  position: relative;
+  
+}
+
+
+#ft-about{
+  padding: 2.5vw;
+  width: 30vw;
+}
+
+#ft-contact {
+  padding: 2.5vw;
+  align-items: center;
+ 
+}
+#ft-contact ul{
+ 
+  width: 30vw;
+  text-align: center;
+
+}
+#ft-social {
+  padding: 2.5vw;
+  
+}
+#ft-social ul{
+  
+  display: flex;
+  position: relative;
+  width: 30vw;
+  
+}
+
+#social-icons li{
+  align-items: center;
+  text-align: center;
+  padding-left:  5px; 
+  padding-right: 5px;
+}
