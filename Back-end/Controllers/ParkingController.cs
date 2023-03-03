@@ -126,6 +126,43 @@ namespace Back_end.Controllers
             return Ok(parking);
         }
 
+
+        [HttpGet("/parkings/{name}")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetParkings(string name)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var parkings = await _respository.GetParkingByNameAsync(name);
+
+            return Ok(parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+                p.ParkingManagers,
+                p.Feedbacks,
+                p.TimeFrames,
+                Slot = p.Slots.Select(s =>
+              new
+              {
+                  SlotID = s.ID,
+                  CarModelID = s.CarModel.ID,
+                  CarModelName = s.CarModel.Model,
+                  s.TypeOfSlot,
+                  s.Status,
+                  s.Discription,
+                  s.LastModifyAt
+
+              }),
+            }));
+        }
+
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Add(ParkingModel model)
