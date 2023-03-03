@@ -72,7 +72,11 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Parking>> GetAllAsync()
         {
-            return await _dbContext.Parkings.ToListAsync();
+            return await _dbContext.Parkings.Include(p=>p.ParkingManagers)
+                .Include(p => p.Slots).ThenInclude(s=>s.CarModel)
+                .Include(p => p.TimeFrames)
+                .Include(p => p.Owner)
+                .ToListAsync();
         }
 
      

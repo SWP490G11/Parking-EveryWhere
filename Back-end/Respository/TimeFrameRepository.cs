@@ -23,9 +23,18 @@ namespace Back_end.Respository
 
         public async Task AddAsync(TimeFrameModel model)
         {
+            var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
             try
             {
-                await _dbContext.TimeFrames.AddAsync(_mapper.Map<TimeFrame>(model));
+                await _dbContext.TimeFrames.AddAsync(new TimeFrame()
+                {
+                    LastModifyAt = DateTime.Now,
+                    End = model.End,
+                    Start=model.Start,
+                    Name = model.Name,
+                    Parking = parking,
+                    Price = model.Price,
+                });
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

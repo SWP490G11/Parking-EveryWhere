@@ -21,12 +21,12 @@ namespace Back_end.Authorization
             _appSetting = appSetting.Value;
         }
 
-        public async Task Invoke(HttpContext context,IUserRespository userRespository,IJwtUtils jwtUtils)
+        public async Task Invoke(HttpContext context, IUserRespository userRespository, IJwtUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].SingleOrDefault()?.Split(" ").Last();
             if (token != null)
             {
-                
+
                 var userIdExp = jwtUtils.ValidateJwtToken(token);
                 if (userIdExp != null)
                 {
@@ -35,10 +35,12 @@ namespace Back_end.Authorization
                     User user = await userRespository.GetUser(Convert.ToString(arr[0]));
                     DateTime exp = Convert.ToDateTime(arr[1]);
 
-                    if (user.IsDisable) {
+                    if (user.IsDisable)
+                    {
                         context.Response.StatusCode = 401;
-                        return; }
-                   
+                        return;
+                    }
+
                     //if (user != null && exp != null)
                     if (user != null)
                     {
