@@ -34,7 +34,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/carmodel/{id}")]
-        [ValidateAntiForgeryToken]
+        
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Get( string id)
         {
@@ -46,7 +46,7 @@ namespace Back_end.Controllers
         }
 
         [HttpPost("/carmodel")]
-        [ValidateAntiForgeryToken]
+        
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Add( CarModelx2 carModel)
         {
@@ -58,7 +58,7 @@ namespace Back_end.Controllers
         }
 
         [HttpPut("/carmodel/{id}")]
-        [ValidateAntiForgeryToken]
+        
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Update( string id, CarModelx2 carModel)
         {
@@ -71,7 +71,7 @@ namespace Back_end.Controllers
 
 
         [HttpDelete("/carmodel/{id}")]
-        [ValidateAntiForgeryToken]
+       
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Delete( string id)
         {
