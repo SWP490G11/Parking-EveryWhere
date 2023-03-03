@@ -1,10 +1,8 @@
-﻿using Back_end.Authorization;
+﻿using AutoMapper;
 using Back_end.Common;
-using Back_end.Entities;
 using Back_end.Models;
 using Back_end.Models.User;
 using Back_end.Respository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Back_end.Controllers
@@ -13,17 +11,19 @@ namespace Back_end.Controllers
     [ApiController]
     public class ParkingController : ControllerBase
     {
-        private readonly IJwtUtils _jwtUtils;
-        private readonly IParkingRespository _respository;
 
-        public ParkingController(IJwtUtils jwtUtils, IParkingRespository respository)
+        private readonly IParkingRespository _respository;
+        private readonly IMapper _mapper;
+
+        public ParkingController(IParkingRespository respository, IMapper mapper)
         {
-            _jwtUtils = jwtUtils;
+
             _respository = respository;
+            _mapper = mapper;
         }
 
         [HttpGet("/parkings-of-owner")]
-        [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> GetParkingsOfOwnerAsync()
         {
 
@@ -33,10 +33,34 @@ namespace Back_end.Controllers
             var user = mwi.User;
             if (user == null) return NotFound();
 
-           
-           
 
-            return Ok(user.Parkings);
+
+
+            return Ok(user.Parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+                p.ParkingManagers,
+                p.Feedbacks,
+                p.TimeFrames,
+                Slot = p.Slots.Select(s =>
+              new
+              {
+                  SlotID = s.ID,
+                   s.CarModel,
+                  s.TypeOfSlot,
+                  s.Status,
+                  s.Discription,
+                  s.LastModifyAt
+
+              }),
+            }).ToList());
         }
 
         [HttpGet("/parking-manager-of-parking/{id}")]
@@ -49,8 +73,8 @@ namespace Back_end.Controllers
             var user = mwi.User;
             if (user == null) return NotFound();
 
-            var parking= await _respository.GetAsync(id);
-            
+            var parking = await _respository.GetAsync(id);
+
 
             return Ok(parking.ParkingManagers);
         }
@@ -61,9 +85,34 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var carModels = await _respository.GetAllAsync();
+            var parkings = await _respository.GetAllAsync();
 
-            return Ok(carModels);
+            return Ok(parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+                p.ParkingManagers,
+                p.Feedbacks,
+                p.TimeFrames,
+                Slot = p.Slots.Select(s =>
+              new
+              {
+                  SlotID = s.ID,
+                  CarModelID = s.CarModel.ID,
+                  CarModelName =s.CarModel.Model,
+                  s.TypeOfSlot,
+                  s.Status,
+                  s.Discription,
+                  s.LastModifyAt
+
+              }),
+            }));
         }
 
         [HttpGet("/parking/{id}")]
@@ -72,9 +121,9 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var carModel = await _respository.GetAsync(id);
+            var parking = await _respository.GetAsync(id);
 
-            return Ok(carModel);
+            return Ok(parking);
         }
 
         [HttpPost("/parking")]
@@ -84,9 +133,9 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            
-            
-            await _respository.AddAsync(model,mwi.User);
+
+
+            await _respository.AddAsync(model, mwi.User);
             return Ok("Add Success");
         }
 

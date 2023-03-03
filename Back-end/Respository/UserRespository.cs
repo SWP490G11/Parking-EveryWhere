@@ -15,6 +15,7 @@ namespace Back_end.Respository
     
     public interface IUserRespository
     {
+
         public Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
         public Task<ICollection<User>> GetUsers();
         public Task<User> GetUser(string guidString);
@@ -106,7 +107,7 @@ namespace Back_end.Respository
         {
             try
             {
-                var currentUser = await _dbContext.Users.FindAsync(id);
+                var currentUser = await GetUser(id);
                 currentUser.IsDisable = !currentUser.IsDisable;
                 await _dbContext.SaveChangesAsync();
             }
@@ -125,7 +126,7 @@ namespace Back_end.Respository
 
         public async Task<User> GetUser(string guidString)
         {
-            return await _dbContext.Users.FirstAsync(u=>u.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Users.Include(u=>u.Parkings).ThenInclude(p => p.Slots).Include(u => u.MembershipPackage).FirstAsync(u=>u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()            
                 ));
          
@@ -133,26 +134,17 @@ namespace Back_end.Respository
 
         public async Task<ICollection<User>> GetUserByUserNames(string username)
         {
-            return await _dbContext.Users.Where(u=>u.UserName.ToLower().Contains(username.ToLower())).ToListAsync();
+            return await _dbContext.Users.Include(u => u.Parkings).Include(u=>u.Parking).Include(u => u.MembershipPackage)
+                .Where(u=>u.UserName.ToLower()
+                .Contains(username.ToLower())).ToListAsync();
         }
 
         public async Task<ICollection<User>> GetUsers()
         {
-            var users = await _dbContext.Users.ToListAsync();
-            try
-            {
-               
-                foreach (var user in users)
-                {
-                    user.Parkings = _dbContext.Parkings.Where(p => p.Owner.ID.ToString().ToLower().Trim().Equals(user.ID.ToString().ToLower().Trim())).ToList();
-                }
-               
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex,"Eror: ") ;
-            }
+            var users = await _dbContext.Users.Include(u => u.Parkings).ThenInclude(p => p.Slots).ThenInclude(s=>s.CarModel)
+                .Include(u => u.MembershipPackage)
+                .Include(u => u.Parking).ToListAsync();
+           
             return users;
 
         }

@@ -1,4 +1,5 @@
-﻿using Back_end.Authorization;
+﻿using AutoMapper;
+using Back_end.Authorization;
 using Back_end.Common;
 using Back_end.Entities;
 using Back_end.Models;
@@ -15,11 +16,15 @@ namespace Back_end.Controllers
     {
         private readonly IJwtUtils _jwtUtils;
         private readonly ICRUDSRespository<TimeFrame, TimeFrameModel> _respository;
+        private readonly IMapper _mapper;
 
-        public TimeFrameController(IJwtUtils jwtUtils, ICRUDSRespository<TimeFrame, TimeFrameModel> respository)
+        public TimeFrameController(IJwtUtils jwtUtils, ICRUDSRespository<TimeFrame, TimeFrameModel> respository,
+           IMapper mapper
+            )
         {
             _jwtUtils = jwtUtils;
             _respository = respository;
+            _mapper = mapper;
         }
 
        
@@ -31,7 +36,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var timeFrames = await _respository.GetAllAsync();
 
-            return Ok(timeFrames);
+            return Ok(_mapper.Map<ICollection<TimeFrameModel>>(timeFrames));
         }
 
         [HttpGet("/timeframe/{id}")]
@@ -42,10 +47,10 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var timeFrame = await _respository.GetAsync(id);
 
-            return Ok(timeFrame);
+            return Ok(_mapper.Map<TimeFrameModel>(timeFrame));
         }
 
-        [HttpPost("/timeframe/{id}")]
+        [HttpPost("/timeframe")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Add(TimeFrameModel model)
         {

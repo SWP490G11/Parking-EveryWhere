@@ -16,6 +16,8 @@ namespace Back_end.Respository
         ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize);
         ICollection<Slot> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, SlotModel updateModel);
+
+        Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID);
     }
 
     public class SlotRepository : ISlotRepository
@@ -35,11 +37,10 @@ namespace Back_end.Respository
         {
             try
             {
-                var carmodel = await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
-                var parking = await _dbContext.Parkings.FirstAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
+                var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
+                var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
                 var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.LastModifyByID.ToLower().Trim()));
-                if (carmodel == null) throw new NullReferenceException();
-                if (parking == null) throw new NullReferenceException();
+                
 
                 ICollection<Slot> slots = new List<Slot>();
 
@@ -92,10 +93,22 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Slot>> GetAllAsync()
         {
-            return await _dbContext.Slots.ToListAsync();
+            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(s=>s.CarModel).Include(p=>p.ParkingDetail).ToListAsync();
+
+            return slots;
         }
 
+        public async Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID)
+        {
+            var slots = await _dbContext.Slots
+                .Include(p => p.Parking)
+                .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+                .Where(s=>s.Parking.ID.ToString()
+                .ToLower().Trim().Equals(parkingID
+                .ToLower().Trim())).ToListAsync();
 
+            return slots;
+        }
 
         public async Task<Slot> GetAsync(string idString)
         {
@@ -104,6 +117,9 @@ namespace Back_end.Respository
                 Equals(idString.ToUpper().Trim()
                 ));
         }
+
+
+
 
         public ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize)
         {

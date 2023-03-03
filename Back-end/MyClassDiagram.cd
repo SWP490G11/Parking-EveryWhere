@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
+  <Class Name="Back_end.Controllers.UserController">
+    <Position X="10.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAgAAQAAABAgKAAAABCAAAEgAAAAAACgA=</HashCode>
+      <FileName>Controllers\UserController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_jwtUtils" />
+      <Field Name="_userRespository" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Back_end.Authorization.AuthorizeAttribute" BaseTypeListCollapsed="true">
+    <Position X="1.5" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Authorization\AuthorizeAttribute.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_roles" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Back_end.Authorization.JWTMiddleware">
+    <Position X="3.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAgAAAAABAAAAA=</HashCode>
+      <FileName>Authorization\JWTMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Back_end.Authorization.JWTMiddlewareExtensions">
+    <Position X="4" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Authorization\JWTMiddleware.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Back_end.Authorization.JwtUtils" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAA=</HashCode>
+      <FileName>Authorization\JwtUtils.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Back_end.Entities.User">
+    <Position X="5.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEACAiAkkACAUAACQAAAAAAQABAAAQAAABAQAAk=</HashCode>
+      <FileName>Entities\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Role" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Back_end.Respository.UserRespository">
+    <Position X="12" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAQBAAAgAAAAgAAAAAAAAAIBIAABCAAAEAEAAAAACAA=</HashCode>
+      <FileName>Respository\UserRespository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_dbContext" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Back_end.Helper.ParkingDbContext">
+    <Position X="7" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAACACAgAAAAAAAAACEAAAEAAAghAAAAAAABAQAAA=</HashCode>
+      <FileName>Helper\ParkingDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Back_end.Authorization.IJwtUtils">
+    <Position X="8" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Authorization\JwtUtils.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Back_end.Respository.IUserRespository">
+    <Position X="4.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KAQAAAAgAAAAgAAAAAAAAAIBAAABAAAAEAEAAAAACAA=</HashCode>
+      <FileName>Respository\UserRespository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Back_end.Common.Role">
+    <Position X="0.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAABQCAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Role.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
