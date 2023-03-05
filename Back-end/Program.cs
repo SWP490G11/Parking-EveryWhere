@@ -6,12 +6,14 @@ using Back_end.Respository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddMvcCore();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -47,7 +49,8 @@ service.AddTransient<IParkingRespository,ParkingRespository>();
 service.AddTransient<ICRUDSRespository<Car, CarDTO>, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
-service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
+/*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
+*/
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
 service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
 
@@ -101,11 +104,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
+// using static System.Net.Mime.MediaTypeNames;
+app.UseStatusCodePages(Text.Plain, "Status Code Page: {0}");
+
+
 app.UseMiddleware<JWTMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthorization();
 
