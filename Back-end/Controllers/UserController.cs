@@ -20,15 +20,18 @@ namespace Back_end.Controllers
         private readonly IUserRespository _userRespository;
         private readonly IJwtUtils _jwtUtils;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserController> _logger;
 
 
         public UserController(IUserRespository userRespository
- , IJwtUtils jwtUtils, IMapper mapper, ParkingDbContext dbContext
+ , IJwtUtils jwtUtils, IMapper mapper, ParkingDbContext dbContext,
+            ILogger<UserController> logger
             )
         {
             _userRespository = userRespository;
             _jwtUtils = jwtUtils;
             _mapper = mapper;
+            _logger = logger;
 
 
         }
@@ -88,6 +91,7 @@ namespace Back_end.Controllers
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetUser(string id)
         {
+            
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             var users = await _userRespository.GetUser(id);
@@ -102,12 +106,21 @@ namespace Back_end.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserModel userModel)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
-            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
-                "registor this role");
-            await _userRespository.Register(userModel);
+            try
+            {
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
+                if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
+                    "registor this role");
+                await _userRespository.Register(userModel);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex,"");
+            }
             return Ok("Register Success");
+
         }
 
         [HttpPost("[action]")]
