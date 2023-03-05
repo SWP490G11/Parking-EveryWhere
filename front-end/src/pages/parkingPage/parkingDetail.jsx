@@ -7,15 +7,15 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { Layout, Col, Row, Button  } from "antd";
 const ParkingDetail = () => {
-  const id_Parking = useParams().idParking;
+  const idParking = useParams().idParking;
   const [data,setData]=useState({});
   useEffect(()=>{
-    axios.get(`${process.env.REACT_APP_Backend_URI}parking/${id_Parking}`)
+    axios.get(`${process.env.REACT_APP_Backend_URI}parking/${idParking}`)
     .then(function(response) {
       setData(response.data);
      
     })
-  });
+  },[idParking]);
   return (
     <Layout>
         <Row>

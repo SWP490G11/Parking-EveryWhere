@@ -209,6 +209,7 @@ const Register = () => {
             rules={[
               {
                 required: true,
+                pattern: new RegExp("^[a-zA-Z0-9]+$"),
                 message: "Please input your password!",
               },
             ]}
@@ -226,6 +227,7 @@ const Register = () => {
             rules={[
               {
                 required: true,
+                pattern: new RegExp("^[a-zA-Z0-9]+$"),
                 message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({
@@ -411,6 +413,7 @@ const Register = () => {
             rules={[
               {
                 required: true,
+                pattern: new RegExp("^[a-zA-Z0-9]+$"),
                 message: "Please input your password!",whitespace: false,
               },
             ]}
@@ -428,6 +431,8 @@ const Register = () => {
             rules={[
               {
                 required: true,
+
+                pattern: new RegExp("^[a-zA-Z0-9]+$"),
                 message: "Please confirm your password!",
               },
               ({ getFieldValue }) => ({

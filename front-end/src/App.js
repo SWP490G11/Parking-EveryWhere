@@ -1,6 +1,5 @@
 
 import './App.css';
-import HomePage from './pages/homepage/HomePage'
 import axios from "axios";
 import React, { createContext, useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
@@ -8,6 +7,7 @@ import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
 import { AppRoutes } from './routes/AppRoutes';
 import FooterComp from './components/FooterComp';
+import Login from './pages/loginpage/LoginPage'
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -50,29 +50,16 @@ function App() {
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
-       
-      {loginState.isLogin === false ? (
-           <RouteComponent routes={AuthRoutes} />
+        
+      {(loginState.isLogin === false ) ? ( 
+           <Login/>
           // <LoginPage/>
         ) : (localStorage.getItem("role") === "Admin"  ? (
           <>
             <HeaderComp
               username={loginState.username}
+              id = {loginState.id}
             />
-            {/* <GridComponent
-              leftComp={
-                <div>
-                  <ChangePasswordUser
-                    isOpen={loginState.isfirstlogin === "True"}
-                    userName={loginState.username}
-                  />
-                  <MenuComponent routes={NavRoutes} />
-                  
-                </div>
-              }
-              
-              rightComp={<RouteComponent routes={AppRoutes} />}
-            /> */}
             <RouteComponent routes={AppRoutes} />
             <FooterComp/>
           </>
@@ -87,7 +74,7 @@ function App() {
               <Route path="/map" element={<Map />} />
               
             </Routes> */}
-    
+    <RouteComponent routes={AuthRoutes} />
   </Context.Provider>
    
    

@@ -29,7 +29,7 @@ const  LoginPage= () => {
         ...loginState,
         role: response.data.role,
         username: response.data.username,
-        id: response.data.userId,
+        id: response.data.id,
         isLogin: true,
         token: response.data.token
       });
@@ -39,15 +39,17 @@ const  LoginPage= () => {
           isLogin: true,
           role: response.data.role,
           username: response.data.username,
-          id: response.data.userId, 
+          id: response.data.id, 
           token: response.data.token
         })
       );
       console.log(response.data);
+      navigate("/");
       localStorage.setItem("role",response.data.role );
-      
+      loginState.setItem("isLogin",true);
+    
       axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
-      navigate('/');
+     
     })
 
     .catch((error) => {
