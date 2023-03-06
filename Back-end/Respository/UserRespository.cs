@@ -71,6 +71,7 @@ namespace Back_end.Respository
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName.Trim().Equals(model.UserName.Trim()));
             if (user == null || !BCryptNet.Verify(model.Password, user.HashPassword))
                 throw new AppException("Username or password is incorrect");
+            if(user.IsDisable) throw new AppException("User have been disabled");
 
             string token = _jwtUtils.GenerateToken(user);
 

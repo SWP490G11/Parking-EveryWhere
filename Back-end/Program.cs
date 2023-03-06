@@ -46,7 +46,7 @@ service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
 service.AddTransient<ICRUDSRespository<CarModel,CarModelx2>, CarModelRespository>();
 service.AddTransient<IParkingRespository,ParkingRespository>();
-service.AddTransient<ICRUDSRespository<Car, CarDTO>, CarRepository>();
+service.AddTransient<ICarRepository, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();

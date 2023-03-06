@@ -72,17 +72,9 @@ namespace Back_end.Respository
 
         public async Task DeleteAsync(string idString)
         {
-            try
-            {
                 var parking = await GetAsync(idString);
                 _dbContext.Parkings.Remove(parking);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+                await _dbContext.SaveChangesAsync();  
         }
 
         public async Task<ICollection<Parking>> GetAllAsync()
@@ -126,9 +118,22 @@ namespace Back_end.Respository
         }
 
 
-        public Task UpdateAsync(string idString, ParkingModel updateModel)
+        public async Task UpdateAsync(string idString, ParkingModel updateModel)
         {
-            throw new NotImplementedException();
+            var updateParking = await GetAsync(idString);
+            if (updateParking == null) throw new AppException("Not Found this parking");
+            updateParking.AddressDetail = updateModel.AddressDetail;
+            updateParking.LON=updateModel.LON;
+            updateParking.LAT = updateModel.LAT;
+            updateParking.IsLegal = updateModel.IsLegal;
+            updateParking.Discription = updateModel.Discription;
+            updateParking.ParkingName = updateModel.ParkingName;
+            updateParking.Status = updateModel.Status;
+            updateParking.LastModifyAt = DateTime.Now;
+            
+
+            _dbContext.Update(updateParking);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

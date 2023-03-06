@@ -3,40 +3,77 @@ using Back_end.Common;
 using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Back_end.Respository
 {
-    public class CarRepository : ICRUDSRespository<Car,CarDTO>
+    public interface ICarRepository
+    {
+        Task AddAsync(CarDTO model, User ownner);
+        Task<ICollection<Car>> GetCarByCarModel(string CarModelID);
+        Task DeleteAsync(string idString);
+        Task<ICollection<Car>> GetAllAsync();
+        Task<Car> GetAsync(string idString);
+        ICollection<Car> PaginateAsync(ICollection<Car> source, int pageNo, int pageSize);
+        ICollection<Car> SortAsync(DirectionOfSort direction, string factor);
+        Task UpdateAsync(string id, CarDTO carDTO);
+    }
+
+    public class CarRepository : ICarRepository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<CarRepository> _logger;
         private readonly IMapper _mapper;
 
-        public Task AddAsync(CarDTO model)
+        public async Task<ICollection<Car>> GetCarByCarModel(string carModelID)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Cars.Where(c=>c.CarModel.ID.ToString().Trim().ToLower().Equals(carModelID.ToLower().Trim())).ToListAsync();
         }
 
-       
-
-        public Task DeleteAsync(string idString)
+        public async Task AddAsync(CarDTO model, User ownner)
         {
-            throw new NotImplementedException();
+            var carmodel = await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(model.CarModelID.ToUpper().Trim()
+                ));
+            if (carmodel == null) throw new AppException("Wrong CarModel or CarModel not already existed");
+            if (string.IsNullOrEmpty(model.CarNumber) || string.IsNullOrEmpty(model.CarModelID)) throw new ArgumentNullException("Null somefield");
+            await _dbContext.AddAsync(
+                new Car()
+                {
+                    CarNumber = model.CarNumber,
+                    CarOwner = ownner,
+                    LastModifyAt = DateTime.Now,
+                    CarModel=carmodel
+                }
+                );
+           await _dbContext.SaveChangesAsync();
         }
 
-        public Task<ICollection<Car>> GetAllAsync()
+
+
+        public async Task DeleteAsync(string idString)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+            var deletedCar =await GetAsync(idString);
+
+            _dbContext.Remove(deletedCar);
+           await _dbContext.SaveChangesAsync();
         }
 
-        public Task<Car> GetAsync()
+        public async Task<ICollection<Car>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Cars.Include(c=>c.CarModel).ToListAsync();
         }
 
-        public Task<Car> GetAsync(string idString)
+ 
+
+        public async Task<Car> GetAsync(string idString)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+            return await _dbContext.Cars.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(idString.ToUpper().Trim()
+                ));
         }
 
         public ICollection<Car> PaginateAsync(ICollection<Car> source, int pageNo, int pageSize)
@@ -50,9 +87,19 @@ namespace Back_end.Respository
         }
 
 
-        public Task UpdateAsync(string id,CarDTO carDTO)
+        public async Task UpdateAsync(string id, CarDTO carDTO)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException();
+            var updateddCar = await GetAsync(id);
+
+            updateddCar.CarNumber = carDTO.CarNumber;
+            updateddCar.CarModel = await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(carDTO.CarModelID.ToUpper().Trim()
+                ));
+            updateddCar.LastModifyAt = DateTime.Now;
+
+            _dbContext.Update(updateddCar);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
