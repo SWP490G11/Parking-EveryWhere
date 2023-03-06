@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Back_end.Entities
 {
@@ -19,6 +20,7 @@ namespace Back_end.Entities
 
         public DateTime? LastModifyAt { get; set; }
 
+        [JsonIgnore]
         public User? LastModifyBy { get; set; }
     }
 }

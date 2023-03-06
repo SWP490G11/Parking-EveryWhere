@@ -40,7 +40,7 @@ namespace Back_end.Entities
         [AllowNull]
         public ICollection<Image> Images { get; set; } =new List<Image>();
 
-        [AllowNull]
+        [InverseProperty("CarOwner")]
         public ICollection<Car> Cars { get; set; } = new List<Car>();
 
         [AllowNull]
@@ -57,6 +57,7 @@ namespace Back_end.Entities
 
         [InverseProperty("SubcribeBy")]
         public MembershipPackage? MembershipPackage { get; set; }
+
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
