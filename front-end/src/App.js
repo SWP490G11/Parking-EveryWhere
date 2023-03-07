@@ -9,6 +9,7 @@ import React, { createContext, useState, useEffect } from "react";
 import PrivateRoute from "./pages/routes/PrivateRoutes";
 import ParkingDetail from './pages/parkingDetail/parkingDetail';
 import ParkingHistory from './pages/parkingDetail/parkingHistory';
+import UserProfile from './pages/user/UserProfile';
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -59,7 +60,7 @@ function App() {
               </Route>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} /> */}
-              <Route path="/" element={<ParkingHistory />} />
+              <Route path="/" element={<UserProfile />} />
               
             </Routes>
   </Context.Provider>
