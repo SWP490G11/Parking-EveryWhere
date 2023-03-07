@@ -121,7 +121,7 @@ export function UserProfile() {
         </ul>
 
         <div id="account-information">
-          <h1>Change password</h1>
+          <h1 style={{ marginLeft: "50px" }}>Change password</h1>
           <li id="username">
             Username
             <AutoComplete
@@ -158,7 +158,7 @@ export function UserProfile() {
           <Button
             style={{
               marginLeft: "5vw",
-           
+              marginTop: "30px",
             }}
             type="primary"
           >

@@ -40,6 +40,10 @@ img {
 
 #account-information{
   list-style: none;
+  border-left: 1px solid;
 }
-
+#account-information li{
+  margin-left: 30px;
+  
+}
 
