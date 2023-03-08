@@ -1,15 +1,21 @@
 
 import './App.css';
-import LoginPage from './pages/loginpage/LoginPage';
-import RegisterPage from './pages/loginpage/Register';
-import HomePage from './pages/homepage/HomePage'
 import axios from "axios";
-import { Routes, Route } from "react-router-dom";
 import React, { createContext, useState, useEffect } from "react";
+<<<<<<< HEAD
 import PrivateRoute from "./pages/routes/PrivateRoutes";
 import ParkingDetail from './pages/parkingDetail/parkingDetail';
 import ParkingHistory from './pages/parkingDetail/parkingHistory';
 import UserProfile from './pages/user/UserProfile';
+=======
+import AuthRoutes from './routes/AuthRoutes';
+import RouteComponent from './components/RouteComp';
+import HeaderComp from './components/HeaderComp';
+import  {AppRoutes } from './routes/AppRoutes';
+import  {OwnerRoutes}  from './routes/OwnerRoutes';
+import FooterComp from './components/FooterComp';
+import Login from './pages/loginpage/LoginPage'
+>>>>>>> origin/Phong
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -17,7 +23,7 @@ function App() {
     role: localStorage.role,
     username: localStorage.username,
     id: localStorage.id,
-
+    isLogin:false,
   });
   
   axios.defaults.baseURL = `${process.env.REACT_APP_UNSPLASH_BASEURL}`;
@@ -52,6 +58,7 @@ function App() {
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
+<<<<<<< HEAD
      
      
        <Routes>
@@ -63,6 +70,31 @@ function App() {
               <Route path="/" element={<UserProfile />} />
               
             </Routes>
+=======
+        
+      {(loginState.isLogin === false ) ? ( 
+          //  <Login/>
+           <RouteComponent routes={AuthRoutes} />
+          // <LoginPage/>
+        ) : (
+          loginState.role === "Admin"  ? (
+          <>
+            <HeaderComp
+              username={loginState.username}
+              id = {loginState.id}
+            />
+            <RouteComponent routes={AppRoutes} />
+            <FooterComp/>
+          </>
+        ):(<> <HeaderComp
+          username={loginState.username}
+          id = {loginState.id}
+        />
+        <RouteComponent routes={OwnerRoutes} />
+        <FooterComp/></>))}
+      
+    
+>>>>>>> origin/Phong
   </Context.Provider>
    
    

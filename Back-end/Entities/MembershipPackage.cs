@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Back_end.Entities
 {
@@ -19,8 +20,9 @@ namespace Back_end.Entities
 
         public DateTime SubcribeAt { get; set; }
 
-        
-        public ICollection<User> SubcribeBy { get; set; }
+        [InverseProperty("MembershipPackage")]
+        [AllowNull]
+        public ICollection<User> SubcribeBy { get; set; } = new List<User>();
 
         public DateTime LastModifyAt { get; set; }
 

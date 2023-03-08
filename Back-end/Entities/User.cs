@@ -1,6 +1,7 @@
 ﻿using Back_end.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Back_end.Entities
@@ -11,7 +12,7 @@ namespace Back_end.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; } = Guid.NewGuid();
 
-        public string   UserName { get; set; }
+        public string UserName { get; set; }
 
         [JsonIgnore]
         public string HashPassword { get; set; }
@@ -36,21 +37,31 @@ namespace Back_end.Entities
 
         [Required]
         public bool IsDisable { get; set; } = false;
-        public ICollection<Image> Images { get; set; }
+        [AllowNull]
+        public ICollection<Image> Images { get; set; } =new List<Image>();
 
-        public ICollection<Car> Cars { get; set; }
+        [AllowNull]
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
 
-        public ICollection<ParkingDetail> ParkingDetails  { get; set; }
+        [AllowNull]
+        public ICollection<ParkingDetail>? ParkingDetails { get; set; } = new List<ParkingDetail>();
 
-        public ICollection<Feedback> Feedback { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
-        public MembershipPackage? MembershipPackage { get; set; } = null;
+        [InverseProperty("Owner")]
+        [AllowNull]
+        public ICollection<Parking>? Parkings { get; set; } = new List<Parking>();
+
+        [InverseProperty("ParkingManagers")]
+        public Parking? Parking { get; set; }
+
+        [InverseProperty("SubcribeBy")]
+        public MembershipPackage? MembershipPackage { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
 
         public DateTime LastModifyAt { get; set; }
 
-        
     }
 }

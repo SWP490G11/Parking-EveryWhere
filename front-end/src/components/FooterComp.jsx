@@ -4,21 +4,27 @@ import {
   TwitterOutlined,
   InstagramOutlined,
 } from "@ant-design/icons";
+import { Layout,Col,Row } from 'antd';
+const { Header, Footer, Sider, Content } = Layout;
 function FooterComp() {
+  const footerStyle = {
+    textAlign: 'center',
+    color: '#fff',
+    backgroundColor: '#7dbcea',
+  }
   return (
-    <footer>
-      <div className="container">
-        <div id="ft-container">
-          <div id="ft-about">
-            <h3 style={{ display: "center", textAlign: "center" }}>About Us</h3>
+    <Footer style={footerStyle}>
+      <Row>
+      <Col span={8}>
+        <h3 style={{ display: "center", textAlign: "center" }}>About Us</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
               vestibulum justo nec sapien hendrerit, in lobortis erat sagittis.
               Nunc congue eros id libero varius tristique.{" "}
             </p>
-          </div>
-          <div id="ft-contact">
-            <h3 style={{ display: "center", textAlign: "center" }}>
+            </Col>
+      <Col span={8}>
+      <h3 style={{ display: "center", textAlign: "center" }}>
               Contact Us
             </h3>
             <ul>
@@ -32,9 +38,9 @@ function FooterComp() {
                 <a href="#">Address : Mễ Trì - Hà Nội</a>
               </li>
             </ul>
-          </div>
-          <div id="ft-social">
-            <h3  style={{ display: "center", textAlign: "center" }}>Social Media</h3>
+        </Col>
+      <Col span={8}>
+      <h3  style={{ display: "center", textAlign: "center" }}>Social Media</h3>
             <ul id="social-icons">
               <li>
                 <FacebookOutlined href="#" />
@@ -49,10 +55,25 @@ function FooterComp() {
                 Instagram
               </li>
             </ul>
+        </Col>
+    </Row>
+ {/* <div id="ft-container">
+          <div id="ft-about">
+            
           </div>
-        </div>
-      </div>
-    </footer>
+          <div id="ft-contact">
+            
+          </div>
+          <div id="ft-social">
+           
+          </div>
+        </div> */}
+    </Footer>
+    // <footer>
+    //   <div className="container">
+       
+    //   </div>
+    // </footer>
   );
 }
 export default FooterComp;

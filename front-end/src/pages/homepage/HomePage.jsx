@@ -1,34 +1,34 @@
-import { Layout } from "antd";
+import { Layout, Col, Row  } from "antd";
 
 import React from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
-
-import HeaderComp from "../../components/HeaderComp";
-import FooterComp from "../../components/FooterComp";
-import ParkingList from "../../components/ParkingList";
+import ParkingList from "../parkingPage/ParkingList";
 import FilterComp from "../../components/FilterComp";
 // Menu
-
-const { Header, Content, Sider } = Layout;
-
-const HomePage = () => {
+const HomePage = ({routers}) => {
   return (
     <Layout>
       {/* Header */}
-      <HeaderComp />
+      {/* <HeaderComp /> */}
       <FilterComp />
       {/* Body */}
       <div className="body">
+      <Row>
+        {/*ParkingList*/}
+      <Col span={10}>
+      <ParkingList />
+      </Col>
         {/* Map */}
-        
-        <ParkingList />
-        <Mapbox />
+      <Col span={14}>
+      <Mapbox />
+      </Col>
+    </Row>
+    
+   
       </div>
-      {/* About */}
-      {/* Footer */}
-
-      <FooterComp />
+    
+      
     </Layout>
   );
 };

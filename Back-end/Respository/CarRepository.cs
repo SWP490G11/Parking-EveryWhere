@@ -1,19 +1,25 @@
-﻿using Back_end.Common;
+﻿using AutoMapper;
+using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
 
 namespace Back_end.Respository
 {
     public class CarRepository : ICRUDSRespository<Car,CarDTO>
     {
-        
+        private readonly ParkingDbContext _dbContext;
+        private readonly ILogger<CarRepository> _logger;
+        private readonly IMapper _mapper;
 
         public Task AddAsync(CarDTO model)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync()
+       
+
+        public Task DeleteAsync(string idString)
         {
             throw new NotImplementedException();
         }
@@ -24,6 +30,11 @@ namespace Back_end.Respository
         }
 
         public Task<Car> GetAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Car> GetAsync(string idString)
         {
             throw new NotImplementedException();
         }

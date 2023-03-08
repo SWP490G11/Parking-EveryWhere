@@ -1,4 +1,5 @@
-﻿using Back_end.Authorization;
+﻿using AutoMapper;
+using Back_end.Authorization;
 using Back_end.Common;
 using Back_end.Entities;
 using Back_end.Helper;
@@ -7,6 +8,7 @@ using Back_end.Respository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using AuthorizeAttribute = Back_end.Authorization.AuthorizeAttribute;
 
 namespace Back_end.Controllers
@@ -17,12 +19,18 @@ namespace Back_end.Controllers
     {
         private readonly IUserRespository _userRespository;
         private readonly IJwtUtils _jwtUtils;
-       public UserController(IUserRespository userRespository
- , IJwtUtils jwtUtils
+        private readonly IMapper _mapper;
+        
+
+        public UserController(IUserRespository userRespository
+ , IJwtUtils jwtUtils,IMapper mapper, ParkingDbContext dbContext
             )
         {
             _userRespository = userRespository;
             _jwtUtils = jwtUtils;
+             _mapper = mapper;
+          
+            
         }
 
         [AllowAnonymous]
@@ -43,7 +51,36 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             var users = await _userRespository.GetUsers();
+
+            
+
+            
            
+            return Ok(users);
+        }
+
+        [HttpGet("[action]")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetUserbyUserName(string username)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var users = await _userRespository.GetUserByUserNames(username);
+
+            return Ok(users);
+        }
+
+        [HttpGet("[action]")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> Paginate(int pageNo=1,int pageSize=5)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
+            if (pageSize<=0) pageSize=1 ;
+         
+            var users = await _userRespository.Paginate(pageNo,pageSize);
+
             return Ok(users);
         }
 
@@ -58,6 +95,7 @@ namespace Back_end.Controllers
             return Ok(users);
         }
 
+      
 
 
         [HttpPost("[action]")]
@@ -66,15 +104,30 @@ namespace Back_end.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed") ;
+            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
+                "registor this role");
             await _userRespository.Register(userModel);
             return Ok("Register Success");
         }
 
+        [HttpPost("[action]")]
+        [Authorization.Authorize(Role.ParkingOwner)]
+        public async Task<IActionResult> RegisterForParkingManager(UserModel userModel)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
+            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
+                "registor this role");
+            await _userRespository.Register(userModel);
+            return Ok("Register Success");
+        }
 
         [HttpPut("[action]")]
-        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner)]
+        
         public async Task<IActionResult> ChangePassword(string id,ChangePasswordModel userModel)
         {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _userRespository.ChangePassword(id,userModel);
             return Ok("ChangePassword Success");
@@ -84,6 +137,8 @@ namespace Back_end.Controllers
         [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id,UserModel userModel)
         {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
            await _userRespository.Update(id,userModel);
             return Ok("Update Success");
@@ -93,6 +148,8 @@ namespace Back_end.Controllers
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> DisableOrActive(string id)
         {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _userRespository.DisableOrActiveUser(id);
             return Ok("Change state success");
