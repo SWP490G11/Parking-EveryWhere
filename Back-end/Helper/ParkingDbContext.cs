@@ -38,6 +38,8 @@ namespace Back_end.Helper
 
         public virtual DbSet<TimeFrame> TimeFrames { get; set; }
 
+        public virtual DbSet<ParkingDetail> ParkingDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

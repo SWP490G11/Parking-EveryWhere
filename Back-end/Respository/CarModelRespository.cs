@@ -41,9 +41,10 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
         {
             try
             {
+                if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
                 var carModel = await GetAsync(idString);
                 _dbContext.CarModels.Remove(carModel);
-               var a=  await _dbContext.Parkings.ToListAsync();
+              
                 
                 await _dbContext.SaveChangesAsync();
                 
