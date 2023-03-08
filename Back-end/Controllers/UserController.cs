@@ -100,6 +100,19 @@ namespace Back_end.Controllers
         }
 
 
+        [HttpGet("[action]")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetProfile()
+        {
+
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+         
+
+            return Ok(mwi.User);
+        }
+
+
 
 
         [HttpPost("[action]")]

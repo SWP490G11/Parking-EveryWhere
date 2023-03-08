@@ -53,7 +53,7 @@ service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository
 */
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
 service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
-
+service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
