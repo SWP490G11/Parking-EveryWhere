@@ -101,7 +101,7 @@ namespace Back_end.Controllers
 
 
         [HttpGet("[action]")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingOwner,Role.ParkingManager)]
         public async Task<IActionResult> GetProfile()
         {
 
