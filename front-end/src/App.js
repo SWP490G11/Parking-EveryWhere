@@ -2,12 +2,6 @@
 import './App.css';
 import axios from "axios";
 import React, { createContext, useState, useEffect } from "react";
-<<<<<<< HEAD
-import PrivateRoute from "./pages/routes/PrivateRoutes";
-import ParkingDetail from './pages/parkingDetail/parkingDetail';
-import ParkingHistory from './pages/parkingDetail/parkingHistory';
-import UserProfile from './pages/user/UserProfile';
-=======
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
@@ -15,7 +9,7 @@ import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import FooterComp from './components/FooterComp';
 import Login from './pages/loginpage/LoginPage'
->>>>>>> origin/Phong
+import UserProfile from './pages/user/UserProfile';
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -58,21 +52,8 @@ function App() {
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
-<<<<<<< HEAD
-     
-     
-       <Routes>
-              {/* <Route element={<PrivateRoute />}>
-                <Route path="/" element={<HomePage />} />
-              </Route>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} /> */}
-              <Route path="/" element={<UserProfile />} />
-              
-            </Routes>
-=======
         
-      {(loginState.isLogin === false ) ? ( 
+      {/* {(loginState.isLogin === false ) ? ( 
           //  <Login/>
            <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
@@ -91,10 +72,10 @@ function App() {
           id = {loginState.id}
         />
         <RouteComponent routes={OwnerRoutes} />
-        <FooterComp/></>))}
+        <FooterComp/></>))} */}
       
+        <UserProfile/>
     
->>>>>>> origin/Phong
   </Context.Provider>
    
    

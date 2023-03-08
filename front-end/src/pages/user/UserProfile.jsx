@@ -2,7 +2,25 @@ import "../../style/profile.css";
 import HeaderComp from "../../components/HeaderComp";
 import FilterComp from "../../components/FilterComp";
 import { UserOutlined } from "@ant-design/icons";
-import { Avatar, Space, AutoComplete, DatePicker, Button,Radio } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+import {
+  Avatar,
+  Space,
+  AutoComplete,
+  DatePicker,
+  Button,
+  Radio,
+  Cascader,
+  Checkbox,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Switch,
+  TreeSelect,
+  Upload,
+} from "antd";
 import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -28,6 +46,9 @@ export function UserProfile() {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
+  const { RangePicker } = DatePicker;
+  const { TextArea } = Input;
+  const [componentDisabled, setComponentDisabled] = useState(true);
   return (
     <>
       {" "}
@@ -36,102 +57,124 @@ export function UserProfile() {
         <div className="avatar">
           {" "}
           <div className="user-avatar">
-            <img
-              src="https://img.lovepik.com/element/40143/1122.png_1200.png"
-              alt=""
-            />
+            <Avatar
+              size={150}
+              icon={
+                <Form.Item
+                  style={{ marginLeft: "23px", marginTop: "30px" }}
+                  valuePropName="fileList"
+                >
+                  <Upload action="/upload.do" listType="picture-card">
+                    <PlusOutlined />
+                  </Upload>
+                </Form.Item>
+              }
+              action="/upload.do"
+            />{" "}
           </div>
-          <div className="user-name">Phung Nam Duy</div>
+          <div className="user-name" style={{ marginTop: "120px" }}>
+            Phung Nam Duy
+          </div>
         </div>
 
-        <ul className="user-information">
-          <li id="full-name">
-            Full name:
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
-            />
-          </li>
-          <li id="dob">
-            Date of birth:
-            <DatePicker
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              defaultValue={dayjs("2015-06-06", dateFormat)}
-              enable
-            />
-          </li>
-
-          <li id="gender">
-            Gender
-            <Radio.Group onChange={onChange} value={value}>
+        <Form
+          labelCol={{
+            span: 4,
+          }}
+          wrapperCol={{
+            span: 14,
+          }}
+          layout="horizontal"
+          style={{
+            maxWidth: 600,
+          }}
+        >
+          <Form.Item label="Checkbox" name="disabled" valuePropName="checked">
+            <Checkbox>Gender</Checkbox>
+          </Form.Item>
+          <Form.Item label="Radio">
+            <Radio.Group name="radiogroup" defaultValue={1}>
               <Radio value={1}>Male</Radio>
               <Radio value={2}>Female</Radio>
             </Radio.Group>
-          </li>
-          <li id="address">
-            Address
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
+          </Form.Item>
+          <Form.Item label="Full name:">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Email:">
+            <Input />
+          </Form.Item>
+          <Form.Item label="Phone number:">
+            <InputNumber style={{marginLeft:"16px"}}/>
+          </Form.Item>
+          <Form.Item label="Select">
+            <Select>
+              <Select.Option value="demo">Demo</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="TreeSelect">
+            <TreeSelect
+              treeData={[
+                {
+                  title: "Light",
+                  value: "light",
+                  children: [
+                    {
+                      title: "Bamboo",
+                      value: "bamboo",
+                    },
+                  ],
+                },
+              ]}
             />
-          </li>
-          <li id="CMND">
-            CMND
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
+          </Form.Item>
+          <Form.Item label="Cascader">
+            <Cascader
+              options={[
+                {
+                  value: "zhejiang",
+                  label: "Zhejiang",
+                  children: [
+                    {
+                      value: "hangzhou",
+                      label: "Hangzhou",
+                    },
+                  ],
+                },
+              ]}
             />
-          </li>
-          <li id="phone-number">
-            Phone number
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
-            />
-          </li>
+          </Form.Item>
+          <Form.Item label="Date of birth :">
+            <DatePicker />
+          </Form.Item>
+          <Form.Item label="RangePicker">
+            <RangePicker />
+          </Form.Item>
 
-          <li id="membership">
-            Membership
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
-            />
-          </li>
-          <li id="role">
-            Role
-            <AutoComplete
-              style={{
-                marginLeft: "20px",
-                width: 200,
-              }}
-              onSearch={handleSearch}
-              options={options}
-            />
-          </li>
-        </ul>
+          <Form.Item label="TextArea">
+            <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item label="Switch" valuePropName="checked">
+            <Switch />
+          </Form.Item>
+          <Form.Item label="Upload" valuePropName="fileList">
+            <Upload action="/upload.do" listType="picture-card">
+              <div>
+                <PlusOutlined />
+                <div
+                  style={{
+                    marginTop: 8,
+                  }}
+                >
+                  Upload
+                </div>
+              </div>
+            </Upload>
+          </Form.Item>
+          <Form.Item label="Button">
+            <Button>Button</Button>
+          </Form.Item>
+        </Form>
       </div>
       <FooterComp />
     </>

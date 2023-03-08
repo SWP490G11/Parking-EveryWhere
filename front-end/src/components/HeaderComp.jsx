@@ -3,6 +3,7 @@ import {LogoutOutlined,AppstoreOutlined,HomeOutlined, SettingOutlined,DownOutlin
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
+
 // import '../style/Style.css'
 const menuitems = [
   {
@@ -17,7 +18,7 @@ const menuitems = [
   {
     label: "Parking Of Me ",
     key: "app",
-    icon: <AppstoreOutlined />,
+    icon: <i class="bi bi-p-circle"></i>,
   },
   {
     label: "Payment",
