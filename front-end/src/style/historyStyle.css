@@ -1,0 +1,18 @@
+.body {
+    display: flex;
+  }
+  #left-body {
+    display: block;
+    padding: 34px;
+  
+    width: 70vw;
+  }
+  
+  #left-body ul {
+    list-style: none;
+  }
+  #right-body {
+    right: 0;
+    position: absolute;
+    width: 30vw;
+  }
