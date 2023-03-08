@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@goongmaps/goong-geocoder": "^1.1.1",
-    "@goongmaps/goong-geocoder-react": "^0.1.1",
-    "@goongmaps/goong-map-react": "^1.1.2",
     "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.9.2",
     "@testing-library/jest-dom": "^5.16.5",

@@ -5,7 +5,8 @@ import React, { createContext, useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
-import { AppRoutes } from './routes/AppRoutes';
+import  {AppRoutes } from './routes/AppRoutes';
+import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import FooterComp from './components/FooterComp';
 import Login from './pages/loginpage/LoginPage'
 export const Context = createContext();
@@ -52,9 +53,11 @@ function App() {
     <Context.Provider value={[loginState, setLoginState]}>
         
       {(loginState.isLogin === false ) ? ( 
-           <Login/>
+          //  <Login/>
+           <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
-        ) : (localStorage.getItem("role") === "Admin"  ? (
+        ) : (
+          loginState.role === "Admin"  ? (
           <>
             <HeaderComp
               username={loginState.username}
@@ -63,18 +66,14 @@ function App() {
             <RouteComponent routes={AppRoutes} />
             <FooterComp/>
           </>
-        ):(<></>))}
-       {/* <Routes>
-              <Route element={<PrivateRoute />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/parking/detail" element={<ParkingDetail />} />
-              </Route>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/map" element={<Map />} />
-              
-            </Routes> */}
-    <RouteComponent routes={AuthRoutes} />
+        ):(<> <HeaderComp
+          username={loginState.username}
+          id = {loginState.id}
+        />
+        <RouteComponent routes={OwnerRoutes} />
+        <FooterComp/></>))}
+      
+    
   </Context.Provider>
    
    

@@ -1,14 +1,18 @@
 import { Menu, Modal, Dropdown, Avatar, Button,Input, Form } from "antd";
-import {LogoutOutlined,AppstoreOutlined, MailOutlined, SettingOutlined,DownOutlined, UserOutlined} from "@ant-design/icons";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined, SettingOutlined,DownOutlined, UserOutlined} from "@ant-design/icons";
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
-import '../style/Style.css'
+// import '../style/Style.css'
 const menuitems = [
   {
-    label: "Home",
+    label: (
+      <a href="/">
+        Home
+      </a>
+    ),
     key: "mail",
-    icon: <MailOutlined />,
+    icon: <HomeOutlined />,
   },
   {
     label: "Parking Of Me ",
@@ -330,4 +334,3 @@ export default function HeaderComp({username,id}) {
     </>
   );
 }
-

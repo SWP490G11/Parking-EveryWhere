@@ -63,7 +63,7 @@ const  LoginPage= () => {
     
     <div className="login-page">
       
-    <div className="illustration-wrapper">
+      <div className="illustration-wrapper">
         <img src="https://mixkit.imgix.net/art/preview/mixkit-left-handed-man-sitting-at-a-table-writing-in-a-notebook-27-original-large.png?q=80&auto=format%2Ccompress&h=700" alt="Login"/>
       </div>
       
@@ -101,11 +101,7 @@ const  LoginPage= () => {
           >
             <Input.Password />
           </Form.Item>
-        {/* <div className="validContainer">
-            {formik.touched.password && formik.errors.password ? (
-              <p className="validationText">{formik.errors.password}</p>
-            ) : null}
-          </div> */}
+       
         <Form.Item name="remember" valuePropName="checked">
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
