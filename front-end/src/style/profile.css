@@ -1,13 +1,15 @@
 #profile {
   display: flex;
   position: relative;
+  background-color: aquamarine;
 }
 
 .avatar {
-  width: 30vw;
+  width: 25vw;
   display: block;
-  background-color: aquamarine;
+  background-color: rgb(236, 255, 127);
   text-align: center;
+  margin-left: 25vw;
 }
 img {
   width: 35%;
@@ -25,9 +27,13 @@ img {
 }
 
 .user-information {
+  
   list-style: none;
-  width: 40vw;
+  width: 25vw;
   font-size: 15px;
+  background-color: rgb(236, 255, 127);
+  height: 100%;
+  
 }
 .user-information li{
 
@@ -39,6 +45,7 @@ img {
 }
 
 #account-information{
+
   list-style: none;
   border-left: 1px solid;
 }
