@@ -1,10 +1,17 @@
 import React, { useState, useContext } from "react";
-import "./LoginPage.css" ;
-import {Form,Checkbox,Button,Input,Spin} from 'antd';
+import "./LoginPage.css";
+import { Form, Checkbox, Button, Input, Spin } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { LoadingOutlined,GithubOutlined } from "@ant-design/icons";
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import {
+  LoadingOutlined,
+  GithubOutlined,
+  FacebookOutlined,
+  GoogleOutlined,
+  TwitterOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../App";
 function LoginPage() {
@@ -72,76 +79,96 @@ function LoginPage() {
    
   return (
     
-    <div className="login-page">
-      
-    <div className="illustration-wrapper">
-        <img src="https://mixkit.imgix.net/art/preview/mixkit-left-handed-man-sitting-at-a-table-writing-in-a-notebook-27-original-large.png?q=80&auto=format%2Ccompress&h=700" alt="Login"/>
-      </div>
-      
-    <Form
+    <section><div className="img-bg">
+    <img
+      src="https://images.unsplash.com/photo-1470224114660-3f6686c562eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
+      alt="Hình Ảnh Minh Họa"
+    />
+  </div>
+
+  <div class="noi-dung">
+    <div class="form">
+      <h2>PARKING EVERYWHERE</h2>
+      <Form
         name="login-form"
         initialValues={{ remember: true }}
         onSubmit={formik.handleSubmit}
       >
-        <p className="form-title">Welcome back</p>
-        <p>Login to the Dashboard</p>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
-        >
-          <Input
-            type="username"
-            placeholder="Username"
+        <div class="input-form">
+          <span>Username</span>
+          <Form.Item
             name="username"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.username}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Please input your password!' }]}
-        >
-          <Input.Password 
-             placeholder="Password" 
-             name="password"
-             onChange={formik.handleChange}
-             onBlur={formik.handleBlur}
-             value={formik.values.password}
-          />
-        </Form.Item>
-        {/* <div className="validContainer">
-            {formik.touched.password && formik.errors.password ? (
-              <p className="validationText">{formik.errors.password}</p>
-            ) : null}
-          </div> */}
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button" onClick={formik.handleSubmit}
-           disabled={isLoging === LOGING.LOADING}>
-             <span>
-                {isLoging === LOGING.LOADING ? (
-                  <Spin indicator={antIcon} />
-                )  : (
-                  "Login"
-                )}
-              </span>
-           
-          </Button>
-        </Form.Item>
-        <Form.Item>
-        <Button type="text" href={"/register"}>
-   <GithubOutlined className="teamSocialIcon" /> Register
-        </Button>
-        </Form.Item>
+            rules={[
+              { required: true, message: "Please input your username!" },
+            ]}
+          >
+            <Input
+              type="username"
+              placeholder=""
+              name="username"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.username}
+            />
+            
+          </Form.Item>
+        </div>
+        <div class="input-form">
+          <span>Password</span>
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: "Please input your password!" },
+            ]}
+          >
+            <Input
+              placeholder="Password"
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            <EyeTwoTone/>
+          </Form.Item>
+        </div>
+        <div class="nho-dang-nhap">
+          <label>
+            <Form.Item name="remember" valuePropName="checked">
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+          </label>
+        </div>
+        <div class="input-form">
+          <Form.Item>
+            <input
+              onClick={formik.handleSubmit}
+              disabled={isLoging === LOGING.LOADING}
+              type="submit"
+              value="LOGIN"
+              
+            />
+          </Form.Item>
+        </div>
+        <div class="input-form">
+          <p>
+            Do not have account ? <a href="#">Register</a>
+          </p>
+        </div>
       </Form>
-      
+      <h3>Login by social account</h3>
+      <ul class="icon-dang-nhap">
+        <li>
+          <FacebookOutlined style={{scale:"200%"}}/>
+        </li>
+        <li>
+          <GoogleOutlined style={{scale:"200%"}}/>
+        </li>
+        <li>
+          <TwitterOutlined style={{scale:"200%"}}/>
+        </li>
+      </ul>
     </div>
-   
+  </div></section>
  
   );
 }
