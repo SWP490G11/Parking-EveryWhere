@@ -29,14 +29,47 @@ namespace Back_end.Controllers
 
 
         [HttpGet("/slots")]
-        [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetAll()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             var slots = await _respository.GetAllAsync();
 
-            return Ok(_mapper.Map<ICollection<SlotModel>>(slots));
+            return Ok(slots.Select(s=>
+           new {
+               SlotID= s.ID,
+               s.Price,
+               CarModelID= s.CarModel.ID,
+               ParkingID = s.Parking.ID,
+               s.Discription,
+               ParkingDetail = s.ParkingDetail.Select(pd=> pd.ID.ToString() ).ToList(),
+               s.Status,
+               s.LastModifyAt,
+              LastModifyBy= s.LastModifyBy.ID,
+            }));
+        }
+
+        [HttpGet("/slots/{parkingID}")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetSlotOfParking(string parkingID)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var slots = await _respository.GetSlotByParkingAsync(parkingID);
+
+            return Ok(slots.Select(s =>
+           new {
+               SlotID = s.ID,
+               s.Price,
+               CarModelID = s.CarModel.ID,
+               ParkingID = s.Parking.ID,
+               s.Discription,
+               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               s.Status,
+               s.LastModifyAt,
+               LastModifyBy = s.LastModifyBy.ID,
+           }));
         }
 
         [HttpPost("/slot")]

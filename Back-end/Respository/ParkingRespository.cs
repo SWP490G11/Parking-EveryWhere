@@ -4,10 +4,25 @@ using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Back_end.Respository
 {
-    public class ParkingRespository : IParkingRespository
+    public interface IParkingRespository
+    {
+        Task AddAsync(ParkingModel model, User owner);
+        Task DeleteAsync(string idString);
+        Task<ICollection<Parking>> GetAllAsync();
+
+        Task<ICollection<Parking>> GetParkingByNameAsync(string searchText);
+        
+        Task<Parking> GetAsync(string idString);
+        ICollection<Parking> PaginateAsync(ICollection<Parking> source, int pageNo, int pageSize);
+        ICollection<Parking> SortAsync(DirectionOfSort direction, string factor);
+        Task UpdateAsync(string idString, ParkingModel updateModel);
+    }
+
+    public class ParkingRespository :  IParkingRespository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<ParkingRespository> _logger;
@@ -20,12 +35,12 @@ namespace Back_end.Respository
             _mapper = mapper;
         }
 
-        public async Task AddAsync(ParkingModel model,User owner)
+        public async Task AddAsync(ParkingModel model, User owner)
         {
             try
             {
-             
-                
+
+
                 var parking = new Parking()
                 {
                     AddressDetail = model.AddressDetail,
@@ -53,29 +68,25 @@ namespace Back_end.Respository
             }
         }
 
-     
+
 
         public async Task DeleteAsync(string idString)
         {
-            try
-            {
                 var parking = await GetAsync(idString);
                 _dbContext.Parkings.Remove(parking);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+                await _dbContext.SaveChangesAsync();  
         }
 
         public async Task<ICollection<Parking>> GetAllAsync()
         {
-            return await _dbContext.Parkings.ToListAsync();
+            return await _dbContext.Parkings.Include(p => p.ParkingManagers)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+                .Include(p => p.TimeFrames)
+                .Include(p => p.Owner)
+                .ToListAsync();
         }
 
-     
+
 
         public async Task<Parking> GetAsync(string idString)
         {
@@ -83,6 +94,17 @@ namespace Back_end.Respository
             return await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
+        }
+
+        public async Task<ICollection<Parking>> GetParkingByNameAsync(string searchText)
+        {
+            var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase); 
+            var parkings =  await _dbContext.Parkings.Include(p => p.ParkingManagers)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+                .Include(p => p.TimeFrames)
+                .Include(p => p.Owner).Where(p=>p.ParkingName.Contains(searchTextHD.Trim()))
+                .ToListAsync();
+            return parkings;
         }
 
         public ICollection<Parking> PaginateAsync(ICollection<Parking> source, int pageNo, int pageSize)
@@ -96,9 +118,22 @@ namespace Back_end.Respository
         }
 
 
-        public Task UpdateAsync(string idString, ParkingModel updateModel)
+        public async Task UpdateAsync(string idString, ParkingModel updateModel)
         {
-            throw new NotImplementedException();
+            var updateParking = await GetAsync(idString);
+            if (updateParking == null) throw new AppException("Not Found this parking");
+            updateParking.AddressDetail = updateModel.AddressDetail;
+            updateParking.LON=updateModel.LON;
+            updateParking.LAT = updateModel.LAT;
+            updateParking.IsLegal = updateModel.IsLegal;
+            updateParking.Discription = updateModel.Discription;
+            updateParking.ParkingName = updateModel.ParkingName;
+            updateParking.Status = updateModel.Status;
+            updateParking.LastModifyAt = DateTime.Now;
+            
+
+            _dbContext.Update(updateParking);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
