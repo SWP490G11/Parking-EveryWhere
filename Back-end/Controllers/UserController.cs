@@ -156,7 +156,7 @@ namespace Back_end.Controllers
 
         [HttpPut("[action]")]
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner)]
-        public async Task<IActionResult> Update(string id, UserModel userModel)
+        public async Task<IActionResult> Update(string id, UpdateModel userModel)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
