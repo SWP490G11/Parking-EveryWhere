@@ -1,4 +1,4 @@
-﻿using Back_end.Authorization;
+using Back_end.Authorization;
 using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models.User;
@@ -230,9 +230,6 @@ namespace Back_end.Respository
                 updateUser.DateOfBirth = userModel.DateOfBirth;
                 updateUser.Email = userModel.Email;
                 updateUser.Role = userModel.Role;
-
-
-
 
                 _dbContext.Users.Update(updateUser);
                 await _dbContext.SaveChangesAsync();
