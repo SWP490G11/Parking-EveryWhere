@@ -9,11 +9,16 @@ namespace Back_end.Helper
     {
         public MapperProfile()
         {
-            CreateMap<User, UserModel>().ForMember(um=>um.Password,u=>u.MapFrom(u=>u.HashPassword));
+            CreateMap<User, UserModel>().ForMember(um => um.Password, u => u.MapFrom(u => u.HashPassword));
             CreateMap<UserModel, User>();
 
             CreateMap<CarModel, CarModelx2>();
             CreateMap<CarModelx2, CarModel>();
+
+
+
+            CreateMap<Image, ImageModel>();
+            CreateMap<ImageModel, Image>();
 
             CreateMap<TimeFrame, TimeFrameModel>().ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()));
             CreateMap<TimeFrameModel, TimeFrame>();

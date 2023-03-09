@@ -3,15 +3,18 @@ using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
 using Back_end.Respository;
+using Back_end.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddMvcCore();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -38,18 +41,25 @@ service.AddDbContext<ParkingDbContext>(
 );
 
 service.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+service.Configure<CloudarySettings>(builder.Configuration.GetSection("CloudarySettings"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
 service.AddTransient<ICRUDSRespository<CarModel,CarModelx2>, CarModelRespository>();
 service.AddTransient<IParkingRespository,ParkingRespository>();
-service.AddTransient<ICRUDSRespository<Car, CarDTO>, CarRepository>();
+service.AddTransient<ICarRepository, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
-service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
+/*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
+*/
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
 service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
+service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
+
+
+service.AddTransient<IImageService, ImageService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -101,11 +111,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
+// using static System.Net.Mime.MediaTypeNames;
+app.UseStatusCodePages(Text.Plain, "Status Code Page: {0}");
+
+
 app.UseMiddleware<JWTMiddleware>();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthorization();
 

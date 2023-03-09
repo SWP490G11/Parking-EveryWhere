@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Back_end.Entities
 {
@@ -14,6 +15,10 @@ namespace Back_end.Entities
 
         public TimeFrame TimeFrame { get; set; }
 
+        public DateTime ParkingDate { get; set; }
+
+        [AllowNull]
+        public DateTime? PickUpDate { get; set; }
         public string? Note { get; set; }
 
         public DateTime LastModifyAt { get; set; }

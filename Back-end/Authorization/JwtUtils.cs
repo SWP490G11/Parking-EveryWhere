@@ -11,6 +11,7 @@ namespace Back_end.Authorization
 
     public interface IJwtUtils
     {
+
         string GenerateToken(User user);
         public string ValidateJwtToken(string token);
 

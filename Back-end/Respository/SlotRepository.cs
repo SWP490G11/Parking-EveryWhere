@@ -16,6 +16,8 @@ namespace Back_end.Respository
         ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize);
         ICollection<Slot> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, SlotModel updateModel);
+
+        Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID);
     }
 
     public class SlotRepository : ISlotRepository
@@ -91,12 +93,22 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Slot>> GetAllAsync()
         {
-            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(s=>s.CarModel).ToListAsync();
+            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(s=>s.CarModel).Include(p=>p.ParkingDetail).ToListAsync();
 
             return slots;
         }
 
+        public async Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID)
+        {
+            var slots = await _dbContext.Slots
+                .Include(p => p.Parking)
+                .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+                .Where(s=>s.Parking.ID.ToString()
+                .ToLower().Trim().Equals(parkingID
+                .ToLower().Trim())).ToListAsync();
 
+            return slots;
+        }
 
         public async Task<Slot> GetAsync(string idString)
         {
@@ -105,6 +117,9 @@ namespace Back_end.Respository
                 Equals(idString.ToUpper().Trim()
                 ));
         }
+
+
+
 
         public ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize)
         {

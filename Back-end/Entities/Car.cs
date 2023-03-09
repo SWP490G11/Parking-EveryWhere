@@ -15,6 +15,7 @@ namespace Back_end.Entities
        
         public DateTime? LastModifyAt { get; set; }
 
-        public User? LastModifyBy { get; set; }
+        [InverseProperty("Cars")]
+        public User CarOwner { get; set; }
     }
 }
