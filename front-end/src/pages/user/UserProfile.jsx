@@ -58,14 +58,17 @@ export function UserProfile() {
         userName: dt.userName,
         email: dt.email,
         phoneNumber: dt.phoneNumber,
-        dateOfBirth:dayjs(dt.dateOfBirth, 'YYYY-MM-DD'),
+         dateOfBirth:dayjs(dt.dateOfBirth, 'YYYY-MM-DD'),
         gender: dt.gender,
         role: dt.role,
       });
       
     }).catch((error) => {
-      
-      //setError(error.response.data.message);
+      notification.warning({
+        message: `Load profile fail`,
+        description: 'Please check input again',
+        placement: 'topLeft',
+      });
     });
   },[]);
   return (
@@ -151,7 +154,7 @@ export function UserProfile() {
           >
             <Radio.Group disabled>
               <Radio value={"Male"}>Male</Radio>
-              <Radio value={"Female"}>FeMale</Radio>
+              <Radio value={"FeMale"}>FeMale</Radio>
               <Radio value={'Other'}>Other</Radio>
             </Radio.Group>
           </Form.Item>
