@@ -1,6 +1,7 @@
 
 import './App.css';
 import axios from "axios";
+
 import React, { createContext, useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
@@ -8,7 +9,7 @@ import HeaderComp from './components/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import FooterComp from './components/FooterComp';
-import Login from './pages/loginpage/LoginPage'
+
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({

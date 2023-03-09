@@ -205,7 +205,7 @@ namespace Back_end.Respository
                 var updateUser = await GetUser(id);
 
                 updateUser.UserName = userModel.UserName;
-                updateUser.HashPassword = BCryptNet.HashPassword(userModel.Password);
+                // updateUser.HashPassword = BCryptNet.HashPassword(userModel.Password);
                 updateUser.Gender = userModel.Gender;
                 updateUser.FirstName = userModel.FirstName;
                 updateUser.LastName = userModel.LastName;
@@ -214,9 +214,6 @@ namespace Back_end.Respository
                 updateUser.DateOfBirth = userModel.DateOfBirth;
                 updateUser.Email = userModel.Email;
                 updateUser.Role = userModel.Role;
-
-
-
 
                 _dbContext.Users.Update(updateUser);
                 await _dbContext.SaveChangesAsync();

@@ -3,14 +3,15 @@ import {
   Form,
   Input,
   DatePicker,
+  notification,
   Radio, Space, Button, Image, } from "antd";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useNavigate,useParams } from "react-router-dom";
 import axios from "axios";
+import UploadImg from "../../components/UploadImage";
 
-
-export function UserProfile() {
+export function EditUser() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const id = useParams().iduser;
@@ -68,17 +69,46 @@ export function UserProfile() {
       //setError(error.response.data.message);
     });
   },[]);
+  const onFinish = (fieldsValue) => {
+    const values = {
+      ...fieldsValue,
+     
+      dateOfBirth: fieldsValue["dateOfBirth"].format("YYYY-MM-DD"),
+     
+    };
+    axios
+      .put(`${process.env.REACT_APP_Backend_URI}api/User/Update?id=${id}`, {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        userName: values.userName,
+        dateOfBirth: values.DateOfBirth,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        gender: values.gender,
+        role: values.role,
+      })
+      .then(() => {
+        sessionStorage.setItem("changeStatus", true);
+        navigate("/user");
+      }).catch((error)=>{
+        notification.warning({
+            message: `Save fail`,
+            description: 'Please check input again',
+            placement: 'topLeft',
+          });
+      });
+  };
   return (
     
       <div id="profile">
         <div className="avatar">
           <div className="user-avatar">
             <Space wrap size={80} >
-              <Image className="imgz"
+              {/* <Image className="imgz"
                 width={160}
                 src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-              
+              /> */}
+              <UploadImg />
             </Space>
           </div>
           <div className="user-name">
@@ -90,6 +120,7 @@ export function UserProfile() {
         <Form
           {...formItemLayout}
           form={form}
+          onFinish={onFinish}
           initialValues={{
             prefix: "86",
           }}
@@ -105,21 +136,21 @@ export function UserProfile() {
             label="FirstName"
              
           >
-            <Input disabled/>
+            <Input />
           </Form.Item>
           <Form.Item
             name="lastName"
             label="LastName"
            
           >
-            <Input disabled />
+            <Input  />
           </Form.Item>
 
           <Form.Item
             name="userName"
             label="UserName"
           >
-            <Input disabled/>
+            <Input />
           </Form.Item>
          
           <Form.Item
@@ -127,7 +158,7 @@ export function UserProfile() {
             label="E-mail"
             
           >        
-              <Input disabled/>
+              <Input />
           </Form.Item>
           <Form.Item
             name="phoneNumber"
@@ -135,7 +166,7 @@ export function UserProfile() {
            
           >
             <Input            
-             disabled
+             
             />
           </Form.Item>
           <Form.Item
@@ -143,13 +174,13 @@ export function UserProfile() {
             label="Date of birth"
             
           >
-            <DatePicker disabled style={{width: 332}} />
+            <DatePicker  style={{width: 332}} />
           </Form.Item>
           <Form.Item
             name="gender"
             label="Gender"
           >
-            <Radio.Group disabled>
+            <Radio.Group >
               <Radio value={"Male"}>Male</Radio>
               <Radio value={"FeMale"}>FeMale</Radio>
               <Radio value={'Other'}>Other</Radio>
@@ -163,9 +194,9 @@ export function UserProfile() {
           </Form.Item>
           
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary"  onClick={() => navigate(`/user-profile/edit/${id}`)}
+            <Button type="primary"  htmlType="submit"
             >
-            Edit
+            Save
             </Button>
             <Button type="second" onClick={() => navigate(-1)}>
               Back
@@ -178,4 +209,4 @@ export function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default EditUser;

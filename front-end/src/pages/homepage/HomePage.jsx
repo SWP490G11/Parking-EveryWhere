@@ -8,6 +8,7 @@ import FilterComp from "../../components/FilterComp";
 // Menu
 const HomePage = ({routers}) => {
   return (
+    <section>
     <Layout>
       {/* Header */}
       {/* <HeaderComp /> */}
@@ -16,7 +17,7 @@ const HomePage = ({routers}) => {
       <div className="body">
       <Row>
         {/*ParkingList*/}
-      <Col span={10}>
+      <Col span={10} >
       <ParkingList />
       </Col>
         {/* Map */}
@@ -30,6 +31,7 @@ const HomePage = ({routers}) => {
     
       
     </Layout>
+    </section>
   );
 };
 export default HomePage;

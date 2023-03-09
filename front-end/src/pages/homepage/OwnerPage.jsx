@@ -5,7 +5,7 @@ import React from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
 import ManageMyParking from "../parkingPage/ManageParking";
-import FilterComp from "../../components/FilterComp";
+
 import {
     FilterOutlined
   } from "@ant-design/icons";

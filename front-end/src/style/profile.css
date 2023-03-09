@@ -9,15 +9,17 @@
   background-color: aquamarine;
   text-align: center;
 }
-img {
+.imgz {
   width: 35%;
-  border-radius: 50%;
+  border-radius: 100%;
   border: 1px black solid;
-  padding: 1px;
-  margin: 10px;
+ 
   background-color: rgb(0, 0, 0);
 }
-
+.form{
+  margin:auto;
+  text-align: center;
+}
 .user-name {
   margin: 20px;
   font-weight: bold;
