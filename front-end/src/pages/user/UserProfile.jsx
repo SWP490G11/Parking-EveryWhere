@@ -58,7 +58,7 @@ export function UserProfile() {
         userName: dt.userName,
         email: dt.email,
         phoneNumber: dt.phoneNumber,
-         dateOfBirth:dayjs(dt.dateOfBirth, 'YYYY-MM-DD'),
+        dateOfBirth:dayjs(dt.dateOfBirth, 'YYYY-MM-DD'),
         gender: dt.gender,
         role: dt.role,
       });
@@ -151,7 +151,7 @@ export function UserProfile() {
           >
             <Radio.Group disabled>
               <Radio value={"Male"}>Male</Radio>
-              <Radio value={"FeMale"}>FeMale</Radio>
+              <Radio value={"Female"}>FeMale</Radio>
               <Radio value={'Other'}>Other</Radio>
             </Radio.Group>
           </Form.Item>
