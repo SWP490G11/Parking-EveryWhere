@@ -4,7 +4,7 @@ import {
   Input,
   DatePicker,
   notification,
-  Radio, Space, Button, Image, } from "antd";
+  Radio, Space, Button, } from "antd";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useNavigate,useParams } from "react-router-dom";
@@ -72,16 +72,14 @@ export function EditUser() {
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,
-     
       dateOfBirth: fieldsValue["dateOfBirth"].format("YYYY-MM-DD"),
-     
     };
     axios
       .put(`${process.env.REACT_APP_Backend_URI}api/User/Update?id=${id}`, {
         firstName: values.firstName,
         lastName: values.lastName,
         userName: values.userName,
-        dateOfBirth: values.DateOfBirth,
+        dateOfBirth: values.dateOfBirth,
         email: values.email,
         phoneNumber: values.phoneNumber,
         gender: values.gender,
@@ -89,7 +87,12 @@ export function EditUser() {
       })
       .then(() => {
         sessionStorage.setItem("changeStatus", true);
-        navigate("/user");
+        notification.success({
+          message: `Save successfully`,
+          description: 'Updated user profile',
+          placement: 'topLeft',
+        });
+        navigate(`/user-profile/${id}`);
       }).catch((error)=>{
         notification.warning({
             message: `Save fail`,
@@ -182,7 +185,7 @@ export function EditUser() {
           >
             <Radio.Group >
               <Radio value={"Male"}>Male</Radio>
-              <Radio value={"FeMale"}>FeMale</Radio>
+              <Radio value={"Female"}>FeMale</Radio>
               <Radio value={'Other'}>Other</Radio>
             </Radio.Group>
           </Form.Item>

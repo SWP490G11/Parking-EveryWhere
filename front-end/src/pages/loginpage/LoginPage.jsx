@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import "./LoginPage.css";
-import { Form, Checkbox, Input } from "antd";
+import { Form, Checkbox, Input,notification } from "antd";
 import axios from "axios";
 import {
   FacebookOutlined,
@@ -59,6 +59,11 @@ function LoginPage() {
       .catch((error) => {
         setLoging(LOGING.FAIL);
         axios.defaults.headers.common["Authorization"] = "";
+        notification.warning({
+          message: `Login fail`,
+          description: 'Please check user or password again',
+          placement: 'topLeft',
+        });
          //setError(error.response.data.message);
       });
   };
