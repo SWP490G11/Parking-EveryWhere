@@ -3,7 +3,11 @@ import {LogoutOutlined,AppstoreOutlined,HomeOutlined, SettingOutlined,DownOutlin
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
+<<<<<<< HEAD
 
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> 9f6ee2a2b2daceb28a44739647bff5f57aba0e4d
 // import '../style/Style.css'
 const menuitems = [
   {
@@ -87,7 +91,7 @@ export default function HeaderComp({username,id}) {
       offset: 1,
     },
   };
-  {/*Log-Out*/}
+  //Log-Out
   const handleConfirmLogout = () => {
     Modal.confirm({
       title: "Are you sure?",
@@ -109,12 +113,12 @@ export default function HeaderComp({username,id}) {
       onCancel() {},
     });
   };
- 
+  const navigate = useNavigate();
   const items = [
     {
       label: 'My Profile',
       key: '1',
-      onClick: "",
+      onClick: ()=>navigate(`/user-profile/${id}`),
       icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
     {
@@ -267,6 +271,7 @@ export default function HeaderComp({username,id}) {
               <Input.Password
                 disabled={isModal.isLoading === true}
                 className="inputForm"
+                
                 onChange={(pass) => {
                   setPassword({ ...password, oldPassword: pass.target.value });
                 }}
@@ -330,7 +335,7 @@ export default function HeaderComp({username,id}) {
         </div>
       </div>
       <Menu mode="horizontal" items={menuitems} />;{/* Content */}
-      {/* Filter */}
+     
       
     </>
   );

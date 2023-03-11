@@ -6,11 +6,12 @@ import {
   Input,
   Spin,
   DatePicker,
+  notification,
   Radio,
 } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import "./Register.css";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -81,12 +82,21 @@ const Register = () => {
         setTimeout(() => {
           setLoading(LOADING.FAIL);
         }, 3000);
+        notification.success({
+          message: `Register success`,
+          description: 'You can login now',
+          placement: 'topLeft',
+        });
         navigate("/login");
       })
       .catch((error) => {
-        console.log(error);
+        notification.warning({
+          message: `Register fail`,
+          description: 'Please check input again',
+          placement: 'topLeft',
+        });
       });
-    console.log("Received values of form: ", values);
+    
   };
   
 
@@ -128,9 +138,9 @@ const Register = () => {
   return (
     <div className="signup-page">
       <div className="illustration-wrapper">
-        <img
-          src="https://mixkit.imgix.net/art/preview/mixkit-left-handed-man-sitting-at-a-table-writing-in-a-notebook-27-original-large.png?q=80&auto=format%2Ccompress&h=700"
-          alt="Login"
+      <img
+          src="https://images.unsplash.com/photo-1470224114660-3f6686c562eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
+          alt="Hình Ảnh Minh Họa"
         />
       </div>
       <div className="form">  
@@ -330,7 +340,7 @@ const Register = () => {
             {...tailFormItemLayout}
           >
             <Checkbox>
-              I have read the <a href="#">agreement</a>
+              I have read the <a >agreement</a>
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
@@ -535,7 +545,7 @@ const Register = () => {
             {...tailFormItemLayout}
           >
             <Checkbox>
-              I have read the <a href="">agreement</a>
+              I have read the <a >agreement</a>
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>

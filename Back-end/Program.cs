@@ -3,6 +3,7 @@ using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
 using Back_end.Respository;
+using Back_end.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
@@ -40,7 +41,9 @@ service.AddDbContext<ParkingDbContext>(
 );
 
 service.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+service.Configure<CloudarySettings>(builder.Configuration.GetSection("CloudarySettings"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 service.AddTransient<IJwtUtils, JwtUtils>();
 service.AddTransient<IUserRespository, UserRespository>();
@@ -54,6 +57,10 @@ service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
 service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
 service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
+
+
+service.AddTransient<IImageService, ImageService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

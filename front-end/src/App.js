@@ -1,6 +1,7 @@
 
 import './App.css';
 import axios from "axios";
+
 import React, { createContext, useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
@@ -8,8 +9,12 @@ import HeaderComp from './components/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import FooterComp from './components/FooterComp';
+<<<<<<< HEAD
 import Login from './pages/loginpage/LoginPage'
 import UserProfile from './pages/user/UserProfile';
+=======
+
+>>>>>>> 9f6ee2a2b2daceb28a44739647bff5f57aba0e4d
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({

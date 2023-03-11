@@ -5,7 +5,8 @@ import {
   InstagramOutlined,
 } from "@ant-design/icons";
 import { Layout,Col,Row } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import React from 'react';
+const {Footer } = Layout;
 function FooterComp() {
   const footerStyle = {
     textAlign: 'center',
@@ -29,13 +30,13 @@ function FooterComp() {
             </h3>
             <ul>
               <li>
-                <a href="#">Email : najumy1807.2k@gmail.com</a>
+                <a>Email : najumy1807.2k@gmail.com</a>
               </li>
               <li>
-                <a href="#">Phone : 0981949455</a>
+                <a >Phone : 0981949455</a>
               </li>
               <li>
-                <a href="#">Address : Mễ Trì - Hà Nội</a>
+                <a >Address : Mễ Trì - Hà Nội</a>
               </li>
             </ul>
         </Col>
@@ -57,23 +58,9 @@ function FooterComp() {
             </ul>
         </Col>
     </Row>
- {/* <div id="ft-container">
-          <div id="ft-about">
-            
-          </div>
-          <div id="ft-contact">
-            
-          </div>
-          <div id="ft-social">
-           
-          </div>
-        </div> */}
+
     </Footer>
-    // <footer>
-    //   <div className="container">
-       
-    //   </div>
-    // </footer>
+   
   );
 }
 export default FooterComp;

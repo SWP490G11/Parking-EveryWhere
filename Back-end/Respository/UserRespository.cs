@@ -1,4 +1,4 @@
-﻿using Back_end.Authorization;
+using Back_end.Authorization;
 using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models.User;
@@ -27,7 +27,7 @@ namespace Back_end.Respository
 
         public Task Register(UserModel userModel);
 
-        public Task Update(string id, UserModel userModel);
+        public Task Update(string id, UpdateModel userModel);
 
         public Task DisableOrActiveUser(string id);
 
@@ -216,13 +216,12 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public async Task Update(string id, UserModel userModel)
+        public async Task Update(string id, UpdateModel userModel)
         {
             
                 var updateUser = await GetUser(id);
 
-                updateUser.UserName = userModel.UserName;
-                updateUser.HashPassword = BCryptNet.HashPassword(userModel.Password);
+               
                 updateUser.Gender = userModel.Gender;
                 updateUser.FirstName = userModel.FirstName;
                 updateUser.LastName = userModel.LastName;
@@ -231,9 +230,6 @@ namespace Back_end.Respository
                 updateUser.DateOfBirth = userModel.DateOfBirth;
                 updateUser.Email = userModel.Email;
                 updateUser.Role = userModel.Role;
-
-
-
 
                 _dbContext.Users.Update(updateUser);
                 await _dbContext.SaveChangesAsync();

@@ -162,6 +162,7 @@ footer a:hover {
 .inputForm {
   border-radius: 4px !important;
   border: 2px solid #a3a8ad !important;
+  width: 100%;
 }
 .buttonState {
   border: none !important;
