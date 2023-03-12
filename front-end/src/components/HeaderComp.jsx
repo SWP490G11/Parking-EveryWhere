@@ -103,7 +103,7 @@ export default function HeaderComp({username,id}) {
           localStorage.removeItem("loginState");
           localStorage.removeItem("role");
           localStorage.setItem("isLogin",false);
-          window.location.href = `/login`;
+          window.location.href = `/`;
         });
       },
       onCancel() {},
@@ -114,7 +114,7 @@ export default function HeaderComp({username,id}) {
     {
       label: 'My Profile',
       key: '1',
-      onClick: ()=>navigate(`/user-profile/${id}`),
+      onClick: ()=>navigate(`/user-profile`),
       icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
     {

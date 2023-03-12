@@ -1,4 +1,4 @@
-import { Avatar, Button, List, Space } from 'antd';
+import { Avatar, List, Space } from 'antd';
 import React, { useEffect, useState } from "react";
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -20,8 +20,8 @@ const ParkingList = () => {
   },[]);
    
   const data = itemz.map((it) => ({
-    href: `/parking/detail/${it.id}`,
-    title: it.parkingName,
+    href: `/parking/detail/${it.parkingID}`,
+    title: it.parkingName, 
     avatar: `https://joesch.moe/api/v1/random`,
     description: it.discription,
     content: it.addressDetail,
@@ -64,6 +64,7 @@ const ParkingList = () => {
         {item.content}
       </List.Item>
     )}
-  />)
+  />
+  )
       };
 export default ParkingList;

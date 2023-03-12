@@ -3,6 +3,7 @@ import {
   Form,
   Input,
   DatePicker,
+  notification,
   Radio, Space, Button, Image, } from "antd";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -13,7 +14,6 @@ import axios from "axios";
 export function UserProfile() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const id = useParams().iduser;
   const [fullname,setFullName]=useState("");
   const formItemLayout = {
     labelCol: {
@@ -47,7 +47,7 @@ export function UserProfile() {
   };
   
   useEffect(()=>{
-    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${id}`)
+    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetProfile`)
     .then(function(response) {
       console.log(response.data);
       const dt = response.data;
@@ -166,7 +166,7 @@ export function UserProfile() {
           </Form.Item>
           
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary"  onClick={() => navigate(`/user-profile/edit/${id}`)}
+            <Button type="primary"  onClick={() => navigate(`/user-profile/edit`)}
             >
             Edit
             </Button>

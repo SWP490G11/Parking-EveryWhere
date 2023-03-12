@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../../App";
+
 function LoginPage() {
 
   const LOGING = {
@@ -20,7 +21,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [loginState, setLoginState] = useContext(Context);
   const [isLoging, setLoging] = useState(LOGING.NONE);
-  const [error, setError] = useState("");
+ 
   const onSubmit = (values) => {
     setLoging(LOGING.LOADING);
     axios
@@ -48,17 +49,22 @@ function LoginPage() {
           })
         );
         console.log(response.data);
-        navigate("/");
+        navigate("/home");
         localStorage.setItem("role", response.data.role);
         loginState.setItem("isLogin", true);
 
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + response.data.token;
+        axios.defaults.headers.common["Authorization"] ="Bearer " + response.data.token;
+          notification.success({
+            message: `Login successully`,
+            description: 'You can use product',
+            placement: 'topLeft',
+          });
       })
 
       .catch((error) => {
         setLoging(LOGING.FAIL);
         axios.defaults.headers.common["Authorization"] = "";
+        
         notification.warning({
           message: `Login fail`,
           description: 'Please check user or password again',
