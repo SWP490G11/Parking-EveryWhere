@@ -3,7 +3,7 @@ import { Layout, Col, Row  } from "antd";
 import React from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
-import ParkingList from "../parkingPage/ParkingList";
+import ParkingList from "../ParkingPage/ParkingList";
 import FilterComp from "../../components/FilterComp";
 // Menu
 const HomePage = ({routers}) => {

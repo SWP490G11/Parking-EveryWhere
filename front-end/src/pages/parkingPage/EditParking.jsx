@@ -11,7 +11,7 @@ import { useNavigate,useParams } from "react-router-dom";
 import axios from "axios";
 import UploadImg from "../../components/UploadImage";
 
-export function EditUser() {
+export function EditParking() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const id = useParams().iduser;
@@ -212,4 +212,4 @@ export function EditUser() {
   );
 }
 
-export default EditUser;
+export default EditParking;

@@ -9,12 +9,6 @@ import HeaderComp from './components/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import FooterComp from './components/FooterComp';
-<<<<<<< HEAD
-import Login from './pages/loginpage/LoginPage'
-import UserProfile from './pages/user/UserProfile';
-=======
-
->>>>>>> 9f6ee2a2b2daceb28a44739647bff5f57aba0e4d
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -58,12 +52,12 @@ function App() {
     
     <Context.Provider value={[loginState, setLoginState]}>
         
-      {/* {(loginState.isLogin === false ) ? ( 
+      {(loginState.isLogin === false ) ? ( 
           //  <Login/>
            <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
         ) : (
-          loginState.role === "Admin"  ? (
+          loginState.role === "1"  ? (
           <>
             <HeaderComp
               username={loginState.username}
@@ -77,9 +71,8 @@ function App() {
           id = {loginState.id}
         />
         <RouteComponent routes={OwnerRoutes} />
-        <FooterComp/></>))} */}
+        <FooterComp/></>))}
       
-        <UserProfile/>
     
   </Context.Provider>
    

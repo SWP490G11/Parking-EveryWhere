@@ -4,7 +4,7 @@ import { useState } from 'react';
 import React from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
-import ManageMyParking from "../parkingPage/ManageParking";
+import ManageMyParking from "../ParkingPage/ManageParking";
 
 import {
     FilterOutlined
@@ -22,6 +22,7 @@ const OwnerPage = () => {
   const onClose = () => {
     setOpen(false);
   };
+  
   return (
     
     <Layout>
