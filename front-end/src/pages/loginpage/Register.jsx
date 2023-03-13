@@ -87,7 +87,7 @@ const Register = () => {
           description: 'You can login now',
           placement: 'topLeft',
         });
-        navigate("/login");
+        navigate("/");
       })
       .catch((error) => {
         notification.warning({

@@ -79,8 +79,13 @@ export default function HeaderComp({ username, id }) {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
           localStorage.removeItem("loginState");
           localStorage.removeItem("role");
+<<<<<<< HEAD
           localStorage.setItem("isLogin", false);
           window.location.href = `/login`;
+=======
+          localStorage.setItem("isLogin",false);
+          window.location.href = `/`;
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
         });
       },
       onCancel() {},
@@ -89,9 +94,15 @@ export default function HeaderComp({ username, id }) {
   const navigate = useNavigate();
   const items = [
     {
+<<<<<<< HEAD
       label: "My Profile",
       key: "1",
       onClick: () => navigate(`/user-profile/${id}`),
+=======
+      label: 'My Profile',
+      key: '1',
+      onClick: ()=>navigate(`/user-profile`),
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
       icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
     {

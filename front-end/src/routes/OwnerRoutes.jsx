@@ -8,6 +8,7 @@ import CarType from "../pages/CarPage/CarType";
 import React from "react";
 
 export const OwnerRoutes = [
+<<<<<<< HEAD
   {
     path: "/parking/detail/:idParking",
     element: <PakingDetail />,
@@ -44,3 +45,27 @@ export const OwnerRoutes = [
     title: "Car Detail",
   },
 ];
+=======
+    {
+      path: "/parking/detail/:idParking",
+      element: <PakingDetail />,
+      title: "Parking Detail",
+    },
+    {
+      path: "/home",
+      element: <OwnerPage />,
+      title: "Home Page",
+    },
+    {
+      path: "/user-profile",
+      element: <UserProfile />,
+      title: "User Profile",
+    },
+    {
+      path: "/user-profile/edit",
+      element: <EditUserProfile />,
+      title: "Edit User Profile",
+    },
+   
+  ];
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c

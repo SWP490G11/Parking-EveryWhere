@@ -1,5 +1,14 @@
 import "../../style/profile.css";
+<<<<<<< HEAD
 import { Form, Input, DatePicker, Radio, Space, Button, Image } from "antd";
+=======
+import { 
+  Form,
+  Input,
+  DatePicker,
+  notification,
+  Radio, Space, Button, Image, } from "antd";
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,8 +17,12 @@ import axios from "axios";
 export function UserProfile() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const id = useParams().iduser;
   const [fullname, setFullName] = useState("");
+=======
+  const [fullname,setFullName]=useState("");
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
   const formItemLayout = {
     labelCol: {
       xs: {
@@ -40,6 +53,53 @@ export function UserProfile() {
       },
     },
   };
+<<<<<<< HEAD
+=======
+  
+  useEffect(()=>{
+    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetProfile`)
+    .then(function(response) {
+      console.log(response.data);
+      const dt = response.data;
+      setFullName(dt.lastName+" "+dt.firstName);
+      form.setFieldsValue({
+        firstName: dt.firstName,
+        lastName: dt.lastName,
+        userName: dt.userName,
+        email: dt.email,
+        phoneNumber: dt.phoneNumber,
+         dateOfBirth:dayjs(dt.dateOfBirth, 'YYYY-MM-DD'),
+        gender: dt.gender,
+        role: dt.role,
+      });
+      
+    }).catch((error) => {
+      notification.warning({
+        message: `Load profile fail`,
+        description: 'Please check input again',
+        placement: 'topLeft',
+      });
+    });
+  },[]);
+  return (
+    
+      <div id="profile">
+        <div className="avatar">
+          <div className="user-avatar">
+            <Space wrap size={80} >
+              <Image className="imgz"
+                width={160}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              />
+              
+            </Space>
+          </div>
+          <div className="user-name">
+            {fullname}
+          </div>
+        </div>
+        <div className="form">
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
 
   useEffect(() => {
     axios
@@ -130,9 +190,13 @@ export function UserProfile() {
           </Form.Item>
 
           <Form.Item {...tailFormItemLayout}>
+<<<<<<< HEAD
             <Button
               type="primary"
               onClick={() => navigate(`/user-profile/edit/${id}`)}
+=======
+            <Button type="primary"  onClick={() => navigate(`/user-profile/edit`)}
+>>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
             >
               Edit
             </Button>

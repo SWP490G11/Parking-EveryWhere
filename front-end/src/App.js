@@ -1,7 +1,7 @@
 
 import './App.css';
 import axios from "axios";
-
+import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import React, { createContext, useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
