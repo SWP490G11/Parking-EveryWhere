@@ -14,7 +14,7 @@ import UploadImg from "../../components/UploadImage";
 export function EditUser() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const id = useParams().iduser;
+  const [id,setId]= useState("");
   const [fullname,setFullName]=useState("");
   const formItemLayout = {
     labelCol: {
@@ -48,7 +48,7 @@ export function EditUser() {
   };
   
   useEffect(()=>{
-    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${id}`)
+    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetProfile`)
     .then(function(response) {
       console.log(response.data);
       const dt = response.data;
@@ -63,7 +63,7 @@ export function EditUser() {
         gender: dt.gender,
         role: dt.role,
       });
-      
+      setId(dt.id);
     }).catch((error) => {
       
       //setError(error.response.data.message);
@@ -86,13 +86,13 @@ export function EditUser() {
         role: values.role,
       })
       .then(() => {
-        sessionStorage.setItem("changeStatus", true);
+        //sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Save successfully`,
           description: 'Updated user profile',
           placement: 'topLeft',
         });
-        navigate(`/user-profile/${id}`);
+        navigate(`/user-profile`);
       }).catch((error)=>{
         notification.warning({
             message: `Save fail`,
@@ -153,7 +153,7 @@ export function EditUser() {
             name="userName"
             label="UserName"
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
          
           <Form.Item

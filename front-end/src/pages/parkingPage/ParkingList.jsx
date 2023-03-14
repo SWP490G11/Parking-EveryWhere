@@ -20,7 +20,7 @@ const ParkingList = () => {
   },[]);
    
   const data = itemz.map((it) => ({
-    href: `/parking/detail/${it.id}`,
+    href: `/parking/detail/${it.parkingID}`,
     title: it.parkingName,
     avatar: `https://joesch.moe/api/v1/random`,
     description: it.discription,

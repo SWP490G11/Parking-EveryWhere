@@ -10,17 +10,17 @@ export const OwnerRoutes = [
       title: "Parking Detail",
     },
     {
-      path: "/",
+      path: "/home",
       element: <OwnerPage />,
       title: "Home Page",
     },
     {
-      path: "/user-profile/:iduser",
+      path: "/user-profile",
       element: <UserProfile />,
       title: "User Profile",
     },
     {
-      path: "/user-profile/edit/:iduser",
+      path: "/user-profile/edit",
       element: <EditUserProfile />,
       title: "Edit User Profile",
     },
