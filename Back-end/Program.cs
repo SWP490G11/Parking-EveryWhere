@@ -34,7 +34,8 @@ var service = builder.Services;
 service.AddDbContext<ParkingDbContext>(
     options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+            o=>o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
     }
 

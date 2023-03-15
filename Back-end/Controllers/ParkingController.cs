@@ -49,18 +49,15 @@ namespace Back_end.Controllers
                 p.ParkingManagers,
                 p.Feedbacks,
                 p.TimeFrames,
-                Slot = p.Slots.Select(s =>
-              new
-              {
-                  SlotID = s.ID,
-                   s.CarModel,
-                  s.TypeOfSlot,
-                  s.Status,
-                  s.Discription,
-                  s.LastModifyAt
+                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
+                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
+                NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
+                NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.NotAvailable),
 
-              }),
-            }).ToList());
+            }
+
+
+                ).ToList()) ;
         }
 
         [HttpGet("/parking-manager-of-parking/{id}")]
@@ -78,6 +75,21 @@ namespace Back_end.Controllers
 
             return Ok(parking.ParkingManagers);
         }
+
+        [HttpGet("/parking-manager-of-owner")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
+        public async Task<IActionResult> GetParkingManagerOfOwner()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
+            var user = mwi.User;
+            if (user == null) return NotFound();
+
+
+            return Ok(user.Parkings.Select(p=>p.ParkingManagers));
+        }
+
 
         [HttpGet("/parkings")]
         [Authorization.Authorize(Role.Admin)]
@@ -100,18 +112,11 @@ namespace Back_end.Controllers
                 p.ParkingManagers,
                 p.Feedbacks,
                 p.TimeFrames,
-                Slot = p.Slots.Select(s =>
-              new
-              {
-                  SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName =s.CarModel.Model,
-                  s.TypeOfSlot,
-                  s.Status,
-                  s.Discription,
-                  s.LastModifyAt
+                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
+                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
+                NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
+                NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
 
-              }),
             }));
         }
 
