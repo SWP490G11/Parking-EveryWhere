@@ -8,6 +8,7 @@ import MapGL, {
   GeolocateControl
 } from "@goongmaps/goong-map-react";
 import Geocoder from "@goongmaps/goong-geocoder-react";
+import '@goongmaps/goong-geocoder-react/dist/goong-geocoder.css'
 import CITIES from "../data/cities.json";
 import Pins from "./Pins";
 const geolocateStyle = {
@@ -33,7 +34,7 @@ const scaleControlStyle = {
   left: 0,
   padding: "10px"
 };
-const Mapbox=( {result, setResult })=> {
+const Mapbox = ({ result, setResult }) => {
   const [viewport, setViewport] = useState({
     latitude: 21.013470323298243,
     longitude: 105.52708575547926,
@@ -57,34 +58,45 @@ const Mapbox=( {result, setResult })=> {
   };
 
   return (
-    
-    <MapGL
+
+
+   <>
+   <MapGL
       ref={mapRef}
       {...viewport}
       width="800px"
-      height="800px"
+      height="500px"
       onViewportChange={handleViewportChange}
       goongApiAccessToken="4dAgWahZ3jW5LsZCiYikMTvVUOYpd2jcmxz3kyLA"
+      style={{
+        position:'absolute'
+      }}
     >
       <Geocoder
-      style={scaleControlStyle}
+       
         mapRef={mapRef}
         onViewportChange={handleGeocoderViewportChange}
         goongApiAccessToken="oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB"
+        style={{
+          position:'relative'
+        }}
       />
       <Pins data={CITIES} onClick={setPopupInfo} />
       {/* <Marker
         latitude={21.026975}
         longitude={105.85}        
       /> */}
-     
-     <GeolocateControl style={geolocateStyle} />
-        <FullscreenControl style={fullscreenControlStyle} />
-        <NavigationControl style={navStyle} />
-        {/* <ScaleControl style={scaleControlStyle} /> */}
-      
+
+      <GeolocateControl style={geolocateStyle} />
+      <FullscreenControl style={fullscreenControlStyle} />
+      <NavigationControl style={navStyle} />
+      {/* <ScaleControl style={scaleControlStyle} /> */}
+
     </MapGL>
+   </>
+
+    
   );
-    }
+}
 
 export default Mapbox;
