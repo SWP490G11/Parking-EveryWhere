@@ -1,4 +1,4 @@
-/* .autocomplete-input {
+.autocomplete-input {
     display: flex;
     position: absolute;
     top: 50px;
@@ -67,7 +67,4 @@
 .ready {
     color: #fff;
     background-color: #0fc90f;
-} */
-.mapboxgl-ctrl-top-right{
-    pointer-events: auto;
 }
