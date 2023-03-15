@@ -17,7 +17,7 @@ const ParkingList = () => {
     .then(function(response) {
       setItemz(response.data);
     })
-  },[]);
+  });
    
   const data = itemz.map((it) => ({
     href: `/parking/detail/${it.parkingID}`,
