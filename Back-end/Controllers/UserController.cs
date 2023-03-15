@@ -71,7 +71,25 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var users = await _userRespository.GetUserByUserNames(username);
 
-            return Ok(users);
+            return Ok(users.Select(
+                u=>new 
+                {
+                u.ID,
+                u.Gender,
+                u.IsDisable,
+                u.UserName,
+                u.DateOfBirth,
+                u.Email,
+                u.PhoneNumber,
+                u.FirstName,
+                u.LastName,
+                PakingID= u.Parking.ID,
+                 u.CitizenID,
+                 u.Images,
+                 u.Role,
+                
+                }
+                ));
         }
 
         [HttpGet("[action]")]
@@ -120,11 +138,9 @@ namespace Back_end.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserModel userModel)
         {
-            
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-                if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
-                if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
-                    "registor this role");
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
                 await _userRespository.Register(userModel);
          
             return Ok("Register Success");
@@ -132,14 +148,18 @@ namespace Back_end.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorization.Authorize(Role.ParkingOwner)]
-        public async Task<IActionResult> RegisterForParkingManager(UserModel userModel)
+        [Authorization.Authorize(Role.ParkingOwner,Role.Admin)]
+        public async Task<IActionResult> RegisterForParkingManager(PMModel userModel)
         {
+
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (await _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
-            if (userModel.Role == Role.Admin || userModel.Role == Role.ParkingManager) return BadRequest("You not have permission for " +
-                "registor this role");
-            await _userRespository.Register(userModel);
+            /*if (mwi.User.Role!=Role.ParkingOwner) return BadRequest("You not have permission for " +
+                "registor this role");*/
+            await _userRespository.RegisterForParkingManager(userModel);
             return Ok("Register Success");
         }
 

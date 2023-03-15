@@ -9,6 +9,7 @@ namespace Back_end.Respository
 {
 
     using Back_end.Common;
+    using System;
     using System.Text.RegularExpressions;
     using BCryptNet = BCrypt.Net.BCrypt;
 
@@ -39,7 +40,9 @@ namespace Back_end.Respository
         public Task<ICollection<User>> GetParkingManagers();
 
 
+        public Task RegisterForParkingManager(PMModel userModel);
 
+        
 
     }
     public class UserRespository : IUserRespository
@@ -147,7 +150,10 @@ namespace Back_end.Respository
 
         public async Task<User> GetUser(string guidString)
         {
-            return await _dbContext.Users.Include(u => u.Parkings).ThenInclude(p => p.Slots).Include(u => u.MembershipPackage).FirstAsync(u => u.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Users.Include(u => u.Parkings)
+                .ThenInclude(p => p.Slots).Include(u=>u.Parkings).ThenInclude(p=>p.ParkingManagers).
+                Include(u=>u.Parking).Include(u => u.MembershipPackage)
+                .FirstAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
 
@@ -179,7 +185,7 @@ namespace Back_end.Respository
         public async Task Register(UserModel userModel)
         {
 
-
+            
 
             var user = new User()
             {
@@ -193,8 +199,10 @@ namespace Back_end.Respository
                 DateOfBirth = userModel.DateOfBirth,
                 Email = userModel.Email,
                 Role = userModel.Role,
-                Parkings = new List<Parking>()
-
+                Parkings = new List<Parking>(),
+                
+                
+                 
             };
 
             await _dbContext.Users.AddAsync(user);
@@ -245,6 +253,35 @@ namespace Back_end.Respository
             }
 
             return false;
+        }
+
+        public async Task RegisterForParkingManager(PMModel userModel)
+        {
+            if (string.IsNullOrEmpty(userModel.ParkingID)) throw new ArgumentNullException();
+            var parking= await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(userModel.ParkingID.ToUpper().Trim()
+                ));
+
+            var user = new User()
+            {
+                UserName = userModel.UserName,
+                HashPassword = BCryptNet.HashPassword(userModel.Password),
+                Gender = userModel.Gender,
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                LastModifyAt = DateTime.Now,
+                PhoneNumber = userModel.PhoneNumber,
+                DateOfBirth = userModel.DateOfBirth,
+                Email = userModel.Email,
+                Role = Role.ParkingManager,
+                Parking = parking,
+                
+                
+
+            };
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
         }
     }
 
