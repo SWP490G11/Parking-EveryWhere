@@ -10,7 +10,7 @@ const IconText = ({ icon, text }) => (
   </Space>
 );
 
-const ParkingList = () => {
+const ManageParkingManager = () => {
   const [itemz,setItemz]=useState([]);;
   // useEffect(()=>{
   //   axios.get(`${process.env.REACT_APP_Backend_URI}parkings`)
@@ -20,7 +20,7 @@ const ParkingList = () => {
   // });
   const loadData = async () => {
    
-    const response = await axios.get(`${process.env.REACT_APP_Backend_URI}parkings`);
+    const response = await axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetAll`);
     setItemz(response.data);
     
   };
@@ -72,4 +72,4 @@ const ParkingList = () => {
     )}
   />)
       };
-export default ParkingList;
+export default ManageParkingManager;

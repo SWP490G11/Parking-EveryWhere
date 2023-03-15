@@ -109,7 +109,7 @@ const Mapbox=()=> {
           <div>You are here</div>
         </Popup>}
       
-     <GeolocateControl style={geolocateStyle} />
+       <GeolocateControl style={geolocateStyle} />
         <FullscreenControl style={fullscreenControlStyle} />
         <NavigationControl style={navStyle} /> 
      

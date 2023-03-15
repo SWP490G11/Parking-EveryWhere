@@ -1,5 +1,5 @@
-import { Menu, Modal, Dropdown, Avatar, Button,Input, Form } from "antd";
-import {LogoutOutlined,AppstoreOutlined,HomeOutlined, SettingOutlined,DownOutlined, UserOutlined} from "@ant-design/icons";
+import { Menu, Modal, Dropdown, Avatar, Button,Input, Form,  } from "antd";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined} from "@ant-design/icons";
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const menuitems = [
   {
     label: (
-      <a href="/">
+      <a href="/home">
         Home
       </a>
     ),
@@ -21,50 +21,37 @@ const menuitems = [
     icon: <AppstoreOutlined />,
   },
   {
-    label: "Payment",
-    key: "SubMenu",
-    icon: <SettingOutlined />,
-    children: [
-      {
-        type: "group",
-        label: "Item 1",
-        children: [
-          {
-            label: "Option 1",
-            key: "setting:1",
-          },
-          {
-            label: "Option 2",
-            key: "setting:2",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Item 2",
-        children: [
-          {
-            label: "Option 3",
-            key: "setting:3",
-          },
-          {
-            label: "Option 4",
-            key: "setting:4",
-          },
-        ],
-      },
-    ],
+  label: (
+    <a href="/manager-user">Manage User</a>
+  ),
+  key: "alipay",
   },
+ 
+];
+const menuonwer =[
   {
     label: (
-      <a href="https://ant.design" target="_blank" rel="noopener noreferrer">
-        Navigation Four - Link
+      <a href="/home">
+        Home
       </a>
+    ),
+    key: "mail",
+    icon: <HomeOutlined />,
+  },
+  {
+    label: "Parking Of Me ",
+    key: "app",
+    icon: <AppstoreOutlined />,
+  },
+ 
+  {
+    label: (
+      <a href="/parking-manager">Manage parking manager</a>
     ),
     key: "alipay",
   },
-];
-export default function HeaderComp({username,id}) {
+]
+export default function HeaderComp({username,id,role}) {
   const [isModal, setModal] = React.useState({
     isOpen: false,
     isLoading: false,
@@ -330,7 +317,12 @@ export default function HeaderComp({username,id}) {
       </Modal>
         </div>
       </div>
-      <Menu mode="horizontal" items={menuitems} />;{/* Content */}
+      {role === "Admin" ? (
+        <Menu mode="horizontal" items={menuitems}/>
+      ):(
+        <Menu mode="horizontal" items={menuonwer}/>
+      )}
+       ;
      
       
     </>

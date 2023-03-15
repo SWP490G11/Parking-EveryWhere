@@ -24,5 +24,6 @@ export const OwnerRoutes = [
       element: <EditUserProfile />,
       title: "Edit User Profile",
     },
+    
    
   ];

@@ -2,7 +2,7 @@ import PakingDetail from "../pages/parkingPage/parkingDetail";
 import HomePage from "../pages/homepage/HomePage";
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
-import Maps from "../components/Maps";
+import ManageUser from "../pages/user/ManageUser";
 import React from "react";
 export const AppRoutes = [
     {
@@ -26,9 +26,10 @@ export const AppRoutes = [
       title: "Edit User Profile",
     },
     {
-      path: "/maps",
-      element: <Maps />,
+      path: "/manager-user",
+      element: <ManageUser />,
       title: "Edit User Profile",
-    },
+    }
+   
    
   ];
