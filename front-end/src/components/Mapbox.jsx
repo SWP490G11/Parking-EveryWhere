@@ -60,14 +60,19 @@ const Mapbox=()=> {
   };
 
   return (
-    
-    <MapGL
+
+
+   <>
+   <MapGL
       ref={mapRef}
       {...viewport}
       width="100%"
       height="100%"
       onViewportChange={handleViewportChange}
       goongApiAccessToken="4dAgWahZ3jW5LsZCiYikMTvVUOYpd2jcmxz3kyLA"
+      style={{
+        position:'absolute'
+      }}
     >
       <div >
       <Geocoder
@@ -76,6 +81,9 @@ const Mapbox=()=> {
         mapRef={mapRef}
         onViewportChange={handleGeocoderViewportChange}
         goongApiAccessToken="oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB"
+        style={{
+          position:'relative'
+        }}
       />
       </div>
      
@@ -115,7 +123,10 @@ const Mapbox=()=> {
      
       
     </MapGL>
+   </>
+
+    
   );
-    }
+}
 
 export default Mapbox;
