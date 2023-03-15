@@ -275,23 +275,20 @@ const OwnerPage = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-            {/* <AddressAutofill accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg">
-              <input
-                autoComplete="shipping address-line1"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </AddressAutofill> */}
-            {/* <SearchBox accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg"/> */}
-              
-            <Mapbox />
+            
+            <Row gutter={16}>
+            <Col span={24}>
             <Space>
               <Button onClick={onClose}>Cancel</Button>
               <Button htmlType="submit" type="primary">
                 Submit
               </Button>
-            </Space>
+              </Space>
+           
+              </Col>
+           
+            </Row>
+            <Mapbox />
           </Form>
         </Drawer>
         <Row>

@@ -1,6 +1,6 @@
 import "@goongmaps/goong-js/dist/goong-js.css";
 import "@goongmaps/goong-geocoder/dist/goong-geocoder.css";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useCallback  } from "react";
 import MapGL, {
   NavigationControl,
   FullscreenControl,
@@ -44,10 +44,14 @@ const Mapbox=()=> {
   });
   const [showPopup, togglePopup] = React.useState(false);
   const mapRef = useRef(null);
+  const handleViewportChange = useCallback(
+    (newViewport) => setViewport(newViewport),
+    []
+  );
   const [popupInfo, setPopupInfo] = useState(null);
-  const handleViewportChange = (newViewport) => {
-    setViewport({ ...viewport, ...newViewport });
-  };
+  // const handleViewportChange = (newViewport) => {
+  //   setViewport({ ...viewport, ...newViewport });
+  // };
 
   // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
   const handleGeocoderViewportChange = (viewport) => {
