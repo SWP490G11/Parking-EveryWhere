@@ -12,7 +12,7 @@ import axios from "axios";
 import moment from "moment";
 
 
-export default function ManageParkingManager() {
+export default function ManageCar() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -104,7 +104,7 @@ export default function ManageParkingManager() {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_Backend_URI}parking-manager-of-owner`,
+        `${process.env.REACT_APP_Backend_URI}api/User/GetAll`,
         {}
       )
       .then(function (response) {

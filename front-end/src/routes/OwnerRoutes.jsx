@@ -2,6 +2,7 @@ import PakingDetail from "../pages/parkingPage/parkingDetail";
 import OwnerPage from "../pages/homepage/OwnerPage";
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
+import ManageParkingManager from "../pages/user/ParkingManager/ManageParkingManager";
 import React from "react";
 export const OwnerRoutes = [
     {
@@ -24,6 +25,12 @@ export const OwnerRoutes = [
       element: <EditUserProfile />,
       title: "Edit User Profile",
     },
+    {
+      path: "/parking-manager-of-owner",
+      element: <ManageParkingManager />,
+      title: " ManageParkingManager Profile",
+    },
+    
     
    
   ];

@@ -22,10 +22,18 @@ const menuitems = [
   },
   {
   label: (
-    <a href="/manager-user">Manage User</a>
+    <a href="/managerUser">Manage User</a>
   ),
-  key: "alipay",
+  key: "managerUser",
+  icon: <AppstoreOutlined />,
   },
+  {
+    label: (
+      <a href="/managerCarModel">Manage Car Model</a>
+    ),
+    key: "managerCarModel",
+    icon: <AppstoreOutlined />,
+    },
  
 ];
 const menuonwer =[
@@ -46,7 +54,7 @@ const menuonwer =[
  
   {
     label: (
-      <a href="/parking-manager">Manage parking manager</a>
+      <a href="/parking-manager-of-owner">Manage parking manager</a>
     ),
     key: "alipay",
   },
