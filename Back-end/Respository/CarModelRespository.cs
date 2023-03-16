@@ -39,21 +39,16 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
 
         public async Task DeleteAsync(string idString)
         {
-            try
-            {
+           
                 if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
                 var carModel = await GetAsync(idString);
+            if (carModel != null) throw new AppException("Wrong Id");
                 _dbContext.CarModels.Remove(carModel);
               
                 
                 await _dbContext.SaveChangesAsync();
                 
-            }
-            catch (Exception ex)
-            {
 
-                _logger.LogError(ex, "Has error:");
-            }
         }
 
         public async Task<ICollection<CarModel>> GetAllAsync()
@@ -65,9 +60,11 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
         public async Task<CarModel> GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            var carmodel= await _dbContext.CarModels.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
+
+            return carmodel;
         }
 
         public ICollection<CarModel> PaginateAsync(ICollection<CarModel> source, int pageNo, int pageSize)
@@ -82,22 +79,18 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
 
         public async Task UpdateAsync(string idString, CarModelx2 model)
         {
-            try
-            {
+            
                 var carModel = await GetAsync(idString);
-                carModel.Price = model.Price;
+            if (carModel != null) throw new AppException("Wrong Id");
+
+            carModel.Price = model.Price;
                 carModel.Model = model.Model;
                 carModel.Discript = model.Discript;
                 carModel.LastModifyAt = DateTime.Now;
 
-                _dbContext.CarModels.Remove(carModel);
+                _dbContext.CarModels.Update(carModel);
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+         
         }
     }
 }
