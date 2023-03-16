@@ -8,7 +8,5 @@ namespace Back_end.Models
 
         public string CarNumber { get; set; }
 
-        public DateTime? LastModifyAt { get; set; }
-
     }
 }
