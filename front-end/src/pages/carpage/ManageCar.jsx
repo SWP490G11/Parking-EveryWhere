@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Select, Row, Col, Modal } from "antd";
+import { Table, Input, Button, Menu, Dropdown,Space,Form, Row, Col, Modal,notification,Drawer } from "antd";
 import {
   FilterOutlined,
   EditFilled,
@@ -9,80 +9,64 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import moment from "moment";
 
 
-export default function ManageCar() {
+
+export default function ManageCarModel() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [type, setType] = useState("Gender");
+  const [type, setType] = useState("Model");
   const [role, setRole] = useState("Role");
+  const [form] = Form.useForm();
+  const [form1] = Form.useForm();
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
   });
 
   const columns = [
-    {
+    {   
         title: "ID",
         dataIndex: "id",
         key: "id",
+        width: "25%",
        
       },
       {
-        title: "FullName",
-        dataIndex: "fullName",
-        key: "fullName",
+        title: "Car Number",
+        dataIndex: "carNumber",
+        key: "carNumber",
         sorter: (a, b) => {
-          if (a.fullName > b.fullName) {
+          if (a.carNumber > b.carNumber) {
             return -1;
-          }
-          if (b.fullName > a.fullName) {
+          }else
+          if (b.carNumber > a.carNumber) {
             return 1;
           }
           return 0;
         },
+        width: "7%",
       },
+   
     {
-      title: "User Name",
-      dataIndex: "userName",
-      key: "userName",
-
+      title: "Car Model",
+      dataIndex: "carmodel",
+      key: "carmodel",
       sorter: (a, b) => {
-        if (a.userName > b.userName) {
+        if (a.carmodel > b.carmodel) {
           return -1;
         }
-        if (b.userName > a.userName) {
+        if (b.carmodel > a.carmodel) {
           return 1;
         }
         return 0;
       },
-      width: "10%",
-    },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
      
     },
-   
-    {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
-    },  
-    {
-      title: "Phone Number",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
-    },
-    {
-        title: "Role",
-        dataIndex: "role",
-        key: "role",
-      },
     {
       title: "Action",
       dataIndex: "action",
@@ -90,21 +74,18 @@ export default function ManageCar() {
       
     },
   ];
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    title: "Notice",
-    content: <p>Do you want to disable student?</p>,
-    footer: (
-      <div style={{ textAlign: "left" }}>
-        <Button className="buttonSave">Disable</Button>
-       
-      </div>
-    ),
-  });
+ 
+  const showDrawer1 = () => {
+    setOpen1(true);
+  };
+  const onClose1 = () => {
+    setOpen1(false);
+  };
+  const [idcar,setIdCar]=useState("");
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_Backend_URI}api/User/GetAll`,
+        `${process.env.REACT_APP_Backend_URI}cars-of-owner`,
         {}
       )
       .then(function (response) {
@@ -112,58 +93,59 @@ export default function ManageCar() {
         console.log(respData);
 
         respData.forEach((element) => {
-            element.fullName = element.lastName + " " + element.firstName;
-          element.dateOfBirth = moment(
-            new Date(element.dateOfBirth).toLocaleDateString("en-US")
-          ).format("DD/MM/YYYY");
+          element.carmodel = element.carModel.model;
           element.action = [
-            <Link to={`/editUser/${element.studentId}`} id="editButton">
-              <EditFilled style={{  fontSize: "25px" }} />
-            </Link>,
+            
+              <EditFilled style={{  fontSize: "25px" }}
+              onClick={()=>{
+                showDrawer1();
+                form1.setFieldsValue({
+                  id : element.id,
+                  carmodel: element.carmodel,
+                  carNumber: element.carNumber,
+                   
+                });
+                setIdCar(element.id);
+              }}
+              />,
+          
             <CloseCircleOutlined
               onClick={() => {
-                setDeleteModal({
-                  ...deleteModal,
-                  footer: (
-                    <div >
-                      <Button 
-                        className="ant-btn ant-btn-danger"
-                        onClick={() => {
-                          axios
-                            .put(
-                              `${process.env.REACT_APP_Backend_URI}api/Student/Diable/${element.studentId}`
+                Modal.confirm({
+                    title: "Are you sure?",
+                    icon: <CloseCircleOutlined style={{ color: "red" }} />,
+                    content: "Do you want to delete this car model?",
+                    okText: "Delete",
+                    cancelText: "Cancel",
+                    okButtonProps: { style: { background: "#e30c18", color: "white" } },
+              
+                    onOk() {
+                      return new Promise((resolve, reject) => {
+                        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                        axios
+                            .delete(
+                              `${process.env.REACT_APP_Backend_URI}carmodel/${element.id}`
                             )
                             .then(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: false,
+                              
+                              notification.success({
+                                message: `Delete successfully`,
+                                description: 'Delete a new car model successfully',
+                                placement: 'topLeft',
                               });
-                              window.location.reload();
                             })
                             .catch(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: true,
-                                footer: null,
-                                title: "Can not disable user",
-                                content: (
-                                  <p>
-                                    There are valid assignments belonging to
-                                    this user. Please Close all assignments
-                                    before disabling user.
-                                  </p>
-                                ),
-                              });
+                                notification.error({
+                                    message: `Delete fail`,
+                                    description: 'Delete a user fail',
+                                    placement: 'topLeft',
+                                  });
                             });
-                        }}
-                      >
-                        Disable
-                      </Button>
-                      
-                    </div>
-                  ),
-                  isOpen: true,
-                });
+                      });
+                    },
+                    onCancel() {},
+                  });
+              
               }}
               style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
             />,
@@ -172,14 +154,14 @@ export default function ManageCar() {
         setData(
           respData.sort((a, b) => {
             if (
-              a.userName.trim().toLowerCase() >
-              b.userName.trim().toLowerCase()
+              a.carNumber.trim().toLowerCase() >
+              b.carNumber.trim().toLowerCase()
             ) {
               return 1;
             }
             if (
-              b.userName.trim().toLowerCase() >
-              a.userName.trim().toLowerCase()
+              b.carNumber.trim().toLowerCase() >
+              a.carNumber.trim().toLowerCase()
             ) {
               return -1;
             }
@@ -188,30 +170,21 @@ export default function ManageCar() {
         );
       }, [])
       .catch(() => {});
-  }, [deleteModal]);
-  const[userInfor,setUserInfor]=useState([])
-  const userInfordata = (idz) => {
-    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${idz}`)
-    .then(function(response) {
-      setUserInfor(response.data);
-      
-    }).catch((error) => {
-     
-    })
-  };
+  }, [data]);
+ 
+ 
   const dataBytype =
-    type === "Gender" ? data : data.filter((u) => u.gender === type);
-    const dataRole= role === "Role" ? dataBytype : dataBytype.filter((u) => u.role === role);
+    type === "Model" ? data : data.filter((u) => u.model === type);
+   // const dataRole= role === "Role" ? dataBytype : dataBytype.filter((u) => u.role === role);
   const finalData =
     searchText === ""
-      ? dataRole
-      : (dataRole.filter(
+      ? dataBytype
+      : (dataBytype.filter(
           (u) =>
-            u.userName
+            u.model
               .toLowerCase()
               .replace(/\s+/g, "")
-              .includes(searchText.toLowerCase().replace(/\s+/g, "")) ||
-            u.id.toLowerCase().includes(searchText.toLowerCase())
+              .includes(searchText.toLowerCase().replace(/\s+/g, "")) 
         ) 
         );
 
@@ -229,7 +202,89 @@ export default function ManageCar() {
    showSizeChanger:true, 
       showTotal: total => `Total ${total} Student`
   };
-
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  
+  const onFinish = (values) => {
+    
+    axios
+      .post(`${process.env.REACT_APP_Backend_URI}carmodel`, {
+        carmodel: values.carmodel,
+        carNumber: values.carNumber,
+       
+      })
+      .then(() => {
+        // sessionStorage.setItem("changeStatus", true);
+        notification.success({
+          message: `Successfully`,
+          description: "Create new parking successfully",
+          placement: "topLeft",
+        });
+        form.setFieldsValue({
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
+        setOpen(false);
+       // window.location.reload();
+      })
+      .catch((error) => {
+        notification.warning({
+          message: `Fail`,
+          description: "Please check input again",
+          placement: "topLeft",
+        });
+        form.setFieldsValue({
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
+      });
+  };
+  const onFinishEdit = (values) => {
+    
+    axios
+      .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
+        
+        carmodel: values.carmodel,
+        carNumber: values.carNumber,
+       
+      })
+      .then(() => {
+        // sessionStorage.setItem("changeStatus", true);
+        notification.success({
+          message: `Successfully`,
+          description: "Edit this parking successfully",
+          placement: "topLeft",
+        });
+        form.setFieldsValue({
+          carmodel: "",
+          carNumber: "",
+         
+            
+          })
+        setOpen(false);
+       // window.location.reload();
+      })
+      .catch((error) => {
+        notification.warning({
+          message: `Fail`,
+          description: "Please check input again",
+          placement: "topLeft",
+        });
+        form.setFieldsValue({
+          carmodel: "",
+          carNumber: "",
+            
+          })
+      });
+  };
   return (
     <>
       <p
@@ -243,56 +298,12 @@ export default function ManageCar() {
           paddingBottom: "20px",
         }}
       >
-        User List
+        Car Model List
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
-            {/*Filter Gender */}
-        <Dropdown.Button
-            placement="bottom"
-            icon={<FilterOutlined />}
-            overlay={
-              <Menu>
-                <Menu.Item
-                  value="Male"
-                  onClick={() => {
-                    setType("Male");
-                  }}
-                >
-                  {" "}
-                  Male
-                </Menu.Item>
-                <Menu.Item
-                  value="Female"
-                  onClick={() => {
-                    setType("Female");
-                  }}
-                >
-                  {" "}
-                  Female
-                </Menu.Item>
-                <Menu.Item
-                  value="Other"
-                  onClick={() => {
-                    setType("Other");
-                  }}
-                >
-                  {" "}
-                  Other
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    setType("Gender");
-                  }}
-                >
-                  {" "}
-                  All
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            {type}
-          </Dropdown.Button>
+         
+      
            {/*Filter Role */}
           <Dropdown.Button
             placement="bottom"
@@ -333,7 +344,7 @@ export default function ManageCar() {
              </Menu.Item>
              <Menu.Item
                onClick={() => {
-                setRole("Role");
+                setRole("Model");
                }}
              >
                {" "}
@@ -358,13 +369,21 @@ export default function ManageCar() {
           />
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={9} xxl={9}>
-          <Button style={{ background: "#33CCFF", color: "white" }}>
-            <Link to="/addStudent"> Add new Student</Link>
+          <Button style={{ background: "#33CCFF", color: "white"  } } 
+          onClick={()=>{
+            showDrawer();
+            form.setFieldsValue({
+            model: "",
+            discript:"",
+            price: "",
+            
+          });}}>
+             Add new car model
           </Button>
         </Col>
       </Row>
       {/* Delete Modal */}
-      <Modal
+      {/* <Modal
         open={deleteModal.isOpen}
         title={deleteModal.title}
         footer={deleteModal.footer}
@@ -377,10 +396,10 @@ export default function ManageCar() {
         }
       >
         {deleteModal.content}
-      </Modal>
+      </Modal> */}
       <Modal
         open={modal.isOpen}
-        title="Detail Student"
+        title="Detail Car model"
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
@@ -413,7 +432,7 @@ export default function ManageCar() {
             </td>
           </tr>
           <tr>
-            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>User Name</td>
+            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>Car Number</td>
             <td
               style={{
                 fontSize: "18px",
@@ -422,11 +441,11 @@ export default function ManageCar() {
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.userName}
+              {modal.data.carNumber}
             </td>
           </tr>
           <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Full Name</td>
+            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Car Model</td>
             <td
               style={{
                 fontSize: "18px",
@@ -435,11 +454,12 @@ export default function ManageCar() {
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.fullName}
+              {modal.data.carmodel}
             </td>
           </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Phone Number</td>
+        
+          {/* <tr>
+            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Car Model Detal </td>
             <td
               style={{
                 fontSize: "18px",
@@ -448,50 +468,11 @@ export default function ManageCar() {
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.phoneNumber}
+              {modal.data.carModel}
             </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Email </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.email}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Gender</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.gender}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>
-              Date of Birth
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.dateOfBirth}
-            </td>
-          </tr>
+          </tr> */}
+          
+       
         </table>
       </Modal>
 
@@ -523,13 +504,10 @@ export default function ManageCar() {
                     ...modal,
                     isOpen: true,
                     data: {
-                        id: record.id,
-                        userName: record.userName,
-                      fullName: record.lastName+" "+userInfor.firstName,
-                      phoneNumber: record.phoneNumber,
-                      dateOfBirth: record.dateOfBirth,
-                      gender: record.gender,
-                      email: record.email,
+                      id: record.id,
+                        carNumber: record.carNumber,
+                        carmodel: record.carmodel,
+                        carModel: record.carModel,
 
                     },
                   });
@@ -543,12 +521,9 @@ export default function ManageCar() {
                     isOpen: true,
                     data: {
                         id: record.id,
-                        userName: record.userName,
-                        fullName: record.lastName+" "+userInfor.firstName,
-                        phoneNumber: record.phoneNumber,
-                      dateOfBirth: record.dateOfBirth,
-                      gender: record.gender,
-                      email: record.email,
+                        carNumber: record.carNumber,
+                        carmodel: record.carmodel,
+                        carModel: record.carModel,
                     },
                   });
                   console.log(modal.data);
@@ -560,6 +535,203 @@ export default function ManageCar() {
           }}
         />
       )}
+      {/*Add new car model */}
+       <Drawer
+          title="Create a new car model"
+          width={550}
+          onClose={onClose}
+          open={open}
+          bodyStyle={{
+            paddingBottom: 80,
+          }}
+        >
+          <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="carNumber"
+                  label="Car Number"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Model Name",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Please enter Model Name" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="carModel"
+                  label="Car Model"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Price ",
+                    },
+                  ]}
+                >
+                  <Input
+                    style={{
+                      width: "100%",
+                    }}
+                    placeholder="Please enter Price "
+                  />
+                 
+                </Form.Item>
+              </Col>
+            </Row>
+          
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="discript"
+                  label="Discript"
+                  rules={[
+                    {
+                      required: true,
+                      message: "please enter Discript",
+                    },
+                  ]}
+                >
+                  <Input.TextArea
+                    rows={4}
+                    placeholder="please enter Description"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            
+            <Row gutter={16}>
+            <Col span={24}>
+            <Space>
+              <Button onClick={()=>{
+                onClose();
+                form.setFieldsValue({
+                    model: "",
+                    discript:"",
+                    price: "",
+                    })
+                } }>Cancel</Button>
+              <Button htmlType="submit" type="primary">
+                Submit
+              </Button>
+              </Space>
+           
+              </Col>
+           
+            </Row>
+           
+          </Form>
+        </Drawer>
+         {/*Edit car model */}
+       <Drawer
+          title="Edit  car model"
+          width={550}
+          onClose={onClose1}
+          open={open1}
+          bodyStyle={{
+            paddingBottom: 80,
+          }}
+        >
+          <Form form={form1} onFinish={onFinishEdit} layout="vertical" hideRequiredMark>
+          <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="id"
+                  label="ID "
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Model Name",
+                    },
+                  ]}
+                >
+                  <Input disabled placeholder="Please enter Model Name" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="carNumber"
+                  label="Car Number"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Car Number ",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Please enter Car Number" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="price"
+                  label="Price"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Price ",
+                    },
+                  ]}
+                >
+                  <Input
+                    style={{
+                      width: "100%",
+                    }}
+                    placeholder="Please enter Price "
+                  />
+                 
+                </Form.Item>
+              </Col>
+            </Row>
+          
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="carModel"
+                  label="Car Model Detail"
+                  rules={[
+                    {
+                      required: true,
+                      message: "please enter Discript",
+                    },
+                  ]}
+                >
+                  <Input.TextArea 
+                  disabled
+                    rows={4}
+                   
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            
+            <Row gutter={16}>
+            <Col span={24}>
+            <Space>
+              <Button onClick={()=>{
+                onClose1();
+                
+                } }>Cancel</Button>
+              <Button onClick={onClose1} htmlType="submit" type="primary">
+                Submit
+              </Button>
+              </Space>
+           
+              </Col>
+           
+            </Row>
+           
+          </Form>
+        </Drawer>
     </>
   );
 }

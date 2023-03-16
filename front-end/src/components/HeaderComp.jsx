@@ -1,5 +1,5 @@
 import { Menu, Modal, Dropdown, Avatar, Button,Input, Form,  } from "antd";
-import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined} from "@ant-design/icons";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined} from "@ant-design/icons";
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
@@ -113,16 +113,22 @@ export default function HeaderComp({username,id,role}) {
       icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
     {
+      label: 'My Car',
+      key: '2',
+      onClick: ()=>navigate(`/mycar`),
+      icon: <CarOutlined  style={{ color: "red", fontWeight: "bold" }} />,
+    },
+    {
       
     label: 'Change Password',
-    key: '2',
+    key: '3',
     onClick:() => setModal({ ...isModal, isOpen: true }),
-    icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
+    icon: <RedoOutlined  style={{ color: "red", fontWeight: "bold" }} />,
   },
     {
       
     label: 'Logout',
-    key: '3',
+    key: '4',
     onClick: () => handleConfirmLogout(),
     icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
   }];
@@ -133,7 +139,7 @@ export default function HeaderComp({username,id,role}) {
       {/* Header */}
       <div className="header">
         <div id="left-side">
-          <a href='/'>LOGO</a>
+          <a href='/home'>LOGO</a>
         </div>
        
         <div id="right-side">

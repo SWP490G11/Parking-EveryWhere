@@ -141,10 +141,7 @@ export default function ManageCarModel() {
                               `${process.env.REACT_APP_Backend_URI}carmodel/${element.id}`
                             )
                             .then(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: false,
-                              });
+                              
                               notification.success({
                                 message: `Delete successfully`,
                                 description: 'Delete a new car model successfully',
@@ -188,7 +185,7 @@ export default function ManageCarModel() {
       }, [])
       .catch(() => {});
   }, [data]);
-  const[userInfor,setUserInfor]=useState([])
+ 
  
   const dataBytype =
     type === "Model" ? data : data.filter((u) => u.model === type);
@@ -745,7 +742,7 @@ export default function ManageCarModel() {
                 onClose1();
                 
                 } }>Cancel</Button>
-              <Button htmlType="submit" type="primary">
+              <Button onClick={onClose1} htmlType="submit" type="primary">
                 Submit
               </Button>
               </Space>

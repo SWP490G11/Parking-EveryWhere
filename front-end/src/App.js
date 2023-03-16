@@ -71,6 +71,7 @@ function App() {
         ):(<> <HeaderComp
           username={loginState.username}
           id = {loginState.id}
+          role= {loginState.role}
         />
         <RouteComponent routes={OwnerRoutes} />
         <FooterComp/></>))}
