@@ -40,6 +40,24 @@ namespace Back_end.Controllers
             return Ok(cars);
         }
 
+
+        [HttpGet("/cars-of-owner")]
+        [Authorization.Authorize(Role.Customer)]
+        public async Task<IActionResult> GetCarsOfOwner()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
+
+            return Ok(mwi.User.Cars.Select(c => new{
+              c.ID,
+              c.CarNumber,
+              c.CarModel,
+              
+            })) ;
+        }
+
+
         [HttpGet("/car/{id}")]
 
         [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingOwner,Role.ParkingManager)]

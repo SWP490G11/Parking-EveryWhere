@@ -26,6 +26,13 @@ namespace Back_end.Respository
         private readonly ILogger<CarRepository> _logger;
         private readonly IMapper _mapper;
 
+        public CarRepository(ParkingDbContext dbContext, ILogger<CarRepository> logger, IMapper mapper)
+        {
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
+        }
+
         public async Task<ICollection<Car>> GetCarByCarModel(string carModelID)
         {
             return await _dbContext.Cars.Where(c=>c.CarModel.ID.ToString().Trim().ToLower().Equals(carModelID.ToLower().Trim())).ToListAsync();
@@ -38,9 +45,10 @@ namespace Back_end.Respository
                 ));
             if (carmodel == null) throw new AppException("Wrong CarModel or CarModel not already existed");
             if (string.IsNullOrEmpty(model.CarNumber) || string.IsNullOrEmpty(model.CarModelID)) throw new ArgumentNullException("Null somefield");
-            await _dbContext.AddAsync(
-                new Car()
+            await _dbContext.Cars.AddAsync(
+                new Back_end.Entities.Car()
                 {
+                    
                     CarNumber = model.CarNumber,
                     CarOwner = ownner,
                     LastModifyAt = DateTime.Now,
@@ -98,7 +106,7 @@ namespace Back_end.Respository
                 ));
             updateddCar.LastModifyAt = DateTime.Now;
 
-            _dbContext.Update(updateddCar);
+            _dbContext.Cars.Update(updateddCar);
             await _dbContext.SaveChangesAsync();
         }
     }

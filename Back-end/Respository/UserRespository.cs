@@ -151,8 +151,11 @@ namespace Back_end.Respository
         public async Task<User> GetUser(string guidString)
         {
             return await _dbContext.Users.Include(u => u.Parkings)
-                .ThenInclude(p => p.Slots).Include(u=>u.Parkings).ThenInclude(p=>p.ParkingManagers).
-                Include(u=>u.Parking).Include(u => u.MembershipPackage)
+                .ThenInclude(p => p.Slots).Include(u=>u.Parkings)
+                .ThenInclude(p=>p.ParkingManagers).
+                Include(u=>u.Parking)
+                .Include(u => u.MembershipPackage)
+                .Include(u=>u.Cars).ThenInclude(c=>c.CarModel)
                 .FirstAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
