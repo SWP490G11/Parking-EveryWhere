@@ -93,7 +93,7 @@ export default function ManageUser() {
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     title: "Notice",
-    content: <p>Do you want to disable student?</p>,
+    content: <p>Do you want to disable this account?</p>,
     footer: (
       <div style={{ textAlign: "left" }}>
         <Button className="buttonSave">Disable</Button>
@@ -131,14 +131,14 @@ export default function ManageUser() {
                         onClick={() => {
                           axios
                             .put(
-                              `${process.env.REACT_APP_Backend_URI}api/Student/Diable/${element.studentId}`
+                              `${process.env.REACT_APP_Backend_URI}api/User/DisableOrActive?id=${element.id}`
                             )
                             .then(() => {
                               setDeleteModal({
                                 ...deleteModal,
                                 isOpen: false,
                               });
-                              window.location.reload();
+                              //window.location.reload();
                             })
                             .catch(() => {
                               setDeleteModal({
@@ -188,7 +188,7 @@ export default function ManageUser() {
         );
       }, [])
       .catch(() => {});
-  }, [deleteModal]);
+  }, [deleteModal,data]);
   const[userInfor,setUserInfor]=useState([])
   const userInfordata = (idz) => {
     axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${idz}`)
