@@ -42,7 +42,7 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
            
                 if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
                 var carModel = await GetAsync(idString);
-            if (carModel != null) throw new AppException("Wrong Id");
+            if (carModel == null) throw new AppException("Wrong Id");
                 _dbContext.CarModels.Remove(carModel);
               
                 
@@ -81,7 +81,7 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
         {
             
                 var carModel = await GetAsync(idString);
-            if (carModel != null) throw new AppException("Wrong Id");
+            if (carModel == null) throw new AppException("Wrong Id");
 
             carModel.Price = model.Price;
                 carModel.Model = model.Model;
