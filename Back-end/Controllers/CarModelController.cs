@@ -23,7 +23,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/carmodels")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetAll()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -34,8 +34,8 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/carmodel/{id}")]
-        
-        [Authorization.Authorize(Role.Admin)]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Get( string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;

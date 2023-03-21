@@ -98,7 +98,13 @@ const OwnerPage = () => {
         setItemz(response.data);
       });
   }, []);
-
+  const findaddress=()=>{
+    axios.get("https://rsapi.goong.io/geocode?address=91%20Trung%20K%C3%ADnh,%20Trung%20H%C3%B2a,%20C%E1%BA%A7u%20Gi%E1%BA%A5y,%20H%C3%A0%20N%E1%BB%99i&api_key={TMw3W9agfk2vQofcCzZFATxEwpM7HSYthHMgz7Dl}")
+    .then((response) => {
+      
+      console.log(response.data);
+    })
+  }
   const data = itemz.map((it) => ({
     href: `/parking/detail/${it.id}`,
     title: it.parkingName,
@@ -220,6 +226,7 @@ const OwnerPage = () => {
                     }}
                     placeholder="Please enter address detail"
                   />
+                  <Button onClick={()=>findaddress()}>Search</Button>
                 </Form.Item>
               </Col>
             </Row>
@@ -283,23 +290,20 @@ const OwnerPage = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-            {/* <AddressAutofill accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg">
-              <input
-                autoComplete="shipping address-line1"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </AddressAutofill> */}
-            {/* <SearchBox accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg"/> */}
-              
-            <Mapbox />
+            
+            <Row gutter={16}>
+            <Col span={24}>
             <Space>
               <Button onClick={onClose}>Cancel</Button>
               <Button htmlType="submit" type="primary">
                 Submit
               </Button>
-            </Space>
+              </Space>
+           
+              </Col>
+           
+            </Row>
+            <Mapbox />
           </Form>
         </Drawer>
         <Row>

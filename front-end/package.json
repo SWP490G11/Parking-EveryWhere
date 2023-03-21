@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@goongmaps/goong-geocoder-react": "^0.1.1",
+    "@goongmaps/goong-map-react": "^1.1.2",
     "@mapbox/search-js-react": "^1.0.0-beta.14",
     "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.9.2",
@@ -28,7 +30,7 @@
     "yup": "^1.0.0"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-scripts start",
+    "start": "set PORT=3030 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

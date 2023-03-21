@@ -2,7 +2,9 @@ import PakingDetail from "../pages/CarPage/CarType";
 import HomePage from "../pages/homepage/HomePage";
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
-import Maps from "../components/Maps";
+import ManageUser from "../pages/user/ManageUser";
+import ManageCarModel from "../pages/carpage/carmodelpage/ManageCarModel";
+import ManageCar from "../pages/carpage/ManageCar";
 import React from "react";
 import EditParking from "../pages/ParkingPage/EditParking";
 
@@ -68,10 +70,21 @@ export const AppRoutes = [
       title: "Edit User Profile",
     },
     {
-      path: "/maps",
-      element: <Maps />,
+      path: "/managerUser",
+      element: <ManageUser />,
       title: "Edit User Profile",
     },
+    {
+      path: "/managerCarModel",
+      element: <ManageCarModel />,
+      title: "Manage Car",
+    },
+    {
+      path: "/mycar",
+      element: <ManageCar />,
+      title: "My Car",
+    }
+   
    
   ];
 >>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c

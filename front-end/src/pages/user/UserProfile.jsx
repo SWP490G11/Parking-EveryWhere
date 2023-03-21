@@ -11,7 +11,11 @@ import {
 >>>>>>> cb1e5f3417a834876729ff8c4ee4cfcbfc096d8c
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+<<<<<<< HEAD
 import { useNavigate, useParams } from "react-router-dom";
+=======
+import { useNavigate } from "react-router-dom";
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
 import axios from "axios";
 
 export function UserProfile() {

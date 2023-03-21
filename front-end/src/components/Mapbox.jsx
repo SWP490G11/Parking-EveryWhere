@@ -1,132 +1,135 @@
-import Map, {
-  Marker,
+import "@goongmaps/goong-js/dist/goong-js.css";
+import "@goongmaps/goong-geocoder/dist/goong-geocoder.css";
+import React, { useRef, useState,useCallback  } from "react";
+import MapGL, {
   NavigationControl,
-  Popup,
   FullscreenControl,
-  GeolocateControl,
-  ScaleControl,
-} from "react-map-gl";
-import 'mapbox-gl/dist/mapbox-gl.css'
-// import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
-// import React, { useState, useRef, useCallback } from "react";
-// import Geocoder from "react-map-gl-geocoder";
-import "./mapbox.css"
-import React, { useState, useRef, } from "react";
-import axios from "axios";
-import Geocoder from 'react-mapbox-gl-geocoder'
-const Mapbox=( {result, setResult })=> {
+  GeolocateControl,Marker,Popup
+} from "@goongmaps/goong-map-react";
+import Geocoder from '@goongmaps/goong-geocoder-react';
+import CITIES from "../data/cities.json";
+import Pins from "./Pins";
+import './mapbox.css'
+const geolocateStyle = {
+  top: 0,
+  left: 0,
+  padding: "10px"
+};
 
-  const[lat,setLat]=React.useState(21.013450292643007);
-  const[lng,setLng]= React.useState(105.52707502664386);
-  const [showPopup, setShowPopup] = React.useState(true);
-  const [viewport, setViewport] = React.useState({
-    latitude: 21.013450292643007,
-    longitude: 105.52707502664386,
-    zoom: 13
+const fullscreenControlStyle = {
+  top: 36,
+  left: 0,
+  padding: "10px"
+};
+
+const navStyle = {
+  top: 72,
+  left: 0,
+  padding: "10px"
+};
+
+const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
+  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
+  C20.1,15.8,20.2,15.8,20.2,15.7z`;
+
+const SIZE = 20;
+const Mapbox=()=> {
+  const [viewport, setViewport] = useState({
+    latitude: 21.013470323298243,
+    longitude: 105.52708575547926,
+    zoom: 12,
+    
   });
-  const [pickMarker, setPickMarker] = useState(false);
-  const [pop,setPop]=useState(true);
-  const [ready, setReady] = useState(false);
+  const [showPopup, togglePopup] = React.useState(false);
+  const mapRef = useRef(null);
+  const handleViewportChange = useCallback(
+    (newViewport) => setViewport(newViewport),
+    []
+  );
+  const [popupInfo, setPopupInfo] = useState(null);
+  // const handleViewportChange = (newViewport) => {
+  //   setViewport({ ...viewport, ...newViewport });
+  // };
 
-  const final = () => {
-      axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${viewport.longitude},${viewport.latitude}.json?access_token=pk.eyJ1IjoiZGV2bGlucm9jaGEiLCJhIjoiY2t2bG82eTk4NXFrcDJvcXBsemZzdnJoYSJ9.aq3RAvhuRww7R_7q-giWpA`).then(res => {
-          const { data } = res;
-          setResult({ latitude: viewport.latitude, longitude: viewport.longitude, location: data.features[0].place_name });
-          setReady(true)
-      })
-  }
-  const lc = () => {
-    console.log(result);
+  // if you are happy with Geocoder default settings, you can just use handleViewportChange directly
+  const handleGeocoderViewportChange = (viewport) => {
+    const geocoderDefaultOverrides = { transitionDuration: 1000 };
+
+    return handleViewportChange({
+      ...viewport,
+      ...geocoderDefaultOverrides
+    });
   };
-  const mapRef = useRef();
-  const handleViewportChange = (newViewport, item) => {
-      if (ready) {
-          setResult({ ...result, location: '' });
-          setReady(false)
-      }
-      console.log(item);
-      setViewport(newViewport);
-      item.isPanning !== true && item.isZooming !== true && setResult({ latitude: newViewport.latitude, longitude: newViewport.longitude, location: item.place_name })
-  }
-
-  // const onSelected = (viewPort, item) => {
-  //   navigate("/map");
-  //   console.log(viewPort);
-  //   setViewport({ ...viewPort, zoom: viewPort.zoom * 20 });
-  //   console.log('Selected: ', item)
-  // }
-
-  const onDragStart = React.useCallback(() => {
-      console.log("run")
-  }, []);
-  
-  console.log(viewport);
-  console.log(result);
- 
 
   return (
-    <div className="App">
-     <div>
-                <div className="autocomplete-input">
-                    
-                    <Geocoder
-                       mapboxApiAccessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg"
-                         onSelected={(newViewport, item) => {handleViewportChange(newViewport, item); setReady(true)}} viewport={viewport} hideOnSelect={true} initialInputValue={result.location}
-                    />
-                </div>
-                <div className="select-location-btn">
-                    <button onClick={() => { setPickMarker(true) }}>Select Location </button>
-                </div>
-                {
-                    (pickMarker || ready) && <div className="select-btn">
-                        <button onClick={!ready ? () => final() : () => lc()} className={ready ? "ready" : "not-ready"}> {ready ? "Confirm Pickup" : "Select"} </button>
-                    </div>
-                }
-            </div>
-      <Map
-        
-        mapboxAccessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg"
-        // ref={mapRef}
+
+
+
+   <MapGL
+      ref={mapRef}
+      {...viewport}
+      width="100%"
+      height="100%"
+      onViewportChange={handleViewportChange}
+      goongApiAccessToken="4dAgWahZ3jW5LsZCiYikMTvVUOYpd2jcmxz3kyLA"
+      style={{
+        position:'absolute'
+      }}
+    >
+      <div  className="mapboxgl-ctrl-top-right">
+      <Geocoder
        
-        style={{
-          width: "800px",
-          height:"800px"
-        }}
-        ref={mapRef}
-        {...viewport}
-        onViewportChange={handleViewportChange}
-        onTouchStart={onDragStart}
-         initialViewState={{
-          longitude: viewport.longitude,
-          latitude: viewport.latitude,
-          zoom:14
-         }}
-        mapStyle="mapbox://styles/mapbox/streets-v12"
-      >
-       {pop === true ? (
-          <>
-            <Marker longitude={viewport.longitude} latitude={viewport.latitude}/>
-              
-            <Popup
-             
-              longitude={viewport.longitude}
-              latitude={viewport.latitude}
-              closeButton={true}
-              onClose={() => setShowPopup(false)}
-            >
-              <p>{result.location}</p>
-            </Popup>
-          </>
-        ) : (
-           <Marker longitude={result.longitude} latitude={result.latitude}/>
-          
-        )} 
-        <NavigationControl position="bottom-right" />
-        <FullscreenControl />
         
-        <GeolocateControl />
-      </Map>
-    </div>
+        mapRef={mapRef}
+        onViewportChange={handleGeocoderViewportChange}
+        goongApiAccessToken="oC8CNdh20xrH8Dpm0SIkZYQqBijW847QWVmBE0DB"
+        style={{
+          position:'relative'
+        }}
+      />
+      </div>
+      
+      
+     
+      <Pins data={CITIES} onClick={setPopupInfo} />
+      <Marker
+      
+      longitude={viewport.longitude}
+      latitude={viewport.latitude}
+    >
+      <svg
+        height={SIZE}
+        viewBox="0 0 24 24"
+        style={{
+          cursor: "pointer",
+          fill: "#d00",
+          stroke: "none",
+          transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
+        }}
+        
+      >
+        <path d={ICON} />
+      </svg>
+    </Marker>
+      {showPopup && <Popup
+          latitude={21.013470323298243}
+          longitude={105.52708575547926}
+          closeButton={true}
+          closeOnClick={false}
+          onClose={() => togglePopup(false)}
+          anchor="top" >
+          <div>You are here</div>
+        </Popup>}
+      
+       <GeolocateControl style={geolocateStyle} />
+        <FullscreenControl style={fullscreenControlStyle} />
+        <NavigationControl style={navStyle} /> 
+     
+      
+    </MapGL>
+  
+
+    
   );
 }
 

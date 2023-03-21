@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Menu, Modal, Dropdown, Avatar, Button, Input, Form } from "antd";
 import {
   LogoutOutlined,
@@ -8,12 +9,18 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import React, { useState } from "react";
+=======
+import { Menu, Modal, Dropdown, Avatar, Button,Input, Form,  } from "antd";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined} from "@ant-design/icons";
+import React from "react";
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
 import "../style/home.css";
 import axios from "axios";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import EditParking from "../pages/ParkingPage/EditParking";
 // import '../style/Style.css'
+<<<<<<< HEAD
 
 export default function HeaderComp({ username, id }) {
   const menuitems = [
@@ -43,6 +50,63 @@ export default function HeaderComp({ username, id }) {
       key: "alipay",
     },
   ];
+=======
+const menuitems = [
+  {
+    label: (
+      <a href="/home">
+        Home
+      </a>
+    ),
+    key: "mail",
+    icon: <HomeOutlined />,
+  },
+  {
+    label: "Parking Of Me ",
+    key: "app",
+    icon: <AppstoreOutlined />,
+  },
+  {
+  label: (
+    <a href="/managerUser">Manage User</a>
+  ),
+  key: "managerUser",
+  icon: <AppstoreOutlined />,
+  },
+  {
+    label: (
+      <a href="/managerCarModel">Manage Car Model</a>
+    ),
+    key: "managerCarModel",
+    icon: <AppstoreOutlined />,
+    },
+ 
+];
+const menuonwer =[
+  {
+    label: (
+      <a href="/home">
+        Home
+      </a>
+    ),
+    key: "mail",
+    icon: <HomeOutlined />,
+  },
+  {
+    label: "Parking Of Me ",
+    key: "app",
+    icon: <AppstoreOutlined />,
+  },
+ 
+  {
+    label: (
+      <a href="/parking-manager-of-owner">Manage parking manager</a>
+    ),
+    key: "alipay",
+  },
+]
+export default function HeaderComp({username,id,role}) {
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
   const [isModal, setModal] = React.useState({
     isOpen: false,
     isLoading: false,
@@ -106,6 +170,7 @@ export default function HeaderComp({ username, id }) {
       icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
     {
+<<<<<<< HEAD
       label: "Change Password",
       key: "2",
       onClick: () => setModal({ ...isModal, isOpen: true }),
@@ -118,13 +183,39 @@ export default function HeaderComp({ username, id }) {
       icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
     },
   ];
+=======
+      label: 'My Car',
+      key: '2',
+      onClick: ()=>navigate(`/mycar`),
+      icon: <CarOutlined  style={{ color: "red", fontWeight: "bold" }} />,
+    },
+    {
+      
+    label: 'Change Password',
+    key: '3',
+    onClick:() => setModal({ ...isModal, isOpen: true }),
+    icon: <RedoOutlined  style={{ color: "red", fontWeight: "bold" }} />,
+  },
+    {
+      
+    label: 'Logout',
+    key: '4',
+    onClick: () => handleConfirmLogout(),
+    icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
+  }];
+ 
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
 
   return (
     <>
       {/* Header */}
       <div className="header">
         <div id="left-side">
+<<<<<<< HEAD
           <a href="/">LOGO</a>
+=======
+          <a href='/home'>LOGO</a>
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
         </div>
 
         <div id="right-side">
@@ -332,7 +423,18 @@ export default function HeaderComp({ username, id }) {
           </Modal>
         </div>
       </div>
+<<<<<<< HEAD
       <Menu mode="horizontal" items={menuitems} />;{/* Content */}
+=======
+      {role === "Admin" ? (
+        <Menu mode="horizontal" items={menuitems}/>
+      ):(
+        <Menu mode="horizontal" items={menuonwer}/>
+      )}
+       ;
+     
+      
+>>>>>>> 95d5c93b020b04db38947714b638eac205c9aa85
     </>
   );
 }
