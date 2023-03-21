@@ -82,6 +82,7 @@ export default function ManageCarModel() {
     setOpen1(false);
   };
   const [idcar,setIdCar]=useState("");
+  const[carmode,setCarmode]=useState([])
   useEffect(() => {
     axios
       .get(
@@ -91,7 +92,7 @@ export default function ManageCarModel() {
       .then(function (response) {
         let respData = response.data;
         console.log(respData);
-
+        setCarmode(response.data.carModel);
         respData.forEach((element) => {
           element.carmodel = element.carModel.model;
           element.action = [
@@ -103,7 +104,7 @@ export default function ManageCarModel() {
                   id : element.id,
                   carmodel: element.carmodel,
                   carNumber: element.carNumber,
-                   
+                  carModel: element.carModel,
                 });
                 setIdCar(element.id);
               }}
@@ -562,29 +563,7 @@ export default function ManageCarModel() {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="carModel"
-                  label="Car Model"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Price ",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Please enter Price "
-                  />
-                 
-                </Form.Item>
-              </Col>
-            </Row>
-          
+            
             <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
