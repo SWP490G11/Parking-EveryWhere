@@ -7,7 +7,7 @@ import {
   Radio, Space, Button, Image, } from "antd";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 

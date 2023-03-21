@@ -12,11 +12,14 @@ const IconText = ({ icon, text }) => (
 
 const ParkingList = () => {
   const [itemz,setItemz]=useState([]);;
+  const loadData = async () => {
+   
+    const response = await axios.get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`);
+    setItemz(response.data);
+    
+  };
   useEffect(()=>{
-    axios.get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`)
-    .then(function(response) {
-      setItemz(response.data);
-    })
+     loadData();
   },[]);
    
   const data = itemz.map((it) => ({

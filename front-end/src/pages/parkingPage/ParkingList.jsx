@@ -12,13 +12,21 @@ const IconText = ({ icon, text }) => (
 
 const ParkingList = () => {
   const [itemz,setItemz]=useState([]);;
-  useEffect(()=>{
-    axios.get(`${process.env.REACT_APP_Backend_URI}parkings`)
-    .then(function(response) {
-      setItemz(response.data);
-    })
-  },[]);
+  // useEffect(()=>{
+  //   axios.get(`${process.env.REACT_APP_Backend_URI}parkings`)
+  //   .then(function(response) {
+  //     setItemz(response.data);
+  //   })
+  // });
+  const loadData = async () => {
    
+    const response = await axios.get(`${process.env.REACT_APP_Backend_URI}parkings`);
+    setItemz(response.data);
+    
+  };
+  useEffect(()=>{
+     loadData();
+  },[]);
   const data = itemz.map((it) => ({
     href: `/parking/detail/${it.parkingID}`,
     title: it.parkingName,
