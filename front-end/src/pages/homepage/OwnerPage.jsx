@@ -17,7 +17,7 @@ import {
   Menu,
 
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
 
