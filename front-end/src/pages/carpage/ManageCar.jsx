@@ -352,7 +352,7 @@ export default function ManageCarModel() {
               </Menu>
             }
           >
-            {role}
+            {type}
           </Dropdown.Button>
       
         </Col>
