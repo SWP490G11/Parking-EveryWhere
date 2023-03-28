@@ -189,7 +189,7 @@ export default function ManageUser() {
       }, [])
       .catch(() => {});
   }, [deleteModal,data]);
-  const[userInfor,setUserInfor]=useState([])
+  //const[userInfor,setUserInfor]=useState([])
   // const userInfordata = (idz) => {
   //   axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${idz}`)
   //   .then(function(response) {
@@ -525,7 +525,7 @@ export default function ManageUser() {
                     data: {
                         id: record.id,
                         userName: record.userName,
-                      fullName: record.lastName+" "+userInfor.firstName,
+                      fullName: record.lastName+" "+record.firstName,
                       phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
                       gender: record.gender,
@@ -544,7 +544,7 @@ export default function ManageUser() {
                     data: {
                         id: record.id,
                         userName: record.userName,
-                        fullName: record.lastName+" "+userInfor.firstName,
+                        fullName: record.lastName+" "+record.firstName,
                         phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
                       gender: record.gender,

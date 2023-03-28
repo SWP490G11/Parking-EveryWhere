@@ -4,10 +4,9 @@ import {
   FilterOutlined,
   EditFilled,
   CloseCircleOutlined,
-  CloseSquareOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+
 import axios from "axios";
 
 
@@ -18,7 +17,6 @@ export default function ManageCarModel() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Model");
-  const [role, setRole] = useState("Role");
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -82,7 +80,7 @@ export default function ManageCarModel() {
     setOpen1(false);
   };
   const [idcar,setIdCar]=useState("");
-  const[carmode,setCarmode]=useState([])
+  //const[carmode,setCarmode]=useState([])
   useEffect(() => {
     axios
       .get(
@@ -92,7 +90,7 @@ export default function ManageCarModel() {
       .then(function (response) {
         let respData = response.data;
         console.log(respData);
-        setCarmode(response.data.carModel);
+       // setCarmode(response.data.carModel);
         respData.forEach((element) => {
           element.carmodel = element.carModel.model;
           element.action = [
@@ -313,7 +311,7 @@ export default function ManageCarModel() {
                 <Menu>
                 <Menu.Item
                onClick={() => {
-                 setRole("ParkingManager");
+                 setType("ParkingManager");
                }}
              >
                {" "}
@@ -321,7 +319,7 @@ export default function ManageCarModel() {
              </Menu.Item>
              <Menu.Item
                onClick={() => {
-                setRole("ParkingOwner");
+                setType("ParkingOwner");
                }}
              >
                {" "}
@@ -329,7 +327,7 @@ export default function ManageCarModel() {
              </Menu.Item>
              <Menu.Item
                onClick={() => {
-                setRole("Customer");
+                setType("Customer");
                }}
              >
                {" "}
@@ -337,7 +335,7 @@ export default function ManageCarModel() {
              </Menu.Item>
              <Menu.Item
                onClick={() => {
-                setRole("Admin");
+                setType("Admin");
                }}
              >
                {" "}
@@ -345,7 +343,7 @@ export default function ManageCarModel() {
              </Menu.Item>
              <Menu.Item
                onClick={() => {
-                setRole("Model");
+                setType("Model");
                }}
              >
                {" "}

@@ -46,7 +46,7 @@ const Mapbox=()=> {
     (newViewport) => setViewport(newViewport),
     []
   );
-  const [popupInfo, setPopupInfo] = useState(null);
+  //const [popupInfo, setPopupInfo] = useState(null);
   // const handleViewportChange = (newViewport) => {
   //   setViewport({ ...viewport, ...newViewport });
   // };
@@ -91,7 +91,8 @@ const Mapbox=()=> {
       
       
      
-      <Pins data={CITIES} onClick={setPopupInfo} />
+      {/* <Pins data={CITIES} onClick={setPopupInfo} /> */}
+      <Pins data={CITIES} />
       <Marker
       
       longitude={viewport.longitude}

@@ -1,9 +1,6 @@
 import {  Button, Input, Select } from "antd";
 import {
  
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import React from 'react';
