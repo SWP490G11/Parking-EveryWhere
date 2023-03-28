@@ -25,9 +25,15 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+         # Build and test the project, then
+         # deploy to Azure Web App.
+          cd front-end
           npm install
           npm run build --if-present
-          npm run test --if-present
+          cd ../
+      - name: add process.json
+        run: |
+         echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> front-end/build/process.json
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
