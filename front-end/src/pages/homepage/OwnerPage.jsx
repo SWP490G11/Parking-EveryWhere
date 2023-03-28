@@ -1,8 +1,6 @@
 import {
   PlusOutlined,
-  LikeOutlined,
-  MessageOutlined,
-  StarOutlined,
+
   FilterOutlined,
 } from "@ant-design/icons";
 import {
@@ -18,8 +16,7 @@ import {
   Layout,
   Dropdown,
   Menu,
-  Avatar,
-  List,
+
 } from "antd";
 import React, { useEffect, useState } from "react";
 import "../../style/home.css";
@@ -27,7 +24,7 @@ import Mapbox from "../../components/Mapbox";
 
 import axios from "axios";
 
-import { AddressAutofill, SearchBox } from "@mapbox/search-js-react";
+
 import ManageParking from "../parkingPage/ManageParking";
 // Menu
 const { Option } = Select;
@@ -98,14 +95,14 @@ const OwnerPage = () => {
       console.log(response.data);
     })
   }
-  const data = itemz.map((it) => ({
-    href: `/parking/detail/${it.id}`,
-    title: it.parkingName,
-    avatar: `https://joesch.moe/api/v1/random`,
-    description: it.discription,
-    content: it.addressDetail,
-  }));
-  const [value, setValue] = React.useState("");
+  // const data = itemz.map((it) => ({
+  //   href: `/parking/detail/${it.id}`,
+  //   title: it.parkingName,
+  //   avatar: `https://joesch.moe/api/v1/random`,
+  //   description: it.discription,
+  //   content: it.addressDetail,
+  // }));
+  //const [value, setValue] = React.useState("");
   return (
     <Layout>
       <div className="body">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Select, Row, Col, Modal } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal } from "antd";
 import {
   FilterOutlined,
   EditFilled,
@@ -190,15 +190,15 @@ export default function ManageParkingManager() {
       .catch(() => {});
   }, [deleteModal]);
   const[userInfor,setUserInfor]=useState([])
-  const userInfordata = (idz) => {
-    axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${idz}`)
-    .then(function(response) {
-      setUserInfor(response.data);
+  // const userInfordata = (idz) => {
+  //   axios.get(`${process.env.REACT_APP_Backend_URI}api/User/GetUser?id=${idz}`)
+  //   .then(function(response) {
+  //     setUserInfor(response.data);
       
-    }).catch((error) => {
+  //   }).catch((error) => {
      
-    })
-  };
+  //   })
+  // };
   const dataBytype =
     type === "Gender" ? data : data.filter((u) => u.gender === type);
     const dataRole= role === "Role" ? dataBytype : dataBytype.filter((u) => u.role === role);
