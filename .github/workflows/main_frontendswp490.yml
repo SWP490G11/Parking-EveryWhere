@@ -2,7 +2,6 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 
-
 name: Build and deploy Node.js app to Azure Web App - frontendSWP490
 
 on:
@@ -32,13 +31,25 @@ jobs:
         cd front-end
         npm install
         npm run build --if-present
-         cd ../
+        cd ../
+       # Zip the build directory
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@0.6.1
+      with:
+        filename: release.zip
+        path: ./front-end/build/*
+      
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+      with:
+        name: node-app
+        path: release.zip
     - name: add process.json
       run: |
         echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> front-end/build/process.json
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'frontendSWP490'
+        app-name: ${{ env.AZURE_WEBAPP_NAME}}
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A694DA831F9D4775A97A8AA75A034031 }}
-        package: 'front-end/build' 
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
