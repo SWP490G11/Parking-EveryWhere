@@ -340,7 +340,7 @@ const Register = () => {
             {...tailFormItemLayout}
           >
             <Checkbox>
-              I have read the <a >agreement</a>
+              I have read the agreement
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
@@ -545,7 +545,7 @@ const Register = () => {
             {...tailFormItemLayout}
           >
             <Checkbox>
-              I have read the <a >agreement</a>
+              I have read the agreement
             </Checkbox>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>

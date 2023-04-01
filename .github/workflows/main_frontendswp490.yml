@@ -1,0 +1,44 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+
+
+name: Build and deploy Node.js app to Azure Web App - frontendSWP490
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+env:
+  Backend_URI: https://backendswp490.azurewebsites.net/
+  AZURE_WEBAPP_NAME: frontendSWP490  # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: 'front-end/build'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '16.x' 
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install, build, and test
+      run: |
+        # Build and test the project, then
+        # deploy to Azure Web App.
+        cd front-end
+        npm install
+        npm run build --if-present
+         cd ../
+    - name: add process.json
+      run: |
+        echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> front-end/build/process.json
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'frontendSWP490'
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A694DA831F9D4775A97A8AA75A034031 }}
+        package: 'front-end/build' 

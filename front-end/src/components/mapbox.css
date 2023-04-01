@@ -68,3 +68,6 @@
     color: #fff;
     background-color: #0fc90f;
 }
+.mapboxgl-ctrl-top-right{
+    pointer-events: auto;
+}

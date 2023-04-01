@@ -1,11 +1,11 @@
 
 import React, { useEffect,useState } from "react";
-import Mapbox from "../../components/Mapbox";
+
 
 import "../../style/parkingDetail.css";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import { Layout, Col, Row, Button  } from "antd";
+import {  Col, Row, Button  } from "antd";
 const ParkingDetail = () => {
   const idParking = useParams().idParking;
   const [dataz,setDataz]=useState({});
@@ -27,7 +27,7 @@ const ParkingDetail = () => {
             <h1>{dataz.parkingName}</h1>
           </div>
           <div id="image">
-            <img src="#" />
+            
           </div>
           <div id="pk-detail">
             <ul>

@@ -1,8 +1,6 @@
 import {
   PlusOutlined,
-  LikeOutlined,
-  MessageOutlined,
-  StarOutlined,
+
   FilterOutlined,
 } from "@ant-design/icons";
 import {
@@ -13,34 +11,32 @@ import {
   Form,
   Input,
   Row,
-  Select,
   Space,
   Layout,
   Dropdown,
   Menu,
-  Avatar,
-  List,
+
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
 
 import axios from "axios";
 
-import { AddressAutofill, SearchBox } from "@mapbox/search-js-react";
+
 import ManageParking from "../parkingPage/ManageParking";
 // Menu
-const { Option } = Select;
+// const { Option } = Select;
 const OwnerPage = () => {
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
+  // const IconText = ({ icon, text }) => (
+  //   <Space>
+  //     {React.createElement(icon)}
+  //     {text}
+  //   </Space>
+  // );
   const [open, setOpen] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [page, setPage] = useState(1);
+  //const [searchText, setSearchText] = useState("");
+  //const [page, setPage] = useState(1);
   const [type, setType] = useState("All");
   const [result, setResult] = useState({
     latitude: 24.8607,
@@ -83,23 +79,29 @@ const OwnerPage = () => {
         });
       });
   };
-  const [itemz, setItemz] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`)
-      .then(function (response) {
-        setItemz(response.data);
-      });
-  }, []);
-
-  const data = itemz.map((it) => ({
-    href: `/parking/detail/${it.id}`,
-    title: it.parkingName,
-    avatar: `https://joesch.moe/api/v1/random`,
-    description: it.discription,
-    content: it.addressDetail,
-  }));
-  const [value, setValue] = React.useState("");
+  // const [itemz, setItemz] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`)
+  //     .then(function (response) {
+  //      // setItemz(response.data);
+  //     });
+  // }, []);
+  const findaddress=()=>{
+    axios.get("https://rsapi.goong.io/geocode?address=91%20Trung%20K%C3%ADnh,%20Trung%20H%C3%B2a,%20C%E1%BA%A7u%20Gi%E1%BA%A5y,%20H%C3%A0%20N%E1%BB%99i&api_key={TMw3W9agfk2vQofcCzZFATxEwpM7HSYthHMgz7Dl}")
+    .then((response) => {
+      
+      console.log(response.data);
+    })
+  }
+  // const data = itemz.map((it) => ({
+  //   href: `/parking/detail/${it.id}`,
+  //   title: it.parkingName,
+  //   avatar: `https://joesch.moe/api/v1/random`,
+  //   description: it.discription,
+  //   content: it.addressDetail,
+  // }));
+  //const [value, setValue] = React.useState("");
   return (
     <Layout>
       <div className="body">
@@ -155,8 +157,8 @@ const OwnerPage = () => {
               maxLength={255}
               allowClear
               onSearch={(e) => {
-                setPage(1);
-                setSearchText(e.replace(/ /g, ""));
+                //setPage(1);
+                //setSearchText(e.replace(/ /g, ""));
               }}
             />
           </Col>
@@ -212,6 +214,7 @@ const OwnerPage = () => {
                     }}
                     placeholder="Please enter address detail"
                   />
+                  <Button onClick={()=>findaddress()}>Search</Button>
                 </Form.Item>
               </Col>
             </Row>
@@ -275,23 +278,20 @@ const OwnerPage = () => {
                 </Form.Item>
               </Col>
             </Row>
-
-            {/* <AddressAutofill accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg">
-              <input
-                autoComplete="shipping address-line1"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-            </AddressAutofill> */}
-            {/* <SearchBox accessToken="pk.eyJ1IjoicGh1Y252MSIsImEiOiJjbGVoNmxxZjUwZGp3M3JteGFheHI1YWN2In0.l2DZdcNdU53TNxILTmrhVg"/> */}
-              
-            <Mapbox />
+            
+            <Row gutter={16}>
+            <Col span={24}>
             <Space>
               <Button onClick={onClose}>Cancel</Button>
               <Button htmlType="submit" type="primary">
                 Submit
               </Button>
-            </Space>
+              </Space>
+           
+              </Col>
+           
+            </Row>
+            <Mapbox />
           </Form>
         </Drawer>
         <Row>

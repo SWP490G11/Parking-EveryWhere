@@ -30,13 +30,13 @@ function FooterComp() {
             </h3>
             <ul>
               <li>
-                <a>Email : najumy1807.2k@gmail.com</a>
+                Email : najumy1807.2k@gmail.com
               </li>
               <li>
-                <a >Phone : 0981949455</a>
+                Phone : 0981949455
               </li>
               <li>
-                <a >Address : Mễ Trì - Hà Nội</a>
+                Address : Mễ Trì - Hà Nội
               </li>
             </ul>
         </Col>
