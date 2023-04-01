@@ -25,15 +25,15 @@ jobs:
 
       - name: Restore
         run: |
-          cd WebApi
+          cd Back-end
           dotnet restore
       - name: Build
         run: |
-          cd WebApi
+          cd Back-end
           dotnet build --no-restore
       - name: Update database
         run: |
-          cd WebApi
+          cd Back-end
           dotnet tool install --global dotnet-ef
           dotnet tool restore
           dotnet ef database update
@@ -41,7 +41,7 @@ jobs:
           ASPNETCORE_ENVIRONMENT: Production
       - name: Publish
         run: |
-          cd WebApi
+          cd Back-end
           dotnet publish --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_NAME }}
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
