@@ -52,4 +52,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME}}
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A694DA831F9D4775A97A8AA75A034031 }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: release.zip
