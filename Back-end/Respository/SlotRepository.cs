@@ -35,8 +35,7 @@ namespace Back_end.Respository
 
         public async Task AddAsync(uint quantity, SlotModel model)
         {
-            try
-            {
+           
                 var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
                 var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
                 var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.LastModifyByID.ToLower().Trim()));
@@ -67,28 +66,18 @@ namespace Back_end.Respository
 
 
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+            
+           
         }
 
 
         public async Task DeleteAsync(string idString)
         {
-            try
-            {
+            
                 var timeFrame = await GetAsync(idString);
                 _dbContext.Slots.Remove(timeFrame);
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+          
         }
 
         public async Task<ICollection<Slot>> GetAllAsync()

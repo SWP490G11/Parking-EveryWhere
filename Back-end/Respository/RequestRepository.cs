@@ -1,16 +1,70 @@
-﻿using Back_end.Common;
+﻿using AutoMapper;
+using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Back_end.Respository
 {
-    public class RequestRepository : ICRUDSRespository<Request,RequestModel>
+    public interface IRequestRepository
     {
-      
+        Task AddAsync(RequestModel model, User requestBy);
+        Task DeleteAsync(string idString);
+        Task<ICollection<Request>> GetAllAsync();
+        Task<Request> GetAsync(string idString);
+        ICollection<Request> PaginateAsync(ICollection<Request> source, int pageNo, int pageSize);
+        ICollection<Request> SortAsync(DirectionOfSort direction, string factor);
+        Task UpdateAsync(string idString, UpdateRequestModel updateModel);
 
-        public Task AddAsync(RequestModel model)
+        Task CancelRequest(string idString);
+    }
+
+    public class RequestRepository : IRequestRepository
+    {
+
+        private readonly ParkingDbContext _dbContext;
+        private readonly ILogger<SlotRepository> _logger;
+        private readonly IMapper _mapper;
+
+        public RequestRepository(ParkingDbContext dbContext, ILogger<SlotRepository> logger, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _logger = logger;
+            _mapper = mapper;
+        }
+
+        public async Task AddAsync(RequestModel model, User requestBy)
+        {
+
+            if (string.IsNullOrEmpty(model.ParkingID)) throw new ArgumentNullException();
+            var parking = await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(model.ParkingID.ToUpper().Trim()
+                ));
+
+            var request = new Request()
+            {
+                LastModifyAt = DateTime.Now,
+                Note = model.Note,
+                Requestby=requestBy,
+                Parking= parking,
+                RequestAt= DateTime.Now,
+                Status  = Status.Pending,
+            } ; 
+
+            await _dbContext.Requests.AddAsync(request);
+
+            await _dbContext.SaveChangesAsync();
+
+        }
+
+        public async Task CancelRequest(string idString)
+        {
+            var updateRequest = await GetAsync(idString);
+            updateRequest.Status = Status.Cancel;
+            _dbContext.Requests.Update(updateRequest);
+            await _dbContext.SaveChangesAsync();
         }
 
         public Task DeleteAsync(string idString)
@@ -18,14 +72,17 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<Request>> GetAllAsync()
+        public async Task<ICollection<Request>> GetAllAsync()
         {
-            throw new NotImplementedException();
+           return  await _dbContext.Requests.ToListAsync();
         }
 
-        public Task<Request> GetAsync(string idString)
+        public async Task<Request> GetAsync(string idString)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+            return await _dbContext.Requests.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Equals(idString.ToUpper().Trim()
+                ));
         }
 
         public ICollection<Request> PaginateAsync(ICollection<Request> source, int pageNo, int pageSize)
@@ -38,11 +95,17 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-      
 
-        public Task UpdateAsync(string idString, RequestModel updateModel)
+
+        public async Task UpdateAsync(string idString, UpdateRequestModel updateModel)
         {
-            throw new NotImplementedException();
+            var updateRequest =  await GetAsync(idString);
+            updateRequest.Note = updateModel.Note;
+            updateRequest.Status = updateModel.Status;
+            updateRequest.LastModifyAt = DateTime.Now;
+
+            _dbContext.Requests.Update(updateRequest);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

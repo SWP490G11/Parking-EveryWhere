@@ -2,12 +2,15 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace Back_end.Services
 {
     public interface IImageService
     {
         Task<ImageUploadResult> UploadImageAsync(IFormFile file);
+
+        Task<ICollection<ImageUploadResult>> UploadImageRageAsync(IFormFileCollection files);
         Task<DeletionResult> DeleteImageAsync(string publicID);
     }
 
@@ -40,6 +43,7 @@ namespace Back_end.Services
                     
                 };
                 uploadResult = await _cloudinary.UploadAsync(upLoadParams);
+              
             }
              
             
@@ -54,6 +58,25 @@ namespace Back_end.Services
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
             return result;
+        }
+
+        public async Task<ICollection<ImageUploadResult>> UploadImageRageAsync(IFormFileCollection files)
+        {
+            ICollection <ImageUploadResult> results = new List<ImageUploadResult>();
+            foreach (var file in files)
+            {
+                using var stream = file.OpenReadStream();
+                var uploadParams = new ImageUploadParams()
+                {
+                    Folder = "my_folder",
+                    File = new FileDescription(file.FileName, stream)
+                };
+                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                results.Add(uploadResult);
+            }
+
+
+            return results;
         }
     }
 }

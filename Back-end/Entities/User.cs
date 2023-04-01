@@ -58,6 +58,8 @@ namespace Back_end.Entities
         [InverseProperty("SubcribeBy")]
         public MembershipPackage? MembershipPackage { get; set; }
 
+        public ICollection<Request> Requests { get; set; } = new List<Request>();
+
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
