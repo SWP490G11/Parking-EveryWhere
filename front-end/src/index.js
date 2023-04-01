@@ -4,7 +4,6 @@ import "./index.css";
 import { BrowserRouter } from 'react-router-dom';
 import App from "./App.js";
 import reportWebVitals from "./reportWebVitals";
-import './style/ant.css';
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
