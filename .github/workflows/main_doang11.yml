@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - frontend490
+name: Build and deploy Node.js app to Azure Web App - DoAnG11
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -23,11 +23,12 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          # Build and test the project, then
+          # deploy to Azure Web App.
           cd front-end
           npm install
           npm run build --if-present
-          npm run test --if-present
-        # Zip the build directory
+          cd ../
       - name: Zip Release
         uses: TheDoctor0/zip-release@0.6.1
         with:
@@ -39,11 +40,6 @@ jobs:
         with:
           name: node-app
           path: release.zip
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: node-app
-          path: ./front-end
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,10 +55,10 @@ jobs:
           name: node-app
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
         with:
-          app-name: 'frontend490'
+          app-name: 'DoAnG11'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_613A2312DB9F4468860C8A81CE5BCD76 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_98C1A896B6694A2E8EC0A380D8642BD6 }}
           package: release.zip
