@@ -21,6 +21,7 @@ namespace Back_end.Helper.Seeding
                     ,LastModifyAt= DateTime.Now
                     
                     },
+                    
 
                      new User { UserName="mboustead0" ,HashPassword= BCrypt.HashPassword("bY5rZNeJ4Us"),  FirstName="Martita", LastName="Boustead", DateOfBirth=Convert.ToDateTime("2016-11-24 13:12:53" ),Gender=Gender.Male,PhoneNumber="06868143899" ,Email="mboustead0@businessweek.com", CitizenID="019502501861" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
  new User { UserName="istonebanks1" ,HashPassword= BCrypt.HashPassword("MZcBPir"),  FirstName="Ingeborg", LastName="Stonebanks", DateOfBirth=Convert.ToDateTime("2014-10-29 23:29:28" ),Gender=Gender.Other,PhoneNumber="0633691068" ,Email="istonebanks1@auda.org.au", CitizenID="014280490976" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},

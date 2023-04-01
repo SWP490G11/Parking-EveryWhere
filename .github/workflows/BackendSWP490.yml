@@ -1,48 +1,51 @@
 name: Build and deploy .NET Core application to Web App BackendSWP490
+
+env:
+  AZURE_WEBAPP_NAME: BackendSWP490
+  AZURE_WEBAPP_PACKAGE_NAME: '../published'   
+  NETCORE_VERSION : 6.0.x
+
 on:
   push:
     branches:
-    - main
-env:
-  AZURE_WEBAPP_NAME: BackendSWP490
-  AZURE_WEBAPP_PACKAGE_PATH: ./publish
-  CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: .
+      - main
+  workflow_dispatch:
+
 jobs:
   build:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-    - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v3
-      with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    - name: Deploy to Azure WebApp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.BackendSWP490_9471 }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - uses: actions/checkout@v2
+
+      - name: Set up dotnet Core ${{ env.NETCORE_VERSION }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.NETCORE_VERSION }}
+
+      - name: Restore
+        run: |
+          cd WebApi
+          dotnet restore
+      - name: Build
+        run: |
+          cd WebApi
+          dotnet build --no-restore
+      - name: Update database
+        run: |
+          cd WebApi
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+          dotnet ef database update
+        env:
+          ASPNETCORE_ENVIRONMENT: Production
+      - name: Publish
+        run: |
+          cd WebApi
+          dotnet publish --configuration Release --output ${{ env.AZURE_WEBAPP_PACKAGE_NAME }}
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.BackendSWP490_9471 }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

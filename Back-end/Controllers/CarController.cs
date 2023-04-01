@@ -42,7 +42,7 @@ namespace Back_end.Controllers
 
 
         [HttpGet("/cars-of-owner")]
-        [Authorization.Authorize(Role.Customer)]
+        [Authorization.Authorize(Role.Customer,Role.Admin)]
         public async Task<IActionResult> GetCarsOfOwner()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -72,7 +72,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/car")]
 
-        [Authorization.Authorize(Role.Customer)]
+        [Authorization.Authorize(Role.Customer,Role.Admin)]
         public async Task<IActionResult> Add(CarDTO car)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -84,7 +84,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/car/{id}")]
 
-        [Authorization.Authorize(Role.Customer)]
+        [Authorization.Authorize(Role.Customer,Role.Admin)]
         public async Task<IActionResult> Update(string id, CarDTO car)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -97,7 +97,7 @@ namespace Back_end.Controllers
 
         [HttpDelete("/car/{id}")]
 
-        [Authorization.Authorize(Role.Customer)]
+        [Authorization.Authorize(Role.Customer,Role.Admin)]
         public async Task<IActionResult> Delete(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;

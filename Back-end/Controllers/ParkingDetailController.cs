@@ -84,7 +84,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/parkingdetail")]
 
-        [Authorization.Authorize(Role.ParkingManager,Role.ParkingOwner)]
+        [Authorization.Authorize(Role.ParkingManager,Role.Admin,Role.ParkingOwner)]
         public async Task<IActionResult> Add(ParkingDetailModel parkingdetail)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -96,7 +96,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/parkingdetail/{id}")]
 
-        [Authorization.Authorize(Role.ParkingManager)]
+        [Authorization.Authorize(Role.ParkingManager,Role.Admin)]
         public async Task<IActionResult> Update(string id, ParkingDetailModel parkingdetail)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -109,7 +109,7 @@ namespace Back_end.Controllers
 
         [HttpDelete("/parkingdetail/{id}")]
 
-        [Authorization.Authorize(Role.ParkingManager)]
+        [Authorization.Authorize(Role.ParkingManager,Role.Admin)]
         public async Task<IActionResult> Delete(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
