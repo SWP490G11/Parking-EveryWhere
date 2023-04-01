@@ -22,7 +22,7 @@ namespace Back_end.Respository
 
         public Task<ICollection<User>> Paginate(int pageNo = 1, int pageSize = 5);
 
-        public Task<bool> UsernameExisted(string username);
+        public bool UsernameExisted(string username);
 
         public Task SortUser(DirectionOfSort typeOfSort, string factor);
 
@@ -156,6 +156,8 @@ namespace Back_end.Respository
                 Include(u=>u.Parking)
                 .Include(u => u.MembershipPackage)
                 .Include(u=>u.Cars).ThenInclude(c=>c.CarModel)
+                .Include(u=>u.Requests).
+                Include(u=>u.Feedbacks)
                 .FirstAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
@@ -248,9 +250,9 @@ namespace Back_end.Respository
 
         }
 
-        public async Task<bool> UsernameExisted(string username)
+        public bool UsernameExisted(string username)
         {
-            if (await _dbContext.Users.AnyAsync(u => u.UserName.Trim().Equals(username.Trim())))
+            if ( _dbContext.Users.Any(u => u.UserName.Trim().Equals(username.Trim())))
             {
                 return true;
             }
@@ -265,10 +267,12 @@ namespace Back_end.Respository
                 Equals(userModel.ParkingID.ToUpper().Trim()
                 ));
 
+            var username = GenerateUsername(userModel.FirstName, userModel.LastName);
+
             var user = new User()
             {
-                UserName = userModel.UserName,
-                HashPassword = BCryptNet.HashPassword(userModel.Password),
+                UserName =username,
+                HashPassword = BCryptNet.HashPassword(GeneratePassword(username,userModel.DateOfBirth)),
                 Gender = userModel.Gender,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
@@ -286,6 +290,54 @@ namespace Back_end.Respository
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
+
+        private string GenerateUsername(string firstName,string lastName)
+        {
+            if (string.IsNullOrEmpty(firstName)|| string.IsNullOrEmpty(lastName)) throw new AppException("Name of user can not empty any fields") ;
+            var prefix = string.Empty;
+            var postfix = string.Empty;
+            var firstnames = firstName.Trim().Split(' ');
+            var lastnames = lastName.Trim().Split(' ');
+
+            foreach (var fn in firstnames)
+            {
+                prefix += fn.Trim();
+            }
+
+            foreach (var ln in lastnames)
+            {
+                if (ln != "") postfix += ln.Trim().Substring(0, 1);
+            }
+
+            var rawusername = (prefix + postfix).ToLower();
+
+            //generate code
+            var check = UsernameExisted(rawusername);
+            if (check)
+            {
+                var postNumber = 0;
+                var flag = true;
+                var username = "";
+                do
+                {
+                    postNumber++;
+                    username = rawusername + postNumber.ToString();
+                    flag = UsernameExisted(username);
+                } while (flag);
+                return username;
+            }
+            else
+            {
+                return rawusername;
+            }
+        }
+
+
+        private string GeneratePassword(string username,DateTime dob)
+        {
+            return username + "@" + dob.ToString("ddMMyyyy");
+        }
+
     }
 
 

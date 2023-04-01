@@ -6,10 +6,6 @@ namespace Back_end.Models.User
     public class PMModel
     {
         public string ParkingID { get; set; }
-        public string UserName { get; set; }
-
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
 
         public string FirstName { get; set; }
 

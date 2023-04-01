@@ -52,7 +52,7 @@ service.AddTransient<ICRUDSRespository<CarModel,CarModelx2>, CarModelRespository
 service.AddTransient<IParkingRespository,ParkingRespository>();
 service.AddTransient<ICarRepository, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
-service.AddTransient<ICRUDSRespository<Request, RequestModel>, RequestRepository>();
+service.AddTransient<IRequestRepository, RequestRepository>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 */
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
