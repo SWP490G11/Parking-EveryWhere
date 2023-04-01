@@ -23,6 +23,7 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd front-end
           npm install
           npm run build --if-present
           npm run test --if-present
@@ -31,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: 'front-end/build'
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +54,4 @@ jobs:
           app-name: 'frontend490'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_302C259C26D8404CA0FE9E229BDDD24F }}
-          package: .
+          package: 'front-end/build'
