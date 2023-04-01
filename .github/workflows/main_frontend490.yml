@@ -23,15 +23,27 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd front-end
           npm install
           npm run build --if-present
           npm run test --if-present
-
+        # Zip the build directory
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.6.1
+        with:
+          filename: release.zip
+          path: ./front-end/build/*
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: release.zip
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: node-app
+          path: ./front-end
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +65,4 @@ jobs:
           app-name: 'frontend490'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_613A2312DB9F4468860C8A81CE5BCD76 }}
-          package: .
+          package: release.zip
