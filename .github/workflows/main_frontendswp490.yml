@@ -39,6 +39,6 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'frontendSWP490'
+        app-name: ${{ env.AZURE_WEBAPP_NAME}}
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A694DA831F9D4775A97A8AA75A034031 }}
-        package: 'front-end/build' 
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
