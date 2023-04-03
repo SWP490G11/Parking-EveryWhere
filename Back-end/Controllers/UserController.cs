@@ -87,7 +87,7 @@ namespace Back_end.Controllers
                 u.LastName,
                 PakingID= u.Parking.ID,
                  u.CitizenID,
-                 u.Images,
+                 u.Image,
                  u.Role,
                 
                 }
@@ -138,13 +138,13 @@ namespace Back_end.Controllers
 
         [HttpPost("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(UserModel userModel)
+        public  IActionResult Register(UserModel userModel)
         {
             
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if ( _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
-                await _userRespository.Register(userModel);
+                 _userRespository.Register(userModel);
          
             return Ok("Register Success");
 

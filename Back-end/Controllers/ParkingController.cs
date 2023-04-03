@@ -180,14 +180,14 @@ namespace Back_end.Controllers
 
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
-        public async Task<IActionResult> Add(ParkingModel model)
+        public async IActionResult Add(ParkingModel model)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
 
-            await _respository.AddAsync(model, mwi.User);
+             _respository.AddAsync(model, mwi.User);
             return Ok("Add Success");
         }
 

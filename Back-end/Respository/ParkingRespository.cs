@@ -10,7 +10,7 @@ namespace Back_end.Respository
 {
     public interface IParkingRespository
     {
-        Task AddAsync(ParkingModel model, User owner);
+        void AddAsync(ParkingModel model, User owner);
         Task DeleteAsync(string idString);
         Task<ICollection<Parking>> GetAllAsync();
 
@@ -27,28 +27,20 @@ namespace Back_end.Respository
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<ParkingRespository> _logger;
         private readonly IMapper _mapper;
+        private readonly IImageRepository _imageRepository;
 
-        public ParkingRespository(ParkingDbContext dbContext, ILogger<ParkingRespository> logger, IMapper mapper)
+        public ParkingRespository(ParkingDbContext dbContext, ILogger<ParkingRespository> logger, IMapper mapper, IImageRepository imageRepository)
         {
             _dbContext = dbContext;
             _logger = logger;
             _mapper = mapper;
+            _imageRepository = imageRepository;
         }
 
-        public async Task AddAsync(ParkingModel model, User owner)
+        public void AddAsync(ParkingModel model, User owner)
         {
             
-                var images = new List<Image>();
-
-                foreach (var url in model.imagesURLs)
-                {
-                    var image = new Image()
-                    {
-                        URL = url.Trim(),
-                        
-                    };
-                    images.Add(image);
-                }
+               
 
                 var parking = new Parking()
                 {
@@ -60,25 +52,39 @@ namespace Back_end.Respository
                     Status = Status.Available,
                     Discription = model.Discription,
                     LastModifyAt = DateTime.Now,
-                    ParkingName = model.ParkingName,                 
+                    ParkingName = model.ParkingName, 
+                    
                 };
 
                 owner.Parkings.Add(parking);
 
-               await _dbContext.Parkings.AddAsync(parking);
+                _dbContext.Parkings.Add(parking);
 
-                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();
 
-                foreach (var image in images)
+            var images = new List<Image>();
+            foreach (var url in model.imagesURLs)
+            {
+                var image = new Image()
                 {
-                    image.Parking = await GetAsync(parking.ID.ToString());
-                }
+                    URL = url,
+                    Parking= parking,
 
-                parking.Images = images;
 
-               await _dbContext.Images.AddRangeAsync(images);
-                await _dbContext.SaveChangesAsync();
+                };
+                images.Add(image);
+            }
 
+            parking.Images = images;
+            _imageRepository.AddRageAsync(images);
+
+
+
+
+            
+
+
+               
 
            
         }

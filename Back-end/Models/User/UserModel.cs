@@ -30,8 +30,8 @@ namespace Back_end.Models.User
         public string Email { get; set; }
 
         public DateTime LastModifyAt { get; set; }
-        
-        public List<string>? imagesURL { get; set; } = new List<string>();
+
+        public string imageURL { get; set; } 
 
     }
 }
