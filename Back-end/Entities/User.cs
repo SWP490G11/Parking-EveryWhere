@@ -38,7 +38,11 @@ namespace Back_end.Entities
         [Required]
         public bool IsDisable { get; set; } = false;
         [AllowNull]
-        public ICollection<Image>? Images { get; set; } =new List<Image>();
+
+        public Image? Image { get; set; }
+        [ForeignKey("Image")]
+
+        public Guid? ImageID { get; set; }
 
         [InverseProperty("CarOwner")]
         public ICollection<Car> Cars { get; set; } = new List<Car>();
@@ -66,5 +70,6 @@ namespace Back_end.Entities
 
         public DateTime LastModifyAt { get; set; }
 
+       
     }
 }

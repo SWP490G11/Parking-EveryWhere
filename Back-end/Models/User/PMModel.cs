@@ -23,7 +23,7 @@ namespace Back_end.Models.User
 
         public DateTime LastModifyAt { get; set; }
 
-        public List<string>? imagesURLs { get; set; } = new List<string>();
+        public string imageURL { get; set; }
 
     }
 }

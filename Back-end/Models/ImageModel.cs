@@ -2,12 +2,13 @@
 {
     public class ImageModel
     {
-
         public string URL { get; set; }
 
-        public string PublicID { get; set; }
+        public string? UserID { get; set; }
 
-        public bool IsMain { get; set; }
+        public string? ParkingID { get; set; }
+
+        public string? FeedBackID { get; set; }
 
 
     }

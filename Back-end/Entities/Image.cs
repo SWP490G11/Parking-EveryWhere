@@ -12,6 +12,9 @@ namespace Back_end.Entities
         public string URL { get; set; }
 
         public User? User { get; set; }
+        [ForeignKey("User")]
+
+        public Guid? UserID { get; set; }
         public Parking? Parking { get; set; }
 
         public Feedback? Feedback { get; set; }
