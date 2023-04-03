@@ -38,7 +38,7 @@ namespace Back_end.Entities
         [Required]
         public bool IsDisable { get; set; } = false;
         [AllowNull]
-        public ICollection<Image> Images { get; set; } =new List<Image>();
+        public ICollection<Image>? Images { get; set; } =new List<Image>();
 
         [InverseProperty("CarOwner")]
         public ICollection<Car> Cars { get; set; } = new List<Car>();
