@@ -9,6 +9,7 @@ namespace Back_end.Respository
 {
 
     using Back_end.Common;
+    using Back_end.Models;
     using System;
     using System.Text.RegularExpressions;
     using BCryptNet = BCrypt.Net.BCrypt;
@@ -26,7 +27,7 @@ namespace Back_end.Respository
 
         public Task SortUser(DirectionOfSort typeOfSort, string factor);
 
-        public Task Register(UserModel userModel);
+        public void Register(UserModel userModel);
 
         public Task Update(string id, UpdateModel userModel);
 
@@ -49,18 +50,18 @@ namespace Back_end.Respository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly IJwtUtils _jwtUtils;
-
+        private readonly IImageRepository _imageRepository;
 
 
 
         public UserRespository(ParkingDbContext dbContext,
-            IJwtUtils jwtUtils
+            IJwtUtils jwtUtils, IImageRepository imageRepository
             )
         {
             _dbContext = dbContext;
             _dbContext.Database.AutoSavepointsEnabled = true;
             _jwtUtils = jwtUtils;
-
+            _imageRepository = imageRepository;
 
 
         }
@@ -158,7 +159,7 @@ namespace Back_end.Respository
                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
                 .Include(u => u.Requests).
                 Include(u => u.Feedbacks)
-                .Include(u=>u.Images)
+                .Include(u=>u.Image)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
@@ -188,20 +189,9 @@ namespace Back_end.Respository
             return await _dbContext.Users.Skip((pageNo - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
-        public async Task Register(UserModel userModel)
+        public void Register(UserModel userModel)
         {
 
-            var images = new List<Image>();
-
-            foreach (var url in userModel.imagesURL)
-            {
-                var image = new Image()
-                {
-                    URL = url.Trim(),
-
-                };
-                images.Add(image);
-            }
 
             var user = new User()
             {
@@ -221,22 +211,24 @@ namespace Back_end.Respository
 
             };
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+             _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
 
 
-            foreach (var image in images)
+            var image = new Image()
             {
-                image.User = await GetUser(user.ID.ToString());
-            }
+                URL = userModel.imageURL,
+                User = user,
+                UserID = user.ID
+            };
 
-            user.Images = images;
+            user.Image = image;
+            
 
-            await _dbContext.Images.AddRangeAsync(images);
-            await _dbContext.SaveChangesAsync();
+            _imageRepository.AddAsync(image);
 
 
-
+           
 
 
 
@@ -250,21 +242,12 @@ namespace Back_end.Respository
 
         public async Task Update(string id, UpdateModel userModel)
         {
-            var images = new List<Image>();
-
 
             var updateUser = await GetUser(id);
-            foreach (var url in userModel.ImageURLs)
-            {
-                var image = new Image()
-                {
-                    URL = url.Trim(),
-                    ID = updateUser.ID,
-                };
-                images.Add(image);
-            }
 
 
+
+            updateUser.Image = _imageRepository.UpdateAsync(updateUser.Image.ID.ToString(),userModel.ImageURL);
             updateUser.Gender = userModel.Gender;
             updateUser.FirstName = userModel.FirstName;
             updateUser.LastName = userModel.LastName;
@@ -273,7 +256,7 @@ namespace Back_end.Respository
             updateUser.DateOfBirth = userModel.DateOfBirth;
             updateUser.Email = userModel.Email;
             updateUser.Role = userModel.Role;
-            updateUser.Images = images;
+
             _dbContext.Users.Update(updateUser);
             await _dbContext.SaveChangesAsync();
 
@@ -319,6 +302,18 @@ namespace Back_end.Respository
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+
+                var image = new Image()
+            {
+                URL = userModel.imageURL,
+                User = user,
+                UserID = user.ID
+            };
+
+            user.Image = image;
+            
+
+            _imageRepository.AddAsync(image);
         }
 
         private string GenerateUsername(string firstName, string lastName)

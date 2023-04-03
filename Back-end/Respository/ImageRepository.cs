@@ -1,35 +1,96 @@
 ﻿using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace Back_end.Respository
 {
-    public class ImageRepository : ICRUDSRespository<Image, ImageModel>
+    public interface IImageRepository
     {
-        public Task AddAsync(ImageModel model)
+        void AddAsync(Image? model);
+        void AddRageAsync(ICollection<Image> models);
+        void DeleteAsync(string idString);
+        Image Get(string idString);
+        ICollection<Image> GetAllAsync();
+        ICollection<Image> PaginateAsync(int pageNo, int pageSize);
+        ICollection<Image> SortAsync(DirectionOfSort direction, string factor);
+        Image UpdateAsync(string idString, string URL);
+    }
+
+    public class ImageRepository : IImageRepository
+    {
+
+        private readonly ParkingDbContext _dbContext;
+
+        public ImageRepository(ParkingDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public void AddAsync(Image? addModel)
+        {
+
+            _dbContext.Images.Add(addModel);
+            _dbContext.SaveChanges();
+        }
+
+
+        public void AddRageAsync(ICollection<Image> models)
+
+        {
+           
+            ICollection<Image> images = new List<Image>();
+
+            foreach (var model in models)
+            {
+
+
+                var image = new Image()
+                {
+                    URL = model.URL,
+                    User = model.User,
+                    Parking = model.Parking,
+                    Feedback = model.Feedback,
+
+
+                };
+
+                images.Add(image);
+            }
+
+
+            _dbContext.Images.AddRange(images);
+            _dbContext.SaveChanges();
+        }
+
+
+
+        public void DeleteAsync(string idString)
         {
             throw new NotImplementedException();
         }
 
-      
-
-        public Task DeleteAsync(string idString)
+        public ICollection<Image> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<Image>> GetAllAsync()
+
+        public Image Get(string idString)
         {
-            throw new NotImplementedException();
+
+            if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
+
+            return _dbContext.Images.FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
+                 Equals(idString.ToUpper().Trim()
+                 )); ;
+
         }
 
-        
-        public Task<Image> GetAsync(string idString)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ICollection<Image> PaginateAsync(ICollection<Image> source, int pageNo, int pageSize)
+        public ICollection<Image> PaginateAsync(int pageNo, int pageSize)
         {
             throw new NotImplementedException();
         }
@@ -39,9 +100,18 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(string idString, ImageModel updateModel)
+        public Image UpdateAsync(string idString,string URL)
         {
-            throw new NotImplementedException();
+            var updatedImage = Get(idString);
+            updatedImage.URL = URL;
+
+            _dbContext.Images.Update(updatedImage);
+            _dbContext.SaveChanges();
+
+            return updatedImage;
         }
+
+
+    
     }
 }
