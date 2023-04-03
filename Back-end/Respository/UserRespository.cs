@@ -158,7 +158,8 @@ namespace Back_end.Respository
                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
                 .Include(u => u.Requests).
                 Include(u => u.Feedbacks)
-                .FirstAsync(u => u.ID.ToString().ToUpper().Trim().
+                .Include(u=>u.Images)
+                .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
 
