@@ -38,9 +38,9 @@ namespace Back_end.Entities
         [InverseProperty("Parkings")]
         public User Owner { get; set; }
 
-       
 
 
+        public ICollection<Image>? Images { get; set; } = new List<Image>();
 
 
         public ICollection<Feedback> Feedbacks { get; set; }

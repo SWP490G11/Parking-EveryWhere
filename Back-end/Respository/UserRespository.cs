@@ -42,7 +42,7 @@ namespace Back_end.Respository
 
         public Task RegisterForParkingManager(PMModel userModel);
 
-        
+
 
     }
     public class UserRespository : IUserRespository
@@ -61,7 +61,7 @@ namespace Back_end.Respository
             _dbContext.Database.AutoSavepointsEnabled = true;
             _jwtUtils = jwtUtils;
 
-           
+
 
         }
 
@@ -74,7 +74,7 @@ namespace Back_end.Respository
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.UserName.Trim().Equals(model.UserName.Trim()));
             if (user == null || !BCryptNet.Verify(model.Password, user.HashPassword))
                 throw new AppException("Username or password is incorrect");
-            if(user.IsDisable) throw new AppException("User have been disabled");
+            if (user.IsDisable) throw new AppException("User have been disabled");
 
             string token = _jwtUtils.GenerateToken(user);
 
@@ -151,13 +151,13 @@ namespace Back_end.Respository
         public async Task<User> GetUser(string guidString)
         {
             return await _dbContext.Users.Include(u => u.Parkings)
-                .ThenInclude(p => p.Slots).Include(u=>u.Parkings)
-                .ThenInclude(p=>p.ParkingManagers).
-                Include(u=>u.Parking)
+                .ThenInclude(p => p.Slots).Include(u => u.Parkings)
+                .ThenInclude(p => p.ParkingManagers).
+                Include(u => u.Parking)
                 .Include(u => u.MembershipPackage)
-                .Include(u=>u.Cars).ThenInclude(c=>c.CarModel)
-                .Include(u=>u.Requests).
-                Include(u=>u.Feedbacks)
+                .Include(u => u.Cars).ThenInclude(c => c.CarModel)
+                .Include(u => u.Requests).
+                Include(u => u.Feedbacks)
                 .FirstAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
@@ -190,7 +190,17 @@ namespace Back_end.Respository
         public async Task Register(UserModel userModel)
         {
 
-            
+            var images = new List<Image>();
+
+            foreach (var url in userModel.imagesURL)
+            {
+                var image = new Image()
+                {
+                    URL = url.Trim(),
+
+                };
+                images.Add(image);
+            }
 
             var user = new User()
             {
@@ -205,16 +215,24 @@ namespace Back_end.Respository
                 Email = userModel.Email,
                 Role = userModel.Role,
                 Parkings = new List<Parking>(),
-                
-                
-                 
+
+
+
             };
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
 
+            foreach (var image in images)
+            {
+                image.User = await GetUser(user.ID.ToString());
+            }
 
+            user.Images = images;
+
+            await _dbContext.Images.AddRangeAsync(images);
+            await _dbContext.SaveChangesAsync();
 
 
 
@@ -231,28 +249,39 @@ namespace Back_end.Respository
 
         public async Task Update(string id, UpdateModel userModel)
         {
-            
-                var updateUser = await GetUser(id);
+            var images = new List<Image>();
 
-               
-                updateUser.Gender = userModel.Gender;
-                updateUser.FirstName = userModel.FirstName;
-                updateUser.LastName = userModel.LastName;
-                updateUser.LastModifyAt = DateTime.Now;
-                updateUser.PhoneNumber = userModel.PhoneNumber;
-                updateUser.DateOfBirth = userModel.DateOfBirth;
-                updateUser.Email = userModel.Email;
-                updateUser.Role = userModel.Role;
 
-                _dbContext.Users.Update(updateUser);
-                await _dbContext.SaveChangesAsync();
-           
+            var updateUser = await GetUser(id);
+            foreach (var url in userModel.ImageURLs)
+            {
+                var image = new Image()
+                {
+                    URL = url.Trim(),
+                    ID = updateUser.ID,
+                };
+                images.Add(image);
+            }
+
+
+            updateUser.Gender = userModel.Gender;
+            updateUser.FirstName = userModel.FirstName;
+            updateUser.LastName = userModel.LastName;
+            updateUser.LastModifyAt = DateTime.Now;
+            updateUser.PhoneNumber = userModel.PhoneNumber;
+            updateUser.DateOfBirth = userModel.DateOfBirth;
+            updateUser.Email = userModel.Email;
+            updateUser.Role = userModel.Role;
+            updateUser.Images = images;
+            _dbContext.Users.Update(updateUser);
+            await _dbContext.SaveChangesAsync();
+
 
         }
 
         public bool UsernameExisted(string username)
         {
-            if ( _dbContext.Users.Any(u => u.UserName.Trim().Equals(username.Trim())))
+            if (_dbContext.Users.Any(u => u.UserName.Trim().Equals(username.Trim())))
             {
                 return true;
             }
@@ -263,7 +292,7 @@ namespace Back_end.Respository
         public async Task RegisterForParkingManager(PMModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.ParkingID)) throw new ArgumentNullException();
-            var parking= await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            var parking = await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(userModel.ParkingID.ToUpper().Trim()
                 ));
 
@@ -271,8 +300,8 @@ namespace Back_end.Respository
 
             var user = new User()
             {
-                UserName =username,
-                HashPassword = BCryptNet.HashPassword(GeneratePassword(username,userModel.DateOfBirth)),
+                UserName = username,
+                HashPassword = BCryptNet.HashPassword(GeneratePassword(username, userModel.DateOfBirth)),
                 Gender = userModel.Gender,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
@@ -282,8 +311,8 @@ namespace Back_end.Respository
                 Email = userModel.Email,
                 Role = Role.ParkingManager,
                 Parking = parking,
-                
-                
+
+
 
             };
 
@@ -291,9 +320,9 @@ namespace Back_end.Respository
             await _dbContext.SaveChangesAsync();
         }
 
-        private string GenerateUsername(string firstName,string lastName)
+        private string GenerateUsername(string firstName, string lastName)
         {
-            if (string.IsNullOrEmpty(firstName)|| string.IsNullOrEmpty(lastName)) throw new AppException("Name of user can not empty any fields") ;
+            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName)) throw new AppException("Name of user can not empty any fields");
             var prefix = string.Empty;
             var postfix = string.Empty;
             var firstnames = firstName.Trim().Split(' ');
@@ -333,7 +362,7 @@ namespace Back_end.Respository
         }
 
 
-        private string GeneratePassword(string username,DateTime dob)
+        private string GeneratePassword(string username, DateTime dob)
         {
             return username + "@" + dob.ToString("ddMMyyyy");
         }

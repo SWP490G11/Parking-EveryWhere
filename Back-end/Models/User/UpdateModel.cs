@@ -24,5 +24,7 @@ namespace Back_end.Models.User
         public string Email { get; set; }
 
         public DateTime LastModifyAt { get; set; }
+
+        public List<string> ImageURLs { get; set; }
     }
 }

@@ -20,5 +20,7 @@ namespace Back_end.Models
         public double LAT { get; set; }
 
         public string? AddressDetail { get; set; }
+
+        public List<string>? imagesURLs { get; set; } = new List<string>();
     }
 }

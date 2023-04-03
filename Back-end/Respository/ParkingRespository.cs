@@ -17,7 +17,7 @@ namespace Back_end.Respository
         Task<ICollection<Parking>> GetParkingByNameAsync(string searchText);
         
         Task<Parking> GetAsync(string idString);
-        ICollection<Parking> PaginateAsync(ICollection<Parking> source, int pageNo, int pageSize);
+        ICollection<Parking> PaginateAsync( int pageNo, int pageSize);
         ICollection<Parking> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, ParkingModel updateModel);
     }
@@ -37,9 +37,18 @@ namespace Back_end.Respository
 
         public async Task AddAsync(ParkingModel model, User owner)
         {
-            try
-            {
+            
+                var images = new List<Image>();
 
+                foreach (var url in model.imagesURLs)
+                {
+                    var image = new Image()
+                    {
+                        URL = url.Trim(),
+                        
+                    };
+                    images.Add(image);
+                }
 
                 var parking = new Parking()
                 {
@@ -51,21 +60,27 @@ namespace Back_end.Respository
                     Status = Status.Available,
                     Discription = model.Discription,
                     LastModifyAt = DateTime.Now,
-                    ParkingName = model.ParkingName,
-
+                    ParkingName = model.ParkingName,                 
                 };
 
                 owner.Parkings.Add(parking);
 
-                await _dbContext.Parkings.AddAsync(parking);
+               await _dbContext.Parkings.AddAsync(parking);
 
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
 
-                _logger.LogError(ex, "Has error:");
-            }
+                foreach (var image in images)
+                {
+                    image.Parking = await GetAsync(parking.ID.ToString());
+                }
+
+                parking.Images = images;
+
+               await _dbContext.Images.AddRangeAsync(images);
+                await _dbContext.SaveChangesAsync();
+
+
+           
         }
 
 
@@ -102,12 +117,13 @@ namespace Back_end.Respository
             var parkings =  await _dbContext.Parkings.Include(p => p.ParkingManagers)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
                 .Include(p => p.TimeFrames)
+                .Include(p=>p.Images)
                 .Include(p => p.Owner).Where(p=>p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
             return parkings;
         }
 
-        public ICollection<Parking> PaginateAsync(ICollection<Parking> source, int pageNo, int pageSize)
+        public ICollection<Parking> PaginateAsync( int pageNo, int pageSize)
         {
             throw new NotImplementedException();
         }
