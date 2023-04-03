@@ -53,6 +53,8 @@ service.AddTransient<IParkingRespository,ParkingRespository>();
 service.AddTransient<ICarRepository, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<IRequestRepository, RequestRepository>();
+
+service.AddTransient<IFeedBackReposiotory , FeedBackReposiotory>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 */
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();

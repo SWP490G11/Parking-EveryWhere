@@ -11,10 +11,6 @@ namespace Back_end.Entities
 
         public string URL { get; set; }
 
-        public string PublicID { get; set; }
-
-        public bool IsMain { get; set; }
-
         public User? User { get; set; }
         public Parking? Parking { get; set; }
 

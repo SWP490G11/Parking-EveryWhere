@@ -9,10 +9,9 @@ namespace Back_end.Models
         public float Rating { get; set; }
 
         public string FeedbackByID { get; set; }
-        public ICollection<Image>? Images { get; set; }
+        public List<string> ImageURLs { get; set; }
 
-        public Parking Parking { get; set; }
+        public string ParkingID { get; set; }
 
-        public DateTime LastModifyAt { get; set; }
     }
 }
