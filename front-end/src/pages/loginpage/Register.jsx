@@ -132,7 +132,7 @@ const Register = () => {
       document.getElementById("reg2").style.display = "none";
     }
     setValuez(e.target.value);
-    console.log("radio checked", e.target.value);
+    
   };
   
   return (

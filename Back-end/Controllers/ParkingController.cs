@@ -180,7 +180,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
-        public async IActionResult Add(ParkingModel model)
+        public IActionResult Add(ParkingModel model)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");

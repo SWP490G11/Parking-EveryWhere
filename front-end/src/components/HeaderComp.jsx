@@ -47,8 +47,12 @@ const menuonwer =[
     icon: <HomeOutlined />,
   },
   {
-    label: "Parking Of Me ",
-    key: "app",
+    label: (
+      <a href="/manage-parking">
+        Manage Parking
+      </a>
+    ), 
+    key: "Manage",
     icon: <AppstoreOutlined />,
   },
   {

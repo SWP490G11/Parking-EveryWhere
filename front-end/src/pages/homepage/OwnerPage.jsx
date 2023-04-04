@@ -28,15 +28,11 @@ import ManageParking from "../parkingPage/ManageParking";
 // Menu
 // const { Option } = Select;
 const OwnerPage = () => {
-  // const IconText = ({ icon, text }) => (
-  //   <Space>
-  //     {React.createElement(icon)}
-  //     {text}
-  //   </Space>
-  // );
+  
   const [open, setOpen] = useState(false);
   //const [searchText, setSearchText] = useState("");
   //const [page, setPage] = useState(1);
+  const [itemz,setItemz]=useState([]);;
   const [type, setType] = useState("All");
   const [result, setResult] = useState({
     latitude: 24.8607,
@@ -79,14 +75,23 @@ const OwnerPage = () => {
         });
       });
   };
-  // const [itemz, setItemz] = useState([]);
-  // useEffect(() => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`)
-  //     .then(function (response) {
-  //      // setItemz(response.data);
-  //     });
-  // }, []);
+  const loadData = async () => {
+   
+    const response = await axios.get(`${process.env.REACT_APP_Backend_URI}parkings-of-owner`);
+    setItemz(response.data);
+    
+  };
+  useEffect(()=>{
+     loadData();
+  },[]);
+   
+  const data = itemz.map((it) => ({
+    href: `/parking/detail/${it.parkingID}`,
+    title: it.parkingName, 
+    avatar: `https://joesch.moe/api/v1/random`,
+    description: it.discription,
+    content: it.addressDetail,
+  }));
   const findaddress=()=>{
     axios.get("https://rsapi.goong.io/geocode?address=91%20Trung%20K%C3%ADnh,%20Trung%20H%C3%B2a,%20C%E1%BA%A7u%20Gi%E1%BA%A5y,%20H%C3%A0%20N%E1%BB%99i&api_key=TMw3W9agfk2vQofcCzZFATxEwpM7HSYthHMgz7Dl")
     .then((response) => {
@@ -94,14 +99,7 @@ const OwnerPage = () => {
       console.log(response.data);
     })
   }
-  // const data = itemz.map((it) => ({
-  //   href: `/parking/detail/${it.id}`,
-  //   title: it.parkingName,
-  //   avatar: `https://joesch.moe/api/v1/random`,
-  //   description: it.discription,
-  //   content: it.addressDetail,
-  // }));
-  //const [value, setValue] = React.useState("");
+
   return (
     <Layout>
       <div className="body">
@@ -297,8 +295,7 @@ const OwnerPage = () => {
         <Row>
           {/*ParkingList*/}
           <Col span={10}>
-            <ManageParking />
-            {/* <List
+          <List
     itemLayout="vertical"
     size="normal"
     pagination={{
@@ -334,7 +331,7 @@ const OwnerPage = () => {
         {item.content}
       </List.Item>
     )}
-  /> */}
+  />
           </Col>
           {/* Map */}
           <Col span={14}>

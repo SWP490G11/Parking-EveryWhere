@@ -6,6 +6,7 @@ import ManageParkingManager from "../pages/user/ParkingManager/ManageParkingMana
 import React from "react";
 import ManageCar from "../pages/carpage/ManageCar";
 import OwnerRequest from "../pages/requestpage/OwnerRequest";
+import ManageParking from "../pages/parkingPage/ManageParking";
 export const OwnerRoutes = [
     {
       path: "/parking/detail/:idParking",
@@ -42,7 +43,12 @@ export const OwnerRoutes = [
       element: <OwnerRequest />,
       title: "Request of Owner",
     },
+    {
+      path: "/manage-parking",
+      element: < ManageParking />,
+      title: "Request of Owner",
+    },
 
-    
+   
    
   ];
