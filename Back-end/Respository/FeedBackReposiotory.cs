@@ -1,6 +1,7 @@
 ﻿using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
+using Back_end.Models.User;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -8,20 +9,24 @@ namespace Back_end.Respository
 {
     public interface IFeedBackReposiotory
     {
-        Task CreateFeedBack(FeedbackModel feedbackModel);
+        void CreateFeedBack(FeedbackModel feedbackModel);
         Task Delete(string ID);
         Task<ICollection<Feedback>> GetAllFeedbacksAsync();
         Task<Feedback> GetFeedbacksAsync(string idString);
-        Task UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel);
+        void UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel);
+
+       
     }
 
     public class FeedBackReposiotory : IFeedBackReposiotory
     {
         private readonly ParkingDbContext _dbContext;
+        private readonly IImageRepository _imageRepository;
 
-        public FeedBackReposiotory(ParkingDbContext dbContext)
+        public FeedBackReposiotory(ParkingDbContext dbContext, IImageRepository imageRepository)
         {
             _dbContext = dbContext;
+            _imageRepository = imageRepository;
         }
 
         public async Task<ICollection<Feedback>> GetAllFeedbacksAsync()
@@ -39,55 +44,63 @@ namespace Back_end.Respository
                 ));
         }
 
-        public async Task CreateFeedBack(FeedbackModel feedbackModel)
+        public void CreateFeedBack(FeedbackModel feedbackModel)
         {
 
             var images = new List<Image>();
 
-            foreach (var url in feedbackModel.ImageURLs)
-            {
-                var image = new Image()
-                {
-                    URL = url.Trim(),
-
-                };
-                images.Add(image);
-            }
+           
 
             var fedback = new Feedback()
             {
                 Content = feedbackModel.Content,
                 Rating = feedbackModel.Rating,
                 LastModifyAt = DateTime.Now,
-                Parking = await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+                Parking =  _dbContext.Parkings.FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(feedbackModel.ParkingID.ToUpper().Trim()
                 )),
 
             };
-            await _dbContext.Feedbacks.AddAsync(fedback);
-            _dbContext.SaveChanges();
-
-            foreach (var image in images)
+            foreach (var url in feedbackModel.ImageURLs)
             {
-                image.Feedback = await GetFeedbacksAsync(fedback.ID.ToString());
+                var image = new Image()
+                {
+                    URL = url.Trim(),
+                    Feedback = fedback
+
+                };
+                images.Add(image);
             }
 
             fedback.Images = images;
+             _dbContext.Feedbacks.Add(fedback);
 
-            await _dbContext.Images.AddRangeAsync(images);
-            await _dbContext.SaveChangesAsync();
+            _imageRepository.AddRageAsync(images);
+
         }
 
 
-        public async Task UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel)
+        public void UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel)
         {
-            var updated = await _dbContext.Feedbacks.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            var updated =  _dbContext.Feedbacks.FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(id.ToUpper().Trim()));
             updated.Content = feedbackModel.Content;
             updated.Rating = feedbackModel.Rating;
             updated.LastModifyAt = DateTime.Now;
 
+            var images = new List<Image>();
+            foreach (var url in feedbackModel.ImageURLs)
+            {
+                var image = new Image()
+                {
+                    URL = url,
+                    Feedback = updated,
+                };
+                images.Add(image);
+            }
 
+            updated.Images = _imageRepository.UpdateRange(images);
+            _dbContext.Update(updated);
             _dbContext.SaveChanges();
         }
 

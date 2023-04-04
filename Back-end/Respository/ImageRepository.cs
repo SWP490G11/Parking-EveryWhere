@@ -18,6 +18,8 @@ namespace Back_end.Respository
         ICollection<Image> PaginateAsync(int pageNo, int pageSize);
         ICollection<Image> SortAsync(DirectionOfSort direction, string factor);
         Image UpdateAsync(string idString, string URL);
+
+        public ICollection<Image> UpdateRange(List<Image> newimages);
     }
 
     public class ImageRepository : IImageRepository
@@ -111,7 +113,29 @@ namespace Back_end.Respository
             return updatedImage;
         }
 
+        public ICollection<Image> UpdateRange(List<Image> newimages)
+        {
+            var updatedImages = new List<Image>();
+            foreach (var image in newimages)
+            {
+                var existedImg = Get(image.ID.ToString());
+                if(existedImg != null)
+                {
+                    updatedImages.Add(existedImg);
+                }
+                else
+                {
+                    _dbContext.Images.Add(image);
+                    updatedImages.Add(image);
+                    
+                }
+            }
 
-    
+            _dbContext.UpdateRange(updatedImages);
+            _dbContext.SaveChanges();
+
+            return updatedImages;
+        }
+        
     }
 }
