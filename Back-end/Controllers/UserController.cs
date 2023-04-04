@@ -146,7 +146,7 @@ namespace Back_end.Controllers
             if ( _userRespository.UsernameExisted(userModel.UserName)) return BadRequest("Username has existed");
                  _userRespository.Register(userModel);
          
-            return Ok("Register Success");
+            return Ok(userModel);
 
         }
 
@@ -161,8 +161,8 @@ namespace Back_end.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             /*if (mwi.User.Role!=Role.ParkingOwner) return BadRequest("You not have permission for " +
                 "registor this role");*/
-            await _userRespository.RegisterForParkingManager(userModel);
-            return Ok("Register Success");
+         var pm=   await _userRespository.RegisterForParkingManager(userModel);
+            return Ok(pm);
         }
 
         [HttpPut("[action]")]
