@@ -41,7 +41,7 @@ namespace Back_end.Respository
         public Task<ICollection<User>> GetParkingManagers();
 
 
-        public Task RegisterForParkingManager(PMModel userModel);
+        public Task<User> RegisterForParkingManager(PMModel userModel);
 
 
 
@@ -159,7 +159,8 @@ namespace Back_end.Respository
                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
                 .Include(u => u.Requests).
                 Include(u => u.Feedbacks)
-                .Include(u=>u.Image)
+                .Include(u => u.Image).
+                Include(u => u.Parkings).ThenInclude(p=>p.Images)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
@@ -273,7 +274,7 @@ namespace Back_end.Respository
             return false;
         }
 
-        public async Task RegisterForParkingManager(PMModel userModel)
+        public async Task<User> RegisterForParkingManager(PMModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.ParkingID)) throw new ArgumentNullException();
             var parking = await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
@@ -313,7 +314,10 @@ namespace Back_end.Respository
             user.Image = image;
             
 
+
             _imageRepository.AddAsync(image);
+
+            return user;
         }
 
         private string GenerateUsername(string firstName, string lastName)

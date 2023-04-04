@@ -13,16 +13,14 @@ namespace Back_end.Respository
         void AddAsync(ParkingModel model, User owner);
         Task DeleteAsync(string idString);
         Task<ICollection<Parking>> GetAllAsync();
-
+        Parking GetAsync(string idString);
         Task<ICollection<Parking>> GetParkingByNameAsync(string searchText);
-        
-        Task<Parking> GetAsync(string idString);
-        ICollection<Parking> PaginateAsync( int pageNo, int pageSize);
+        ICollection<Parking> PaginateAsync(int pageNo, int pageSize);
         ICollection<Parking> SortAsync(DirectionOfSort direction, string factor);
-        Task UpdateAsync(string idString, ParkingModel updateModel);
+        void UpdateAsync(string idString, ParkingModel updateModel);
     }
 
-    public class ParkingRespository :  IParkingRespository
+    public class ParkingRespository : IParkingRespository
     {
         private readonly ParkingDbContext _dbContext;
         private readonly ILogger<ParkingRespository> _logger;
@@ -39,28 +37,25 @@ namespace Back_end.Respository
 
         public void AddAsync(ParkingModel model, User owner)
         {
-            
-               
 
-                var parking = new Parking()
-                {
-                    AddressDetail = model.AddressDetail,
-                    IsLegal = model.IsLegal,
-                    LAT = model.LAT,
-                    LON = model.LON,
-                    Owner = owner,
-                    Status = Status.Available,
-                    Discription = model.Discription,
-                    LastModifyAt = DateTime.Now,
-                    ParkingName = model.ParkingName, 
-                    
-                };
 
-                owner.Parkings.Add(parking);
 
-                _dbContext.Parkings.Add(parking);
+            var parking = new Parking()
+            {
+                AddressDetail = model.AddressDetail,
+                IsLegal = model.IsLegal,
+                LAT = model.LAT,
+                LON = model.LON,
+                Owner = owner,
+                Status = Status.Available,
+                Discription = model.Discription,
+                LastModifyAt = DateTime.Now,
+                ParkingName = model.ParkingName,
 
-                _dbContext.SaveChanges();
+            };
+
+
+
 
             var images = new List<Image>();
             foreach (var url in model.imagesURLs)
@@ -68,7 +63,7 @@ namespace Back_end.Respository
                 var image = new Image()
                 {
                     URL = url,
-                    Parking= parking,
+                    Parking = parking,
 
 
                 };
@@ -76,60 +71,66 @@ namespace Back_end.Respository
             }
 
             parking.Images = images;
+            owner.Parkings.Add(parking);
+
+            _dbContext.Parkings.Add(parking);
+
+
             _imageRepository.AddRageAsync(images);
 
 
 
 
-            
 
 
-               
 
-           
+
+
         }
 
 
 
         public async Task DeleteAsync(string idString)
         {
-                var parking = await GetAsync(idString);
-                _dbContext.Parkings.Remove(parking);
-                await _dbContext.SaveChangesAsync();  
+            var parking = GetAsync(idString);
+            _dbContext.Parkings.Remove(parking);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<ICollection<Parking>> GetAllAsync()
         {
             return await _dbContext.Parkings.Include(p => p.ParkingManagers)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
-                .Include(p => p.TimeFrames)
+                 .Include(p => p.TimeFrames)
                 .Include(p => p.Owner)
+                .Include(p => p.Images)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+               
                 .ToListAsync();
         }
 
 
 
-        public async Task<Parking> GetAsync(string idString)
+        public Parking GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            return _dbContext.Parkings.First(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
 
         public async Task<ICollection<Parking>> GetParkingByNameAsync(string searchText)
         {
-            var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase); 
-            var parkings =  await _dbContext.Parkings.Include(p => p.ParkingManagers)
+            var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase);
+            var parkings = await _dbContext.Parkings.Include(p => p.ParkingManagers)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
                 .Include(p => p.TimeFrames)
-                .Include(p=>p.Images)
-                .Include(p => p.Owner).Where(p=>p.ParkingName.Contains(searchTextHD.Trim()))
+                .Include(p => p.Images)
+                .Include(p => p.Owner).Where(p => p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
             return parkings;
         }
 
-        public ICollection<Parking> PaginateAsync( int pageNo, int pageSize)
+        public ICollection<Parking> PaginateAsync(int pageNo, int pageSize)
         {
             throw new NotImplementedException();
         }
@@ -140,22 +141,37 @@ namespace Back_end.Respository
         }
 
 
-        public async Task UpdateAsync(string idString, ParkingModel updateModel)
+        public void UpdateAsync(string idString, ParkingModel updateModel)
         {
-            var updateParking = await GetAsync(idString);
+
+            var images = new List<Image>();
+
+
+            var updateParking = GetAsync(idString);
             if (updateParking == null) throw new AppException("Not Found this parking");
             updateParking.AddressDetail = updateModel.AddressDetail;
-            updateParking.LON=updateModel.LON;
+            updateParking.LON = updateModel.LON;
             updateParking.LAT = updateModel.LAT;
             updateParking.IsLegal = updateModel.IsLegal;
             updateParking.Discription = updateModel.Discription;
             updateParking.ParkingName = updateModel.ParkingName;
             updateParking.Status = updateModel.Status;
             updateParking.LastModifyAt = DateTime.Now;
-            
+
+            updateParking.Images = _imageRepository.UpdateRange(images);
+            foreach (var url in updateModel.imagesURLs)
+            {
+                var image = new Image()
+                {
+                    URL = url,
+                    Parking = updateParking
+                };
+                images.Add(image);
+            }
+
 
             _dbContext.Update(updateParking);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
         }
     }
 }

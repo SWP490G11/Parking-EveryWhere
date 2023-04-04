@@ -61,16 +61,16 @@ namespace Back_end.Controllers
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
                 NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
                 NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.NotAvailable),
-
+                Image = p.Images.Select(i => i.URL)
             }
 
 
-                ).ToList());
+                ).ToList()) ;
         }
 
         [HttpGet("/parking-manager-of-parking/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
-        public async Task<IActionResult> GetParkingManagerOfParking(string id)
+        public IActionResult GetParkingManagerOfParking(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
@@ -78,7 +78,7 @@ namespace Back_end.Controllers
             var user = mwi.User;
             if (user == null) return NotFound();
 
-            var parking = await _respository.GetAsync(id);
+            var parking =  _respository.GetAsync(id);
 
 
             return Ok(parking.ParkingManagers);
@@ -131,11 +131,11 @@ namespace Back_end.Controllers
 
         [HttpGet("/parking/{id}")]
         [Authorization.Authorize(Role.Admin)]
-        public async Task<IActionResult> Get(string id)
+        public  IActionResult Get(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var parking = await _respository.GetAsync(id);
+            var parking =  _respository.GetAsync(id);
 
             return Ok(parking);
         }
@@ -180,7 +180,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
-        public async IActionResult Add(ParkingModel model)
+        public  IActionResult Add(ParkingModel model)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
@@ -198,7 +198,7 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _respository.UpdateAsync(id, model);
+             _respository.UpdateAsync(id, model);
             return Ok("Update Success");
         }
 
