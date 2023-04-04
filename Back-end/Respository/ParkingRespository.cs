@@ -160,9 +160,9 @@ namespace Back_end.Respository
                
             }
 
-
+            updateParking.Images = images;
             _dbContext.Update(updateParking);
-            _dbContext.SaveChanges();
-        }
+            _imageRepository.UpdateRange(images);
+            _dbContext.SaveChanges();        }
     }
 }
