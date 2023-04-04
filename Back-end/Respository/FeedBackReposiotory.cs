@@ -99,9 +99,10 @@ namespace Back_end.Respository
                 images.Add(image);
             }
 
-            updated.Images = _imageRepository.UpdateRange(images);
+            updated.Images = images;
+
             _dbContext.Update(updated);
-            _dbContext.SaveChanges();
+            _imageRepository.UpdateRange(images);
         }
 
 

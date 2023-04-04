@@ -157,8 +157,6 @@ namespace Back_end.Respository
             updateParking.ParkingName = updateModel.ParkingName;
             updateParking.Status = updateModel.Status;
             updateParking.LastModifyAt = DateTime.Now;
-
-            updateParking.Images = _imageRepository.UpdateRange(images);
             foreach (var url in updateModel.imagesURLs)
             {
                 var image = new Image()
@@ -169,9 +167,9 @@ namespace Back_end.Respository
                 images.Add(image);
             }
 
-
+            updateParking.Images = images;
             _dbContext.Update(updateParking);
-            _dbContext.SaveChanges();
-        }
+            _imageRepository.UpdateRange(images);
+            _dbContext.SaveChanges();        }
     }
 }

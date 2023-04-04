@@ -245,10 +245,6 @@ namespace Back_end.Respository
         {
 
             var updateUser = await GetUser(id);
-
-
-
-            updateUser.Image = _imageRepository.UpdateAsync(updateUser.Image.ID.ToString(),userModel.ImageURL);
             updateUser.Gender = userModel.Gender;
             updateUser.FirstName = userModel.FirstName;
             updateUser.LastName = userModel.LastName;
@@ -256,12 +252,25 @@ namespace Back_end.Respository
             updateUser.PhoneNumber = userModel.PhoneNumber;
             updateUser.DateOfBirth = userModel.DateOfBirth;
             updateUser.Email = userModel.Email;
-            updateUser.Role = userModel.Role;
 
+            var image = updateUser.Image;
+            if (image == null) {
+                image = new Image()
+                {
+                    URL = userModel.ImageURL,
+                    User = updateUser
+                };
+                updateUser.Image = image;
+                _imageRepository.AddAsync(image);
+            }
+            else
+            {
+                image.URL = userModel.ImageURL;
+                _imageRepository.UpdateAsync(image);
+
+            }
             _dbContext.Users.Update(updateUser);
-            await _dbContext.SaveChangesAsync();
-
-
+            _dbContext.SaveChanges(true);
         }
 
         public bool UsernameExisted(string username)

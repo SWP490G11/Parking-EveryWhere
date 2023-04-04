@@ -14,9 +14,6 @@ namespace Back_end.Models.User
 
         public Gender Gender { get; set; }
 
-
-        public Role Role { get; set; }
-
         [RegularExpression(@"^[0-9]{10,11}$")]
         public string PhoneNumber { get; set; }
 
