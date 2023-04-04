@@ -55,8 +55,6 @@ namespace Back_end.Respository
             };
 
 
-
-
             var images = new List<Image>();
             foreach (var url in model.imagesURLs)
             {
@@ -65,8 +63,8 @@ namespace Back_end.Respository
                     URL = url,
                     Parking = parking,
 
-
                 };
+                _imageRepository.AddAsync(image);
                 images.Add(image);
             }
 
@@ -76,15 +74,7 @@ namespace Back_end.Respository
             _dbContext.Parkings.Add(parking);
 
 
-            _imageRepository.AddRageAsync(images);
-
-
-
-
-
-
-
-
+            
 
         }
 
@@ -157,6 +147,8 @@ namespace Back_end.Respository
             updateParking.ParkingName = updateModel.ParkingName;
             updateParking.Status = updateModel.Status;
             updateParking.LastModifyAt = DateTime.Now;
+
+           updateParking.Images = _imageRepository.UpdateRange(images);
             foreach (var url in updateModel.imagesURLs)
             {
                 var image = new Image()
@@ -165,6 +157,7 @@ namespace Back_end.Respository
                     Parking = updateParking
                 };
                 images.Add(image);
+               
             }
 
             updateParking.Images = images;
