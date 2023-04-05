@@ -27,7 +27,20 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var feedbacks = await  _reposiotory.GetAllFeedbacksAsync();
 
-            return Ok(feedbacks);
+            return Ok(feedbacks.Select(fb =>
+                 new
+                 {
+                     fb.ID,
+                     fb.Rating,
+                     fb.Content,
+                    ParkingID= fb.Parking.ID.ToString(),
+                     Images = fb.Images.Select(i => i.URL),
+                     Feedbackby = new
+                     {
+                         fb.FeedbackBy.ID,fb.FeedbackBy.UserName
+                     },
+                 }
+            ));
         }
 
         [HttpGet("/feedback/{id}")]
@@ -44,19 +57,19 @@ namespace Back_end.Controllers
 
         [HttpPost("/feedback")]
 
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
         public IActionResult Add(FeedbackModel feedback)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-              _reposiotory.CreateFeedBack(feedback);
+              _reposiotory.CreateFeedBack(feedback,mwi.User);
             return Ok("Add Success");
         }
 
         [HttpPut("/feedback/{id}")]
 
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
         public IActionResult Update(string id, UpdateFeedbackModel feedback)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -69,7 +82,7 @@ namespace Back_end.Controllers
 
         [HttpDelete("/feedback/{id}")]
 
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Delete(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
