@@ -63,7 +63,7 @@ function App() {
           {(() => {
             switch(role) {
               case 'Admin':
-                return <>
+                return (<>
                 <HeaderComp
                 username={loginState.username}
                 id = {loginState.id}
@@ -71,9 +71,9 @@ function App() {
               />
               <RouteComponent routes={AppRoutes} />
               <FooterComp/>
-              </>;
+              </>);
               case 'ParkingOwner':
-                return <>
+                return (<>
                 <HeaderComp
                 username={loginState.username}
                 id = {loginState.id}
@@ -81,11 +81,13 @@ function App() {
               />
               <RouteComponent routes={OwnerRoutes} />
               <FooterComp/>
-              </>
+              </>);
               case 'Customer':
                 return <></>
               case 'ParkingManager':
                 return <></>
+              default:
+                return<></>
             }
           })()}
        </>

@@ -1,5 +1,5 @@
-import { Menu, Modal, Dropdown, Avatar, Button,Input, Form,  } from "antd";
-import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined,FileTextOutlined} from "@ant-design/icons";
+import { Menu, Modal, Dropdown, Avatar, Button,Input, Form, Badge } from "antd";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined,FileTextOutlined, BellFilled} from "@ant-design/icons";
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
@@ -156,8 +156,12 @@ export default function HeaderComp({username,id,role}) {
         </div>
        
         <div id="right-side">
-        {/*Menu*/}
-        <Dropdown menu={{items}} trigger={["click"]}>
+        <ul>
+          <li> <Badge count={100} >
+             <BellFilled style={{fontSize:"30px"}} />
+             </Badge>
+          </li>
+          <li>      <Dropdown menu={{items}} trigger={["click"]}>
           <a
             style={{
               float: "right",
@@ -166,13 +170,22 @@ export default function HeaderComp({username,id,role}) {
               color: "white",
               marginRight: "30px",
             }}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => e.preventDefault()} 
             href="/#"
           >
              <Avatar  icon={<UserOutlined />} style={{marginRight:"10px"}}/>
-            {username} <DownOutlined />
+            {username} <DownOutlined size='small'/>
           </a>
         </Dropdown>
+        </li>
+        </ul>
+          
+           
+          
+       
+        
+        {/*Menu*/}
+      
         <Modal
         afterClose={() => {
           setError("");
