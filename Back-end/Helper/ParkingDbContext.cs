@@ -36,8 +36,6 @@ namespace Back_end.Helper
         public virtual DbSet<MembershipPackage> MembershipPackages { get; set; }
         public virtual DbSet<Request> Requests { get; set; }
 
-        public virtual DbSet<TimeFrame> TimeFrames { get; set; }
-
         public virtual DbSet<ParkingDetail> ParkingDetails { get; set; }
 
 
@@ -77,9 +75,6 @@ namespace Back_end.Helper
             modelBuilder.Entity<Slot>()
  .HasKey(e => e.ID)
  .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-            modelBuilder.Entity<TimeFrame>()
-        .HasKey(e => e.ID)
-        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity<User>(
                 u=>u.HasData(

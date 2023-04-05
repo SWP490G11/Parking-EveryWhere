@@ -69,18 +69,7 @@ namespace Back_end.Controllers
             return Ok(parkingdetail);
         }
 
-        [HttpGet("/parkingdetail/{timeframeID}")]
-
-        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
-        public async Task<IActionResult> GetParkingDetailsByTimeFrame(string timeframeID)
-        {
-            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
-            if (mwi == null) return Unauthorized("You must login to see this information");
-            var parkingdetail = await _repository.GetParkingDetailsByTimeFrame(timeframeID);
-
-            return Ok(parkingdetail);
-        }
-
+       
 
         [HttpPost("/parkingdetail")]
 

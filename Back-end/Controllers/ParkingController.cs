@@ -54,21 +54,31 @@ namespace Back_end.Controllers
                 p.Status,
                 p.Discription,
                 p.AddressDetail,
-                p.ParkingManagers,
-                p.Feedbacks,
-                ImageUrls = p.Images.Select(i => i.URL).ToList(),
-                Slot = p.Slots.Select(s =>
-              new
-              {
-                  SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
-                  s.TypeOfSlot,
-                  s.Status,
-                  s.Discription,
-                  s.LastModifyAt
+                ParkingManagers = p.ParkingManagers.Select(
+                    pm => new
+                    {
+                        p.ID,
+                        FullName = pm.LastName + pm.FirstName,
+                        PhoneNumber = pm.PhoneNumber,
+                        pm.Email,
+                    }
+                    ),
+                Feedbacks = p.Feedbacks.Select(
+                    fb => new
+                    {
+                        fb.ID,
+                        fb.Rating,
+                        fb.Content,
+                        FeebackBy = fb.FeedbackBy.ID.ToString()
+                    }
+                    ),
 
-              }),
+                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
+                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
+                NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
+                NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.NotAvailable),
+                ImageUrls = p.Images.Select(i => i.URL).ToList(),
+
             }));
         }
 
@@ -139,7 +149,7 @@ namespace Back_end.Controllers
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
                     ),
-                p.TimeFrames,
+             
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
                 NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
@@ -197,7 +207,7 @@ namespace Back_end.Controllers
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
                     ),
-                p.TimeFrames,
+           
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
               new
@@ -260,7 +270,15 @@ namespace Back_end.Controllers
             return Ok(parkings.Select(p => new
             {
                 ParkingID = p.ID,
-                
+                PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
+                   group => new
+                   {
+                       Price = group.Key,
+                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "",
+                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                   }
+                    )
+
             }).ToList()) ;
         }
 

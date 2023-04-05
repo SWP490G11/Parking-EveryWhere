@@ -60,7 +60,6 @@ service.AddTransient<IFeedBackReposiotory , FeedBackReposiotory>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 */
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
-service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
 service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
 
 

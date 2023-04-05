@@ -15,7 +15,7 @@ namespace Back_end.Respository
         Task<ICollection<ParkingDetail>> GetParkingDetailsByCar(string carID);
         Task<ICollection<ParkingDetail>> GetParkingDetailsBySlot(string SlotID);
 
-        Task<ICollection<ParkingDetail>> GetParkingDetailsByTimeFrame(string timeframe);
+
         Task<ParkingDetail> GetAsync(string idString);
         ICollection<ParkingDetail> PaginateAsync(ICollection<ParkingDetail> source, int pageNo, int pageSize);
         ICollection<ParkingDetail> SortAsync(DirectionOfSort direction, string factor);
@@ -27,17 +27,17 @@ namespace Back_end.Respository
 
         private readonly ICarRepository _carRepository;
         private readonly ISlotRepository _slotRepository;
-        private readonly ICRUDSRespository<TimeFrame, TimeFrameModel> _timeFrameRepository;
+     
         private readonly ParkingDbContext _dbContext;
 
         public ParkingDetailRepository(ICarRepository carRepository,
             ISlotRepository slotRepository,
-            ICRUDSRespository<TimeFrame, TimeFrameModel> timeFrameRepository,
+          
             ParkingDbContext dbContext)
         {
             _carRepository = carRepository;
             _slotRepository = slotRepository;
-            _timeFrameRepository = timeFrameRepository;
+
             _dbContext = dbContext;
         }
 
@@ -45,17 +45,29 @@ namespace Back_end.Respository
         {
             var car = await _carRepository.GetAsync(model.CarID);
             var slot = await _slotRepository.GetAsync(model.SlotID);
-            var timeFrame = await _timeFrameRepository.GetAsync(model.TimeFrameID);
+            TimeSpan duration;
+            double dayofparking =1;
+
+            if (model.PickUpDate.HasValue)
+            {
+                duration = (TimeSpan)(model.PickUpDate.Value - model.PickUpDate);
+                dayofparking = duration.TotalDays;
+            }
+            else
+            {
+                duration = TimeSpan.FromDays(1);
+                dayofparking = duration.TotalDays;
+            }
 
             var parkingDetail = new ParkingDetail()
             {
                 Car = car,
-                Slot = slot,
-                TimeFrame = timeFrame,
+                Slot = slot,     
                 ParkingDate = model.ParkingDate,
                 PickUpDate = model.PickUpDate,
                 LastModifyAt = DateTime.Now,
                 Note = model.Note,
+                TotalPrice = dayofparking * slot.Price
 
             };
             await _dbContext.ParkingDetails.AddAsync(parkingDetail);
@@ -76,8 +88,8 @@ namespace Back_end.Respository
         {
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
-                .Include(pd => pd.Slot)
-                .Include(pd => pd.TimeFrame).
+                .Include(pd => pd.Slot).
+        
                 ToListAsync();
         }
 
@@ -87,7 +99,7 @@ namespace Back_end.Respository
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
             return await _dbContext.ParkingDetails.Include(pd => pd.Car)
                 .Include(pd => pd.Slot)
-                .Include(pd => pd.TimeFrame)
+             
                 .FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
@@ -98,7 +110,7 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
                 .Include(pd => pd.Slot)
-                .Include(pd => pd.TimeFrame)
+           
                 .Where(pd=>pd.Car.ID.ToString().ToUpper().Trim().Equals(carID.ToUpper().Trim())).
                 ToListAsync();
         }
@@ -108,20 +120,11 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                   .Include(pd => pd.Car)
                   .Include(pd => pd.Slot)
-                  .Include(pd => pd.TimeFrame)
+                 
                   .Where(pd => pd.Slot.ID.ToString().ToUpper().Trim().Equals(SlotID.ToUpper().Trim())).
                   ToListAsync();
         }
-
-        public async Task<ICollection<ParkingDetail>> GetParkingDetailsByTimeFrame(string timeframeID)
-        {
-            return await _dbContext.ParkingDetails
-                  .Include(pd => pd.Car)
-                  .Include(pd => pd.Slot)
-                  .Include(pd => pd.TimeFrame)
-                  .Where(pd => pd.TimeFrame.ID.ToString().ToUpper().Trim().Equals(timeframeID.ToUpper().Trim())).
-                  ToListAsync();
-        }
+   
 
         public ICollection<ParkingDetail> PaginateAsync(ICollection<ParkingDetail> source, int pageNo, int pageSize)
         {

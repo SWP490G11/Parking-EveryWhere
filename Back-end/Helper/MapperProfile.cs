@@ -20,8 +20,6 @@ namespace Back_end.Helper
             CreateMap<Image, ImageModel>();
             CreateMap<ImageModel, Image>();
 
-            CreateMap<TimeFrame, TimeFrameModel>().ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()));
-            CreateMap<TimeFrameModel, TimeFrame>();
 
             CreateMap<Slot, SlotModel>()
                 .ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()))
