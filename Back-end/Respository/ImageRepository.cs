@@ -17,9 +17,11 @@ namespace Back_end.Respository
         ICollection<Image> GetAllAsync();
         ICollection<Image> PaginateAsync(int pageNo, int pageSize);
         ICollection<Image> SortAsync(DirectionOfSort direction, string factor);
-        Image UpdateAsync(string idString, string URL);
+        void UpdateAsync(Image updateImage);
 
-        public ICollection<Image> UpdateRange(List<Image> newimages);
+        public void UpdateRange(List<Image> newimages);
+
+        void DeleteRange(ICollection<Image> images);
     }
 
     public class ImageRepository : IImageRepository
@@ -40,30 +42,10 @@ namespace Back_end.Respository
         }
 
 
-        public void AddRageAsync(ICollection<Image> models)
+        public void AddRageAsync(ICollection<Image> images)
 
         {
            
-            ICollection<Image> images = new List<Image>();
-
-            foreach (var model in models)
-            {
-
-
-                var image = new Image()
-                {
-                    URL = model.URL,
-                    User = model.User,
-                    Parking = model.Parking,
-                    Feedback = model.Feedback,
-
-
-                };
-
-                images.Add(image);
-            }
-
-
             _dbContext.Images.AddRange(images);
             _dbContext.SaveChanges();
         }
@@ -102,40 +84,25 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
-        public Image UpdateAsync(string idString,string URL)
+        public void UpdateAsync(Image updatedImage)
         {
-            var updatedImage = Get(idString);
-            updatedImage.URL = URL;
-
+            
             _dbContext.Images.Update(updatedImage);
             _dbContext.SaveChanges();
 
-            return updatedImage;
         }
 
-        public ICollection<Image> UpdateRange(List<Image> newimages)
+        public void UpdateRange(List<Image> newimages)
         {
-            var updatedImages = new List<Image>();
-            foreach (var image in newimages)
-            {
-                var existedImg = Get(image.ID.ToString());
-                if(existedImg != null)
-                {
-                    updatedImages.Add(existedImg);
-                }
-                else
-                {
-                    _dbContext.Images.Add(image);
-                    updatedImages.Add(image);
-                    
-                }
-            }
+           
+            _dbContext.UpdateRange(newimages);
+            _dbContext.SaveChanges(true);
+         }
 
-            _dbContext.UpdateRange(updatedImages);
+        public void DeleteRange(ICollection<Image> images)
+        {
+            _dbContext.Images.RemoveRange(images);
             _dbContext.SaveChanges();
-
-            return updatedImages;
         }
-        
     }
 }

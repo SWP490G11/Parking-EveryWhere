@@ -11,11 +11,15 @@ namespace Back_end.Models.User
         public Role Role { get; set; }
         public string Token { get; set; }
 
+        public string? ImageURL { get; set; }
+
         public AuthenticateResponse(Entities.User user, string token)
         {
+          
             Id = user.ID;
             Username = user.UserName;
             Role = user.Role;
+            ImageURL = user.Image == null ? "" : user.Image.URL;
             Token = token;
         }
     }

@@ -55,8 +55,6 @@ namespace Back_end.Respository
             };
 
 
-
-
             var images = new List<Image>();
             foreach (var url in model.imagesURLs)
             {
@@ -65,26 +63,18 @@ namespace Back_end.Respository
                     URL = url,
                     Parking = parking,
 
-
                 };
+                _imageRepository.AddAsync(image);
                 images.Add(image);
             }
 
-            parking.Images = images;
+         
             owner.Parkings.Add(parking);
 
             _dbContext.Parkings.Add(parking);
 
 
-            _imageRepository.AddRageAsync(images);
-
-
-
-
-
-
-
-
+            
 
         }
 
@@ -100,11 +90,10 @@ namespace Back_end.Respository
         public async Task<ICollection<Parking>> GetAllAsync()
         {
             return await _dbContext.Parkings.Include(p => p.ParkingManagers)
-                 .Include(p => p.TimeFrames)
+                 .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
-               
                 .ToListAsync();
         }
 
@@ -113,7 +102,11 @@ namespace Back_end.Respository
         public Parking GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return _dbContext.Parkings.First(c => c.ID.ToString().ToUpper().Trim().
+            return _dbContext.Parkings.Include(p => p.ParkingManagers)
+                 .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
+                .Include(p => p.Owner)
+                .Include(p => p.Images)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel).FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
@@ -158,7 +151,9 @@ namespace Back_end.Respository
             updateParking.Status = updateModel.Status;
             updateParking.LastModifyAt = DateTime.Now;
 
-            updateParking.Images = _imageRepository.UpdateRange(images);
+            var deletedimages = updateParking.Images == null ? new List<Image>() : updateParking.Images; 
+            _imageRepository.DeleteRange(deletedimages);
+
             foreach (var url in updateModel.imagesURLs)
             {
                 var image = new Image()
@@ -167,11 +162,14 @@ namespace Back_end.Respository
                     Parking = updateParking
                 };
                 images.Add(image);
+               
             }
-
-
+            
+            updateParking.Images = images;
+            
             _dbContext.Update(updateParking);
-            _dbContext.SaveChanges();
+
+            _imageRepository.AddRageAsync(images);
         }
     }
 }
