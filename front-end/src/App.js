@@ -1,7 +1,7 @@
 
 import './App.css';
 import axios from "axios";
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext,useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
@@ -49,7 +49,28 @@ function App() {
     }
   }, [loginState.token]);
   const role= loginState.role;
- 
+  const renderContent = () => {
+    switch (role) {
+      case 'Admin':
+        return (<>
+       
+      <RouteComponent routes={AppRoutes} />
+     
+      </>);
+      case 'ParkingOwner':
+        return (<>
+       
+      <RouteComponent routes={OwnerRoutes} />
+      
+      </>);
+      case 'Customer':
+        return <></>
+      case 'ParkingManager':
+        return <></>
+        default:
+          return null
+    }
+  };
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
@@ -60,36 +81,34 @@ function App() {
           // <LoginPage/>
         ) : (
           <>
-          {(() => {
-            switch(role) {
-              case 'Admin':
-                return (<>
-                <HeaderComp
+           <HeaderComp
                 username={loginState.username}
                 id = {loginState.id}
                 role= {loginState.role}
               />
+              {renderContent()}
+          {/* {(() => {
+            if(loginState.role === "Admin"){
+      
+              
               <RouteComponent routes={AppRoutes} />
-              <FooterComp/>
-              </>);
-              case 'ParkingOwner':
-                return (<>
-                <HeaderComp
-                username={loginState.username}
-                id = {loginState.id}
-                role= {loginState.role}
-              />
+            
+              
+            }else if(loginState.role === "ParkingOwner"){
+              
               <RouteComponent routes={OwnerRoutes} />
-              <FooterComp/>
-              </>);
-              case 'Customer':
-                return <></>
-              case 'ParkingManager':
-                return <></>
-              default:
-                return<></>
+              
+
+            }else if(loginState.role === "Customer"){
+
+            }else {
+
             }
-          })()}
+            // switch(role) {
+             
+            // }
+          })()} */}
+          <FooterComp/>
        </>
        )}
       

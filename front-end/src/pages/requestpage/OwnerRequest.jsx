@@ -1,7 +1,7 @@
 import {Table, Modal, Button,Row,Col,Input} from 'antd';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {CheckOutlined, CloseOutlined, CloseSquareOutlined, ReloadOutlined} from "@ant-design/icons";
+import {CheckOutlined, CloseOutlined, CloseSquareOutlined} from "@ant-design/icons";
 import moment from "moment";
 
 export default function OwnerRequest() {
@@ -12,7 +12,7 @@ export default function OwnerRequest() {
     });
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalCancelVisible, setIsModalCancelVisible] = useState(false);
-    const [isModalReturnVisible, setIsModalReturnVisible] = useState(false);
+   
     const [idCompleted, setIdCompleted] = useState();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -68,13 +68,10 @@ export default function OwnerRequest() {
     };
 //===========================================================
    
-    const handleCheckReturnId = (id) => {
-        setIdCompleted(id)
-    }
     
   
 //===============================================
-const index=0;
+
     useEffect(() => {
         axios
             .get(`${process.env.REACT_APP_Backend_URI}request/myRequest`, {})
@@ -85,8 +82,7 @@ const index=0;
                     element.lastModifyAt = moment(new Date(element.lastModifyAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
                     element.requestBy = element.requestby.userName;
                     element.parkingName = element.parkings.parkingName;
-                    element.stt =index;
-                    index+=1;
+                    
 
 
                     element.action = [
