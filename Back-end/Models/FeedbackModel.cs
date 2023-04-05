@@ -7,8 +7,6 @@ namespace Back_end.Models
         public string Content { get; set; }
 
         public float Rating { get; set; }
-
-        public string FeedbackByID { get; set; }
         public List<string> ImageURLs { get; set; }
 
         public string ParkingID { get; set; }

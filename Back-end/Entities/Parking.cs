@@ -43,7 +43,7 @@ namespace Back_end.Entities
         public ICollection<Image>? Images { get; set; } = new List<Image>();
 
 
-        public ICollection<Feedback> Feedbacks { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; }/* = new List<Feedback>();*/
 
 
 

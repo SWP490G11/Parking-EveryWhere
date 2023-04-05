@@ -31,7 +31,15 @@ namespace Back_end.Helper.Seeding
 
                          new User {UserName= "customer", HashPassword= BCrypt.HashPassword("Customer")
                     ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
-                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Admin
+                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Customer
+                    ,LastModifyAt= DateTime.Now
+
+                    },
+
+
+                         new User {UserName= "owner", HashPassword= BCrypt.HashPassword("Owner@")
+                    ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
+                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Customer
                     ,LastModifyAt= DateTime.Now
 
                     },

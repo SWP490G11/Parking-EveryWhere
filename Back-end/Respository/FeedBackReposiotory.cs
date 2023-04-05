@@ -9,7 +9,7 @@ namespace Back_end.Respository
 {
     public interface IFeedBackReposiotory
     {
-        void CreateFeedBack(FeedbackModel feedbackModel);
+        void CreateFeedBack(FeedbackModel feedbackModel, User feedbackby);
         Task Delete(string ID);
         Task<ICollection<Feedback>> GetAllFeedbacksAsync();
         Task<Feedback> GetFeedbacksAsync(string idString);
@@ -32,19 +32,21 @@ namespace Back_end.Respository
         public async Task<ICollection<Feedback>> GetAllFeedbacksAsync()
         {
 
-            return await _dbContext.Feedbacks.Include(f => f.Images).ToListAsync();
+            return await _dbContext.Feedbacks.Include(f => f.Images).Include(f=>f.Parking).Include(f=>f.FeedbackBy).
+                ThenInclude(f => f.Image).ToListAsync();
         }
 
         public async Task<Feedback> GetFeedbacksAsync(string idString)
         {
 
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.Feedbacks.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Feedbacks.Include(f => f.Images).Include(f => f.Parking).
+                Include(f => f.FeedbackBy).ThenInclude(f=>f.Image).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
 
-        public void CreateFeedBack(FeedbackModel feedbackModel)
+        public void CreateFeedBack(FeedbackModel feedbackModel,User feedbackby)
         {
 
             var images = new List<Image>();
@@ -59,7 +61,7 @@ namespace Back_end.Respository
                 Parking =  _dbContext.Parkings.FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(feedbackModel.ParkingID.ToUpper().Trim()
                 )),
-
+                FeedbackBy= feedbackby,
             };
             foreach (var url in feedbackModel.ImageURLs)
             {
@@ -72,11 +74,11 @@ namespace Back_end.Respository
                 images.Add(image);
             }
 
-            fedback.Images = images;
+     
              _dbContext.Feedbacks.Add(fedback);
+            feedbackby.Feedbacks.Add(fedback);
 
             _imageRepository.AddRageAsync(images);
-
         }
 
 
@@ -88,6 +90,8 @@ namespace Back_end.Respository
             updated.Rating = feedbackModel.Rating;
             updated.LastModifyAt = DateTime.Now;
 
+            var deletedimages = updated.Images == null ? new List<Image>() : updated.Images;
+            _imageRepository.DeleteRange(deletedimages);
             var images = new List<Image>();
             foreach (var url in feedbackModel.ImageURLs)
             {
@@ -102,7 +106,7 @@ namespace Back_end.Respository
             updated.Images = images;
 
             _dbContext.Update(updated);
-            _imageRepository.UpdateRange(images);
+            _imageRepository.AddRageAsync(images);
         }
 
 

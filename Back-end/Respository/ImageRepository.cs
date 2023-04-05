@@ -42,30 +42,10 @@ namespace Back_end.Respository
         }
 
 
-        public void AddRageAsync(ICollection<Image> models)
+        public void AddRageAsync(ICollection<Image> images)
 
         {
            
-            ICollection<Image> images = new List<Image>();
-
-            foreach (var model in models)
-            {
-
-
-                var image = new Image()
-                {
-                    URL = model.URL,
-                    User = model.User,
-                    Parking = model.Parking,
-                    Feedback = model.Feedback,
-
-
-                };
-
-                images.Add(image);
-            }
-
-
             _dbContext.Images.AddRange(images);
             _dbContext.SaveChanges();
         }

@@ -56,16 +56,20 @@ namespace Back_end.Controllers
                 p.AddressDetail,
                 p.ParkingManagers,
                 p.Feedbacks,
-                p.TimeFrames,
-                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
-                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
-                NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
-                NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.NotAvailable),
-                Image = p.Images.Select(i => i.URL)
-            }
+                ImageUrls = p.Images.Select(i => i.URL).ToList(),
+                Slot = p.Slots.Select(s =>
+              new
+              {
+                  SlotID = s.ID,
+                  CarModelID = s.CarModel.ID,
+                  CarModelName = s.CarModel.Model,
+                  s.TypeOfSlot,
+                  s.Status,
+                  s.Discription,
+                  s.LastModifyAt
 
-
-                ).ToList()) ;
+              }),
+            }));
         }
 
         [HttpGet("/parking-manager-of-parking/{id}")]
@@ -117,8 +121,24 @@ namespace Back_end.Controllers
                 p.Status,
                 p.Discription,
                 p.AddressDetail,
-                p.ParkingManagers,
-                p.Feedbacks,
+                ParkingManagers = p.ParkingManagers.Select(
+                    pm => new
+                    {
+                        p.ID,
+                        FullName = pm.LastName + pm.FirstName,
+                        PhoneNumber = pm.PhoneNumber,
+                        pm.Email,
+                    }
+                    ),
+                Feedbacks = p.Feedbacks.Select(
+                    fb => new
+                    {
+                        fb.ID,
+                        fb.Rating,
+                        fb.Content,
+                        FeebackBy = fb.FeedbackBy.ID.ToString()
+                    }
+                    ),
                 p.TimeFrames,
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -126,7 +146,7 @@ namespace Back_end.Controllers
                 NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
 
-            }));
+            })) ;
         }
 
         [HttpGet("/parking/{id}")]
@@ -159,8 +179,24 @@ namespace Back_end.Controllers
                 p.Status,
                 p.Discription,
                 p.AddressDetail,
-                p.ParkingManagers,
-                p.Feedbacks,
+                ParkingManagers = p.ParkingManagers.Select(
+                    pm => new
+                    {
+                        p.ID,
+                        FullName = pm.LastName + pm.FirstName,
+                        PhoneNumber = pm.PhoneNumber,
+                        pm.Email,
+                    }
+                    ),
+                Feedbacks = p.Feedbacks.Select(
+                    fb => new
+                    {
+                        fb.ID,
+                        fb.Rating,
+                        fb.Content,
+                        FeebackBy = fb.FeedbackBy.ID.ToString()
+                    }
+                    ),
                 p.TimeFrames,
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
