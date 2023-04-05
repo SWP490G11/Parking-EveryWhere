@@ -13,7 +13,7 @@ namespace Back_end.Entities
 
         public Slot Slot { get; set; }
 
-        public TimeFrame TimeFrame { get; set; }
+      
 
         public DateTime ParkingDate { get; set; }
 
@@ -25,8 +25,9 @@ namespace Back_end.Entities
 
         public User? LastModifyBy { get; set; }
 
-        public double TotalPrice { 
-         get { return TimeFrame.Price + Car.CarModel.Price + Slot.Price; }
+        public double TotalPrice {
+
+            get; set;
         }
     }
 }

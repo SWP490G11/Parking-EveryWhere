@@ -23,5 +23,7 @@ namespace Back_end.Entities
 
         public Parking Parking { get; set; }
 
+      
+
     }
 }

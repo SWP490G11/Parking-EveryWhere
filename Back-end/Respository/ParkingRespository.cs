@@ -83,7 +83,10 @@ namespace Back_end.Respository
         public async Task DeleteAsync(string idString)
         {
             var parking = GetAsync(idString);
+            var delteImages = parking.Images == null ? new List<Image>() : parking.Images;
+             _dbContext.Images.RemoveRange(delteImages);
             _dbContext.Parkings.Remove(parking);
+           
             await _dbContext.SaveChangesAsync();
         }
 
@@ -92,7 +95,8 @@ namespace Back_end.Respository
             return await _dbContext.Parkings.Include(p => p.ParkingManagers)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
-                .Include(p => p.Images)
+                .Include(p => p.Images).
+                Include(p=>p.Requests)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
                 .ToListAsync();
         }
@@ -116,7 +120,7 @@ namespace Back_end.Respository
             var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase);
             var parkings = await _dbContext.Parkings.Include(p => p.ParkingManagers)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
-                .Include(p => p.TimeFrames)
+
                 .Include(p => p.Images)
                 .Include(p => p.Owner).Where(p => p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
