@@ -9,79 +9,70 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import moment from "moment";
 
 
-export default function ManageParkingManager() {
+export default function ManageParking() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
+  const [status,setStatus]= useState("Status");
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
   });
 
   const columns = [
-    {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-       
-      },
       {
-        title: "FullName",
-        dataIndex: "fullName",
-        key: "fullName",
+        title: "Parking Name",
+        dataIndex: "parkingName",
+        key: "parkingName",
         sorter: (a, b) => {
-          if (a.fullName > b.fullName) {
+          if (a.parkingName > b.parkingName) {
             return -1;
           }
-          if (b.fullName > a.fullName) {
+          if (b.parkingName > a.parkingName) {
             return 1;
           }
           return 0;
         },
       },
     {
-      title: "User Name",
-      dataIndex: "userName",
-      key: "userName",
+      title: "Parking Managers",
+      dataIndex: "parkingmanager",
+      key: "parkingmanager",
 
       sorter: (a, b) => {
-        if (a.userName > b.userName) {
+        if (a.parkingmanager > b.parkingmanager) {
           return -1;
         }
-        if (b.userName > a.userName) {
+        if (b.parkingmanager > a.parkingmanager) {
           return 1;
         }
         return 0;
       },
-      width: "10%",
     },
     {
-      title: "Gender",
-      dataIndex: "gender",
-      key: "gender",
-     
+      title: "Address Detail",
+      dataIndex: "addressDetail",
+      key: "addressDetail",
+      sorter: (a, b) => {
+        if (a.addressDetail > b.addressDetail) {
+          return -1;
+        }
+        if (b.addressDetail > a.addressDetail) {
+          return 1;
+        }
+        return 0;
+      },
     },
    
     {
-      title: "Date of Birth",
-      dataIndex: "dateOfBirth",
-      key: "dateOfBirth",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
     },  
-    {
-      title: "Phone Number",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
-    },
-    {
-        title: "Role",
-        dataIndex: "role",
-        key: "role",
-      },
+   
     {
       title: "Action",
       dataIndex: "action",
@@ -103,18 +94,15 @@ export default function ManageParkingManager() {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_Backend_URI}parking-manager-of-owner`,
+        `${process.env.REACT_APP_Backend_URI}parkings-of-owner`,
         {}
       )
       .then(function (response) {
         let respData = response.data;
         console.log(respData);
-
         respData.forEach((element) => {
-            element.fullName = element.lastName + " " + element.firstName;
-          element.dateOfBirth = moment(
-            new Date(element.dateOfBirth).toLocaleDateString("en-US")
-          ).format("DD/MM/YYYY");
+          element.parkingmanager= element.parkingManagers.userName;
+         
           element.action = [
             <Link to={`/editUser/${element.studentId}`} id="editButton">
               <EditFilled style={{  fontSize: "25px" }} />
@@ -171,14 +159,14 @@ export default function ManageParkingManager() {
         setData(
           respData.sort((a, b) => {
             if (
-              a.userName.trim().toLowerCase() >
-              b.userName.trim().toLowerCase()
+              a.parkingName.trim().toLowerCase() >
+              b.parkingName.trim().toLowerCase()
             ) {
               return 1;
             }
             if (
-              b.userName.trim().toLowerCase() >
-              a.userName.trim().toLowerCase()
+              b.parkingName.trim().toLowerCase() >
+              a.parkingName.trim().toLowerCase()
             ) {
               return -1;
             }
@@ -189,17 +177,18 @@ export default function ManageParkingManager() {
       .catch(() => {});
   }, [deleteModal]);
 
-
+  const dataBystatus =
+  status === "Status" ? data : data.filter((u) => u.status === status);
   const finalData =
     searchText === ""
-      ? data
-      : (data.filter(
+      ? dataBystatus
+      : (dataBystatus.filter(
           (u) =>
-            u.userName
+            u.parkingName
               .toLowerCase()
               .replace(/\s+/g, "")
-              .includes(searchText.toLowerCase().replace(/\s+/g, "")) ||
-            u.id.toLowerCase().includes(searchText.toLowerCase())
+              .includes(searchText.toLowerCase().replace(/\s+/g, "")) 
+              // || u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
 
@@ -231,10 +220,47 @@ export default function ManageParkingManager() {
           paddingBottom: "20px",
         }}
       >
-        User List
+        Manage Parking
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  value="Available"
+                  onClick={() => {
+                    setStatus("Available");
+                  }}
+                >
+                  {" "}
+                  Available
+                </Menu.Item>
+                <Menu.Item
+                  value="NotAvailable"
+                  onClick={() => {
+                    setStatus("NotAvailable");
+                  }}
+                >
+                  {" "}
+                  Not Available
+                </Menu.Item>
+                
+                <Menu.Item
+                  onClick={() => {
+                    setStatus("Status");
+                  }}
+                >
+                  {" "}
+                  All
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            {status}
+          </Dropdown.Button>
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
@@ -247,11 +273,7 @@ export default function ManageParkingManager() {
             }}
           />
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={9} xxl={9}>
-          <Button style={{ background: "#33CCFF", color: "white" }}>
-            <Link to="/addStudent"> Add new Student</Link>
-          </Button>
-        </Col>
+       
       </Row>
       {/* Delete Modal */}
       <Modal
@@ -288,7 +310,7 @@ export default function ManageParkingManager() {
         ]}
         closable={false}
       >
-        <table>
+        {/* <table>
           <tr>
             <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
             <td
@@ -382,7 +404,7 @@ export default function ManageParkingManager() {
               {modal.data.dateOfBirth}
             </td>
           </tr>
-        </table>
+        </table> */}
       </Modal>
 
       {data.length === 0 ? (
@@ -396,11 +418,22 @@ export default function ManageParkingManager() {
         />
       ) : (
         <Table
-          key="id"
-          rowKey={(data) => data.id}
+          // key="id"
+          rowKey={(data) => data.parkingName}
           columns={columns}
           pagination={pagination}
           dataSource={finalData}
+           expandable={{
+            expandedRowRender: (record) => (
+              <p
+                style={{
+                  margin: 0,
+                }}
+              >
+               Hello
+              </p>
+            )
+               }}
           onRow={(record) => {
             return {
               onClick: (e) => {
@@ -413,17 +446,15 @@ export default function ManageParkingManager() {
                     ...modal,
                     isOpen: true,
                     data: {
-                        id: record.id,
-                        userName: record.userName,
-                      fullName: record.lastName+" "+record.firstName,
-                      phoneNumber: record.phoneNumber,
-                      dateOfBirth: record.dateOfBirth,
-                      gender: record.gender,
-                      email: record.email,
-
+                        
+                      parkingName: record.parkingName,
+                      parkingmanager: record.parkingmanager,
+                      addressDetail: record.addressDetail,
+                      status: record.status,
+                    
                     },
                   });
-                  console.log(modal.data);
+                  
                 } else if (
                   e.target.className ===
                   "ant-table-cell ant-table-column-sort ant-table-cell-row-hover"
@@ -432,13 +463,11 @@ export default function ManageParkingManager() {
                     ...modal,
                     isOpen: true,
                     data: {
-                        id: record.id,
-                        userName: record.userName,
-                        fullName: record.lastName+" "+record.firstName,
-                        phoneNumber: record.phoneNumber,
-                      dateOfBirth: record.dateOfBirth,
-                      gender: record.gender,
-                      email: record.email,
+                                 
+                      parkingName: record.parkingName,
+                      parkingmanager: record.parkingmanager,
+                      addressDetail: record.addressDetail,
+                      status: record.status,
                     },
                   });
                   console.log(modal.data);

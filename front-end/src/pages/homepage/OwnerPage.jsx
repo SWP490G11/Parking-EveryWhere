@@ -1,30 +1,14 @@
 import {
   PlusOutlined,
-
+ 
   FilterOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  Col,
-  Drawer,
-  notification,
-  Form,
-  Input,
-  Row,
-  Space,
-  Layout,
-  Dropdown,
-  Menu,
-
-} from "antd";
-import React, {  useState } from "react";
+import { Button,Col, Drawer, notification,Form,Input,Row, Space, Layout,Dropdown,Menu, Avatar,List} from "antd";
+import React, { useState, useEffect } from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
 
 import axios from "axios";
-
-
-import ManageParking from "../parkingPage/ManageParking";
 // Menu
 // const { Option } = Select;
 const OwnerPage = () => {
@@ -309,9 +293,7 @@ const OwnerPage = () => {
       <List.Item
         key={item.title}
         actions={[
-          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+         
         ]}
         extra={
           <img

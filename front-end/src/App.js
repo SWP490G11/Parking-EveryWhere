@@ -48,6 +48,8 @@ function App() {
       setLoginState(JSON.parse(localStorage.getItem("loginState")));
     }
   }, [loginState.token]);
+  const role= loginState.role;
+ 
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
@@ -57,23 +59,37 @@ function App() {
            <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
         ) : (
-          loginState.role === "Admin"  ? (
           <>
-            <HeaderComp
-              username={loginState.username}
-              id = {loginState.id}
-              role= {loginState.role}
-            />
-            <RouteComponent routes={AppRoutes} />
-            <FooterComp/>
-          </>
-        ):(<> <HeaderComp
-          username={loginState.username}
-          id = {loginState.id}
-          role= {loginState.role}
-        />
-        <RouteComponent routes={OwnerRoutes} />
-        <FooterComp/></>))}
+          {(() => {
+            switch(role) {
+              case 'Admin':
+                return <>
+                <HeaderComp
+                username={loginState.username}
+                id = {loginState.id}
+                role= {loginState.role}
+              />
+              <RouteComponent routes={AppRoutes} />
+              <FooterComp/>
+              </>;
+              case 'ParkingOwner':
+                return <>
+                <HeaderComp
+                username={loginState.username}
+                id = {loginState.id}
+                role= {loginState.role}
+              />
+              <RouteComponent routes={OwnerRoutes} />
+              <FooterComp/>
+              </>
+              case 'Customer':
+                return <></>
+              case 'ParkingManager':
+                return <></>
+            }
+          })()}
+       </>
+       )}
       
     
   </Context.Provider>

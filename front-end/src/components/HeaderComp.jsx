@@ -1,10 +1,11 @@
-import { Menu, Modal, Dropdown, Avatar, Button,Input, Form,  } from "antd";
-import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined,FileTextOutlined} from "@ant-design/icons";
+import { Menu, Modal, Dropdown, Avatar, Button,Input, Form, Badge,Col, Row } from "antd";
+import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined,FileTextOutlined,BellFilled} from "@ant-design/icons";
 import React from "react";
 import "../style/home.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import '../style/Style.css'
+
 const menuitems = [
   {
     label: (
@@ -149,14 +150,20 @@ export default function HeaderComp({username,id,role}) {
 
   return (
     <>
-      {/* Header */}
-      <div className="header">
-        <div id="left-side">
-          <a href='/home'>LOGO</a>
-        </div>
-       
-        <div id="right-side">
-        {/*Menu*/}
+     
+        <div className="logo" />
+        <Row>
+        <Col span={6} pull={18}>
+        {role === "Admin" ? (
+        <Menu mode="horizontal" items={menuitems}/>
+      ):(
+        <Menu mode="horizontal" items={menuonwer}/>
+      )}
+       </Col>
+         <Col span={18} push={6}>
+         <Badge count={0} >
+              <BellFilled  shape="square" style={{ fontSize: '30px' }} />
+        </Badge>
         <Dropdown menu={{items}} trigger={["click"]}>
           <a
             style={{
@@ -342,13 +349,14 @@ export default function HeaderComp({username,id,role}) {
           <p>Your password has been changed successfully!</p>
         )}
       </Modal>
-        </div>
-      </div>
-      {role === "Admin" ? (
-        <Menu mode="horizontal" items={menuitems}/>
-      ):(
-        <Menu mode="horizontal" items={menuonwer}/>
-      )}
+         </Col>
+   
+     </Row>
+       
+     
+      {/* Header */}
+    
+      
        ;
      
       
