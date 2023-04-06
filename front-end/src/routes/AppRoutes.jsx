@@ -5,6 +5,7 @@ import EditUserProfile from "../pages/user/EditUser";
 import ManageUser from "../pages/user/ManageUser";
 import ManageCarModel from "../pages/carpage/carmodelpage/ManageCarModel";
 import ManageCar from "../pages/carpage/ManageCar";
+import ManageRequest from "../pages/requestpage/ManageRequest";
 import React from "react";
 export const AppRoutes = [
     {
@@ -41,6 +42,11 @@ export const AppRoutes = [
       path: "/mycar",
       element: <ManageCar />,
       title: "My Car",
+    },
+    {
+      path: "/manage-request",
+      element: <ManageRequest />,
+      title: "Manage Request",
     }
    
    

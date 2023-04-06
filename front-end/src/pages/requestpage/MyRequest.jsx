@@ -340,7 +340,7 @@ export default function OwnerRequest() {
 
 
             <div>
-                <h1 style={{color: "red", float: "left"}}>My Assignment</h1>
+                <h1 style={{color: "red", float: "left"}}>My Request</h1>
                 <Table
                     columns={columns}
                     pagination={pagination}

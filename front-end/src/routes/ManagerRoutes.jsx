@@ -4,8 +4,7 @@ import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
 import ManageParkingManager from "../pages/user/ParkingManager/ManageParkingManager";
 import React from "react";
-import ManageCar from "../pages/carpage/ManageCar";
-import OwnerRequest from "../pages/requestpage/OwnerRequest";
+import ManageRequest from "../pages/requestpage/ManageRequest";
 import ManageParking from "../pages/parkingPage/ManageParking";
 export const ManagerRoutes = [
     {
@@ -34,9 +33,9 @@ export const ManagerRoutes = [
       title: " ManageParkingManager Profile",
     },
     {
-      path: "/request-of-owner",
-      element: <OwnerRequest />,
-      title: "Request of Owner",
+      path: "/manage-request",
+      element: <ManageRequest />,
+      title: "Manage Request",
     },
     {
       path: "/manage-parking",

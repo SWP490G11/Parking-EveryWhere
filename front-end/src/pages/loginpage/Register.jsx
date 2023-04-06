@@ -77,6 +77,7 @@ const Register = () => {
         phoneNumber: values.phoneNumber,
         role:role,
         lastModifyAt: new Date(),
+        imageURL: "",
       })
       .then(() => {
         setTimeout(() => {

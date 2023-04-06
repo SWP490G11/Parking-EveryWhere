@@ -7,6 +7,8 @@ import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
+import  {CustomerRoutes}  from './routes/CustomerRoutes';
+import  {ManagerRoutes}  from './routes/ManagerRoutes';
 import FooterComp from './components/FooterComp';
 
 export const Context = createContext();
@@ -64,11 +66,15 @@ function App() {
       
       </>);
       case 'Customer':
-        return <></>
+        return (<>
+         <RouteComponent routes={CustomerRoutes} />
+        </>);
       case 'ParkingManager':
-        return <></>
-        default:
-          return null
+        return (<>
+          <RouteComponent routes={ManagerRoutes} />
+         </>);
+      default:
+        return null
     }
   };
   return (

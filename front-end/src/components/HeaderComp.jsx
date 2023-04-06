@@ -5,7 +5,7 @@ import "../style/home.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import '../style/Style.css'
-const menuitems = [
+const menuadmin = [
   {
     label: (
       <a href="/home">
@@ -34,6 +34,14 @@ const menuitems = [
     key: "managerCarModel",
     icon: <AppstoreOutlined />,
     },
+    {
+      label:  <a href="/manage-request">
+      Manage Request
+    </a>
+     ,
+      key: "app",
+      icon: <FileTextOutlined />,
+    },
  
 ];
 const menuonwer =[
@@ -56,8 +64,8 @@ const menuonwer =[
     icon: <AppstoreOutlined />,
   },
   {
-    label:  <a href="/request-of-owner">
-    Request Of Owner
+    label:  <a href="/manage-request">
+    Manage Request
   </a>
    ,
     key: "app",
@@ -72,6 +80,47 @@ const menuonwer =[
     key: "alipay",
   },
 ]
+const menucustomer =[
+  {
+    label: (
+      <a href="/home">
+        Home
+      </a>
+    ),
+    key: "mail",
+    icon: <HomeOutlined />,
+  },
+  
+  {
+    label:  <a href="/my-request">
+    My Request
+  </a>
+   ,
+    key: "app",
+    icon: <FileTextOutlined />,
+  },
+]
+const menumanager =[
+  {
+    label: (
+      <a href="/home">
+        Home
+      </a>
+    ),
+    key: "mail",
+    icon: <HomeOutlined />,
+  },
+  
+  {
+    label:  <a href="/my-request">
+    My Request
+  </a>
+   ,
+    key: "app",
+    icon: <FileTextOutlined />,
+  },
+]
+
 export default function HeaderComp({username,id,role}) {
   const [isModal, setModal] = React.useState({
     isOpen: false,
@@ -145,7 +194,28 @@ export default function HeaderComp({username,id,role}) {
     onClick: () => handleConfirmLogout(),
     icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
   }];
- 
+  const renderContent = () => {
+    switch (role) {
+      case 'Admin':
+        return (<>
+       <Menu mode="horizontal" items={menuadmin}/>
+      </>);
+      case 'ParkingOwner':
+        return (<>
+       <Menu mode="horizontal" items={menuonwer}/>
+      </>);
+      case 'Customer':
+        return (<>
+         <Menu mode="horizontal" items={menucustomer}/>
+        </>);
+      case 'ParkingManager':
+        return (<>
+           <Menu mode="horizontal" items={menumanager}/>
+         </>);
+      default:
+        return null
+    }
+  };
 
   return (
     <>
@@ -357,13 +427,7 @@ export default function HeaderComp({username,id,role}) {
       </Modal>
         </div>
       </div>
-      {role === "Admin" ? (
-        <Menu mode="horizontal" items={menuitems}/>
-      ):(
-        <Menu mode="horizontal" items={menuonwer}/>
-      )}
-       ;
-     
+     {renderContent()}
       
     </>
   );
