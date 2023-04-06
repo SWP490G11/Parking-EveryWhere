@@ -43,7 +43,7 @@ namespace Back_end.Controllers
 
         [HttpGet("/request/myRequest")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer,Role.Admin,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetMyRequest()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -55,7 +55,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/request")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Add(RequestModel request)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -67,7 +67,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id, UpdateRequestModel request)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -80,7 +80,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/request/cancel-request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> CancelRequest(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -94,7 +94,7 @@ namespace Back_end.Controllers
 
         [HttpDelete("/request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Delete(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
