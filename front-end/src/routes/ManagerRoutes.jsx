@@ -1,13 +1,12 @@
 import PakingDetail from "../pages/parkingPage/parkingDetail";
-import HomePage from "../pages/homepage/HomePage";
+import OwnerPage from "../pages/homepage/OwnerPage";
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
-import ManageUser from "../pages/user/ManageUser";
-import ManageCarModel from "../pages/carpage/carmodelpage/ManageCarModel";
-import ManageCar from "../pages/carpage/ManageCar";
-import ManageRequest from "../pages/requestpage/ManageRequest";
+import ManageParkingManager from "../pages/user/ParkingManager/ManageParkingManager";
 import React from "react";
-export const AppRoutes = [
+import ManageRequest from "../pages/requestpage/ManageRequest";
+import ManageParking from "../pages/parkingPage/ManageParking";
+export const ManagerRoutes = [
     {
       path: "/parking/detail/:idParking",
       element: <PakingDetail />,
@@ -15,7 +14,7 @@ export const AppRoutes = [
     },
     {
       path: "/home",
-      element: <HomePage />,
+      element: <OwnerPage />,
       title: "Home Page",
     },
     {
@@ -29,25 +28,21 @@ export const AppRoutes = [
       title: "Edit User Profile",
     },
     {
-      path: "/managerUser",
-      element: <ManageUser />,
-      title: "Edit User Profile",
-    },
-    {
-      path: "/managerCarModel",
-      element: <ManageCarModel />,
-      title: "Manage Car",
-    },
-    {
-      path: "/mycar",
-      element: <ManageCar />,
-      title: "My Car",
+      path: "/parking-manager-of-owner",
+      element: <ManageParkingManager />,
+      title: " ManageParkingManager Profile",
     },
     {
       path: "/manage-request",
       element: <ManageRequest />,
       title: "Manage Request",
-    }
+    },
+    {
+      path: "/manage-parking",
+      element: < ManageParking />,
+      title: "Request of Owner",
+    },
+
    
    
   ];

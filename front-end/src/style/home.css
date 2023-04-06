@@ -4,18 +4,16 @@
   width: 100%;
   padding: 0;
   position: relative;
-  height: 8vh;
+  height: 6vh;
 }
 
 #left-side {
   display: block;
-  /* text-align: center; */
-  padding: 34px;
+
 }
 #right-side {
-  margin: 23px 0px 0px auto;
+  margin: 10px 0px 0px auto;
 }
-
 #right-side ul {
   text-align: center;
   height: 100%;

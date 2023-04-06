@@ -1,12 +1,14 @@
 
 import './App.css';
 import axios from "axios";
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext,useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
 import HeaderComp from './components/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
+import  {CustomerRoutes}  from './routes/CustomerRoutes';
+import  {ManagerRoutes}  from './routes/ManagerRoutes';
 import FooterComp from './components/FooterComp';
 
 export const Context = createContext();
@@ -48,6 +50,33 @@ function App() {
       setLoginState(JSON.parse(localStorage.getItem("loginState")));
     }
   }, [loginState.token]);
+  const role= loginState.role;
+  const renderContent = () => {
+    switch (role) {
+      case 'Admin':
+        return (<>
+       
+      <RouteComponent routes={AppRoutes} />
+     
+      </>);
+      case 'ParkingOwner':
+        return (<>
+       
+      <RouteComponent routes={OwnerRoutes} />
+      
+      </>);
+      case 'Customer':
+        return (<>
+         <RouteComponent routes={CustomerRoutes} />
+        </>);
+      case 'ParkingManager':
+        return (<>
+          <RouteComponent routes={ManagerRoutes} />
+         </>);
+      default:
+        return null
+    }
+  };
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
@@ -57,23 +86,37 @@ function App() {
            <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
         ) : (
-          loginState.role === "Admin"  ? (
           <>
-            <HeaderComp
-              username={loginState.username}
-              id = {loginState.id}
-              role= {loginState.role}
-            />
-            <RouteComponent routes={AppRoutes} />
-            <FooterComp/>
-          </>
-        ):(<> <HeaderComp
-          username={loginState.username}
-          id = {loginState.id}
-          role= {loginState.role}
-        />
-        <RouteComponent routes={OwnerRoutes} />
-        <FooterComp/></>))}
+           <HeaderComp
+                username={loginState.username}
+                id = {loginState.id}
+                role= {loginState.role}
+              />
+              {renderContent()}
+          {/* {(() => {
+            if(loginState.role === "Admin"){
+      
+              
+              <RouteComponent routes={AppRoutes} />
+            
+              
+            }else if(loginState.role === "ParkingOwner"){
+              
+              <RouteComponent routes={OwnerRoutes} />
+              
+
+            }else if(loginState.role === "Customer"){
+
+            }else {
+
+            }
+            // switch(role) {
+             
+            // }
+          })()} */}
+          <FooterComp/>
+       </>
+       )}
       
     
   </Context.Provider>
