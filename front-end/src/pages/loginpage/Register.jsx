@@ -77,6 +77,7 @@ const Register = () => {
         phoneNumber: values.phoneNumber,
         role:role,
         lastModifyAt: new Date(),
+        imageURL: "",
       })
       .then(() => {
         setTimeout(() => {
@@ -132,7 +133,7 @@ const Register = () => {
       document.getElementById("reg2").style.display = "none";
     }
     setValuez(e.target.value);
-    console.log("radio checked", e.target.value);
+    
   };
   
   return (
