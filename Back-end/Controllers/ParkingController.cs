@@ -277,6 +277,15 @@ namespace Back_end.Controllers
             }));
         }
 
+
+        [HttpGet("/pending-parkings-number")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer, Role.ParkingManager)]
+        public async Task<IActionResult> GetPendingParkingsNumber()
+        {
+            var listParking = await _respository.GetListParkingPending();
+            return Ok(listParking.Count);
+        }
+
         [HttpPatch("/aprrove-parking/{parkingId}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> AprovePending(string parkingId)

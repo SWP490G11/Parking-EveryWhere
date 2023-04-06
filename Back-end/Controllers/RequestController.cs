@@ -76,6 +76,18 @@ namespace Back_end.Controllers
             ));
         }
 
+        [HttpGet("/pending-request-number/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestPendingOfParkingNumber(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Count);
+        }
+
         [HttpGet("/request/myRequest")]
 
         [Authorization.Authorize(Role.Customer,Role.Admin,Role.ParkingManager,Role.ParkingOwner)]

@@ -98,6 +98,7 @@ namespace Back_end.Respository
             return requests;
         }
 
+
         public async Task<ICollection<Request>> GetRequestPendingToParking(string parkingID)
         {
             var requests = await _dbContext.Requests.Include(x => x.Requestby).Where(x => x.Parking.ID.ToString().Trim().ToLower()
@@ -128,4 +129,5 @@ namespace Back_end.Respository
             await _dbContext.SaveChangesAsync();
         }
     }
+
 }
