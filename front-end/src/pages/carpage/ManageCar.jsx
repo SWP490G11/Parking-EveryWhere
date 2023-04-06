@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Space,Form, Row, Col, Modal,notification,Drawer } from "antd";
+import {
+  Table,
+  Input,
+  Button,
+  Menu,
+  Dropdown,
+  Space,
+  Form,
+  Row,
+  Col,
+  Modal,
+  notification,
+  Drawer,
+} from "antd";
 import {
   FilterOutlined,
   EditFilled,
   CloseCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-
 import axios from "axios";
 
-
-
-export default function ManageCarModel() {
+export default function ManageCar() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Model");
+
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -27,124 +38,130 @@ export default function ManageCarModel() {
   });
 
   const columns = [
-    {   
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: "25%",
-       
-      },
-      {
-        title: "Car Number",
-        dataIndex: "carNumber",
-        key: "carNumber",
-        sorter: (a, b) => {
-          if (a.carNumber > b.carNumber) {
-            return -1;
-          }else
-          if (b.carNumber > a.carNumber) {
-            return 1;
-          }
-          return 0;
-        },
-        width: "7%",
-      },
-   
     {
-      title: "Car Model",
-      dataIndex: "carmodel",
-      key: "carmodel",
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      width: "25%",
+    },
+    {
+      title: "CarNumber",
+      dataIndex: "carNumber",
+      key: "carNumber",
       sorter: (a, b) => {
-        if (a.carmodel > b.carmodel) {
+        if (a.carNumber > b.carNumber) {
           return -1;
-        }
-        if (b.carmodel > a.carmodel) {
+        } else if (b.carNumber > a.carNumber) {
           return 1;
         }
         return 0;
       },
-     
+      width: "7%",
+    },
+    {
+      title: "Discript",
+      dataIndex: "discript",
+      key: "discript",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      sorter: (a, b) => {
+        if (a.price > b.price) {
+          return -1;
+        }
+        if (b.price > a.price) {
+          return 1;
+        }
+        return 0;
+      },
     },
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      
     },
   ];
- 
+  // const [deleteModal, setDeleteModal] = useState({
+  //   isOpen: false,
+  //   title: "Notice",
+  //   content: <p>Do you want to delete car model?</p>,
+  //   // footer: (
+  //   //   <div style={{ textAlign: "left" }}>
+  //   //     <Button className="buttonSave">Delete</Button>
+
+  //   //   </div>
+  //   // ),
+  // });
   const showDrawer1 = () => {
     setOpen1(true);
   };
   const onClose1 = () => {
     setOpen1(false);
   };
-  const [idcar,setIdCar]=useState("");
-  //const[carmode,setCarmode]=useState([])
+  const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
-      .get(
-        `${process.env.REACT_APP_Backend_URI}cars-of-owner`,
-        {}
-      )
+      .get(`${process.env.REACT_APP_Backend_URI}cars`, {})
       .then(function (response) {
         let respData = response.data;
         console.log(respData);
-       // setCarmode(response.data.carModel);
+
         respData.forEach((element) => {
-          element.carmodel = element.carModel.model;
           element.action = [
-            
-              <EditFilled style={{  fontSize: "25px" }}
-              onClick={()=>{
+            <EditFilled
+              style={{ fontSize: "25px" }}
+              onClick={() => {
                 showDrawer1();
                 form1.setFieldsValue({
-                  id : element.id,
-                  carmodel: element.carmodel,
+                  id: element.id,
                   carNumber: element.carNumber,
-                  carModel: element.carModel,
+                  model: element.model,
+                  discript: element.discript,
+                  userName: element.userName,
                 });
                 setIdCar(element.id);
               }}
-              />,
-          
+            />,
+
             <CloseCircleOutlined
               onClick={() => {
                 Modal.confirm({
-                    title: "Are you sure?",
-                    icon: <CloseCircleOutlined style={{ color: "red" }} />,
-                    content: "Do you want to delete this car model?",
-                    okText: "Delete",
-                    cancelText: "Cancel",
-                    okButtonProps: { style: { background: "#e30c18", color: "white" } },
-              
-                    onOk() {
-                      return new Promise((resolve, reject) => {
-                        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                        axios
-                            .delete(
-                              `${process.env.REACT_APP_Backend_URI}carmodel/${element.id}`
-                            )
-                            .then(() => {
-                              
-                              notification.success({
-                                message: `Delete successfully`,
-                                description: 'Delete a new car model successfully',
-                                placement: 'topLeft',
-                              });
-                            })
-                            .catch(() => {
-                                notification.error({
-                                    message: `Delete fail`,
-                                    description: 'Delete a user fail',
-                                    placement: 'topLeft',
-                                  });
-                            });
-                      });
-                    },
-                    onCancel() {},
-                  });
-              
+                  title: "Are you sure?",
+                  icon: <CloseCircleOutlined style={{ color: "red" }} />,
+                  content: "Do you want to delete this car ?",
+                  okText: "Delete",
+                  cancelText: "Cancel",
+                  okButtonProps: {
+                    style: { background: "#e30c18", color: "white" },
+                  },
+
+                  onOk() {
+                    return new Promise((resolve, reject) => {
+                      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                      axios
+                        .delete(
+                          `${process.env.REACT_APP_Backend_URI}car/${element.id}`
+                        )
+                        .then(() => {
+                          notification.success({
+                            message: `Delete successfully`,
+                            description: "Delete a new car model successfully",
+                            placement: "topLeft",
+                          });
+                        })
+                        .catch(() => {
+                          notification.error({
+                            message: `Delete fail`,
+                            description: "Delete a user fail",
+                            placement: "topLeft",
+                          });
+                        });
+                    });
+                  },
+                  onCancel() {},
+                });
               }}
               style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
             />,
@@ -152,16 +169,10 @@ export default function ManageCarModel() {
         });
         setData(
           respData.sort((a, b) => {
-            if (
-              a.carNumber.trim().toLowerCase() >
-              b.carNumber.trim().toLowerCase()
-            ) {
+            if (a.model.trim().toLowerCase() > b.model.trim().toLowerCase()) {
               return 1;
             }
-            if (
-              b.carNumber.trim().toLowerCase() >
-              a.carNumber.trim().toLowerCase()
-            ) {
+            if (b.model.trim().toLowerCase() > a.model.trim().toLowerCase()) {
               return -1;
             }
             return 0;
@@ -170,21 +181,18 @@ export default function ManageCarModel() {
       }, [])
       .catch(() => {});
   }, [data]);
- 
- 
+
   const dataBytype =
     type === "Model" ? data : data.filter((u) => u.model === type);
-   // const dataRole= role === "Role" ? dataBytype : dataBytype.filter((u) => u.role === role);
+  // const dataRole= role === "Role" ? dataBytype : dataBytype.filter((u) => u.role === role);
   const finalData =
     searchText === ""
       ? dataBytype
-      : (dataBytype.filter(
-          (u) =>
-            u.model
-              .toLowerCase()
-              .replace(/\s+/g, "")
-              .includes(searchText.toLowerCase().replace(/\s+/g, "")) 
-        ) 
+      : dataBytype.filter((u) =>
+          u.model
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(searchText.toLowerCase().replace(/\s+/g, ""))
         );
 
   const pagination = {
@@ -198,8 +206,8 @@ export default function ManageCarModel() {
       setPage(page);
       setPageSize(pageSize);
     },
-   showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+    showSizeChanger: true,
+    showTotal: (total) => `Total ${total} Student`,
   };
   const showDrawer = () => {
     setOpen(true);
@@ -207,14 +215,14 @@ export default function ManageCarModel() {
   const onClose = () => {
     setOpen(false);
   };
-  
+
   const onFinish = (values) => {
-    
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}carmodel`, {
-        carmodel: values.carmodel,
-        carNumber: values.carNumber,
-       
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {
+        model: values.model,
+        carNumber: values.discript,
+        price: values.price,
+        lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
@@ -224,13 +232,12 @@ export default function ManageCarModel() {
           placement: "topLeft",
         });
         form.setFieldsValue({
-            model: "",
-            discript:"",
-            price: "",
-            
-          })
+          model: "",
+          carNumber: "",
+          price: "",
+        });
         setOpen(false);
-       // window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         notification.warning({
@@ -239,37 +246,34 @@ export default function ManageCarModel() {
           placement: "topLeft",
         });
         form.setFieldsValue({
-            model: "",
-            discript:"",
-            price: "",
-            
-          })
+          model: "",
+          discript: "",
+          price: "",
+        });
       });
   };
   const onFinishEdit = (values) => {
-    
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
-        
-        carmodel: values.carmodel,
-        carNumber: values.carNumber,
-       
+        model: values.model,
+        discript: values.discript,
+        price: values.price,
+        lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Successfully`,
-          description: "Edit this parking successfully",
+          description: "Edit this car successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carmodel: "",
-          carNumber: "",
-         
-            
-          })
+          model: "",
+          discript: "",
+          price: "",
+        });
         setOpen(false);
-       // window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         notification.warning({
@@ -278,10 +282,10 @@ export default function ManageCarModel() {
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carmodel: "",
-          carNumber: "",
-            
-          })
+          model: "",
+          discript: "",
+          price: "",
+        });
       });
   };
   return (
@@ -297,64 +301,61 @@ export default function ManageCarModel() {
           paddingBottom: "20px",
         }}
       >
-        Car Model List
+        Car List
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
-         
-      
-           {/*Filter Role */}
+          {/*Filter Role */}
           <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
             overlay={
-                <Menu>
+              <Menu>
                 <Menu.Item
-               onClick={() => {
-                 setType("ParkingManager");
-               }}
-             >
-               {" "}
-               ParkingManager
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("ParkingOwner");
-               }}
-             >
-               {" "}
-               ParkingOwner
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Customer");
-               }}
-             >
-               {" "}
-               Customer
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Admin");
-               }}
-             >
-               {" "}
-               Admin
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Model");
-               }}
-             >
-               {" "}
-               All
-             </Menu.Item>
+                  onClick={() => {
+                    setType("ParkingManager");
+                  }}
+                >
+                  {" "}
+                  ParkingManager
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    setType("ParkingOwner");
+                  }}
+                >
+                  {" "}
+                  ParkingOwner
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    setType("Customer");
+                  }}
+                >
+                  {" "}
+                  Customer
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    setType("Admin");
+                  }}
+                >
+                  {" "}
+                  Admin
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    setType("Model");
+                  }}
+                >
+                  {" "}
+                  All
+                </Menu.Item>
               </Menu>
             }
           >
             {type}
           </Dropdown.Button>
-      
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
@@ -368,16 +369,20 @@ export default function ManageCarModel() {
           />
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={9} xxl={9}>
-          <Button style={{ background: "#33CCFF", color: "white"  } } 
-          onClick={()=>{
-            showDrawer();
-            form.setFieldsValue({
-            model: "",
-            discript:"",
-            price: "",
-            
-          });}}>
-             Add new car model
+          <Button
+            style={{ background: "#33CCFF", color: "white" }}
+            onClick={() => {
+              showDrawer();
+              form.setFieldsValue({
+                carNumber: "",
+                model: "",
+
+                discript: "",
+                price: "",
+              });
+            }}
+          >
+            Add new car number
           </Button>
         </Col>
       </Row>
@@ -402,7 +407,7 @@ export default function ManageCarModel() {
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
-        style={{width:400}}
+        style={{ width: 400 }}
         footer={[
           <Button
             style={{ background: "#e30c18", color: "white" }}
@@ -418,7 +423,9 @@ export default function ManageCarModel() {
       >
         <table>
           <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              ID
+            </td>
             <td
               style={{
                 fontSize: "18px",
@@ -431,7 +438,9 @@ export default function ManageCarModel() {
             </td>
           </tr>
           <tr>
-            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>Car Number</td>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Car number
+            </td>
             <td
               style={{
                 fontSize: "18px",
@@ -444,7 +453,9 @@ export default function ManageCarModel() {
             </td>
           </tr>
           <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Car Model</td>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Model
+            </td>
             <td
               style={{
                 fontSize: "18px",
@@ -453,12 +464,13 @@ export default function ManageCarModel() {
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.carmodel}
+              dads {modal.data.model}
             </td>
           </tr>
-        
-          {/* <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Car Model Detal </td>
+          <tr>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Discript
+            </td>
             <td
               style={{
                 fontSize: "18px",
@@ -467,11 +479,25 @@ export default function ManageCarModel() {
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.carModel}
+              {modal.data.discript}
             </td>
-          </tr> */}
-          
-       
+          </tr>
+
+          <tr>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              User name{" "}
+            </td>
+            <td
+              style={{
+                fontSize: "18px",
+                color: "#838688",
+                textAlign: "justify",
+                paddingLeft: "35px",
+              }}
+            >
+              {modal.data.userName}
+            </td>
+          </tr>
         </table>
       </Modal>
 
@@ -494,7 +520,6 @@ export default function ManageCarModel() {
           onRow={(record) => {
             return {
               onClick: (e) => {
-               
                 if (
                   e.target.className ===
                   "ant-table-cell ant-table-cell-row-hover"
@@ -504,10 +529,11 @@ export default function ManageCarModel() {
                     isOpen: true,
                     data: {
                       id: record.id,
-                        carNumber: record.carNumber,
-                        carmodel: record.carmodel,
-                        carModel: record.carModel,
+                      carNumber: record.carNumber,
+                      model: record.model,
 
+                      discript: record.discript,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
@@ -519,10 +545,11 @@ export default function ManageCarModel() {
                     ...modal,
                     isOpen: true,
                     data: {
-                        id: record.id,
-                        carNumber: record.carNumber,
-                        carmodel: record.carmodel,
-                        carModel: record.carModel,
+                      id: record.id,
+                      model: record.model,
+
+                      discript: record.discript,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
@@ -535,180 +562,210 @@ export default function ManageCarModel() {
         />
       )}
       {/*Add new car model */}
-       <Drawer
-          title="Create a new car model"
-          width={550}
-          onClose={onClose}
-          open={open}
-          bodyStyle={{
-            paddingBottom: 80,
-          }}
+      <Drawer
+        title="Add new car"
+        width={550}
+        onClose={onClose}
+        open={open}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
+      >
+        <Form
+          form={form}
+          onFinish={onFinish}
+          layout="vertical"
+          hideRequiredMark
         >
-          <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="carNumber"
-                  label="Car Number"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Model Name",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Please enter Model Name" />
-                </Form.Item>
-              </Col>
-            </Row>
-            
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="discript"
-                  label="Discript"
-                  rules={[
-                    {
-                      required: true,
-                      message: "please enter Discript",
-                    },
-                  ]}
-                >
-                  <Input.TextArea
-                    rows={4}
-                    placeholder="please enter Description"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            
-            <Row gutter={16}>
-            <Col span={24}>
-            <Space>
-              <Button onClick={()=>{
-                onClose();
-                form.setFieldsValue({
-                    model: "",
-                    discript:"",
-                    price: "",
-                    })
-                } }>Cancel</Button>
-              <Button htmlType="submit" type="primary">
-                Submit
-              </Button>
-              </Space>
-           
-              </Col>
-           
-            </Row>
-           
-          </Form>
-        </Drawer>
-         {/*Edit car model */}
-       <Drawer
-          title="Edit  car model"
-          width={550}
-          onClose={onClose1}
-          open={open1}
-          bodyStyle={{
-            paddingBottom: 80,
-          }}
-        >
-          <Form form={form1} onFinish={onFinishEdit} layout="vertical" hideRequiredMark>
           <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="id"
-                  label="ID "
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Model Name",
-                    },
-                  ]}
-                >
-                  <Input disabled placeholder="Please enter Model Name" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="carNumber"
-                  label="Car Number"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Car Number ",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Please enter Car Number" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="price"
-                  label="Price"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Price ",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Please enter Price "
-                  />
-                 
-                </Form.Item>
-              </Col>
-            </Row>
-          
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="carModel"
-                  label="Car Model Detail"
-                  rules={[
-                    {
-                      required: true,
-                      message: "please enter Discript",
-                    },
-                  ]}
-                >
-                  <Input.TextArea 
-                  disabled
-                    rows={4}
-                   
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            
-            <Row gutter={16}>
             <Col span={24}>
-            <Space>
-              <Button onClick={()=>{
-                onClose1();
-                
-                } }>Cancel</Button>
-              <Button onClick={onClose1} htmlType="submit" type="primary">
-                Submit
-              </Button>
+              <Form.Item
+                name="model"
+                label="Model Name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Model Name",
+                  },
+                ]}
+              >
+                <Input placeholder="Please enter Model Name" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Price ",
+                  },
+                ]}
+              >
+                <Input
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Please enter Price "
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="discript"
+                label="Discript"
+                rules={[
+                  {
+                    required: true,
+                    message: "please enter Discript",
+                  },
+                ]}
+              >
+                <Input.TextArea
+                  rows={4}
+                  placeholder="please enter Description"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Space>
+                <Button
+                  onClick={() => {
+                    onClose();
+                    form.setFieldsValue({
+                      model: "",
+                      discript: "",
+                      price: "",
+                    });
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button htmlType="submit" type="primary">
+                  Submit
+                </Button>
               </Space>
-           
-              </Col>
-           
-            </Row>
-           
-          </Form>
-        </Drawer>
+            </Col>
+          </Row>
+        </Form>
+      </Drawer>
+      {/*Edit car model */}
+      <Drawer
+        title="Edit  car information"
+        width={550}
+        onClose={onClose1}
+        open={open1}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
+      >
+        <Form
+          form={form1}
+          onFinish={onFinishEdit}
+          layout="vertical"
+          hideRequiredMark
+        >
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="id"
+                label="ID "
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Model Name",
+                  },
+                ]}
+              >
+                <Input disabled placeholder="Please enter Car Number" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="carNumber"
+                label="Car Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Car Number",
+                  },
+                ]}
+              >
+                <Input placeholder="Please enter Car Number" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Price ",
+                  },
+                ]}
+              >
+                <Input
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Please enter Price "
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="discript"
+                label="Discript"
+                rules={[
+                  {
+                    required: true,
+                    message: "please enter Discript",
+                  },
+                ]}
+              >
+                <Input.TextArea
+                  rows={4}
+                  placeholder="please enter Description"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Space>
+                <Button
+                  onClick={() => {
+                    onClose1();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={onClose1} htmlType="submit" type="primary">
+                  Submit
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+        </Form>
+      </Drawer>
     </>
   );
 }
