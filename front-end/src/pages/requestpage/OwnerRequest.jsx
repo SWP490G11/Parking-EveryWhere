@@ -122,13 +122,6 @@ export default function OwnerRequest() {
     }, [])
 
     const columns = [
-
-
-        {
-            title: "STT",
-            dataIndex:"stt" ,
-            key: "stt",
-        },
         {
             title: "Parking Name",
             dataIndex: "parkingName",
@@ -201,7 +194,7 @@ export default function OwnerRequest() {
             },
         },
         {
-            title: "",
+            title: "Action",
             dataIndex: "action",
             key: "action",
         },

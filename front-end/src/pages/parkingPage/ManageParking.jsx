@@ -37,21 +37,7 @@ export default function ManageParking() {
           return 0;
         },
       },
-    {
-      title: "Parking Managers",
-      dataIndex: "parkingmanager",
-      key: "parkingmanager",
-
-      sorter: (a, b) => {
-        if (a.parkingmanager > b.parkingmanager) {
-          return -1;
-        }
-        if (b.parkingmanager > a.parkingmanager) {
-          return 1;
-        }
-        return 0;
-      },
-    },
+   
     {
       title: "Address Detail",
       dataIndex: "addressDetail",
