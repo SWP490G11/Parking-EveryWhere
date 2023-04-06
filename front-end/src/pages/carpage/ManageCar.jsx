@@ -64,14 +64,14 @@ export default function ManageCar() {
       key: "discript",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Username",
+      dataIndex: "userName",
+      key: "userName",
       sorter: (a, b) => {
-        if (a.price > b.price) {
+        if (a.userName > b.userName) {
           return -1;
         }
-        if (b.price > a.price) {
+        if (b.userName > a.userName) {
           return 1;
         }
         return 0;
@@ -218,10 +218,11 @@ export default function ManageCar() {
 
   const onFinish = (values) => {
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}car`, {
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {        
         model: values.model,
         carNumber: values.discript,
-        price: values.price,
+        discript: values.discript,
+        userName: values.userName,
         lastModifyAt: new Date(),
       })
       .then(() => {
@@ -232,9 +233,10 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
-          carNumber: "",
-          price: "",
+          discript: "",
+          userName: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -246,9 +248,10 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
       });
   };
@@ -268,9 +271,10 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -282,9 +286,10 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
       });
   };
@@ -376,7 +381,6 @@ export default function ManageCar() {
               form.setFieldsValue({
                 carNumber: "",
                 model: "",
-
                 discript: "",
                 price: "",
               });
@@ -531,9 +535,8 @@ export default function ManageCar() {
                       id: record.id,
                       carNumber: record.carNumber,
                       model: record.model,
-
                       discript: record.discript,
-                      price: record.price,
+                      userName: record.userName,
                     },
                   });
                   console.log(modal.data);
@@ -549,7 +552,7 @@ export default function ManageCar() {
                       model: record.model,
 
                       discript: record.discript,
-                      price: record.price,
+                      userName: record.userName,
                     },
                   });
                   console.log(modal.data);
@@ -596,12 +599,12 @@ export default function ManageCar() {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="price"
+                name="carNumber"
                 label="Price"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Price ",
+                    message: "Please enter car number ",
                   },
                 ]}
               >
@@ -609,31 +612,12 @@ export default function ManageCar() {
                   style={{
                     width: "100%",
                   }}
-                  placeholder="Please enter Price "
+                  placeholder="Please enter car number "
                 />
               </Form.Item>
             </Col>
           </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="discript"
-                label="Discript"
-                rules={[
-                  {
-                    required: true,
-                    message: "please enter Discript",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter Description"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+         
 
           <Row gutter={16}>
             <Col span={24}>
@@ -706,47 +690,7 @@ export default function ManageCar() {
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="price"
-                label="Price"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter Price ",
-                  },
-                ]}
-              >
-                <Input
-                  style={{
-                    width: "100%",
-                  }}
-                  placeholder="Please enter Price "
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="discript"
-                label="Discript"
-                rules={[
-                  {
-                    required: true,
-                    message: "please enter Discript",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter Description"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+             
 
           <Row gutter={16}>
             <Col span={24}>
