@@ -18,6 +18,10 @@ namespace Back_end.Respository
         ICollection<Parking> PaginateAsync(int pageNo, int pageSize);
         ICollection<Parking> SortAsync(DirectionOfSort direction, string factor);
         void UpdateAsync(string idString, ParkingModel updateModel);
+
+        Task<ICollection<Parking>> GetListParkingPending();
+
+        Task AproveParking(string? ID);
     }
 
     public class ParkingRespository : IParkingRespository
@@ -43,11 +47,11 @@ namespace Back_end.Respository
             var parking = new Parking()
             {
                 AddressDetail = model.AddressDetail,
-                IsLegal = model.IsLegal,
+                IsLegal =false,
                 LAT = model.LAT,
                 LON = model.LON,
                 Owner = owner,
-                Status = Status.Available,
+                Status = Status.Pending,
                 Discription = model.Discription,
                 LastModifyAt = DateTime.Now,
                 ParkingName = model.ParkingName,
@@ -137,6 +141,25 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
+        public async Task<ICollection<Parking>> GetListParkingPending()
+        {
+
+            var pendingparkings =await _dbContext.Parkings.Where(p=>p.Status==Status.Pending).Include(p => p.ParkingManagers)
+                 .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
+                .Include(p => p.Owner)
+                .Include(p => p.Images)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel).ToListAsync();
+            return pendingparkings;
+        }
+
+        public async Task AproveParking(string? ID)
+        {
+            var parking = GetAsync(ID);
+            parking.Status = Status.Available;
+            parking.IsLegal = true;
+
+           await _dbContext.SaveChangesAsync(true);
+        }
 
         public void UpdateAsync(string idString, ParkingModel updateModel)
         {
@@ -145,7 +168,9 @@ namespace Back_end.Respository
 
 
             var updateParking = GetAsync(idString);
+            
             if (updateParking == null) throw new AppException("Not Found this parking");
+            if (updateParking.IsLegal == false) throw new AppException("That Parking is Illigal");
             updateParking.AddressDetail = updateModel.AddressDetail;
             updateParking.LON = updateModel.LON;
             updateParking.LAT = updateModel.LAT;

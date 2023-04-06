@@ -41,6 +41,41 @@ namespace Back_end.Controllers
             return Ok(request);
         }
 
+        [HttpGet("/request/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestOfParking(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Select(r=>
+          new  {
+              r.ID,r.Status,RequestbyID=  r.Requestby.ID.ToString(),r.RequestAt
+            } 
+            ));
+        }
+
+        [HttpGet("/pending-request/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestPendingOfParking(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Select(r =>
+          new {
+              r.ID,
+              r.Status,
+              RequestbyID = r.Requestby.ID.ToString(),
+              r.RequestAt
+          }
+            ));
+        }
+
         [HttpGet("/request/myRequest")]
 
         [Authorization.Authorize(Role.Customer,Role.Admin,Role.ParkingManager,Role.ParkingOwner)]

@@ -19,6 +19,8 @@ namespace Back_end.Respository
         Task UpdateAsync(string idString, UpdateRequestModel updateModel);
 
         Task CancelRequest(string idString);
+
+        Task<ICollection<Request>> GetRequestToParking(string parkingID);
     }
 
     public class RequestRepository : IRequestRepository
@@ -67,9 +69,13 @@ namespace Back_end.Respository
             await _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(string idString)
+        public async Task DeleteAsync(string idString)
         {
-            throw new NotImplementedException();
+            var request = await GetAsync(idString);
+            _dbContext.Remove(request);
+
+           await _dbContext.SaveChangesAsync();
+
         }
 
         public async Task<ICollection<Request>> GetAllAsync()
@@ -83,6 +89,20 @@ namespace Back_end.Respository
             return await _dbContext.Requests.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
+        }
+
+        public async Task<ICollection<Request>> GetRequestToParking(string parkingID)
+        {
+            var requests = await _dbContext.Requests.Include(x=>x.Requestby).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
+            .Equals(parkingID.Trim().ToLower())).ToListAsync();
+            return requests;
+        }
+
+        public async Task<ICollection<Request>> GetRequestPendingToParking(string parkingID)
+        {
+            var requests = await _dbContext.Requests.Include(x => x.Requestby).Where(x => x.Parking.ID.ToString().Trim().ToLower()
+            .Equals(parkingID.Trim().ToLower()) && x.Status==Status.Pending).ToListAsync();
+            return requests;
         }
 
         public ICollection<Request> PaginateAsync(ICollection<Request> source, int pageNo, int pageSize)
