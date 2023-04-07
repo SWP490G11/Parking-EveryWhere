@@ -18,6 +18,10 @@ namespace Back_end.Respository
         ICollection<Parking> PaginateAsync(int pageNo, int pageSize);
         ICollection<Parking> SortAsync(DirectionOfSort direction, string factor);
         void UpdateAsync(string idString, ParkingModel updateModel);
+
+        Task<ICollection<Parking>> GetListParkingPending();
+
+        Task AproveParking(string? ID);
     }
 
     public class ParkingRespository : IParkingRespository
@@ -43,11 +47,11 @@ namespace Back_end.Respository
             var parking = new Parking()
             {
                 AddressDetail = model.AddressDetail,
-                IsLegal = model.IsLegal,
+                IsLegal =false,
                 LAT = model.LAT,
                 LON = model.LON,
                 Owner = owner,
-                Status = Status.Available,
+                Status = Status.Pending,
                 Discription = model.Discription,
                 LastModifyAt = DateTime.Now,
                 ParkingName = model.ParkingName,
@@ -83,7 +87,10 @@ namespace Back_end.Respository
         public async Task DeleteAsync(string idString)
         {
             var parking = GetAsync(idString);
+            var delteImages = parking.Images == null ? new List<Image>() : parking.Images;
+             _dbContext.Images.RemoveRange(delteImages);
             _dbContext.Parkings.Remove(parking);
+           
             await _dbContext.SaveChangesAsync();
         }
 
@@ -92,7 +99,8 @@ namespace Back_end.Respository
             return await _dbContext.Parkings.Include(p => p.ParkingManagers)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
-                .Include(p => p.Images)
+                .Include(p => p.Images).
+                Include(p=>p.Requests)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
                 .ToListAsync();
         }
@@ -116,7 +124,7 @@ namespace Back_end.Respository
             var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase);
             var parkings = await _dbContext.Parkings.Include(p => p.ParkingManagers)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
-                .Include(p => p.TimeFrames)
+
                 .Include(p => p.Images)
                 .Include(p => p.Owner).Where(p => p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
@@ -133,6 +141,25 @@ namespace Back_end.Respository
             throw new NotImplementedException();
         }
 
+        public async Task<ICollection<Parking>> GetListParkingPending()
+        {
+
+            var pendingparkings =await _dbContext.Parkings.Where(p=>p.Status==Status.Pending).Include(p => p.ParkingManagers)
+                 .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
+                .Include(p => p.Owner)
+                .Include(p => p.Images)
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel).ToListAsync();
+            return pendingparkings;
+        }
+
+        public async Task AproveParking(string? ID)
+        {
+            var parking = GetAsync(ID);
+            parking.Status = Status.Available;
+            parking.IsLegal = true;
+
+           await _dbContext.SaveChangesAsync(true);
+        }
 
         public void UpdateAsync(string idString, ParkingModel updateModel)
         {
@@ -141,7 +168,9 @@ namespace Back_end.Respository
 
 
             var updateParking = GetAsync(idString);
+            
             if (updateParking == null) throw new AppException("Not Found this parking");
+            if (updateParking.IsLegal == false) throw new AppException("That Parking is Illigal");
             updateParking.AddressDetail = updateModel.AddressDetail;
             updateParking.LON = updateModel.LON;
             updateParking.LAT = updateModel.LAT;

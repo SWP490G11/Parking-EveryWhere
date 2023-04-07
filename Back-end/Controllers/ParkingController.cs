@@ -54,21 +54,31 @@ namespace Back_end.Controllers
                 p.Status,
                 p.Discription,
                 p.AddressDetail,
-                p.ParkingManagers,
-                p.Feedbacks,
-                ImageUrls = p.Images.Select(i => i.URL).ToList(),
-                Slot = p.Slots.Select(s =>
-              new
-              {
-                  SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
-                  s.TypeOfSlot,
-                  s.Status,
-                  s.Discription,
-                  s.LastModifyAt
+                ParkingManagers = p.ParkingManagers.Select(
+                    pm => new
+                    {
+                        p.ID,
+                        FullName = pm.LastName + pm.FirstName,
+                        PhoneNumber = pm.PhoneNumber,
+                        pm.Email,
+                    }
+                    ),
+                Feedbacks = p.Feedbacks.Select(
+                    fb => new
+                    {
+                        fb.ID,
+                        fb.Rating,
+                        fb.Content,
+                        FeebackBy = fb.FeedbackBy.ID.ToString()
+                    }
+                    ),
 
-              }),
+                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
+                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
+                NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
+                NumberOfNotAvailableSlot = p.Slots.Count(x => x.Status == Status.NotAvailable),
+                ImageUrls = p.Images.Select(i => i.URL).ToList(),
+
             }));
         }
 
@@ -83,7 +93,7 @@ namespace Back_end.Controllers
             if (user == null) return NotFound();
 
             var parking =  _respository.GetAsync(id);
-
+            if(parking == null) return NotFound();
 
             return Ok(parking.ParkingManagers);
         }
@@ -139,7 +149,7 @@ namespace Back_end.Controllers
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
                     ),
-                p.TimeFrames,
+             
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
                 NumberOfAvailableSlot = p.Slots.Count(x => x.Status == Status.Available),
@@ -150,19 +160,19 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/parking/{id}")]
-        [Authorization.Authorize(Role.Admin)]
+         [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer,Role.ParkingManager)]
         public  IActionResult Get(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             var parking =  _respository.GetAsync(id);
-
+            if (parking == null) return NotFound();
             return Ok(parking);
         }
 
 
         [HttpGet("/parkings/{name}")]
-        [Authorization.Authorize(Role.Admin)]
+          [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer,Role.ParkingManager)]
         public async Task<IActionResult> GetParkings(string name)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -197,7 +207,7 @@ namespace Back_end.Controllers
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
                     ),
-                p.TimeFrames,
+           
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
               new
@@ -213,6 +223,80 @@ namespace Back_end.Controllers
               }),
             }));
         }
+
+        [HttpGet("/pending-parkings")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer, Role.ParkingManager)]
+        public async Task<IActionResult> GetPendingParkings()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var parkings = await _respository.GetListParkingPending();
+
+            return Ok(parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+                ParkingManagers = p.ParkingManagers.Select(
+                    pm => new
+                    {
+                        p.ID,
+                        FullName = pm.LastName + pm.FirstName,
+                        PhoneNumber = pm.PhoneNumber,
+                        pm.Email,
+                    }
+                    ),
+                Feedbacks = p.Feedbacks.Select(
+                    fb => new
+                    {
+                        fb.ID,
+                        fb.Rating,
+                        fb.Content,
+                        FeebackBy = fb.FeedbackBy.ID.ToString()
+                    }
+                    ),
+
+                ImageUrls = p.Images.Select(i => i.URL).ToList(),
+                Slot = p.Slots.Select(s =>
+              new
+              {
+                  SlotID = s.ID,
+                  CarModelID = s.CarModel.ID,
+                  CarModelName = s.CarModel.Model,
+                  s.TypeOfSlot,
+                  s.Status,
+                  s.Discription,
+                  s.LastModifyAt
+
+              }),
+            }));
+        }
+
+
+        [HttpGet("/pending-parkings-number")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer, Role.ParkingManager)]
+        public async Task<IActionResult> GetPendingParkingsNumber()
+        {
+            var listParking = await _respository.GetListParkingPending();
+            return Ok(listParking.Count);
+        }
+
+        [HttpPatch("/aprrove-parking/{parkingId}")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
+        public async Task<IActionResult> AprovePending(string parkingId)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            _respository.AproveParking(parkingId);
+            return Ok("Change status success");
+        }
+
 
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
@@ -260,7 +344,15 @@ namespace Back_end.Controllers
             return Ok(parkings.Select(p => new
             {
                 ParkingID = p.ID,
-                
+                PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
+                   group => new
+                   {
+                       Price = group.Key,
+                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "",
+                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                   }
+                    )
+
             }).ToList()) ;
         }
 

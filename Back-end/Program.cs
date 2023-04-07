@@ -60,7 +60,6 @@ service.AddTransient<IFeedBackReposiotory , FeedBackReposiotory>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 */
 service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
-service.AddTransient<ICRUDSRespository<TimeFrame, TimeFrameModel>, TimeFrameRepository>();
 service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
 
 
@@ -113,14 +112,15 @@ app.UseHttpsRedirection();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
-if(true)
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
+//if(true)
+//{
+//    app.UseSwagger();
+//  app.UseSwaggerUI();
+//app.UseExceptionHandler("/Error");
+//app.UseHsts();
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // using static System.Net.Mime.MediaTypeNames;

@@ -1,4 +1,4 @@
-﻿using Back_end.Common;
+using Back_end.Common;
 using Back_end.Models;
 using Back_end.Models.User;
 using Back_end.Respository;
@@ -41,9 +41,56 @@ namespace Back_end.Controllers
             return Ok(request);
         }
 
+        [HttpGet("/request/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestOfParking(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Select(r=>
+          new  {
+              r.ID,r.Status,RequestbyID=  r.Requestby.ID.ToString(),r.RequestAt
+            } 
+            ));
+        }
+
+        [HttpGet("/pending-request/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestPendingOfParking(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Select(r =>
+          new {
+              r.ID,
+              r.Status,
+              RequestbyID = r.Requestby.ID.ToString(),
+              r.RequestAt
+          }
+            ));
+        }
+
+        [HttpGet("/pending-request-number/{parkingid}")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestPendingOfParkingNumber(string parkingid)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = await _repository.GetRequestToParking(parkingid);
+
+            return Ok(requests.Count);
+        }
+
         [HttpGet("/request/myRequest")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin,Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Customer,Role.Admin,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetMyRequest()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -55,7 +102,7 @@ namespace Back_end.Controllers
 
         [HttpPost("/request")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Add(RequestModel request)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -67,7 +114,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Update(string id, UpdateRequestModel request)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -80,7 +127,7 @@ namespace Back_end.Controllers
 
         [HttpPut("/request/cancel-request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> CancelRequest(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -94,7 +141,7 @@ namespace Back_end.Controllers
 
         [HttpDelete("/request/{id}")]
 
-        [Authorization.Authorize(Role.Customer,Role.Admin)]
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> Delete(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
