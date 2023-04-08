@@ -112,14 +112,15 @@ app.UseHttpsRedirection();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
-if(true)
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
+//if(true)
+//{
+//    app.UseSwagger();
+//  app.UseSwaggerUI();
+//app.UseExceptionHandler("/Error");
+//app.UseHsts();
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // using static System.Net.Mime.MediaTypeNames;
