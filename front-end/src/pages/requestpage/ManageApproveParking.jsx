@@ -1,10 +1,10 @@
-import {Table, Modal, Button,Row,Col,Input} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,Dropdown,Menu} from 'antd';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {CheckOutlined, CloseOutlined, CloseSquareOutlined} from "@ant-design/icons";
-import moment from "moment";
+import {CheckOutlined, CloseOutlined,FilterOutlined} from "@ant-design/icons";
 
-export default function ManageRequest() {
+
+export default function ManageApproveParking() {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
@@ -12,7 +12,7 @@ export default function ManageRequest() {
     });
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalCancelVisible, setIsModalCancelVisible] = useState(false);
-   
+    const [status,setStatus] = useState("Status");
     const [idCompleted, setIdCompleted] = useState();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -25,9 +25,9 @@ export default function ManageRequest() {
         setIsModalVisible(false);
 
         axios
-            .put(`https://rookiesgroup3.azurewebsites.net/api/Assignments/${idCompleted}/accepted`)
+        .patch(`${process.env.REACT_APP_Backend_URI}aprrove-parking/${idCompleted}`, {})
             .then((res) => {
-                window.location.reload();
+                //window.location.reload();
                 setIdCompleted(null)
             }).catch(() => {
 
@@ -74,21 +74,18 @@ export default function ManageRequest() {
             .get(`${process.env.REACT_APP_Backend_URI}pending-parkings`, {})
             .then((response) => {
                 let respData = response.data
+                console.log(respData);
                 respData.forEach((element) => {
-                    //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-                    element.lastModifyAt = moment(new Date(element.lastModifyAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                    element.requestBy = element.requestby.userName;
-                    element.parkingName = element.parkings.parkingName;
-                    
-
-
+                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+                   // {element.status ==="Pending"?(<>Chờ duyệt</>):(<>Từ chối</>)}
+                  
                     element.action = [
                         <Button
                             className='buttonState'
-                            disabled={element.state === 'Cancel' || element.isInProgress === false}
+                            disabled={element.status === 'Cancel'}
                             onClick={() => {
                                 showModal()
-                                handleCheckId(element.id)
+                                handleCheckId(element.parkingID)
                             }}
                         >
                             <CheckOutlined
@@ -97,10 +94,10 @@ export default function ManageRequest() {
                         </Button>,
                         <Button
                             className="buttonState"
-                            disabled={element.state === 'Done' || element.isInProgress === false}
+                            // disabled={element.status === 'Pending' || element.isInProgress === false}
                             onClick={() => {
                                 showModalDelete()
-                                handleCheckDeleteId(element.id)
+                                handleCheckDeleteId(element.parkingID)
                             }}
                         >
                             <CloseOutlined/>
@@ -120,7 +117,7 @@ export default function ManageRequest() {
 
     const columns = [
         {
-            title: "Parking Name",
+            title: "Tên bãi đỗ",
             dataIndex: "parkingName",
             key: "parkingName",
             sorter: (a, b) => {
@@ -135,51 +132,38 @@ export default function ManageRequest() {
         },
 
         {
-            title: "Assigned Date",
-            dataIndex: "assignedDate",
-            key: "assignedDate",
+            title: "Địa chỉ",
+            dataIndex: "addressDetail",
+            key: "addressDetail",
             sorter: (a, b) => {
-                if (a.requestAt > b.requestAt) {
+                if (a.addressDetail > b.addressDetail) {
                     return -1;
                 }
-                if (b.requestAt > a.requestAt) {
+                if (b.addressDetail > a.addressDetail) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        
+        {
+            title: "Miêu tả",
+            dataIndex: "discription",
+            key: "discription",
+            sorter: (a, b) => {
+                if (a.discription > b.discription) {
+                    return -1;
+                }
+                if (b.discription > a.discription) {
                     return 1;
                 }
                 return 0;
             },
         },
         {
-            title: "Assigned By",
-            dataIndex: "assignedBy",
-            key: "assignedBy",
-            sorter: (a, b) => {
-                if (a.requestBy > b.requestBy) {
-                    return -1;
-                }
-                if (b.requestBy > a.requestBy) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
-        {
-            title: "Note",
-            dataIndex: "note",
-            key: "note",
-            sorter: (a, b) => {
-                if (a.note > b.note) {
-                    return -1;
-                }
-                if (b.note > a.note) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
-        {
-            title: "State",
-            dataIndex: "state",
-            key: "state",
+            title: "Trạng thái",
+            dataIndex: "status",
+            key: "status",
             sorter: (a, b) => {
                 if (a.status > b.status) {
                     return -1;
@@ -191,21 +175,23 @@ export default function ManageRequest() {
             },
         },
         {
-            title: "Action",
+            title: "Phê duyệt",
             dataIndex: "action",
             key: "action",
         },
     ];
+    const dataByStatus =
+        status === "Status" ? data : data.filter((u) => u.status === status);
     const finalData =
     searchText === ""
-      ? data
-      : (data.filter(
+      ? dataByStatus
+      : (dataByStatus.filter(
           (u) =>
             u.parkingName
               .toLowerCase()
               .replace(/\s+/g, "")
               .includes(searchText.toLowerCase().replace(/\s+/g, "")) ||
-            u.requestBy.toLowerCase().replace(/\s+/g, "").includes(searchText.toLowerCase().replace(/\s+/g, ""))
+            u.addressDetail.toLowerCase().replace(/\s+/g, "").includes(searchText.toLowerCase().replace(/\s+/g, ""))
         ) 
         );
     const pagination = {
@@ -225,6 +211,56 @@ export default function ManageRequest() {
     return (
         <>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
+        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+            {/*Filter Gender */}
+        <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  value="Male"
+                  onClick={() => {
+                    setStatus("Pending");
+                  }}
+                >
+                  {" "}
+                  Chờ duyệt
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setStatus("Cancel");
+                  }}
+                >
+                  {" "}
+                  Từ chối
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setStatus("Status");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          >   {(() => {
+            switch(status) {
+              case 'Status':
+                return <>Tất cả</>
+              case 'Pending':
+                return <>Chờ duyệt</>
+              case 'Cancel':
+                return <>Từ chối</>
+              default:
+                return null
+            }
+          })}
+          </Dropdown.Button>
+          </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
             placeholder="Search User"
@@ -239,26 +275,16 @@ export default function ManageRequest() {
         </Row>
             <Modal
                 visible={modal.isOpen}
-                title='Detail Assignment Information'
+                title='Thông tin bãi đỗ'
                 onCancel={()=>{setModal({...modal,isOpen:false})}}
-                closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
+                // closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
                 footer={
                     null
                 }
             >
                 <table>
-
                     <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>ID</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.id}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Parking Name</td>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Tên Bãi Đỗ</td>
                         <td style={{
                             fontSize: '18px',
                             color: '#838688',
@@ -268,27 +294,27 @@ export default function ManageRequest() {
                     </tr>
                     
                     <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request By</td>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Địa chỉ</td>
                         <td style={{
                             fontSize: '18px',
                             color: '#838688',
                             textAlign: 'justify',
                             paddingLeft: '35px'
-                        }}>{modal.data.requestdBy}</td>
+                        }}>{modal.data.addressDetail}</td>
                     </tr>
                     <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request At</td>
+                        <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
                         <td style={{
                             fontSize: '18px',
                             color: '#838688',
                             textAlign: 'justify',
                             paddingLeft: '35px'
-                        }}>{modal.data.requestAt}</td>
+                        }}>{modal.data.latitude} - {modal.data.longitude}</td>
                     </tr>
 
                     <tr>
 
-                        <td style={{fontSize: '18px', color: '#838688'}}>Status</td>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Trạng thái</td>
                         <td style={{
                             fontSize: '18px',
                             color: '#838688',
@@ -297,51 +323,52 @@ export default function ManageRequest() {
                         }}>{modal.data.status}</td>
                     </tr>
                     <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Note</td>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Hợp pháp</td>
                         <td style={{
                             fontSize: '18px',
                             color: '#838688',
                             textAlign: 'justify',
                             paddingLeft: '35px'
-                        }}>{modal.data.note}</td>
+                        }}>{
+                        modal.data.note ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
+                        }</td>
                     </tr>
                 </table>
 
 
             </Modal>
             <Modal
-                closable={false}
-                title="Are You Sure?" visible={isModalVisible} okText="Yes" cancelText="No" onOk={handleOk}
+                
+                title="Phê duyệt" visible={isModalVisible} okText="Yes" cancelText="No" onOk={handleOk}
                 onCancel={handleCancel}
                 footer={[
-                    <div style={{textAlign: "left"}}>
-                        <Button key="Yes" onClick={handleOk} className="buttonSave">Accept</Button>
-                        <Button key="No" onClick={handleCancel} className='buttonCancel'>Cancel</Button>
+                    <div style={{textAlign: "right"}}>
+                        <Button key="Yes" onClick={handleOk} className="buttonSave">Đồng ý</Button>
+                        <Button key="No" onClick={handleCancel} className='buttonCancel'>Đóng</Button>
                     </div>
                 ]}>
-                <p>Do you want to accept this request?</p>
+                <p style={{textAlign: "center"}}>Bạn đồng ý phê duyệt cho bãi đỗ này</p>
             </Modal>
             <Modal
-                closable={false}
                 title="Are You Sure?" visible={isModalCancelVisible} okText="Yes" cancelText="No" onOk={handleDeleteOk}
                 onCancel={handleCancelModal}
                 footer={[
-                    <div style={{textAlign: "left"}}>
-                        <Button key="Yes" onClick={handleDeleteOk} className="buttonSave">Decline</Button>
-                        <Button key="No" onClick={handleCancelModal} className=' buttonCancel'>Cancel</Button>
+                    <div style={{textAlign: "right"}}>
+                        <Button key="Yes" onClick={handleDeleteOk} className="buttonSave">Từ chối</Button>
+                        <Button key="No" onClick={handleCancelModal} className=' buttonCancel'>Đóng</Button>
                     </div>
                 ]}>
-                <p>Do you want to cancel this request?</p>
+                 <p style={{textAlign: "center"}}>Bạn từ chối phê duyệt cho bãi đỗ này</p>
             </Modal>
           
 
 
             <div>
-                <h1 style={{color: "red", float: "left"}}>Manage Request</h1>
+                <h1 style={{color: "red", float: "left"}}>Manage Aprrove Request</h1>
                 <Table
                     columns={columns}
                     pagination={pagination}
-                    dataSource={data}
+                    dataSource={finalData}
                     onRow={(record) => {
                         return {
                             onClick: (e) => {
@@ -354,12 +381,14 @@ export default function ManageRequest() {
                                     setModal({
                                         ...modal, isOpen: true
                                         , data: {
-                                            id: record.stt,
                                             parkingName: record.parkingName,
-                                            requestBy: record.requestBy,
-                                            requestAt: record.requestAt,
+                                            addressDetail: record.addressDetail,
+                                            description: record.discription,
+                                            latitude: record.lat,
+                                            longitude: record.lon,
+                                            image: record.imageUrls,
                                             status: record.status,
-                                            note: record.note
+                                            isLegal: record.isLegal,
                                         }
 
                                     });
