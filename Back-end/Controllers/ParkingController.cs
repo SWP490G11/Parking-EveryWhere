@@ -297,6 +297,17 @@ namespace Back_end.Controllers
             return Ok("Change status success");
         }
 
+        [HttpPatch("/cancel-parking/{parkingId}")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
+        public async Task<IActionResult> Cancel(string parkingId)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            _respository.CancelParkingInvalid(parkingId);
+            return Ok("Change status success");
+        }
+
 
         [HttpPost("/parking")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]

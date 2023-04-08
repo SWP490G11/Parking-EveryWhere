@@ -65,7 +65,6 @@ namespace Back_end.Respository
         {
             var updateRequest = await GetAsync(idString);
             updateRequest.Status = Status.Cancel;
-            _dbContext.Requests.Update(updateRequest);
             await _dbContext.SaveChangesAsync();
         }
 

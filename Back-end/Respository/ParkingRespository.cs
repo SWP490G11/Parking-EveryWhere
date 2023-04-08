@@ -22,6 +22,8 @@ namespace Back_end.Respository
         Task<ICollection<Parking>> GetListParkingPending();
 
         Task AproveParking(string? ID);
+
+        Task CancelParkingInvalid(string? ID);
     }
 
     public class ParkingRespository : IParkingRespository
@@ -161,6 +163,15 @@ namespace Back_end.Respository
            await _dbContext.SaveChangesAsync(true);
         }
 
+
+        public async Task CancelParkingInvalid(string? ID)
+        {
+            var parking = GetAsync(ID);
+            parking.Status = Status.Cancel;
+            parking.IsLegal = false;
+
+            await _dbContext.SaveChangesAsync(true);
+        }
         public void UpdateAsync(string idString, ParkingModel updateModel)
         {
 
