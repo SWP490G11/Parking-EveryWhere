@@ -162,8 +162,8 @@ namespace Back_end.Respository
                 .Include(u => u.Requests).
                 Include(u => u.Feedbacks)
                 .Include(u => u.Image).
-                Include(u => u.Parkings)
-                .ThenInclude(p=>p.Images)
+                Include(u => u.Parkings).ThenInclude(p=>p.Requests)
+                .Include(u => u.Parkings).ThenInclude(p=>p.Images)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));

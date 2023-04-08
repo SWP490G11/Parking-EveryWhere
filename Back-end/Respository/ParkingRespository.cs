@@ -159,7 +159,7 @@ namespace Back_end.Respository
             var parking = GetAsync(ID);
             parking.Status = Status.Available;
             parking.IsLegal = true;
-
+            _dbContext.Update(parking);
            await _dbContext.SaveChangesAsync(true);
         }
 
