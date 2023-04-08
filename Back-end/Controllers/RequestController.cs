@@ -125,7 +125,7 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpPut("/request/cancel-request/{id}")]
+        [HttpPatch("/request/cancel-request/{id}")]
 
         [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> CancelRequest(string id)
