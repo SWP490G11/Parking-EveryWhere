@@ -126,6 +126,7 @@ import axios from "axios";
         respData.forEach((element) => {
           element.model= element.carModel.model;
           element.discript =element.carModel.discript;
+          element.userName =element.userName;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
@@ -443,7 +444,7 @@ import axios from "axios";
       >
         <table>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
               Mã xe
             </td>
             <td
@@ -504,8 +505,8 @@ import axios from "axios";
           </tr>
 
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Tên người đăng nhập{" "}
+            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
+             Người dùng{" "}
             </td>
             <td
               style={{
