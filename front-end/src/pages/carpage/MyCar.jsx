@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 
-export const MyCar = () => {
+ const MyCar =() => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -52,6 +52,21 @@ export const MyCar = () => {
         if (a.carNumber > b.carNumber) {
           return -1;
         } else if (b.carNumber > a.carNumber) {
+          return 1;
+        }
+        return 0;
+      },
+      width: "7%",
+    },
+    {
+      title: "Model",
+      dataIndex: "model",
+      key: "model",
+      sorter: (a, b) => {
+        if (a.model > b.model) {
+          return -1;
+        }else
+        if (b.model > a.model) {
           return 1;
         }
         return 0;
@@ -103,12 +118,15 @@ export const MyCar = () => {
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_Backend_URI}cars-of-owner`, {})
+      .get(`${process.env.REACT_APP_Backend_URI}cars`, {})
       .then(function (response) {
         let respData = response.data;
         console.log(respData);
 
         respData.forEach((element) => {
+          element.model= element.carModel.model;
+          element.discript =element.carModel.discript;
+          element.userName =element.userName;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
@@ -128,11 +146,11 @@ export const MyCar = () => {
             <CloseCircleOutlined
               onClick={() => {
                 Modal.confirm({
-                  title: "Are you sure?",
+                  title: "Bạn chắc chứ ?",
                   icon: <CloseCircleOutlined style={{ color: "red" }} />,
-                  content: "Do you want to delete this car ?",
-                  okText: "Delete",
-                  cancelText: "Cancel",
+                  content: "Bạn muốn xóa thông tin của xe này ? ",
+                  okText: "Xóa",
+                  cancelText: "Hủy",
                   okButtonProps: {
                     style: { background: "#e30c18", color: "white" },
                   },
@@ -146,14 +164,14 @@ export const MyCar = () => {
                         )
                         .then(() => {
                           notification.success({
-                            message: `Delete successfully`,
+                            message: `Xóa thành công`,
                             description: "Delete a new car model successfully",
                             placement: "topLeft",
                           });
                         })
                         .catch(() => {
                           notification.error({
-                            message: `Delete fail`,
+                            message: `Xóa không thành công`,
                             description: "Delete a user fail",
                             placement: "topLeft",
                           });
@@ -218,22 +236,20 @@ export const MyCar = () => {
 
   const onFinish = (values) => {
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}car`, {
-        model: values.model,
-        carNumber: values.discript,
-        discript: values.discript,
-        userName: values.userName,
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {        
+        carModelId: values.carModelId,
+        carNumber: values.discript,    
         lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
-          description: "Create new car successfully",
+          message: `Thành công`,
+          description: "Create new parking successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carNumber:"",
           model: "",
           discript: "",
           userName: "",
@@ -248,7 +264,7 @@ export const MyCar = () => {
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carNumber:"",
           model: "",
           discript: "",
           userName: "",
@@ -258,20 +274,21 @@ export const MyCar = () => {
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
+        carNumber : values.carNumber,
         model: values.model,
         discript: values.discript,
-        price: values.price,
+       
         lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
+          message: `Thành công`,
           description: "Edit this car successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carNumber:"",
           model: "",
           discript: "",
           userName: "",
@@ -286,7 +303,7 @@ export const MyCar = () => {
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carNumber:"",
           model: "",
           discript: "",
           userName: "",
@@ -364,7 +381,7 @@ export const MyCar = () => {
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm thông tin xe"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -379,32 +396,32 @@ export const MyCar = () => {
             onClick={() => {
               showDrawer();
               form.setFieldsValue({
-                carNumber: "",
+                carNumber:"",
                 model: "",
                 discript: "",
-                price: "",
+                userName: "",
               });
             }}
           >
-            Add more car for you
+            Add new car number
           </Button>
         </Col>
       </Row>
       {/* Delete Modal */}
       {/* <Modal
-          open={deleteModal.isOpen}
-          title={deleteModal.title}
-          footer={deleteModal.footer}
-          onCancel={() => {
-            setDeleteModal({ ...deleteModal, isOpen: false });
-          }}
-          destroyOnClose={true}
-          closeIcon={
-            <CloseSquareOutlined style={{ color: "red", fontSize: "20px" }} />
-          }
-        >
-          {deleteModal.content}
-        </Modal> */}
+        open={deleteModal.isOpen}
+        title={deleteModal.title}
+        footer={deleteModal.footer}
+        onCancel={() => {
+          setDeleteModal({ ...deleteModal, isOpen: false });
+        }}
+        destroyOnClose={true}
+        closeIcon={
+          <CloseSquareOutlined style={{ color: "red", fontSize: "20px" }} />
+        }
+      >
+        {deleteModal.content}
+      </Modal> */}
       <Modal
         open={modal.isOpen}
         title="Detail Car model"
@@ -428,7 +445,7 @@ export const MyCar = () => {
         <table>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              ID
+              Mã xe
             </td>
             <td
               style={{
@@ -443,7 +460,7 @@ export const MyCar = () => {
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Car number
+              Biển số xe
             </td>
             <td
               style={{
@@ -458,7 +475,7 @@ export const MyCar = () => {
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Model
+              Loại xe
             </td>
             <td
               style={{
@@ -468,12 +485,12 @@ export const MyCar = () => {
                 paddingLeft: "35px",
               }}
             >
-              dads {modal.data.model}
+               {modal.data.model}
             </td>
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Discript
+              Mô tả
             </td>
             <td
               style={{
@@ -489,7 +506,7 @@ export const MyCar = () => {
 
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              User name{" "}
+              Tên người đăng nhập{" "}
             </td>
             <td
               style={{
@@ -566,7 +583,7 @@ export const MyCar = () => {
       )}
       {/*Add new car model */}
       <Drawer
-        title="Add new car"
+        title="Thêm xe mới"
         width={550}
         onClose={onClose}
         open={open}
@@ -584,7 +601,7 @@ export const MyCar = () => {
             <Col span={24}>
               <Form.Item
                 name="model"
-                label="Model Name"
+                label="Loại xe"
                 rules={[
                   {
                     required: true,
@@ -600,7 +617,7 @@ export const MyCar = () => {
             <Col span={24}>
               <Form.Item
                 name="carNumber"
-                label="Price"
+                label="Biển số xe"
                 rules={[
                   {
                     required: true,
@@ -617,6 +634,7 @@ export const MyCar = () => {
               </Form.Item>
             </Col>
           </Row>
+          
 
           <Row gutter={16}>
             <Col span={24}>
@@ -643,7 +661,7 @@ export const MyCar = () => {
       </Drawer>
       {/*Edit car model */}
       <Drawer
-        title="Edit  car information"
+        title="Sửa thông tin của xe"
         width={550}
         onClose={onClose1}
         open={open1}
@@ -689,6 +707,7 @@ export const MyCar = () => {
               </Form.Item>
             </Col>
           </Row>
+             
 
           <Row gutter={16}>
             <Col span={24}>
@@ -710,4 +729,7 @@ export const MyCar = () => {
       </Drawer>
     </>
   );
-};
+
+}
+
+export default MyCar;
