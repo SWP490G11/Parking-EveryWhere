@@ -54,11 +54,11 @@ export default function ManageApproveParking() {
     const handleDeleteOk = () => {
         setIsModalCancelVisible(false);
         axios
-            .put(`https://rookiesgroup3.azurewebsites.net/api/Assignments/${idCompleted}/declined`)
+        .patch(`${process.env.REACT_APP_Backend_URI}cancel-parking/${idCompleted}`, {})
             .then((res) => {
                 setIdCompleted(null)
 
-                window.location.reload();
+                //window.location.reload();
             }).catch((error) => {
 
         })
@@ -113,7 +113,7 @@ export default function ManageApproveParking() {
             .catch((error) => {
 
             })
-    }, [])
+    }, [data])
 
     const columns = [
         {
@@ -147,7 +147,7 @@ export default function ManageApproveParking() {
         },
         
         {
-            title: "Miêu tả",
+            title: "Thông tin thêm",
             dataIndex: "discription",
             key: "discription",
             sorter: (a, b) => {
@@ -303,6 +303,15 @@ export default function ManageApproveParking() {
                         }}>{modal.data.addressDetail}</td>
                     </tr>
                     <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Thông tin thêm</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.description}</td>
+                    </tr>
+                    <tr>
                         <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
                         <td style={{
                             fontSize: '18px',
@@ -330,7 +339,7 @@ export default function ManageApproveParking() {
                             textAlign: 'justify',
                             paddingLeft: '35px'
                         }}>{
-                        modal.data.note ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
+                        modal.data.isLegal ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
                         }</td>
                     </tr>
                 </table>
