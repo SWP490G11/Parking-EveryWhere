@@ -1,16 +1,21 @@
-
+import { Layout } from 'antd';
+import {  Routes, Route } from 'react-router-dom';
 import './App.css';
 import axios from "axios";
 import React, { createContext,useState, useEffect } from "react";
 import AuthRoutes from './routes/AuthRoutes';
 import RouteComponent from './components/RouteComp';
-import HeaderComp from './components/HeaderComp';
+import HeaderComp from './components/Header/HeaderComp';
 import  {AppRoutes } from './routes/AppRoutes';
 import  {OwnerRoutes}  from './routes/OwnerRoutes';
 import  {CustomerRoutes}  from './routes/CustomerRoutes';
 import  {ManagerRoutes}  from './routes/ManagerRoutes';
-import FooterComp from './components/FooterComp';
-
+import FooterComp from './components/Footer/FooterComp';
+import MenuComp from './components/Menu/MenuComponent';
+import HomePage from "./pages/homepage/HomePage";
+import LoginPage from "./pages/loginpage/LoginPage";
+import Register from "./pages/loginpage/Register";
+import NotFound from "./pages/NotFoundPage/NotFoundPage";
 export const Context = createContext();
 function App() {
   const [loginState, setLoginState] = useState({
@@ -51,12 +56,13 @@ function App() {
     }
   }, [loginState.token]);
   const role= loginState.role;
+  const { Content } = Layout;
   const renderContent = () => {
     switch (role) {
       case 'Admin':
         return (<>
        
-      <RouteComponent routes={AppRoutes} />
+      <RouteComponent  routes={AppRoutes} />
      
       </>);
       case 'ParkingOwner':
@@ -77,48 +83,56 @@ function App() {
         return null
     }
   };
+  const token = localStorage.getItem('token');
+//   useEffect(() => {
+    
+//     if (!token) {
+//         window.location.replace('/login')
+//     }
+// }, []);
   return (
     
     <Context.Provider value={[loginState, setLoginState]}>
-        
-      {(loginState.isLogin === false ) ? ( 
+          
+          {(!token) ? ( 
           //  <Login/>
            <RouteComponent routes={AuthRoutes} />
           // <LoginPage/>
         ) : (
+         
           <>
+          
            <HeaderComp
                 username={loginState.username}
                 id = {loginState.id}
                 role= {loginState.role}
               />
+               <Content
+          style={{
+            padding: '0 50px',
+          }}
+        >
+          <MenuComp role= {loginState.role}/>
+          <div
+            className="site-layout-content"
+            style={{
+              background: '#FFF',
+            }}
+          >    <Routes>
+               <Route exact path={'/'} element={<HomePage role={loginState.role} />} />
+         
+                </Routes>
               {renderContent()}
-          {/* {(() => {
-            if(loginState.role === "Admin"){
-      
-              
-              <RouteComponent routes={AppRoutes} />
-            
-              
-            }else if(loginState.role === "ParkingOwner"){
-              
-              <RouteComponent routes={OwnerRoutes} />
-              
-
-            }else if(loginState.role === "Customer"){
-
-            }else {
-
-            }
-            // switch(role) {
+              </div>
              
-            // }
-          })()} */}
+              </Content>
+             
           <FooterComp/>
+       
        </>
-       )}
+          )}
       
-    
+   
   </Context.Provider>
    
    

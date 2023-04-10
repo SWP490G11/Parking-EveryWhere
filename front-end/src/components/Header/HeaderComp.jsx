@@ -1,133 +1,11 @@
-import { Menu, Modal, Dropdown, Avatar, Button,Input, Form, Badge } from "antd";
-import {LogoutOutlined,AppstoreOutlined,HomeOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined,FileTextOutlined, BellFilled} from "@ant-design/icons";
+import {  Modal, Dropdown, Avatar, Button,Input, Form, Badge } from "antd";
+import {LogoutOutlined,DownOutlined, UserOutlined,CarOutlined,RedoOutlined, BellFilled} from "@ant-design/icons";
 import React from "react";
-import "../style/home.css";
+import "../../style/home.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // import '../style/Style.css'
-const menuadmin = [
-  {
-    label: (
-      <a href="/home">
-        Home
-      </a>
-    ),
-    key: "mail",
-    icon: <HomeOutlined />,
-  },
-  {
-    label: "Parking Of Me ",
-    key: "app",
-    icon: <AppstoreOutlined />,
-  },
-  {
-  label: (
-    <a href="/managerUser">Manage User</a>
-  ),
-  key: "managerUser",
-  icon: <AppstoreOutlined />,
-  },
-  {
-    label: (
-      <a href="/managerCarModel">Manage Car Model</a>
-    ),
-    key: "managerCarModel",
-    icon: <AppstoreOutlined />,
-    },
-    {
-      label:  <a href="/manage-request">
-      Manage Request
-    </a>
-     ,
-      key: "app",
-      icon: <FileTextOutlined />,
-    },
- 
-];
-const menuonwer =[
-  {
-    label: (
-      <a href="/home">
-        Home
-      </a>
-    ),
-    key: "mail",
-    icon: <HomeOutlined />,
-  },
-  {
-    label: (
-      <a href="/manage-parking">
-        Manage Parking
-      </a>
-    ), 
-    key: "Manage",
-    icon: <AppstoreOutlined />,
-  },
-  {
-    label:  <a href="/manage-request">
-    Manage Request
-  </a>
-   ,
-    key: "app",
-    icon: <FileTextOutlined />,
-  },
-  {
-    label:  <a href="/my-request">
-    My Request
-  </a>
-   ,
-    key: "app",
-    icon: <FileTextOutlined />,
-  },
 
- 
-  {
-    label: (
-      <a href="/parking-manager-of-owner">Manage parking manager</a>
-    ),
-    key: "alipay",
-  },
-]
-const menucustomer =[
-  {
-    label: (
-      <a href="/home">
-        Home
-      </a>
-    ),
-    key: "mail",
-    icon: <HomeOutlined />,
-  },
-  
-  {
-    label:  <a href="/my-request">
-    My Request
-  </a>
-   ,
-    key: "app",
-    icon: <FileTextOutlined />,
-  },
-]
-const menumanager =[
-  {
-    label: (
-      <a href="/home">
-        Home
-      </a>
-    ),
-    key: "mail",
-    icon: <HomeOutlined />,
-  },
-  
-  {
-    label:  <a href="/my-request">
-    My Request
-  </a>
-   ,
-    key: "app",
-    icon: <FileTextOutlined />,
-  },
-]
 
 export default function HeaderComp({username,id,role}) {
   const [isModal, setModal] = React.useState({
@@ -167,8 +45,9 @@ export default function HeaderComp({username,id,role}) {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
           localStorage.removeItem("loginState");
           localStorage.removeItem("role");
+          localStorage.removeItem("token");
           localStorage.setItem("isLogin",false);
-          window.location.href = `/`;
+          window.location.href = `/login`;
         });
       },
       onCancel() {},
@@ -202,28 +81,7 @@ export default function HeaderComp({username,id,role}) {
     onClick: () => handleConfirmLogout(),
     icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
   }];
-  const renderContent = () => {
-    switch (role) {
-      case 'Admin':
-        return (<>
-       <Menu mode="horizontal" items={menuadmin}/>
-      </>);
-      case 'ParkingOwner':
-        return (<>
-       <Menu mode="horizontal" items={menuonwer}/>
-      </>);
-      case 'Customer':
-        return (<>
-         <Menu mode="horizontal" items={menucustomer}/>
-        </>);
-      case 'ParkingManager':
-        return (<>
-           <Menu mode="horizontal" items={menumanager}/>
-         </>);
-      default:
-        return null
-    }
-  };
+ 
 
   return (
     <>
@@ -435,7 +293,7 @@ export default function HeaderComp({username,id,role}) {
       </Modal>
         </div>
       </div>
-     {renderContent()}
+    
       
     </>
   );

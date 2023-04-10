@@ -1,5 +1,5 @@
 import PakingDetail from "../pages/parkingPage/parkingDetail";
-import HomePage from "../pages/homepage/HomePage";
+
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
 import ManageUser from "../pages/user/ManageUser";
@@ -13,11 +13,7 @@ export const AppRoutes = [
       element: <PakingDetail />,
       title: "Parking Detail",
     },
-    {
-      path: "/home",
-      element: <HomePage />,
-      title: "Home Page",
-    },
+    
     {
       path: "/user-profile",
       element: <UserProfile />,
