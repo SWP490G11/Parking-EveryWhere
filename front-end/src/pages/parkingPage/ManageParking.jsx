@@ -3,7 +3,6 @@ import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal } from "antd";
 import {
   FilterOutlined,
   EditFilled,
-  CloseCircleOutlined,
   CloseSquareOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
@@ -23,49 +22,70 @@ export default function ManageParking() {
   });
 
   const columns = [
-      {
-        title: "Parking Name",
+    {
+        title: "Tên bãi đỗ",
         dataIndex: "parkingName",
         key: "parkingName",
         sorter: (a, b) => {
-          if (a.parkingName > b.parkingName) {
-            return -1;
-          }
-          if (b.parkingName > a.parkingName) {
-            return 1;
-          }
-          return 0;
+            if (a.parkingName > b.parkingName) {
+                return -1;
+            }
+            if (b.parkingName > a.parkingName) {
+                return 1;
+            }
+            return 0;
         },
-      },
-   
-    {
-      title: "Address Detail",
-      dataIndex: "addressDetail",
-      key: "addressDetail",
-      sorter: (a, b) => {
-        if (a.addressDetail > b.addressDetail) {
-          return -1;
-        }
-        if (b.addressDetail > a.addressDetail) {
-          return 1;
-        }
-        return 0;
-      },
     },
-   
+
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },  
-   
-    {
-      title: "Action",
-      dataIndex: "action",
-      key: "action",
-      
+        title: "Địa chỉ",
+        dataIndex: "addressDetail",
+        key: "addressDetail",
+        sorter: (a, b) => {
+            if (a.addressDetail > b.addressDetail) {
+                return -1;
+            }
+            if (b.addressDetail > a.addressDetail) {
+                return 1;
+            }
+            return 0;
+        },
     },
-  ];
+    
+    {
+        title: "Thông tin thêm",
+        dataIndex: "discription",
+        key: "discription",
+        sorter: (a, b) => {
+            if (a.discription > b.discription) {
+                return -1;
+            }
+            if (b.discription > a.discription) {
+                return 1;
+            }
+            return 0;
+        },
+    },
+    {
+        title: "Trạng thái",
+        dataIndex: "statuz",
+        key: "statuz",
+        sorter: (a, b) => {
+            if (a.statuz > b.statuz) {
+                return -1;
+            }
+            if (b.statuz > a.statuz) {
+                return 1;
+            }
+            return 0;
+        },
+    },
+    {
+        title: "Hành động",
+        dataIndex: "action",
+        key: "action",
+    },
+];
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     title: "Notice",
@@ -88,59 +108,70 @@ export default function ManageParking() {
         console.log(respData);
         respData.forEach((element) => {
           element.parkingmanager= element.parkingManagers.userName;
-         
+          //element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+          
           element.action = [
             <Link to={`/editUser/${element.studentId}`} id="editButton">
               <EditFilled style={{  fontSize: "25px" }} />
             </Link>,
-            <CloseCircleOutlined
-              onClick={() => {
-                setDeleteModal({
-                  ...deleteModal,
-                  footer: (
-                    <div >
-                      <Button 
-                        className="ant-btn ant-btn-danger"
-                        onClick={() => {
-                          axios
-                            .put(
-                              `${process.env.REACT_APP_Backend_URI}api/Student/Diable/${element.studentId}`
-                            )
-                            .then(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: false,
-                              });
-                              window.location.reload();
-                            })
-                            .catch(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: true,
-                                footer: null,
-                                title: "Can not disable user",
-                                content: (
-                                  <p>
-                                    There are valid assignments belonging to
-                                    this user. Please Close all assignments
-                                    before disabling user.
-                                  </p>
-                                ),
-                              });
-                            });
-                        }}
-                      >
-                        Disable
-                      </Button>
+            // <CloseCircleOutlined
+            //   onClick={() => {
+            //     setDeleteModal({
+            //       ...deleteModal,
+            //       footer: (
+            //         <div >
+            //           <Button 
+            //             className="ant-btn ant-btn-danger"
+            //             onClick={() => {
+            //               axios
+            //                 .put(
+            //                   `${process.env.REACT_APP_Backend_URI}api/Student/Diable/${element.studentId}`
+            //                 )
+            //                 .then(() => {
+            //                   setDeleteModal({
+            //                     ...deleteModal,
+            //                     isOpen: false,
+            //                   });
+            //                   window.location.reload();
+            //                 })
+            //                 .catch(() => {
+            //                   setDeleteModal({
+            //                     ...deleteModal,
+            //                     isOpen: true,
+            //                     footer: null,
+            //                     title: "Can not disable user",
+            //                     content: (
+            //                       <p>
+            //                         There are valid assignments belonging to
+            //                         this user. Please Close all assignments
+            //                         before disabling user.
+            //                       </p>
+            //                     ),
+            //                   });
+            //                 });
+            //             }}
+            //           >
+            //             Disable
+            //           </Button>
                       
-                    </div>
-                  ),
-                  isOpen: true,
-                });
-              }}
-              style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
-            />,
+            //         </div>
+            //       ),
+            //       isOpen: true,
+            //     });
+            //   }}
+            //   style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
+            // />,
           ];
+          switch(element.status) {
+            case 'Pending':
+              return element.statuz = 'Chờ duyệt'
+            case 'Cancel':
+              return element.statuz = 'Từ chối'
+            case 'Available':
+              return element.statuz = 'Khả dụng'
+            default:
+              return null
+          };
         });
         setData(
           respData.sort((a, b) => {
@@ -222,30 +253,49 @@ export default function ManageParking() {
                   }}
                 >
                   {" "}
-                  Available
+                  Khả dụng
                 </Menu.Item>
                 <Menu.Item
-                  value="NotAvailable"
+                  value="Pending"
                   onClick={() => {
-                    setStatus("NotAvailable");
+                    setStatus("Pending");
                   }}
                 >
                   {" "}
-                  Not Available
+                  Chờ duyệt
                 </Menu.Item>
-                
+                <Menu.Item
+                  value="Cancel"
+                  onClick={() => {
+                    setStatus("Cancel");
+                  }}
+                >
+                  {" "}
+                  Từ chối
+                </Menu.Item>
+               
                 <Menu.Item
                   onClick={() => {
                     setStatus("Status");
                   }}
                 >
                   {" "}
-                  All
+                  Tất cả
                 </Menu.Item>
               </Menu>
             }
-          >
-            {status}
+          >   {(() => {
+            switch(status) {
+              case 'Status':
+                return <p>Tất cả</p>
+              case 'Pending':
+                return <>Chờ duyệt</>
+              case 'Cancel':
+                return <>Từ chối</>
+              default:
+                return null
+            }
+          })}
           </Dropdown.Button>
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
@@ -277,123 +327,80 @@ export default function ManageParking() {
         {deleteModal.content}
       </Modal>
       <Modal
-        open={modal.isOpen}
-        title="Detail Student"
-        onOk={() => {
-          setModal({ ...modal, isOpen: false });
-        }}
-        style={{width:400}}
-        footer={[
-          <Button
-            style={{ background: "#e30c18", color: "white" }}
-            key="back"
-            onClick={() => {
-              setModal({ ...modal, isOpen: false });
-            }}
-          >
-            Close
-          </Button>,
-        ]}
-        closable={false}
-      >
-        {/* <table>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
+                visible={modal.isOpen}
+                title='Thông tin bãi đỗ'
+                onCancel={()=>{setModal({...modal,isOpen:false})}}
+                // closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
+                footer={
+                    null
+                }
             >
-              {modal.data.id}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>User Name</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.userName}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Full Name</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.fullName}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Phone Number</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.phoneNumber}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Email </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.email}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Gender</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.gender}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>
-              Date of Birth
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.dateOfBirth}
-            </td>
-          </tr>
-        </table> */}
+                <table>
+                    <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Tên Bãi Đỗ</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.parkingName}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Địa chỉ</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.addressDetail}</td>
+                    </tr>
+                    <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Thông tin thêm</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.description}</td>
+                    </tr>
+                    <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.latitude} - {modal.data.longitude}</td>
+                    </tr>
+
+                    <tr>
+
+                        <td style={{fontSize: '18px', color: '#838688'}}>Trạng thái</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{modal.data.status}</td>
+                    </tr>
+                    <tr>
+                        <td style={{fontSize: '18px', color: '#838688'}}>Hợp pháp</td>
+                        <td style={{
+                            fontSize: '18px',
+                            color: '#838688',
+                            textAlign: 'justify',
+                            paddingLeft: '35px'
+                        }}>{
+                        modal.data.isLegal ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
+                        }</td>
+                    </tr>
+                </table>
+
+
       </Modal>
 
-      {data.length === 0 ? (
+      {finalData.length === 0 ? (
         <Table
           loading={{
             indicator: (
@@ -416,7 +423,7 @@ export default function ManageParking() {
                   margin: 0,
                 }}
               >
-               Hello
+               <Button>Thêm slot</Button>
               </p>
             )
                }}
@@ -432,12 +439,14 @@ export default function ManageParking() {
                     ...modal,
                     isOpen: true,
                     data: {
-                        
                       parkingName: record.parkingName,
-                      parkingmanager: record.parkingmanager,
                       addressDetail: record.addressDetail,
-                      status: record.status,
-                    
+                      description: record.discription,
+                      latitude: record.lat,
+                      longitude: record.lon,
+                      image: record.imageUrls,
+                      status: record.statuz,
+                      isLegal: record.isLegal,
                     },
                   });
                   
@@ -449,11 +458,14 @@ export default function ManageParking() {
                     ...modal,
                     isOpen: true,
                     data: {
-                                 
                       parkingName: record.parkingName,
-                      parkingmanager: record.parkingmanager,
                       addressDetail: record.addressDetail,
-                      status: record.status,
+                      description: record.discription,
+                      latitude: record.lat,
+                      longitude: record.lon,
+                      image: record.imageUrls,
+                      status: record.statuz,
+                      isLegal: record.isLegal,
                     },
                   });
                   console.log(modal.data);

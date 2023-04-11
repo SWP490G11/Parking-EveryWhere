@@ -1,75 +1,82 @@
-// //import { PlusOutlined } from '@ant-design/icons';
-// import { Modal, Upload, Image } from 'antd';
-// import React, {  useState } from "react";
-// const getBase64 = (file) =>
-//   new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(file);
-//     reader.onload = () => resolve(reader.result);
-//     reader.onerror = (error) => reject(error);
-//   });
-// const UploadImage = () => {
-//   const [previewOpen, setPreviewOpen] = useState(false);
-//   const [previewImage, setPreviewImage] = useState('');
-//   const [previewTitle, setPreviewTitle] = useState('');
-//   const [fileList, setFileList] = useState([
-//     {
-//       uid: '-1',
-//       name: 'image.png',
-//       status: 'done',
-//       url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-//     },
-  
-   
-//   ]);
-//   const handleCancel = () => setPreviewOpen(false);
-//   const handlePreview = async (file) => {
-//     if (!file.url && !file.preview) {
-//       file.preview = await getBase64(file.originFileObj);
-//     }
-//     setPreviewImage(file.url || file.preview);
-//     setPreviewOpen(true);
-//     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-//   };
-//   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-//   const uploadButton = (
-//     <div>
-      
-//       <Image className="imgz"
-//                 width={160}
-//                 preview={false}
-//                 src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-//               />
-//       <div
-//         style={{
-//           marginTop: 8,
-//         }}
-//       >
-//         Upload
-//       </div>
-//     </div>
-//   );
-//   return (
-//     <>
-//       <Upload
-//         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-//         listType="picture-circle"
-       
-//         onPreview={handlePreview}
-//         onChange={handleChange}
-//       >
-//         {uploadButton}
-//       </Upload>
-//       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-//         <img
-//           alt="example"
-//           style={{
-//             width: '100%',
-//           }}
-//           src={previewImage}
-//         />
-//       </Modal>
-//     </>
-//   );
-// };
-// export default UploadImage;
+import { InboxOutlined } from '@ant-design/icons';
+import config from '../config/config';
+import React from 'react';
+import axios from 'axios';
+import {
+    Form,
+    Upload,
+} from 'antd';
+import { Message } from '../utils/helpers';
+import { TypeMessage } from '../utils/constants';
+const formItemLayout = {
+    labelCol: {
+        span: 6,
+    },
+    wrapperCol: {
+        span: 14,
+    },
+};
+
+const normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+        return e;
+    }
+    return e.fileList;
+};
+
+
+const UploadImage = ({ images, setImages }) => {
+
+    const dummyRequest = (options) => {
+
+        const data = new FormData()
+        data.append('media', options.file)
+        data.append('key', config.UPLOAD_API);
+        data.append('upload', 'Upload Image');
+
+        const configCustom = {
+            headers: {
+                'content-type': 'multipart/form-data',
+            },
+        }
+
+        delete axios.defaults.headers.common["Authorization"];
+
+        axios.post(options.action, data, configCustom)
+            .then((res) => {
+                if (res.data.success) {
+                    console.log(res.data)
+                    options.onSuccess(res.data.data, options.file)
+                    setImages([...images, res.data.data.media])
+                } else {
+                    Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                }
+            }).catch((err) => {
+                Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                console.log(err)
+            })
+    }
+
+    return (
+        <Form
+            name="validate_other"
+            {...formItemLayout}
+            style={{
+                width: 600,
+            }}
+        >
+            <Form.Item>
+                <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+                    <Upload.Dragger name="files" customRequest={dummyRequest} action={config.UPLOAD_URL} style={{ width: 120 }}>
+                        <p className="ant-upload-drag-icon">
+                            <InboxOutlined />
+                        </p>
+                        <p className="ant-upload-text">Upload</p>
+                    </Upload.Dragger>
+                </Form.Item>
+            </Form.Item>
+        </Form>
+    )
+};
+export default UploadImage;

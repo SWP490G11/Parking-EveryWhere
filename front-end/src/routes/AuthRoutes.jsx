@@ -4,7 +4,7 @@ import React from "react";
 
  const AuthRoutes = [
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
     title: "Login",
   },
@@ -14,6 +14,8 @@ import React from "react";
     title: "Register ",
   },
   
+  
+ 
 
 ];
 export default AuthRoutes;

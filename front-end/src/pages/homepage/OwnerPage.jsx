@@ -7,7 +7,7 @@ import { Button,Col, Drawer, notification,Form,Input,Row, Space, Layout,Dropdown
 import React, { useState, useEffect } from "react";
 import "../../style/home.css";
 import Mapbox from "../../components/Mapbox";
-
+import { useAuthState } from '../../hooks/authState';
 import axios from "axios";
 // Menu
 // const { Option } = Select;
@@ -16,7 +16,7 @@ const OwnerPage = () => {
   const [open, setOpen] = useState(false);
   //const [searchText, setSearchText] = useState("");
   //const [page, setPage] = useState(1);
-  const [itemz,setItemz]=useState([]);;
+  const [itemz,setItemz]=useState([]);
   const [type, setType] = useState("All");
   const [result, setResult] = useState({
     latitude: 24.8607,
@@ -65,7 +65,10 @@ const OwnerPage = () => {
     setItemz(response.data);
     
   };
+   
   useEffect(()=>{
+    const role = localStorage.getItem('role');
+    if(role )
      loadData();
   },[]);
    

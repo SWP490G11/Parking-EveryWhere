@@ -1,5 +1,4 @@
 import PakingDetail from "../pages/parkingPage/parkingDetail";
-import OwnerPage from "../pages/homepage/OwnerPage";
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
 import ManageParkingManager from "../pages/user/ParkingManager/ManageParkingManager";
@@ -13,11 +12,7 @@ export const OwnerRoutes = [
       element: <PakingDetail />,
       title: "Parking Detail",
     },
-    {
-      path: "/home",
-      element: <OwnerPage />,
-      title: "Home Page",
-    },
+   
     {
       path: "/user-profile",
       element: <UserProfile />,

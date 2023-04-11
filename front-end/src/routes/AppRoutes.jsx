@@ -1,11 +1,11 @@
 import PakingDetail from "../pages/parkingPage/parkingDetail";
-import HomePage from "../pages/homepage/HomePage";
+
 import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
 import ManageUser from "../pages/user/ManageUser";
 import ManageCarModel from "../pages/carpage/carmodelpage/ManageCarModel";
 import ManageCar from "../pages/carpage/ManageCar";
-import ManageRequest from "../pages/requestpage/ManageRequest";
+import ManageAprroveParking from "../pages/requestpage/ManageApproveParking";
 import React from "react";
 export const AppRoutes = [
     {
@@ -13,11 +13,7 @@ export const AppRoutes = [
       element: <PakingDetail />,
       title: "Parking Detail",
     },
-    {
-      path: "/home",
-      element: <HomePage />,
-      title: "Home Page",
-    },
+    
     {
       path: "/user-profile",
       element: <UserProfile />,
@@ -45,7 +41,7 @@ export const AppRoutes = [
     },
     {
       path: "/manage-request",
-      element: <ManageRequest />,
+      element: <ManageAprroveParking />,
       title: "Manage Request",
     }
    
