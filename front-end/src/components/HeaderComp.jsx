@@ -177,7 +177,7 @@ export default function HeaderComp({username,id,role}) {
     {
       label: 'My Car',
       key: '2',
-      onClick: ()=>navigate(`/mycar`),
+      onClick: ()=>navigate(`/manageCar`),
       icon: <CarOutlined  style={{ color: "red", fontWeight: "bold" }} />,
     },
     {

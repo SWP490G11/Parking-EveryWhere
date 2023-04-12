@@ -6,6 +6,7 @@ import UserProfile from "../pages/user/UserProfile";
 import EditUserProfile from "../pages/user/EditUser";
 import MyRequest from "../pages/requestpage/MyRequest";
 import ManageCar from "../pages/carpage/ManageCar";
+import MyCar from "../pages/carpage/MyCar";
 import React from "react";
 export const CustomerRoutes = [
     {
@@ -30,7 +31,7 @@ export const CustomerRoutes = [
     },
     {
       path: "/mycar",
-      element: <ManageCar />,
+      element: <MyCar />,
       title: "My Car",
     },
     {
