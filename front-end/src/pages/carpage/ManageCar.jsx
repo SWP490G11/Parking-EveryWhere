@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 
-export default function ManageCar() {
+ const ManageCar =() => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -59,19 +59,34 @@ export default function ManageCar() {
       width: "7%",
     },
     {
+      title: "Model",
+      dataIndex: "model",
+      key: "model",
+      sorter: (a, b) => {
+        if (a.model > b.model) {
+          return -1;
+        }else
+        if (b.model > a.model) {
+          return 1;
+        }
+        return 0;
+      },
+      width: "7%",
+    },
+    {
       title: "Discript",
       dataIndex: "discript",
       key: "discript",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Username",
+      dataIndex: "userName",
+      key: "userName",
       sorter: (a, b) => {
-        if (a.price > b.price) {
+        if (a.userName > b.userName) {
           return -1;
         }
-        if (b.price > a.price) {
+        if (b.userName > a.userName) {
           return 1;
         }
         return 0;
@@ -83,23 +98,15 @@ export default function ManageCar() {
       key: "action",
     },
   ];
-  // const [deleteModal, setDeleteModal] = useState({
-  //   isOpen: false,
-  //   title: "Notice",
-  //   content: <p>Do you want to delete car model?</p>,
-  //   // footer: (
-  //   //   <div style={{ textAlign: "left" }}>
-  //   //     <Button className="buttonSave">Delete</Button>
-
-  //   //   </div>
-  //   // ),
-  // });
+ 
   const showDrawer1 = () => {
     setOpen1(true);
   };
+
   const onClose1 = () => {
     setOpen1(false);
   };
+
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
@@ -109,6 +116,9 @@ export default function ManageCar() {
         console.log(respData);
 
         respData.forEach((element) => {
+          element.model= element.carModel.model;
+          element.discript =element.carModel.discript;
+          element.userName =element.userName;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
@@ -128,11 +138,11 @@ export default function ManageCar() {
             <CloseCircleOutlined
               onClick={() => {
                 Modal.confirm({
-                  title: "Are you sure?",
+                  title: "Bạn chắc chứ ?",
                   icon: <CloseCircleOutlined style={{ color: "red" }} />,
-                  content: "Do you want to delete this car ?",
-                  okText: "Delete",
-                  cancelText: "Cancel",
+                  content: "Bạn muốn xóa thông tin của xe này ? ",
+                  okText: "Xóa",
+                  cancelText: "Hủy",
                   okButtonProps: {
                     style: { background: "#e30c18", color: "white" },
                   },
@@ -146,14 +156,14 @@ export default function ManageCar() {
                         )
                         .then(() => {
                           notification.success({
-                            message: `Delete successfully`,
+                            message: `Xóa thành công`,
                             description: "Delete a new car model successfully",
                             placement: "topLeft",
                           });
                         })
                         .catch(() => {
                           notification.error({
-                            message: `Delete fail`,
+                            message: `Xóa không thành công`,
                             description: "Delete a user fail",
                             placement: "topLeft",
                           });
@@ -218,23 +228,23 @@ export default function ManageCar() {
 
   const onFinish = (values) => {
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}car`, {
-        model: values.model,
-        carNumber: values.discript,
-        price: values.price,
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {        
+        carModelId: values.carModelId,
+        carNumber: values.discript,    
         lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
+          message: `Thành công`,
           description: "Create new parking successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
-          carNumber: "",
-          price: "",
+          discript: "",
+          userName: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -246,31 +256,34 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
       });
   };
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
+        carNumber : values.carNumber,
         model: values.model,
         discript: values.discript,
-        price: values.price,
+       
         lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
+          message: `Thành công`,
           description: "Edit this car successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -282,9 +295,10 @@ export default function ManageCar() {
           placement: "topLeft",
         });
         form.setFieldsValue({
+          carNumber:"",
           model: "",
           discript: "",
-          price: "",
+          userName: "",
         });
       });
   };
@@ -359,7 +373,7 @@ export default function ManageCar() {
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm thông tin xe"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -374,11 +388,10 @@ export default function ManageCar() {
             onClick={() => {
               showDrawer();
               form.setFieldsValue({
-                carNumber: "",
+                carNumber:"",
                 model: "",
-
                 discript: "",
-                price: "",
+                userName: "",
               });
             }}
           >
@@ -423,8 +436,8 @@ export default function ManageCar() {
       >
         <table>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              ID
+            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
+              Mã xe
             </td>
             <td
               style={{
@@ -439,7 +452,7 @@ export default function ManageCar() {
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Car number
+              Biển số xe
             </td>
             <td
               style={{
@@ -454,7 +467,7 @@ export default function ManageCar() {
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Model
+              Loại xe
             </td>
             <td
               style={{
@@ -464,12 +477,12 @@ export default function ManageCar() {
                 paddingLeft: "35px",
               }}
             >
-              dads {modal.data.model}
+               {modal.data.model}
             </td>
           </tr>
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Discript
+              Mô tả
             </td>
             <td
               style={{
@@ -484,8 +497,8 @@ export default function ManageCar() {
           </tr>
 
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              User name{" "}
+            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
+             Người dùng{" "}
             </td>
             <td
               style={{
@@ -531,9 +544,8 @@ export default function ManageCar() {
                       id: record.id,
                       carNumber: record.carNumber,
                       model: record.model,
-
                       discript: record.discript,
-                      price: record.price,
+                      userName: record.userName,
                     },
                   });
                   console.log(modal.data);
@@ -549,7 +561,7 @@ export default function ManageCar() {
                       model: record.model,
 
                       discript: record.discript,
-                      price: record.price,
+                      userName: record.userName,
                     },
                   });
                   console.log(modal.data);
@@ -563,7 +575,7 @@ export default function ManageCar() {
       )}
       {/*Add new car model */}
       <Drawer
-        title="Add new car"
+        title="Thêm xe mới"
         width={550}
         onClose={onClose}
         open={open}
@@ -581,7 +593,7 @@ export default function ManageCar() {
             <Col span={24}>
               <Form.Item
                 name="model"
-                label="Model Name"
+                label="Loại xe"
                 rules={[
                   {
                     required: true,
@@ -596,12 +608,12 @@ export default function ManageCar() {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="price"
-                label="Price"
+                name="carNumber"
+                label="Biển số xe"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Price ",
+                    message: "Please enter car number ",
                   },
                 ]}
               >
@@ -609,31 +621,12 @@ export default function ManageCar() {
                   style={{
                     width: "100%",
                   }}
-                  placeholder="Please enter Price "
+                  placeholder="Please enter car number "
                 />
               </Form.Item>
             </Col>
           </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="discript"
-                label="Discript"
-                rules={[
-                  {
-                    required: true,
-                    message: "please enter Discript",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter Description"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+          
 
           <Row gutter={16}>
             <Col span={24}>
@@ -660,7 +653,7 @@ export default function ManageCar() {
       </Drawer>
       {/*Edit car model */}
       <Drawer
-        title="Edit  car information"
+        title="Sửa thông tin của xe"
         width={550}
         onClose={onClose1}
         open={open1}
@@ -677,16 +670,16 @@ export default function ManageCar() {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="id"
+                name="model"
                 label="ID "
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Model Name",
+                    message: "Nhập model xe ở đây",
                   },
                 ]}
               >
-                <Input disabled placeholder="Please enter Car Number" />
+                <Input disabled placeholder="Nhập model xe ở đây" />
               </Form.Item>
             </Col>
           </Row>
@@ -706,47 +699,7 @@ export default function ManageCar() {
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="price"
-                label="Price"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter Price ",
-                  },
-                ]}
-              >
-                <Input
-                  style={{
-                    width: "100%",
-                  }}
-                  placeholder="Please enter Price "
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="discript"
-                label="Discript"
-                rules={[
-                  {
-                    required: true,
-                    message: "please enter Discript",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter Description"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
+             
 
           <Row gutter={16}>
             <Col span={24}>
@@ -768,4 +721,7 @@ export default function ManageCar() {
       </Drawer>
     </>
   );
+
 }
+
+export default ManageCar;
