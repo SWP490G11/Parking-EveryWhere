@@ -251,8 +251,8 @@ import axios from "axios";
         form.setFieldsValue({
           carNumber:"",
           model: "",
-          discript: "",
-          price: "",
+          // discript: "",
+          // price: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -274,9 +274,10 @@ import axios from "axios";
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
+        id: values.model.id,
         carNumber : values.carNumber,
-        model: values.model,
-        discript: values.discript,
+       
+        
        
         lastModifyAt: new Date(),
       })
