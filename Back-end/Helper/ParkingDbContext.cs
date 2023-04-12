@@ -38,7 +38,7 @@ namespace Back_end.Helper
 
         public virtual DbSet<ParkingDetail> ParkingDetails { get; set; }
 
-
+        public virtual DbSet<Transaction> Transactions  { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

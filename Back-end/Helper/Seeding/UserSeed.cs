@@ -29,7 +29,7 @@ namespace Back_end.Helper.Seeding
 
                     },
 
-                         new User {UserName= "customer", HashPassword= BCrypt.HashPassword("Customer")
+                         new User {UserName= "customer", HashPassword= BCrypt.HashPassword("Customer123")
                     ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
                     ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Customer
                     ,LastModifyAt= DateTime.Now
@@ -37,31 +37,14 @@ namespace Back_end.Helper.Seeding
                     },
 
 
-                         new User {UserName= "owner", HashPassword= BCrypt.HashPassword("Owner@")
+                         new User {UserName= "owner", HashPassword= BCrypt.HashPassword("Owner123")
                     ,DateOfBirth = new DateTime(2000,7,7),FirstName="Phuc", LastName=" Nguyen Van"
-                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.Customer
+                    ,Gender = Gender.Male,PhoneNumber="0966416708",Email="phucnvhd772000@gmail.com",Role=Role.ParkingOwner
                     ,LastModifyAt= DateTime.Now
 
                     },
 
 
-
-                     new User { UserName="mboustead0" ,HashPassword= BCrypt.HashPassword("bY5rZNeJ4Us"),  FirstName="Martita", LastName="Boustead", DateOfBirth=Convert.ToDateTime("2016-11-24 13:12:53" ),Gender=Gender.Male,PhoneNumber="06868143899" ,Email="mboustead0@businessweek.com", CitizenID="019502501861" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="istonebanks1" ,HashPassword= BCrypt.HashPassword("MZcBPir"),  FirstName="Ingeborg", LastName="Stonebanks", DateOfBirth=Convert.ToDateTime("2014-10-29 23:29:28" ),Gender=Gender.Other,PhoneNumber="0633691068" ,Email="istonebanks1@auda.org.au", CitizenID="014280490976" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="astewart2" ,HashPassword= BCrypt.HashPassword("hL8rNUIuQ"),  FirstName="Aliza", LastName="Stewart", DateOfBirth=Convert.ToDateTime("2017-04-13 21:35:29" ),Gender=Gender.Other,PhoneNumber="07343082906" ,Email="astewart2@businesswire.com", CitizenID="052011153408" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="rbuzine3" ,HashPassword= BCrypt.HashPassword("xpKz04eSykj"),  FirstName="Raviv", LastName="Buzine", DateOfBirth=Convert.ToDateTime("2006-05-06 00:28:27" ),Gender=Gender.Other,PhoneNumber="0519358893" ,Email="rbuzine3@pen.io", CitizenID="030674043571" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
- new User { UserName="ogreenalf4" ,HashPassword= BCrypt.HashPassword("m5u6LJM"),  FirstName="Olympia", LastName="Greenalf", DateOfBirth=Convert.ToDateTime("2015-10-13 18:02:20" ),Gender=Gender.Male,PhoneNumber="0752660557" ,Email="ogreenalf4@facebook.com", CitizenID="029664078144" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
- new User { UserName="cstorie5" ,HashPassword= BCrypt.HashPassword("OosdGF2hBt"),  FirstName="Charlot", LastName="Storie", DateOfBirth=Convert.ToDateTime("2009-07-20 00:00:45" ),Gender=Gender.Female,PhoneNumber="0812332458" ,Email="cstorie5@merriam-webster.com", CitizenID="084002745064" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="cbartosek6" ,HashPassword= BCrypt.HashPassword("QhKpJ9qg"),  FirstName="Carmela", LastName="Bartosek", DateOfBirth=Convert.ToDateTime("2006-04-28 13:16:09" ),Gender=Gender.Male,PhoneNumber="0266983899" ,Email="cbartosek6@ebay.com", CitizenID="093312640912" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="arobley7" ,HashPassword= BCrypt.HashPassword("BFwPeP0vQs"),  FirstName="Andee", LastName="Robley", DateOfBirth=Convert.ToDateTime("2008-03-31 22:29:54" ),Gender=Gender.Other,PhoneNumber="0910759650" ,Email="arobley7@zdnet.com", CitizenID="017271291718" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
- new User { UserName="fguillet8" ,HashPassword= BCrypt.HashPassword("tlntT1u9aER"),  FirstName="Farra", LastName="Guillet", DateOfBirth=Convert.ToDateTime("2004-03-23 13:15:04" ),Gender=Gender.Male,PhoneNumber="0134210264" ,Email="fguillet8@ft.com", CitizenID="088837943287" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
- new User { UserName="imilesap9" ,HashPassword= BCrypt.HashPassword("aA3Jdy"),  FirstName="Iorgo", LastName="Milesap", DateOfBirth=Convert.ToDateTime("2020-08-11 20:40:00" ),Gender=Gender.Female,PhoneNumber="08524784466" ,Email="imilesap9@plala.or.jp", CitizenID="017193152173" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="acookseya" ,HashPassword= BCrypt.HashPassword("wD5Q4P2"),  FirstName="Amie", LastName="Cooksey", DateOfBirth=Convert.ToDateTime("2016-10-25 03:27:31" ),Gender=Gender.Male,PhoneNumber="02935053805" ,Email="acookseya@storify.com", CitizenID="059220509985" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
- new User { UserName="evargab" ,HashPassword= BCrypt.HashPassword("cdcyPM76"),  FirstName="Ellyn", LastName="Varga", DateOfBirth=Convert.ToDateTime("2005-10-17 06:16:37" ),Gender=Gender.Male,PhoneNumber="0652741657" ,Email="evargab@dot.gov", CitizenID="097345428208" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="mloudc" ,HashPassword= BCrypt.HashPassword("p1TckpI6"),  FirstName="Mela", LastName="Loud", DateOfBirth=Convert.ToDateTime("2016-03-13 06:14:18" ),Gender=Gender.Other,PhoneNumber="01641918486" ,Email="mloudc@opensource.org", CitizenID="097541590766" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="sdemeltd" ,HashPassword= BCrypt.HashPassword("QHqX2Kjgm0F"),  FirstName="Sunny", LastName="Demelt", DateOfBirth=Convert.ToDateTime("2020-02-21 20:25:10" ),Gender=Gender.Male,PhoneNumber="0795784606" ,Email="sdemeltd@cafepress.com", CitizenID="051913950498" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="mgleesone" ,HashPassword= BCrypt.HashPassword("YXZTOvF32Bmd"),  FirstName="Myrna", LastName="Gleeson", DateOfBirth=Convert.ToDateTime("2015-04-04 06:17:04" ),Gender=Gender.Male,PhoneNumber="0060336533" ,Email="mgleesone@youtu.be", CitizenID="021166108883" ,Role=Role.Customer ,LastModifyAt= DateTime.Now,},
- new User { UserName="ngrandhamf" ,HashPassword= BCrypt.HashPassword("6kdYW1a0RGjN"),  FirstName="Nonna", LastName="Grandham", DateOfBirth=Convert.ToDateTime("2006-04-04 05:50:12" ),Gender=Gender.Male,PhoneNumber="07995009500" ,Email="ngrandhamf@ihg.com", CitizenID="048251664467" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
  new User { UserName="gtubbsg" ,HashPassword= BCrypt.HashPassword("9NTMojTB2z"),  FirstName="Gwyneth", LastName="Tubbs", DateOfBirth=Convert.ToDateTime("2009-03-26 06:33:21" ),Gender=Gender.Other,PhoneNumber="0630308378" ,Email="gtubbsg@examiner.com", CitizenID="039352634296" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
  new User { UserName="rlavensh" ,HashPassword= BCrypt.HashPassword("E8EwUfs"),  FirstName="Rosalyn", LastName="Lavens", DateOfBirth=Convert.ToDateTime("2011-02-14 16:13:43" ),Gender=Gender.Other,PhoneNumber="06895509784" ,Email="rlavensh@livejournal.com", CitizenID="027587962774" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},
  new User { UserName="nmartinyuki" ,HashPassword= BCrypt.HashPassword("P5J2Y2nos8K4"),  FirstName="Nadine", LastName="Martinyuk", DateOfBirth=Convert.ToDateTime("2011-08-11 17:37:59" ),Gender=Gender.Male,PhoneNumber="0766805261" ,Email="nmartinyuki@g.co", CitizenID="041401323997" ,Role=Role.ParkingOwner ,LastModifyAt= DateTime.Now,},

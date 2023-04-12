@@ -11,10 +11,6 @@ namespace Back_end.Models
 
         public string Discription { get; set; }
 
-        public bool IsLegal { get; set; }
-
-        public DateTime LastModifyAt { get; set; }
-
         public double LON { get; set; }
 
         public double LAT { get; set; }

@@ -154,10 +154,22 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repository.CancelRequest(id);
+            await _repository.CancelRequestAsync(id);
             return Ok("Update Success");
         }
 
+
+        [HttpPatch("/request/aprove-request/{id}")]
+
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
+        public async Task<IActionResult> AproveRequest(string id)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repository.CancelRequestAsync(id);
+            return Ok("Update Success");
+        }
 
 
         [HttpDelete("/request/{id}")]

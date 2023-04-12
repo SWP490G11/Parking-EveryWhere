@@ -21,9 +21,9 @@ namespace Back_end.Respository
 
         Task<ICollection<Parking>> GetListParkingPending();
 
-        Task AproveParking(string? ID);
+        void AproveParking(string? ID);
 
-        Task CancelParkingInvalid(string? ID);
+        void CancelParkingInvalid(string? ID);
     }
 
     public class ParkingRespository : IParkingRespository
@@ -49,7 +49,7 @@ namespace Back_end.Respository
             var parking = new Parking()
             {
                 AddressDetail = model.AddressDetail,
-                IsLegal =false,
+                IsLegal = false,
                 LAT = model.LAT,
                 LON = model.LON,
                 Owner = owner,
@@ -74,13 +74,13 @@ namespace Back_end.Respository
                 images.Add(image);
             }
 
-         
+
             owner.Parkings.Add(parking);
 
             _dbContext.Parkings.Add(parking);
 
 
-            
+
 
         }
 
@@ -90,9 +90,9 @@ namespace Back_end.Respository
         {
             var parking = GetAsync(idString);
             var delteImages = parking.Images == null ? new List<Image>() : parking.Images;
-             _dbContext.Images.RemoveRange(delteImages);
+            _dbContext.Images.RemoveRange(delteImages);
             _dbContext.Parkings.Remove(parking);
-           
+
             await _dbContext.SaveChangesAsync();
         }
 
@@ -102,7 +102,7 @@ namespace Back_end.Respository
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images).
-                Include(p=>p.Requests)
+                Include(p => p.Requests)
                 .Include(p => p.Slots).ThenInclude(s => s.CarModel)
                 .ToListAsync();
         }
@@ -146,7 +146,7 @@ namespace Back_end.Respository
         public async Task<ICollection<Parking>> GetListParkingPending()
         {
 
-            var pendingparkings =await _dbContext.Parkings.Where(p=>p.Status==Status.Pending).Include(p => p.ParkingManagers)
+            var pendingparkings = await _dbContext.Parkings.Where(p => p.Status == Status.Pending).Include(p => p.ParkingManagers)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images)
@@ -154,23 +154,23 @@ namespace Back_end.Respository
             return pendingparkings;
         }
 
-        public async Task AproveParking(string? ID)
+        public void AproveParking(string? ID)
         {
             var parking = GetAsync(ID);
             parking.Status = Status.Available;
             parking.IsLegal = true;
             _dbContext.Update(parking);
-           await _dbContext.SaveChangesAsync(true);
+            _dbContext.SaveChanges();
         }
 
 
-        public async Task CancelParkingInvalid(string? ID)
+        public void CancelParkingInvalid(string? ID)
         {
             var parking = GetAsync(ID);
             parking.Status = Status.Cancel;
             parking.IsLegal = false;
-
-            await _dbContext.SaveChangesAsync(true);
+            _dbContext.Update(parking);
+            _dbContext.SaveChanges();
         }
         public void UpdateAsync(string idString, ParkingModel updateModel)
         {
@@ -179,19 +179,18 @@ namespace Back_end.Respository
 
 
             var updateParking = GetAsync(idString);
-            
+
             if (updateParking == null) throw new AppException("Not Found this parking");
             if (updateParking.IsLegal == false) throw new AppException("That Parking is Illigal");
             updateParking.AddressDetail = updateModel.AddressDetail;
             updateParking.LON = updateModel.LON;
             updateParking.LAT = updateModel.LAT;
-            updateParking.IsLegal = updateModel.IsLegal;
             updateParking.Discription = updateModel.Discription;
             updateParking.ParkingName = updateModel.ParkingName;
             updateParking.Status = updateModel.Status;
             updateParking.LastModifyAt = DateTime.Now;
 
-            var deletedimages = updateParking.Images == null ? new List<Image>() : updateParking.Images; 
+            var deletedimages = updateParking.Images == null ? new List<Image>() : updateParking.Images;
             _imageRepository.DeleteRange(deletedimages);
 
             foreach (var url in updateModel.imagesURLs)
@@ -202,11 +201,11 @@ namespace Back_end.Respository
                     Parking = updateParking
                 };
                 images.Add(image);
-               
+
             }
-            
+
             updateParking.Images = images;
-            
+
             _dbContext.Update(updateParking);
 
             _imageRepository.AddRageAsync(images);

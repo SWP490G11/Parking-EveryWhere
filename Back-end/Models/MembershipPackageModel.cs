@@ -15,15 +15,5 @@ namespace Back_end.Models
         public double Price { get; set; }
 
         public uint Months { get; set; }
-
-        
-        public DateTime SubcribeAt { get; set; }
-
-        [JsonIgnore]
-        [AllowNull]
-        public ICollection<Back_end.Entities.User>? SubcribeBy { get; set; }
-
-        [JsonIgnore]
-        public DateTime LastModifyAt { get; set; }
     }
 }

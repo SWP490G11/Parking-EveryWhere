@@ -64,6 +64,10 @@ namespace Back_end.Entities
 
         public ICollection<Request> Requests { get; set; } = new List<Request>();
 
+        public Transaction? Transaction { get; set; }
+
+        [ForeignKey("Transaction")]
+        public Guid? TransactionID { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Role Role { get; set; }
