@@ -229,8 +229,10 @@ import axios from "axios";
   const onFinish = (values) => {
     axios
       .post(`${process.env.REACT_APP_Backend_URI}car`, {        
+
         carModelId: values.carModelId,
         carNumber: values.discript,    
+
         lastModifyAt: new Date(),
       })
       .then(() => {
@@ -609,7 +611,9 @@ import axios from "axios";
             <Col span={24}>
               <Form.Item
                 name="carNumber"
+
                 label="Biển số xe"
+
                 rules={[
                   {
                     required: true,
@@ -626,7 +630,7 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-          
+
 
           <Row gutter={16}>
             <Col span={24}>

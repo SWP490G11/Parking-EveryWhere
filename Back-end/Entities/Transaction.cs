@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Back_end.Entities;
+
+public class Transaction
+{
+    [Key]
+    public Guid ID { get; set; }
+    public string? OrderDescription { get; set; }
+    public string? TransactionId { get; set; }
+    public string? OrderId { get; set; }
+    public string? PaymentMethod { get; set; }
+    public string? PaymentId { get; set; }
+    public bool? Success { get; set; }
+    public string? Token { get; set; }
+    public string? VnPayResponseCode { get; set; }
+
+    public User? Transactor { get; set; }
+
+    [ForeignKey("User")]
+    public Guid? TransactorID { get; set; }
+}

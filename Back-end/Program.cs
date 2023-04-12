@@ -18,7 +18,7 @@ builder.Services.AddMvcCore();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors();
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     // serialize enums as strings in api responses (e.g. Role)
@@ -29,6 +29,16 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 
 
 var service = builder.Services;
+service.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 
 service.AddDbContext<ParkingDbContext>(
@@ -59,7 +69,8 @@ service.AddTransient<IImageRepository, ImageRepository>();
 service.AddTransient<IFeedBackReposiotory , FeedBackReposiotory>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
 */
-service.AddTransient<ICRUDSRespository<MembershipPackage, MembershipPackageModel>, MembershipPackageRespository>();
+service.AddTransient<IVnPayService, VnPayService>();
+service.AddTransient<IMembershipPackageRespository, MembershipPackageRespository>();
 service.AddTransient <IParkingDetailRepository,ParkingDetailRepository>();
 
 
@@ -112,14 +123,15 @@ app.UseHttpsRedirection();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
-if(true)
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
+//if(true)
+//{
+//    app.UseSwagger();
+//  app.UseSwaggerUI();
+//app.UseExceptionHandler("/Error");
+//app.UseHsts();
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // using static System.Net.Mime.MediaTypeNames;

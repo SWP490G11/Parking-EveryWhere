@@ -18,8 +18,6 @@ namespace Back_end.Entities
 
         public uint Months { get; set; }
 
-        public DateTime SubcribeAt { get; set; }
-
         [InverseProperty("MembershipPackage")]
         [AllowNull]
         public ICollection<User> SubcribeBy { get; set; } = new List<User>();

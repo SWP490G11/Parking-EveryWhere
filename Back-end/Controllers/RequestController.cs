@@ -76,6 +76,27 @@ namespace Back_end.Controllers
             ));
         }
 
+
+        [HttpGet("/pending-request-of-all-parkings-of-owner")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestPendingToTheAllParkingsOfOwner()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = mwi.User.Parkings.SelectMany(p=>p.Requests).Where(r=>r.Status ==Status.Pending).ToList();
+
+            return Ok(requests.Select(r =>
+          new {
+              r.ID,
+              r.Status,
+              RequestbyID = r.Requestby.ID.ToString(),
+              r.RequestAt
+          }
+            ));
+        }
+
+
         [HttpGet("/pending-request-number/{parkingid}")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
@@ -125,7 +146,7 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpPut("/request/cancel-request/{id}")]
+        [HttpPatch("/request/cancel-request/{id}")]
 
         [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> CancelRequest(string id)
@@ -133,10 +154,22 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repository.CancelRequest(id);
+            await _repository.CancelRequestAsync(id);
             return Ok("Update Success");
         }
 
+
+        [HttpPatch("/request/aprove-request/{id}")]
+
+        [Authorization.Authorize(Role.Customer, Role.Admin, Role.ParkingManager, Role.ParkingOwner)]
+        public async Task<IActionResult> AproveRequest(string id)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _repository.CancelRequestAsync(id);
+            return Ok("Update Success");
+        }
 
 
         [HttpDelete("/request/{id}")]

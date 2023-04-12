@@ -18,7 +18,9 @@ namespace Back_end.Respository
         ICollection<Request> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, UpdateRequestModel updateModel);
 
-        Task CancelRequest(string idString);
+        Task CancelRequestAsync(string idString);
+
+        Task AproveRequest(string idString);
 
         Task<ICollection<Request>> GetRequestToParking(string parkingID);
     }
@@ -61,12 +63,13 @@ namespace Back_end.Respository
 
         }
 
-        public async Task CancelRequest(string idString)
+        public async Task CancelRequestAsync(string idString)
         {
             var updateRequest = await GetAsync(idString);
             updateRequest.Status = Status.Cancel;
-            _dbContext.Requests.Update(updateRequest);
-            await _dbContext.SaveChangesAsync();
+
+            _dbContext.Update(updateRequest);
+             _dbContext.SaveChanges();
         }
 
         public async Task DeleteAsync(string idString)
@@ -126,8 +129,19 @@ namespace Back_end.Respository
             updateRequest.LastModifyAt = DateTime.Now;
 
             _dbContext.Requests.Update(updateRequest);
-            await _dbContext.SaveChangesAsync();
+             _dbContext.SaveChanges();
         }
+
+        public async Task AproveRequest(string idString)
+        {
+            var updateRequest = await GetAsync(idString);
+            updateRequest.Status = Status.Cancel;
+
+            _dbContext.Update(updateRequest);
+            _dbContext.SaveChanges();
+        }
+
+      
     }
 
 }
