@@ -98,23 +98,15 @@ import axios from "axios";
       key: "action",
     },
   ];
-  // const [deleteModal, setDeleteModal] = useState({
-  //   isOpen: false,
-  //   title: "Notice",
-  //   content: <p>Do you want to delete car model?</p>,
-  //   // footer: (
-  //   //   <div style={{ textAlign: "left" }}>
-  //   //     <Button className="buttonSave">Delete</Button>
-
-  //   //   </div>
-  //   // ),
-  // });
+ 
   const showDrawer1 = () => {
     setOpen1(true);
   };
+
   const onClose1 = () => {
     setOpen1(false);
   };
+
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
@@ -678,16 +670,16 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="id"
+                name="model"
                 label="ID "
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Model Name",
+                    message: "Nhập model xe ở đây",
                   },
                 ]}
               >
-                <Input disabled placeholder="Please enter Car Number" />
+                <Input disabled placeholder="Nhập model xe ở đây" />
               </Form.Item>
             </Col>
           </Row>

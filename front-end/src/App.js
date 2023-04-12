@@ -1,17 +1,17 @@
-import { Layout } from 'antd';
-import {  Routes, Route } from 'react-router-dom';
-import './App.css';
+import { Layout } from "antd";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
 import axios from "axios";
-import React, { createContext,useState, useEffect } from "react";
-import AuthRoutes from './routes/AuthRoutes';
-import RouteComponent from './components/RouteComp';
-import HeaderComp from './components/Header/HeaderComp';
-import  {AppRoutes } from './routes/AppRoutes';
-import  {OwnerRoutes}  from './routes/OwnerRoutes';
-import  {CustomerRoutes}  from './routes/CustomerRoutes';
-import  {ManagerRoutes}  from './routes/ManagerRoutes';
-import FooterComp from './components/Footer/FooterComp';
-import MenuComp from './components/Menu/MenuComponent';
+import React, { createContext, useState, useEffect } from "react";
+import AuthRoutes from "./routes/AuthRoutes";
+import RouteComponent from "./components/RouteComp";
+import HeaderComp from "./components/Header/HeaderComp";
+import { AppRoutes } from "./routes/AppRoutes";
+import { OwnerRoutes } from "./routes/OwnerRoutes";
+import { CustomerRoutes } from "./routes/CustomerRoutes";
+import { ManagerRoutes } from "./routes/ManagerRoutes";
+import FooterComp from "./components/Footer/FooterComp";
+import MenuComp from "./components/Menu/MenuComponent";
 import HomePage from "./pages/homepage/HomePage";
 import LoginPage from "./pages/loginpage/LoginPage";
 import Register from "./pages/loginpage/Register";
@@ -23,9 +23,9 @@ function App() {
     role: localStorage.role,
     username: localStorage.username,
     id: localStorage.id,
-    isLogin:false,
+    isLogin: false,
   });
-  
+
   axios.defaults.baseURL = `${process.env.REACT_APP_UNSPLASH_BASEURL}`;
   axios.defaults.headers.common["Authorization"] = loginState.token;
   axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -55,87 +55,86 @@ function App() {
       setLoginState(JSON.parse(localStorage.getItem("loginState")));
     }
   }, [loginState.token]);
-  const role= loginState.role;
+  const role = loginState.role;
   const { Content } = Layout;
   const renderContent = () => {
     switch (role) {
-      case 'Admin':
-        return (<>
-       
-      <RouteComponent  routes={AppRoutes} />
-     
-      </>);
-      case 'ParkingOwner':
-        return (<>
-       
-      <RouteComponent routes={OwnerRoutes} />
-      
-      </>);
-      case 'Customer':
-        return (<>
-         <RouteComponent routes={CustomerRoutes} />
-        </>);
-      case 'ParkingManager':
-        return (<>
-          <RouteComponent routes={ManagerRoutes} />
-         </>);
+      case "Admin":
+        return (
+          <>
+            <RouteComponent routes={AppRoutes} />
+          </>
+        );
+      case "ParkingOwner":
+        return (
+          <>
+            <RouteComponent routes={OwnerRoutes} />
+          </>
+        );
+      case "Customer":
+        return (
+          <>
+            <RouteComponent routes={CustomerRoutes} />
+          </>
+        );
+      case "ParkingManager":
+        return (
+          <>
+            <RouteComponent routes={ManagerRoutes} />
+          </>
+        );
       default:
-        return null
+        return null;
     }
   };
-  const token = localStorage.getItem('token');
-//   useEffect(() => {
-    
-//     if (!token) {
-//         window.location.replace('/login')
-//     }
-// }, []);
+  const token = localStorage.getItem("token");
+  //   useEffect(() => {
+
+  //     if (!token) {
+  //         window.location.replace('/login')
+  //     }
+  // }, []);
   return (
-    
     <Context.Provider value={[loginState, setLoginState]}>
-          
-          {(!token) ? ( 
-          //  <Login/>
-           <RouteComponent routes={AuthRoutes} />
-          // <LoginPage/>
-        ) : (
-         
-          <>
-          
-           <HeaderComp
-                username={loginState.username}
-                id = {loginState.id}
-                role= {loginState.role}
-              />
-               <Content
-          style={{
-            padding: '0 50px',
-          }}
-        >
-          <MenuComp role= {loginState.role}/>
-          <div
-            className="site-layout-content"
+      {!token ? (
+        //  <Login/>
+        <RouteComponent routes={AuthRoutes} />
+      ) : (
+        // <LoginPage/>
+        <>
+          <HeaderComp
+            username={loginState.username}
+            id={loginState.id}
+            role={loginState.role}
+          />
+          <Content
             style={{
-              background: '#FFF',
+              padding: "0 50px",
             }}
-          >    <Routes>
-               <Route exact path={'/'} element={<HomePage role={loginState.role} />} />
-         
-                </Routes>
+          >
+            <MenuComp role={loginState.role} />
+            <div
+              className="site-layout-content"
+              style={{
+                background: "#FFF",
+              }}
+            >
+              {" "}
+              <Routes>
+                <Route
+                  exact
+                  path={"/"}
+                  element={<HomePage role={loginState.role} />}
+                />
+              </Routes>
               {renderContent()}
-              </div>
-             
-              </Content>
-             
-          <FooterComp/>
-       
-       </>
-          )}
-      
-   
-  </Context.Provider>
-   
-   
+            </div>
+          </Content>
+
+          <FooterComp />
+        </>
+      )}
+    </Context.Provider>
   );
 }
 
