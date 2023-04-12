@@ -79,14 +79,14 @@ import axios from "axios";
       key: "discript",
     },
     {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
+      title: "price",
+      dataIndex: "price",
+      key: "price",
       sorter: (a, b) => {
-        if (a.userName > b.userName) {
+        if (a.price > b.price) {
           return -1;
         }
-        if (b.userName > a.userName) {
+        if (b.price > a.price) {
           return 1;
         }
         return 0;
@@ -126,7 +126,7 @@ import axios from "axios";
         respData.forEach((element) => {
           element.model= element.carModel.model;
           element.discript =element.carModel.discript;
-          element.userName =element.userName;
+          element.price =element.carModel.price;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
@@ -137,7 +137,7 @@ import axios from "axios";
                   carNumber: element.carNumber,
                   model: element.model,
                   discript: element.discript,
-                  userName: element.userName,
+                  price: element.price,
                 });
                 setIdCar(element.id);
               }}
@@ -251,8 +251,8 @@ import axios from "axios";
         form.setFieldsValue({
           carNumber:"",
           model: "",
-          discript: "",
-          userName: "",
+          // discript: "",
+          // price: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -267,16 +267,17 @@ import axios from "axios";
           carNumber:"",
           model: "",
           discript: "",
-          userName: "",
+          price: "",
         });
       });
   };
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
+        id: values.model.id,
         carNumber : values.carNumber,
-        model: values.model,
-        discript: values.discript,
+       
+        
        
         lastModifyAt: new Date(),
       })
@@ -291,7 +292,7 @@ import axios from "axios";
           carNumber:"",
           model: "",
           discript: "",
-          userName: "",
+          price: "",
         });
         setOpen(false);
         // window.location.reload();
@@ -306,7 +307,7 @@ import axios from "axios";
           carNumber:"",
           model: "",
           discript: "",
-          userName: "",
+          price: "",
         });
       });
   };
@@ -399,7 +400,7 @@ import axios from "axios";
                 carNumber:"",
                 model: "",
                 discript: "",
-                userName: "",
+                price: "",
               });
             }}
           >
@@ -506,7 +507,7 @@ import axios from "axios";
 
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Tên người đăng nhập{" "}
+             Gia ve{" "}
             </td>
             <td
               style={{
@@ -516,7 +517,7 @@ import axios from "axios";
                 paddingLeft: "35px",
               }}
             >
-              {modal.data.userName}
+              {modal.data.price}
             </td>
           </tr>
         </table>
@@ -553,7 +554,7 @@ import axios from "axios";
                       carNumber: record.carNumber,
                       model: record.model,
                       discript: record.discript,
-                      userName: record.userName,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
@@ -569,7 +570,7 @@ import axios from "axios";
                       model: record.model,
 
                       discript: record.discript,
-                      userName: record.userName,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
