@@ -118,7 +118,7 @@ import axios from "axios";
         respData.forEach((element) => {
           element.model= element.carModel.model;
           element.discript =element.carModel.discript;
-          element.userName =element.userName;
+          element.userName =element.carOwner.userName;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
