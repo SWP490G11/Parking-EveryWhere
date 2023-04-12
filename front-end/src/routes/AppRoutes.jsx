@@ -41,7 +41,7 @@ export const AppRoutes = [
     {
       path: "/manageCar",
       element: <ManageCar />,
-      title: "My Car",
+      title: "car admin",
     },
     {
       path: "/manage-request",

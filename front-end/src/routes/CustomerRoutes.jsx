@@ -30,7 +30,7 @@ export const CustomerRoutes = [
       title: "Edit User Profile",
     },
     {
-      path: "/myCar",
+      path: "/manageCar",
       element: <MyCar />,
       title: "My Car",
     },

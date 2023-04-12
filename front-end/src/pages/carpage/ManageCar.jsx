@@ -98,23 +98,15 @@ import axios from "axios";
       key: "action",
     },
   ];
-  // const [deleteModal, setDeleteModal] = useState({
-  //   isOpen: false,
-  //   title: "Notice",
-  //   content: <p>Do you want to delete car model?</p>,
-  //   // footer: (
-  //   //   <div style={{ textAlign: "left" }}>
-  //   //     <Button className="buttonSave">Delete</Button>
-
-  //   //   </div>
-  //   // ),
-  // });
+ 
   const showDrawer1 = () => {
     setOpen1(true);
   };
+
   const onClose1 = () => {
     setOpen1(false);
   };
+
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
@@ -126,7 +118,7 @@ import axios from "axios";
         respData.forEach((element) => {
           element.model= element.carModel.model;
           element.discript =element.carModel.discript;
-          element.userName =element.userName;
+          element.userName =element.carOwner.userName;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
@@ -237,8 +229,10 @@ import axios from "axios";
   const onFinish = (values) => {
     axios
       .post(`${process.env.REACT_APP_Backend_URI}car`, {        
+
         carModelId: values.carModelId,
         carNumber: values.discript,    
+
         lastModifyAt: new Date(),
       })
       .then(() => {
@@ -617,7 +611,9 @@ import axios from "axios";
             <Col span={24}>
               <Form.Item
                 name="carNumber"
+
                 label="Biển số xe"
+
                 rules={[
                   {
                     required: true,
@@ -634,7 +630,7 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-          
+
 
           <Row gutter={16}>
             <Col span={24}>
@@ -678,16 +674,16 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="id"
+                name="model"
                 label="ID "
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Model Name",
+                    message: "Nhập model xe ở đây",
                   },
                 ]}
               >
-                <Input disabled placeholder="Please enter Car Number" />
+                <Input disabled placeholder="Nhập model xe ở đây" />
               </Form.Item>
             </Col>
           </Row>
