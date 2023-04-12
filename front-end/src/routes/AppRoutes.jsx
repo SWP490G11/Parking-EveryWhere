@@ -35,7 +35,7 @@ export const AppRoutes = [
       title: "Manage Car",
     },
     {
-      path: "/mycar",
+      path: "/manageCar",
       element: <ManageCar />,
       title: "My Car",
     },

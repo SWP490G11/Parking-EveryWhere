@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 
- const ManageCar =() => {
+ const MyCar =() => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -444,7 +444,7 @@ import axios from "axios";
       >
         <table>
           <tr>
-            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
               Mã xe
             </td>
             <td
@@ -505,8 +505,8 @@ import axios from "axios";
           </tr>
 
           <tr>
-            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
-             Người dùng{" "}
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Tên người đăng nhập{" "}
             </td>
             <td
               style={{
@@ -732,4 +732,4 @@ import axios from "axios";
 
 }
 
-export default ManageCar;
+export default MyCar;
