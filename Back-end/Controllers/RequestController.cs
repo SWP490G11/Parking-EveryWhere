@@ -80,7 +80,7 @@ namespace Back_end.Controllers
         [HttpGet("/pending-request-of-all-parkings-of-owner")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
-        public async Task<IActionResult> GetListRequestPendingToTheAllParkingsOfOwner(string parkingid)
+        public async Task<IActionResult> GetListRequestPendingToTheAllParkingsOfOwner()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
