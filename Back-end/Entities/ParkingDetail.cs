@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Transactions;
 
 namespace Back_end.Entities
 {
@@ -27,7 +28,7 @@ namespace Back_end.Entities
 
         public double TotalPrice {
 
-            get; set;
+            get;set;
         }
     }
 }

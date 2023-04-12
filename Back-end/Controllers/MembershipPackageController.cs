@@ -1,6 +1,7 @@
 ﻿using Back_end.Authorization;
 using Back_end.Common;
 using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
 using Back_end.Models.User;
 using Back_end.Respository;
@@ -16,14 +17,14 @@ namespace Back_end.Controllers
     [ApiController]
     public class MembershipPackageController : ControllerBase
     {
-        private readonly IJwtUtils _jwtUtils;
+        private readonly ParkingDbContext _dbContext;
         private readonly IMembershipPackageRespository _respository;
         private readonly IVnPayService _vnPayService;
-        public MembershipPackageController(IJwtUtils jwtUtils, IMembershipPackageRespository respository
+        public MembershipPackageController(ParkingDbContext dbContext, IMembershipPackageRespository respository
             ,IVnPayService vnPayService
             )
         {
-            _jwtUtils = jwtUtils;
+            _dbContext = dbContext;
             _respository = respository;
             _vnPayService = vnPayService;
         }
@@ -106,6 +107,11 @@ namespace Back_end.Controllers
         {
            
             var response = _vnPayService.PaymentExecute(Request.Query);
+            var transactor = _dbContext.Users.FirstOrDefault(x=>x.ID.ToString().ToLower().Equals(response.OrderDescription));
+            response.Transactor = transactor;
+
+            _dbContext.Transactions.Add(response);
+            _dbContext.SaveChanges();
 
             return Ok(response);
         }

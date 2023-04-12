@@ -109,7 +109,7 @@ namespace Back_end.Controllers
             if (user == null) return NotFound();
 
 
-            return Ok(user.Parkings.Select(p => p.ParkingManagers));
+            return Ok(user.Parkings.SelectMany(p => p.ParkingManagers));
         }
 
 

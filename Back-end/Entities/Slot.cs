@@ -26,7 +26,7 @@ namespace Back_end.Entities
 
         public CarModel CarModel { get; set; }
 
-        public ICollection<ParkingDetail>? ParkingDetail { get; set; }
+        public ICollection<ParkingDetail>? ParkingDetail { get; set; } = new List<ParkingDetail>();
 
         public DateTime LastModifyAt { get; set; }
 

@@ -6,6 +6,7 @@ using Back_end.Models.User;
 using Back_end.Respository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 
 namespace Back_end.Controllers
 {
@@ -50,6 +51,52 @@ namespace Back_end.Controllers
             }));
         }
 
+
+        [HttpGet("/available-slots")]
+        [Authorization.Authorize(Role.Admin)]
+        public IActionResult GetAvailableSlots()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var slots =  _respository.GetListSlotAvailable();
+
+            return Ok(slots.Select(s =>
+           new {
+               SlotID = s.ID,
+               s.Price,
+               CarModelID = s.CarModel.ID,
+               ParkingID = s.Parking.ID,
+               s.Discription,
+               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               s.Status,
+               s.LastModifyAt,
+               LastModifyBy = s.LastModifyBy.ID,
+           }));
+        }
+
+
+        [HttpGet("/parking-slots")]
+        [Authorization.Authorize(Role.Admin)]
+        public  IActionResult GetParkingSlots()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var slots =  _respository.GetListSlotParking();
+
+            return Ok(slots.Select(s =>
+           new {
+               SlotID = s.ID,
+               s.Price,
+               CarModelID = s.CarModel.ID,
+               ParkingID = s.Parking.ID,
+               s.Discription,
+               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               s.Status,
+               s.LastModifyAt,
+               LastModifyBy = s.LastModifyBy.ID,
+           }));
+        }
+
         [HttpGet("/slots/{parkingID}")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> GetSlotOfParking(string parkingID)
@@ -72,6 +119,26 @@ namespace Back_end.Controllers
            }));
         }
 
+
+        [HttpGet("/group-of-slots/{parkingID}")]
+        [Authorization.Authorize(Role.Admin)]
+        public async Task<IActionResult> GetGroupOfSlots(string parkingID)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
+            var slots = await _respository.GetSlotByParkingAsync(parkingID);
+            return Ok( slots.GroupBy(s => s.Price).Select(
+                   group => new
+                   {
+                       Price = group.Key,
+                       CarModelID = group.FirstOrDefault().CarModel.ID.ToString() ?? "khong tim thay",
+                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "khong thay",
+                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                   }
+                    ));
+        }
+
         [HttpPost("/slot")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public async Task<IActionResult> Add(uint quantity,SlotModel slotModel)
@@ -85,10 +152,11 @@ namespace Back_end.Controllers
             return Ok("Add Success");
         }
 
-        [HttpPut("/slotModel/{id}")]
-        [ValidateAntiForgeryToken]
+
+        [HttpPut("/slot/{id}")]
+
         [Authorization.Authorize(Role.Admin)]
-        public async Task<IActionResult> Update(string id, SlotModel slotModel)
+        public async Task<IActionResult> Update(string id, UpdatedSlotModel slotModel)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
@@ -98,8 +166,20 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpDelete("/slotModel/{id}")]
-        [ValidateAntiForgeryToken]
+        [HttpPut("/slot/{price}")]
+
+        [Authorization.Authorize(Role.Admin)]
+        public IActionResult UpdatePrice(double price)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+             _respository.UpdatePriceOfSlot(price);
+            return Ok("Update Success");
+        }
+
+        [HttpDelete("/slot/{id}")]
+     
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> Delete(string id)
         {
@@ -109,7 +189,24 @@ namespace Back_end.Controllers
             await _respository.DeleteAsync(id);
             return Ok("Deletes Success");
         }
+
+
+        [HttpDelete("/slotModel/{price}")]
+
+        [Authorization.Authorize(Role.Admin)]
+        public IActionResult DeleteRange(double price)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+             _respository.DeleteRangeAsync(price);
+            
+           
+            return Ok("Deletes Success");
+        }
+
     }
+
 
 
 }

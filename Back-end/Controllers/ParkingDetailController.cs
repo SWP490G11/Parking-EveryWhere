@@ -5,6 +5,7 @@ using Back_end.Respository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
+using Back_end.Entities;
 
 namespace Back_end.Controllers
 {
@@ -27,46 +28,80 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var parkingdetails = await _repository.GetAllAsync();
 
-            return Ok(parkingdetails);
+            return Ok(parkingdetails.Select(pd=>new
+            {
+                pd.ID,Car = new {pd.Car.ID,pd.Car.CarNumber,CarOnerID = pd.Car.CarOwner.ID, }
+                ,Slot =new {pd.Slot.ID,CarmodelID = pd.Slot.CarModel.ID,pd.Slot.TypeOfSlot},
+                pd.ParkingDate,pd.PickUpDate,pd.TotalPrice,
+            }));
         }
 
      
 
-        [HttpGet("/parkingdetail/{id}")]
+        [HttpGet("/parkingdetails/{id}/GetDetail")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
         public async Task<IActionResult> Get(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var parkingdetail = await _repository.GetAsync(id);
+            var pd = await _repository.GetAsync(id);
 
-            return Ok(parkingdetail);
+            return Ok(new
+            {
+                pd.ID,
+                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
+                ,
+                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                pd.ParkingDate,
+                pd.PickUpDate,
+                pd.TotalPrice,
+            });
         }
 
 
-        [HttpGet("/parkingdetail/{carID}")]
+        [HttpGet("/parkingdetails/{carID}/GetParkingDetailsByCar")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
         public async Task<IActionResult> GetParkingDetailsByCar(string carID)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var parkingdetail = await _repository.GetParkingDetailsByCar(carID);
+            var parkingdetails = await _repository.GetParkingDetailsByCar(carID);
 
-            return Ok(parkingdetail);
+
+            return Ok(parkingdetails.Select(pd => new
+            {
+                pd.ID,
+                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
+                ,
+                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                  pd.ParkingDate,
+                pd.PickUpDate,
+                pd.TotalPrice,
+            }));
         }
 
-        [HttpGet("/parkingdetail/{SlotID}")]
+        [HttpGet("/parkingdetails/{SlotID}/GetParkingDetailsBySlot")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
         public async Task<IActionResult> GetParkingDetailsBySlot(string SlotID)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var parkingdetail = await _repository.GetParkingDetailsBySlot(SlotID);
+            var parkingdetails = await _repository.GetParkingDetailsBySlot(SlotID);
 
-            return Ok(parkingdetail);
+            return Ok(parkingdetails.Select(pd => new
+            {
+                pd.ID,
+                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
+                ,
+                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                pd.ParkingDate,
+                pd.PickUpDate,
+                pd.TotalPrice,
+              
+            }));
         }
 
        
@@ -93,6 +128,18 @@ namespace Back_end.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _repository.UpdateAsync(id, parkingdetail);
             return Ok("Update Success");
+        }
+
+        [HttpPatch("/parkingdetail/{id}/CarOut")]
+
+        [Authorization.Authorize(Role.ParkingManager, Role.Admin)]
+        public async Task<IActionResult> CarOut(string id)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+           await _repository.CarOut(id);
+            return Ok("Car out of the slot");
         }
 
 
