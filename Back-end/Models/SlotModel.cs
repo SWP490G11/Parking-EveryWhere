@@ -21,7 +21,6 @@ namespace Back_end.Models
 
         public string? ParkingID { get; set; }
 
-        public string? CarModelID { get; set; }
 
         public string? LastModifyByID { get; set; }
     }

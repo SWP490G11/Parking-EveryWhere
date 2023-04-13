@@ -30,7 +30,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorization.Authorize(Role.Admin,Role.ParkingManager)]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
         public async Task<IActionResult> GetAll()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;

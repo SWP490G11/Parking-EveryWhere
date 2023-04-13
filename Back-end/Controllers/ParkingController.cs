@@ -218,8 +218,7 @@ namespace Back_end.Controllers
               new
               {
                   SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
+                  s.Price,
                   s.TypeOfSlot,
                   s.Status,
                   s.Discription,
@@ -271,8 +270,7 @@ namespace Back_end.Controllers
               new
               {
                   SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
+                 s.Price,
                   s.TypeOfSlot,
                   s.Status,
                   s.Discription,
@@ -363,8 +361,7 @@ namespace Back_end.Controllers
                 PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
                    group => new
                    {
-                       Price = group.Key,
-                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "",
+                       Price = group.Key,   
                        SlotType = group.FirstOrDefault().TypeOfSlot,
                    }
                     )

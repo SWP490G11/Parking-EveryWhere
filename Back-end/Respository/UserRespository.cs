@@ -198,7 +198,7 @@ namespace Back_end.Respository
 
         public async Task<ICollection<User>> GetUsers()
         {
-            var users = await _dbContext.Users.Include(u => u.Parkings).ThenInclude(p => p.Slots).ThenInclude(s => s.CarModel)
+            var users = await _dbContext.Users.Include(u => u.Parkings).ThenInclude(p => p.Slots)
                 .Include(u => u.MembershipPackage)
                 .Include(u => u.Parking).ToListAsync();
 

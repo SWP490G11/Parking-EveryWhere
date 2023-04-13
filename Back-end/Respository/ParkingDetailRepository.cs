@@ -100,8 +100,7 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
                 .Include(pd => pd.Slot)
-        .ThenInclude(s => s.CarModel).
-                ToListAsync();
+        .ToListAsync();
         }
 
 
@@ -109,8 +108,7 @@ namespace Back_end.Respository
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
             return await _dbContext.ParkingDetails.Include(pd => pd.Car)
-                .Include(pd => pd.Slot).ThenInclude(s => s.CarModel)
-
+                .Include(pd => pd.Slot)
                 .FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
@@ -121,7 +119,7 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
                 .Include(pd => pd.Slot)
-           .ThenInclude(s => s.CarModel)
+          
                 .Where(pd => pd.Car.ID.ToString().ToUpper().Trim().Equals(carID.ToUpper().Trim())).
                 ToListAsync();
         }
@@ -131,7 +129,7 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                   .Include(pd => pd.Car)
                   .Include(pd => pd.Slot)
-                 .ThenInclude(s => s.CarModel)
+
                   .Where(pd => pd.Slot.ID.ToString().ToUpper().Trim().Equals(SlotID.ToUpper().Trim())).
                   ToListAsync();
         }
