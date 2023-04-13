@@ -11,8 +11,7 @@ namespace Back_end.Models
 
         public string? Discript { get; set; }
 
-        public double Price { get; set; }
-
+  
 
         public DateTime? LastModifyAt { get; set; }
 

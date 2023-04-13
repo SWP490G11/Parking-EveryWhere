@@ -116,7 +116,9 @@ namespace Back_end.Respository
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel).FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
+                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+                .Include(p=>p.Slots).ThenInclude(s=>s.ParkingDetail)
+                .FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }

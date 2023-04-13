@@ -90,32 +90,32 @@ namespace Back_end.Helper
 
             modelBuilder.Entity<CarModel>(
               u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "Xe 2 khoang",  Model = "Mini", Price = 15000 } })
+                    new CarModel { Discript = "Xe 2 khoang",  Model = "Mini"} })
 
               );
             modelBuilder.Entity<CarModel>(
              u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "Xe 4 chỗ du lịch", Model = "Sedan", Price = 15000 } })
+                    new CarModel { Discript = "Xe 4 chỗ du lịch", Model = "Sedan" } })
 
              );
             modelBuilder.Entity<CarModel>(
              u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "xe 5 chỗ", Model = "SUV5", Price = 20000 } })
+                    new CarModel { Discript = "xe 5 chỗ", Model = "SUV5"} })
 
              );
             modelBuilder.Entity<CarModel>(
              u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "Xe van con",  Model = "Minivan", Price = 25000 } })
+                    new CarModel { Discript = "Xe van con",  Model = "Minivan" } })
 
              );
             modelBuilder.Entity<CarModel>(
              u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "Xe bán tải",  Model = "Pickup", Price = 20000 } })
+                    new CarModel { Discript = "Xe bán tải",  Model = "Pickup"} })
 
              );
             modelBuilder.Entity<CarModel>(
             u => u.HasData(new List<CarModel>() {
-                    new CarModel { Discript = "Xe 7 chỗ",  Model = "SUV7", Price = 25000 } })
+                    new CarModel { Discript = "Xe 7 chỗ",  Model = "SUV7" } })
 
             );
             /*modelBuilder.Entity<Parking>(

@@ -89,7 +89,6 @@ namespace Back_end.Controllers
                  u.CitizenID,
                  u.Image,
                  u.Role,
-                
                 }
                 ));
         }
@@ -128,9 +127,25 @@ namespace Back_end.Controllers
 
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-         
+            var u = mwi.User;
 
-            return Ok(mwi.User);
+            return Ok(new
+            {
+                u.ID,
+                u.Gender,
+                u.IsDisable,
+                u.UserName,
+                u.DateOfBirth,
+                u.Email,
+                u.PhoneNumber,
+                u.FirstName,
+                u.LastName,
+                PakingID = u.Parking.ID,
+                u.CitizenID,
+                u.Image,
+                u.Role,
+            }
+                );
         }
 
 
@@ -187,7 +202,7 @@ namespace Back_end.Controllers
             return Ok("Update Success");
         }
 
-        [HttpPut("[action]")]
+        [HttpPatch("[action]")]
         [Authorization.Authorize(Role.Admin)]
         public async Task<IActionResult> DisableOrActive(string id)
         {

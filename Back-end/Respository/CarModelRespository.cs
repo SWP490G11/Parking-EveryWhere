@@ -23,16 +23,10 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
 
         public async Task AddAsync(CarModelx2 model)
         {
-            try
-            {
+           
                 await _dbContext.CarModels.AddAsync(_mapper.Map<CarModel>(model));
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-
-                _logger.LogError(ex, "Has error:");
-            }
+           
         }
 
        
@@ -83,7 +77,7 @@ public CarModelRespository(ParkingDbContext dbContext, ILogger<CarModelResposito
                 var carModel = await GetAsync(idString);
             if (carModel == null) throw new AppException("Wrong Id");
 
-            carModel.Price = model.Price;
+           
                 carModel.Model = model.Model;
                 carModel.Discript = model.Discript;
                 carModel.LastModifyAt = DateTime.Now;

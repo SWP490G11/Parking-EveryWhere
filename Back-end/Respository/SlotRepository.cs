@@ -25,7 +25,7 @@ namespace Back_end.Respository
         ICollection<Slot> GetListSlotParking();
 
 
-        void UpdatePriceOfSlot(double price);
+        void UpdatePriceOfSlot(double price,double updatePrice);
 
         void DeleteRangeAsync(double price);
 
@@ -182,9 +182,15 @@ namespace Back_end.Respository
             return slots;
         }
 
-        public void UpdatePriceOfSlot(double price)
+        public void UpdatePriceOfSlot(double oldprice,double updatePrice)
         {
-            var updated = _dbContext.Slots.Where(s=>s.Price == price).ToList();
+            var updated = _dbContext.Slots.Where(s=>s.Price == oldprice).ToList();
+
+            foreach (var slot in updated)
+            {
+                slot.Price = updatePrice;
+            }
+
             _dbContext.Slots.UpdateRange(updated);
             _dbContext.SaveChanges();
 

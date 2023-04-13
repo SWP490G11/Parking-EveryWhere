@@ -47,6 +47,8 @@ namespace Back_end.Respository
                 Equals(model.ParkingID.ToUpper().Trim()
                 ));
 
+            if (parking.Requests == null) parking.Requests =new List<Request>();
+
             var request = new Request()
             {
                 LastModifyAt = DateTime.Now,
@@ -57,9 +59,11 @@ namespace Back_end.Respository
                 Status  = Status.Pending,
             } ; 
 
-            await _dbContext.Requests.AddAsync(request);
+            
+             parking.Requests.Add(request);
+             _dbContext.Requests.Add(request);
 
-            await _dbContext.SaveChangesAsync();
+             _dbContext.SaveChanges();
 
         }
 
