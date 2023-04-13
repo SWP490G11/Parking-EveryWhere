@@ -166,15 +166,15 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpPut("/slot/{price}")]
+        [HttpPatch("/slot/update-range-price")]
 
         [Authorization.Authorize(Role.Admin)]
-        public IActionResult UpdatePrice(double price)
+        public IActionResult UpdatePrice(double oldPrice,double updatedPrice)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-             _respository.UpdatePriceOfSlot(price);
+             _respository.UpdatePriceOfSlot(oldPrice,updatedPrice);
             return Ok("Update Success");
         }
 

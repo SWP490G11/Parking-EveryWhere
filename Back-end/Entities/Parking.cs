@@ -13,7 +13,7 @@ namespace Back_end.Entities
 
        
 
-        public ICollection<Slot>? Slots { get; set; }
+        public ICollection<Slot>? Slots { get; set; } = new List<Slot>();
 
         public Status Status { get; set; }
 

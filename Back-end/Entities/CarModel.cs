@@ -15,7 +15,7 @@ namespace Back_end.Entities
 
         public string? Discript { get; set; }
 
-        public double Price { get; set; }
+ 
 
 
         public DateTime? LastModifyAt { get; set; }

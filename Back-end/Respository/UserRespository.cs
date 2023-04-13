@@ -135,6 +135,8 @@ namespace Back_end.Respository
 
             var currentUser = await GetUser(id);
             currentUser.IsDisable = !currentUser.IsDisable;
+
+            _dbContext.Users.Update(currentUser);
             await _dbContext.SaveChangesAsync();
 
 
@@ -154,8 +156,7 @@ namespace Back_end.Respository
             return await _dbContext.Users.Include(u => u.Parkings)
                 .ThenInclude(p => p.Slots).Include(u => u.Parkings)
                 .Include(p=>p.Parking)
-                .ThenInclude(p => p.ParkingManagers).
-                 Include(u => u.Parking).ThenInclude(p=>p.ParkingManagers)
+                .ThenInclude(p => p.ParkingManagers)
                  .Include(u=>u.Parking).ThenInclude(p=>p.Feedbacks)
                 .Include(u => u.MembershipPackage)
                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
@@ -175,8 +176,7 @@ namespace Back_end.Respository
             return await _dbContext.Users.Include(u => u.Parkings)
                 .ThenInclude(p => p.Slots).Include(u => u.Parkings)
                 .Include(p => p.Parking)
-                .ThenInclude(p => p.ParkingManagers).
-                 Include(u => u.Parking).ThenInclude(p => p.ParkingManagers)
+                .ThenInclude(p => p.ParkingManagers)
                  .Include(u => u.Parking).ThenInclude(p => p.Feedbacks)
                 .Include(u => u.MembershipPackage)
                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
@@ -222,7 +222,7 @@ namespace Back_end.Respository
                 Email = userModel.Email,
                 Role = userModel.Role,
                 Parkings = new List<Parking>(),
-
+                IsDisable = false,
 
 
             };
@@ -301,9 +301,10 @@ namespace Back_end.Respository
         public async Task<User> RegisterForParkingManager(PMModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.ParkingID)) throw new ArgumentNullException();
-            var parking = await _dbContext.Parkings.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            var parking = await _dbContext.Parkings.Include(p=>p.ParkingManagers).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(userModel.ParkingID.ToUpper().Trim()
                 ));
+            if (parking.ParkingManagers == null) parking.ParkingManagers = new List<User>() ;
 
             var username = GenerateUsername(userModel.FirstName, userModel.LastName);
 
@@ -320,10 +321,14 @@ namespace Back_end.Respository
                 Email = userModel.Email,
                 Role = Role.ParkingManager,
                 Parking = parking,
+                IsDisable = false,
 
 
 
             };
+
+
+            
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -336,9 +341,9 @@ namespace Back_end.Respository
             };
 
             user.Image = image;
-            
 
 
+            parking.ParkingManagers.Add(user);
             _imageRepository.AddAsync(image);
 
             return user;
