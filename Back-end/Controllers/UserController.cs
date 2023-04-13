@@ -129,7 +129,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var u = mwi.User;
 
-            return Ok(new
+            return Ok(/*new
             {
                 u.ID,
                 u.Gender,
@@ -144,7 +144,12 @@ namespace Back_end.Controllers
                 u.CitizenID,
                 u.Image,
                 u.Role,
-            }
+                Parkings = u.Parkings.Select(p=>new
+                {
+                    p.ID,p.ParkingName,p.IsLegal,p.Status
+                })
+            }*/
+                u
                 );
         }
 

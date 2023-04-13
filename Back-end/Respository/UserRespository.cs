@@ -9,7 +9,6 @@ namespace Back_end.Respository
 {
 
     using Back_end.Common;
-    using Back_end.Models;
     using System;
     using System.Text.RegularExpressions;
     using BCryptNet = BCrypt.Net.BCrypt;
@@ -153,18 +152,26 @@ namespace Back_end.Respository
 
         public async Task<User> GetUser(string guidString)
         {
-            return await _dbContext.Users.Include(u => u.Parkings)
-                .ThenInclude(p => p.Slots).Include(u => u.Parkings)
-                .Include(p=>p.Parking)
-                .ThenInclude(p => p.ParkingManagers)
-                 .Include(u=>u.Parking).ThenInclude(p=>p.Feedbacks)
-                .Include(u => u.MembershipPackage)
-                .Include(u => u.Cars).ThenInclude(c => c.CarModel)
-                .Include(u => u.Requests).
-                Include(u => u.Feedbacks)
-                .Include(u => u.Image).
-                Include(u => u.Parkings).ThenInclude(p=>p.Requests)
-                .Include(u => u.Parkings).ThenInclude(p=>p.Images)
+            return await _dbContext.Users
+                .Include(u => u.Parkings)
+                .Include(u => u.Parkings).ThenInclude(p => p.Requests)
+                .Include(u => u.Parkings).ThenInclude(p => p.ParkingManagers)
+                .Include(u => u.Parkings).ThenInclude(p => p.Images)
+                .Include(u => u.Parkings).ThenInclude(p => p.Feedbacks)
+                .Include(u => u.Parkings).ThenInclude(p => p.Slots)
+                 .Include(u => u.Parking)
+                .Include(u => u.Parking).ThenInclude(p => p.Requests)
+                .Include(u => u.Parking).ThenInclude(p => p.ParkingManagers)
+                .Include(u => u.Parking).ThenInclude(p => p.Images)
+                .Include(u => u.Parking).ThenInclude(p => p.Feedbacks)
+                .Include(u => u.Parking).ThenInclude(p => p.Slots)
+                .Include(u => u.Image).ThenInclude(i => i.User)
+                .Include(u => u.Image).ThenInclude(i => i.Parking)
+                .Include(u => u.Image).ThenInclude(i => i.Feedback)
+                 .Include(u => u.Cars).ThenInclude(c => c.CarModel)
+                 .Include(u => u.Cars)
+                 .Include(u => u.MembershipPackage).ThenInclude(m => m.SubcribeBy)
+                 .Include(u => u.Transaction)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
@@ -227,7 +234,7 @@ namespace Back_end.Respository
 
             };
 
-             _dbContext.Users.Add(user);
+            _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
 
 
@@ -239,12 +246,12 @@ namespace Back_end.Respository
             };
 
             user.Image = image;
-            
+
 
             _imageRepository.AddAsync(image);
 
 
-           
+
 
 
 
@@ -269,7 +276,8 @@ namespace Back_end.Respository
             updateUser.Email = userModel.Email;
 
             var image = updateUser.Image;
-            if (image == null) {
+            if (image == null)
+            {
                 image = new Image()
                 {
                     URL = userModel.ImageURL,
@@ -301,10 +309,10 @@ namespace Back_end.Respository
         public async Task<User> RegisterForParkingManager(PMModel userModel)
         {
             if (string.IsNullOrEmpty(userModel.ParkingID)) throw new ArgumentNullException();
-            var parking = await _dbContext.Parkings.Include(p=>p.ParkingManagers).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            var parking = await _dbContext.Parkings.Include(p => p.ParkingManagers).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(userModel.ParkingID.ToUpper().Trim()
                 ));
-            if (parking.ParkingManagers == null) parking.ParkingManagers = new List<User>() ;
+            if (parking.ParkingManagers == null) parking.ParkingManagers = new List<User>();
 
             var username = GenerateUsername(userModel.FirstName, userModel.LastName);
 
@@ -328,12 +336,12 @@ namespace Back_end.Respository
             };
 
 
-            
+
 
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
-                var image = new Image()
+            var image = new Image()
             {
                 URL = userModel.imageURL,
                 User = user,

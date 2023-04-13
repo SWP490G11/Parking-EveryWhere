@@ -87,13 +87,13 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Request>> GetAllAsync()
         {
-           return  await _dbContext.Requests.ToListAsync();
+           return  await _dbContext.Requests.Include(r=>r.Requestby).ToListAsync();
         }
 
         public async Task<Request> GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.Requests.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Requests.Include(r => r.Requestby).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
