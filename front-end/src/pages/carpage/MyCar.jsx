@@ -150,13 +150,11 @@ const MyCar = () => {
               onClick={() => {
                 showDrawer1();
                 form1.setFieldsValue({
-                  id: element.id,
+                  carModelID: element.carModel.id,
                   carNumber: element.carNumber,
-                  model: element.model,
-                  discript: element.discript,
-                  price: element.price,
+                
                 });
-                form.setFieldsValueValue({ model: element.carModel.model });
+            
                 setIdCar(element.id);
               }}
             />,
@@ -194,6 +192,7 @@ const MyCar = () => {
                             placement: "topLeft",
                           });
                         });
+                      
                     });
                   },
                   onCancel() {},
@@ -255,27 +254,24 @@ const MyCar = () => {
   const onFinish = (values) => {
     axios
       .post(`${process.env.REACT_APP_Backend_URI}car`, {
-        carModelId: values.carModelId,
-        carNumber: values.discript,
+        carModelID: values.carModelID,
+        carNumber: values.carNumber,
        
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+    
         notification.success({
           message: `Thành công`,
           description: "Create new car successfully",
           placement: "center",
         });
-        
-        form.setFieldsValue({
-          carModelId : "",
-          carNumber: "",
 
-          // discript: "",
-          // price: "",
+        form.setFieldsValue({
+          carModelID : "",
+          carNumber: "",
         });
         setOpen(false);
-        // window.location.reload();
+      
       })
       .catch((error) => {
         notification.warning({
@@ -293,10 +289,10 @@ const MyCar = () => {
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
-        id: values.model.id,
+        carModelID: values.carModelID,
         carNumber: values.carNumber,
 
-        lastModifyAt: new Date(),
+        
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
@@ -307,9 +303,8 @@ const MyCar = () => {
         });
         form.setFieldsValue({
           carNumber: "",
-          model: "",
-          discript: "",
-          price: "",
+          carModelID: "",
+         
         });
         setOpen(false);
         // window.location.reload();
@@ -322,9 +317,7 @@ const MyCar = () => {
         });
         form.setFieldsValue({
           carNumber: "",
-          model: "",
-          discript: "",
-          price: "",
+          carModelID: "",
         });
       });
   };
@@ -537,6 +530,7 @@ const MyCar = () => {
           }}
         />
       ) : (
+    
         <Table
           key="id"
           rowKey={(data) => data.id}
@@ -605,7 +599,7 @@ const MyCar = () => {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="carModelId"
+                name="carModelID"
                 label="Loại xe"
                 rules={[
                   {
@@ -618,27 +612,7 @@ const MyCar = () => {
               </Form.Item>
             </Col>
           </Row>
-          {/* <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="model"
-                label="Loại xe"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter Model Name",
-                  },
-                ]}
-              >
-                <TreeSelect
-                  name="model"
-                  style={{ width: "100%" }}
-                  multiple
-                  placeholder="Warning multiple"
-                />
-              </Form.Item>
-            </Col>
-          </Row> */}
+    
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
@@ -694,6 +668,7 @@ const MyCar = () => {
           paddingBottom: 80,
         }}
       >
+       
         <Form
           form={form1}
           onFinish={onFinishEdit}
@@ -703,7 +678,7 @@ const MyCar = () => {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="id"
+                name="carModelID"
                 label="ID "
                 rules={[
                   {
@@ -712,7 +687,7 @@ const MyCar = () => {
                   },
                 ]}
               >
-                <Input disabled placeholder="Please enter Car Number" />
+                <Input  placeholder="Please enter Car Model" />
               </Form.Item>
             </Col>
           </Row>

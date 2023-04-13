@@ -11,17 +11,18 @@ import {
   Col,
   Modal,
   notification,
-  Drawer,
+  Drawer
 } from "antd";
 import {
   FilterOutlined,
   EditFilled,
   CloseCircleOutlined,
   LoadingOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 
- const ManageCar =() => {
+const ManageCar = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -36,6 +37,22 @@ import axios from "axios";
     isOpen: false,
     data: {},
   });
+
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((state) => {
+      const newLoadings = [...state];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((state) => {
+        const newLoadings = [...state];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 6000);
+  };
 
   const columns = [
     {
@@ -65,8 +82,7 @@ import axios from "axios";
       sorter: (a, b) => {
         if (a.model > b.model) {
           return -1;
-        }else
-        if (b.model > a.model) {
+        } else if (b.model > a.model) {
           return 1;
         }
         return 0;
@@ -79,14 +95,28 @@ import axios from "axios";
       key: "discript",
     },
     {
-      title: "Username",
-      dataIndex: "userName",
-      key: "userName",
+      title: "price",
+      dataIndex: "price",
+      key: "price",
       sorter: (a, b) => {
-        if (a.userName > b.userName) {
+        if (a.price > b.price) {
           return -1;
         }
-        if (b.userName > a.userName) {
+        if (b.price > a.price) {
+          return 1;
+        }
+        return 0;
+      },
+    },
+    {
+      title: "User name",
+      dataIndex: "carOwner",
+      key: "carOwner",
+      sorter: (a, b) => {
+        if (a.carOwner > b.carOwner) {
+          return -1;
+        }
+        if (b.carOwner > a.carOwner) {
           return 1;
         }
         return 0;
@@ -98,15 +128,23 @@ import axios from "axios";
       key: "action",
     },
   ];
- 
+  // const [deleteModal, setDeleteModal] = useState({
+  //   isOpen: false,
+  //   title: "Notice",
+  //   content: <p>Do you want to delete car model?</p>,
+  //   // footer: (
+  //   //   <div style={{ textAlign: "left" }}>
+  //   //     <Button className="buttonSave">Delete</Button>
+
+  //   //   </div>
+  //   // ),
+  // });
   const showDrawer1 = () => {
     setOpen1(true);
   };
-
   const onClose1 = () => {
     setOpen1(false);
   };
-
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     axios
@@ -116,21 +154,21 @@ import axios from "axios";
         console.log(respData);
 
         respData.forEach((element) => {
-          element.model= element.carModel.model;
-          element.discript =element.carModel.discript;
-          element.userName =element.carOwner.userName;
+          element.model = element.carModel.model;
+          element.discript = element.carModel.discript;
+          element.price = element.carModel.price;
+          element.carOwner = element.carOwner;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
               onClick={() => {
                 showDrawer1();
                 form1.setFieldsValue({
-                  id: element.id,
+                  carModelID: element.carModel.id,
                   carNumber: element.carNumber,
-                  model: element.model,
-                  discript: element.discript,
-                  userName: element.userName,
+                
                 });
+            
                 setIdCar(element.id);
               }}
             />,
@@ -168,6 +206,7 @@ import axios from "axios";
                             placement: "topLeft",
                           });
                         });
+                      
                     });
                   },
                   onCancel() {},
@@ -228,51 +267,46 @@ import axios from "axios";
 
   const onFinish = (values) => {
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}car`, {        
-
-        carModelId: values.carModelId,
-        carNumber: values.discript,    
-
-        lastModifyAt: new Date(),
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {
+        carModelID: values.carModelID,
+        carNumber: values.carNumber,
+       
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+    
         notification.success({
           message: `Thành công`,
-          description: "Create new parking successfully",
-          placement: "topLeft",
+          description: "Create new car successfully",
+          placement: "center",
         });
+
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          userName: "",
+          carModelID : "",
+          carNumber: "",
         });
         setOpen(false);
-        // window.location.reload();
+      
       })
       .catch((error) => {
         notification.warning({
           message: `Fail`,
           description: "Please check input again",
-          placement: "topLeft",
+          placement: "center",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          userName: "",
+          carNumber: "",
         });
       });
+
+      
   };
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
-        carNumber : values.carNumber,
-        model: values.model,
-        discript: values.discript,
-       
-        lastModifyAt: new Date(),
+        carModelID: values.carModelID,
+        carNumber: values.carNumber,
+
+        
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
@@ -282,10 +316,9 @@ import axios from "axios";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          userName: "",
+          carNumber: "",
+          carModelID: "",
+         
         });
         setOpen(false);
         // window.location.reload();
@@ -297,10 +330,8 @@ import axios from "axios";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          userName: "",
+          carNumber: "",
+          carModelID: "",
         });
       });
   };
@@ -390,10 +421,10 @@ import axios from "axios";
             onClick={() => {
               showDrawer();
               form.setFieldsValue({
-                carNumber:"",
+                carNumber: "",
                 model: "",
                 discript: "",
-                userName: "",
+                price: "",
               });
             }}
           >
@@ -401,21 +432,8 @@ import axios from "axios";
           </Button>
         </Col>
       </Row>
-      {/* Delete Modal */}
-      {/* <Modal
-        open={deleteModal.isOpen}
-        title={deleteModal.title}
-        footer={deleteModal.footer}
-        onCancel={() => {
-          setDeleteModal({ ...deleteModal, isOpen: false });
-        }}
-        destroyOnClose={true}
-        closeIcon={
-          <CloseSquareOutlined style={{ color: "red", fontSize: "20px" }} />
-        }
-      >
-        {deleteModal.content}
-      </Modal> */}
+     
+
       <Modal
         open={modal.isOpen}
         title="Detail Car model"
@@ -438,7 +456,7 @@ import axios from "axios";
       >
         <table>
           <tr>
-            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
+            <td style={{ width: "30px", fontSize: "18px", color: "#838688" }}>
               Mã xe
             </td>
             <td
@@ -453,7 +471,7 @@ import axios from "axios";
             </td>
           </tr>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+            <td style={{ width: "30px", fontSize: "18px", color: "#838688" }}>
               Biển số xe
             </td>
             <td
@@ -479,7 +497,7 @@ import axios from "axios";
                 paddingLeft: "35px",
               }}
             >
-               {modal.data.model}
+              {modal.data.model}
             </td>
           </tr>
           <tr>
@@ -499,8 +517,23 @@ import axios from "axios";
           </tr>
 
           <tr>
-            <td style={{ width: "100px", fontSize: "18px", color: "#838688" }}>
-             Người dùng{" "}
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Gia ve{" "}
+            </td>
+            <td
+              style={{
+                fontSize: "18px",
+                color: "#838688",
+                textAlign: "justify",
+                paddingLeft: "35px",
+              }}
+            >
+              {modal.data.price}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
+              Ten nguoi dung{" "}
             </td>
             <td
               style={{
@@ -526,6 +559,7 @@ import axios from "axios";
           }}
         />
       ) : (
+    
         <Table
           key="id"
           rowKey={(data) => data.id}
@@ -547,7 +581,7 @@ import axios from "axios";
                       carNumber: record.carNumber,
                       model: record.model,
                       discript: record.discript,
-                      userName: record.userName,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
@@ -563,7 +597,7 @@ import axios from "axios";
                       model: record.model,
 
                       discript: record.discript,
-                      userName: record.userName,
+                      price: record.price,
                     },
                   });
                   console.log(modal.data);
@@ -594,26 +628,25 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="model"
+                name="carModelID"
                 label="Loại xe"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Model Name",
+                    message: "Please enter Car model id",
                   },
                 ]}
               >
-                <Input placeholder="Please enter Model Name" />
+                <Input placeholder="Please enter Car model id" />
               </Form.Item>
             </Col>
           </Row>
+    
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
                 name="carNumber"
-
                 label="Biển số xe"
-
                 rules={[
                   {
                     required: true,
@@ -630,7 +663,6 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-
 
           <Row gutter={16}>
             <Col span={24}>
@@ -665,6 +697,7 @@ import axios from "axios";
           paddingBottom: 80,
         }}
       >
+       
         <Form
           form={form1}
           onFinish={onFinishEdit}
@@ -674,16 +707,16 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="model"
+                name="carModelID"
                 label="ID "
                 rules={[
                   {
                     required: true,
-                    message: "Nhập model xe ở đây",
+                    message: "Please enter Model Name",
                   },
                 ]}
               >
-                <Input disabled placeholder="Nhập model xe ở đây" />
+                <Input  placeholder="Please enter Car Model" />
               </Form.Item>
             </Col>
           </Row>
@@ -703,7 +736,6 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-             
 
           <Row gutter={16}>
             <Col span={24}>
@@ -725,7 +757,6 @@ import axios from "axios";
       </Drawer>
     </>
   );
-
-}
+};
 
 export default ManageCar;
