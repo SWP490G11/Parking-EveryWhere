@@ -9,18 +9,21 @@ import { useNavigate } from "react-router-dom";
 import { toRoute } from '../../utils/helpers';
 import api from "../../services/api";
 import { routes } from '../../utils/routes';
+import AddSlot from "../../containers/pages/ManageParking/AddSlot";
 export default function ManageParking() {
   const [data, setData] = useState([]);
   const navigateTo = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [status,setStatus]= useState("Status");
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
   });
-
+  const [parkingID,setParkingID] = useState("");
+  const [parkingName,setParkingName] = useState("");
   const columns = [
     {
         title: "Tên bãi đỗ",
@@ -354,18 +357,22 @@ export default function ManageParking() {
       ) : (
         <Table
           // key="id"
-          rowKey={(data) => data.parkingName}
+          rowKey={(data) => data.parkingID}
           columns={columns}
           pagination={pagination}
           dataSource={finalData}
            expandable={{
+            
             expandedRowRender: (record) => (
               <p
                 style={{
                   margin: 0,
                 }}
               >
-               <Button>Thêm slot</Button>
+                
+               <Button  onClick={e => {setOpen(true);setParkingID(record.parkingID);setParkingName(record.parkingName);
+                
+              }}>Thêm slot</Button>
               </p>
             )
                }}
@@ -419,6 +426,9 @@ export default function ManageParking() {
           }}
         />
       )}
+      {!open ? <></> : 
+      <AddSlot setOpen={setOpen} open={open} parkingID={parkingID} parkingName={parkingName}/>
+      }
     </>
   );
 }

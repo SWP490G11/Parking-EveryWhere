@@ -204,7 +204,6 @@ export default function ManageParkingManager() {
             u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
-
   const pagination = {
     current: page,
     PageSize: pageSize,
@@ -545,7 +544,7 @@ export default function ManageParkingManager() {
         />
       )}
       {!open ? <></> : 
-      <AddPM setOpen={setOpen} open={open}/>
+      <AddPM setOpen={setOpen} open={open} />
       }
     </>
   );
