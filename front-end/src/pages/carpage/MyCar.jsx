@@ -12,16 +12,18 @@ import {
   Modal,
   notification,
   Drawer,
+  TreeSelect
 } from "antd";
 import {
   FilterOutlined,
   EditFilled,
   CloseCircleOutlined,
   LoadingOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 
- const MyCar =() => {
+const MyCar = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
@@ -36,6 +38,22 @@ import axios from "axios";
     isOpen: false,
     data: {},
   });
+
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((state) => {
+      const newLoadings = [...state];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((state) => {
+        const newLoadings = [...state];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 6000);
+  };
 
   const columns = [
     {
@@ -65,8 +83,7 @@ import axios from "axios";
       sorter: (a, b) => {
         if (a.model > b.model) {
           return -1;
-        }else
-        if (b.model > a.model) {
+        } else if (b.model > a.model) {
           return 1;
         }
         return 0;
@@ -124,21 +141,20 @@ import axios from "axios";
         console.log(respData);
 
         respData.forEach((element) => {
-          element.model= element.carModel.model;
-          element.discript =element.carModel.discript;
-          element.price =element.carModel.price;
+          element.model = element.carModel.model;
+          element.discript = element.carModel.discript;
+          element.price = element.carModel.price;
           element.action = [
             <EditFilled
               style={{ fontSize: "25px" }}
               onClick={() => {
                 showDrawer1();
                 form1.setFieldsValue({
-                  id: element.id,
+                  carModelID: element.carModel.id,
                   carNumber: element.carNumber,
-                  model: element.model,
-                  discript: element.discript,
-                  price: element.price,
+                
                 });
+            
                 setIdCar(element.id);
               }}
             />,
@@ -176,6 +192,7 @@ import axios from "axios";
                             placement: "topLeft",
                           });
                         });
+                      
                     });
                   },
                   onCancel() {},
@@ -236,50 +253,46 @@ import axios from "axios";
 
   const onFinish = (values) => {
     axios
-      .post(`${process.env.REACT_APP_Backend_URI}car`, {        
-        carModelId: values.carModelId,
-        carNumber: values.discript,    
-        lastModifyAt: new Date(),
+      .post(`${process.env.REACT_APP_Backend_URI}car`, {
+        carModelID: values.carModelID,
+        carNumber: values.carNumber,
+       
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+    
         notification.success({
           message: `Thành công`,
-          description: "Create new parking successfully",
-          placement: "topLeft",
+          description: "Create new car successfully",
+          placement: "center",
         });
+
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          // discript: "",
-          // price: "",
+          carModelID : "",
+          carNumber: "",
         });
         setOpen(false);
-        // window.location.reload();
+      
       })
       .catch((error) => {
         notification.warning({
           message: `Fail`,
           description: "Please check input again",
-          placement: "topLeft",
+          placement: "center",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          price: "",
+          carNumber: "",
         });
       });
+
+      
   };
   const onFinishEdit = (values) => {
     axios
       .put(`${process.env.REACT_APP_Backend_URI}car/${idcar}`, {
-        id: values.model.id,
-        carNumber : values.carNumber,
-       
+        carModelID: values.carModelID,
+        carNumber: values.carNumber,
+
         
-       
-        lastModifyAt: new Date(),
       })
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
@@ -289,10 +302,9 @@ import axios from "axios";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          price: "",
+          carNumber: "",
+          carModelID: "",
+         
         });
         setOpen(false);
         // window.location.reload();
@@ -304,10 +316,8 @@ import axios from "axios";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber:"",
-          model: "",
-          discript: "",
-          price: "",
+          carNumber: "",
+          carModelID: "",
         });
       });
   };
@@ -397,7 +407,7 @@ import axios from "axios";
             onClick={() => {
               showDrawer();
               form.setFieldsValue({
-                carNumber:"",
+                carNumber: "",
                 model: "",
                 discript: "",
                 price: "",
@@ -408,21 +418,8 @@ import axios from "axios";
           </Button>
         </Col>
       </Row>
-      {/* Delete Modal */}
-      {/* <Modal
-        open={deleteModal.isOpen}
-        title={deleteModal.title}
-        footer={deleteModal.footer}
-        onCancel={() => {
-          setDeleteModal({ ...deleteModal, isOpen: false });
-        }}
-        destroyOnClose={true}
-        closeIcon={
-          <CloseSquareOutlined style={{ color: "red", fontSize: "20px" }} />
-        }
-      >
-        {deleteModal.content}
-      </Modal> */}
+     
+
       <Modal
         open={modal.isOpen}
         title="Detail Car model"
@@ -486,7 +483,7 @@ import axios from "axios";
                 paddingLeft: "35px",
               }}
             >
-               {modal.data.model}
+              {modal.data.model}
             </td>
           </tr>
           <tr>
@@ -507,7 +504,7 @@ import axios from "axios";
 
           <tr>
             <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-             Gia ve{" "}
+              Gia ve{" "}
             </td>
             <td
               style={{
@@ -533,6 +530,7 @@ import axios from "axios";
           }}
         />
       ) : (
+    
         <Table
           key="id"
           rowKey={(data) => data.id}
@@ -601,19 +599,20 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="model"
+                name="carModelID"
                 label="Loại xe"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Model Name",
+                    message: "Please enter Car model id",
                   },
                 ]}
               >
-                <Input placeholder="Please enter Model Name" />
+                <Input placeholder="Please enter Car model id" />
               </Form.Item>
             </Col>
           </Row>
+    
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
@@ -635,7 +634,6 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-          
 
           <Row gutter={16}>
             <Col span={24}>
@@ -670,6 +668,7 @@ import axios from "axios";
           paddingBottom: 80,
         }}
       >
+       
         <Form
           form={form1}
           onFinish={onFinishEdit}
@@ -679,7 +678,7 @@ import axios from "axios";
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="id"
+                name="carModelID"
                 label="ID "
                 rules={[
                   {
@@ -688,7 +687,7 @@ import axios from "axios";
                   },
                 ]}
               >
-                <Input disabled placeholder="Please enter Car Number" />
+                <Input  placeholder="Please enter Car Model" />
               </Form.Item>
             </Col>
           </Row>
@@ -708,7 +707,6 @@ import axios from "axios";
               </Form.Item>
             </Col>
           </Row>
-             
 
           <Row gutter={16}>
             <Col span={24}>
@@ -730,7 +728,6 @@ import axios from "axios";
       </Drawer>
     </>
   );
-
-}
+};
 
 export default MyCar;
