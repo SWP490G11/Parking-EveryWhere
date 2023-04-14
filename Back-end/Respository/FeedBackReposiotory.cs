@@ -15,7 +15,7 @@ namespace Back_end.Respository
         Task<Feedback> GetFeedbacksAsync(string idString);
         void UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel);
 
-       
+        
     }
 
     public class FeedBackReposiotory : IFeedBackReposiotory

@@ -57,13 +57,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl =pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -71,7 +72,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    )*/,
 
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -139,13 +140,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -153,7 +155,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    )*/,
              
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -197,13 +199,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -211,7 +214,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    ),*/,
            
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
@@ -249,13 +252,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks,/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -263,7 +267,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    ),*/
 
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>

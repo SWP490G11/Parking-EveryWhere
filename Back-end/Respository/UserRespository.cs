@@ -172,6 +172,10 @@ namespace Back_end.Respository
                  .Include(u => u.Cars)
                  .Include(u => u.MembershipPackage).ThenInclude(m => m.SubcribeBy)
                  .Include(u => u.Transaction)
+                 .Include(u=>u.Requests)
+                 .Include(u=>u.Requests).ThenInclude(r=>r.Parking)
+                 .Include(u => u.Feedbacks).ThenInclude(f=>f.Images)
+                  .Include(u => u.Feedbacks).ThenInclude(f => f.Parking)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));

@@ -33,7 +33,7 @@ namespace Back_end.Controllers
                      fb.ID,
                      fb.Rating,
                      fb.Content,
-                    ParkingID= fb.Parking.ID.ToString(),
+                     ParkingID= fb.Parking.ID.ToString(),
                      Images = fb.Images.Select(i => i.URL),
                      Feedbackby = new
                      {
@@ -53,6 +53,19 @@ namespace Back_end.Controllers
             var feedback = await  _reposiotory.GetFeedbacksAsync(id);
 
             return Ok(feedback);
+        }
+
+
+        [HttpGet("/my-feedback")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
+        public async Task<IActionResult> Get()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+        
+
+            return Ok(mwi.User.Feedbacks);
         }
 
         [HttpPost("/feedback")]

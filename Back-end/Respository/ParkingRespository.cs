@@ -98,7 +98,8 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Parking>> GetAllAsync()
         {
-            return await _dbContext.Parkings.Include(p => p.ParkingManagers)
+            return await _dbContext.Parkings.Include(p => p.ParkingManagers).ThenInclude(pm=>pm.Image)
+                .Include(p=>p.Feedbacks)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images).
@@ -128,7 +129,7 @@ namespace Back_end.Respository
             var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase);
             var parkings = await _dbContext.Parkings.Include(p => p.ParkingManagers)
                 .Include(p => p.Slots)
-
+                    .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Images)
                 .Include(p => p.Owner).Where(p => p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
