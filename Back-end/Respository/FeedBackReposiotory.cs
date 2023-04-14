@@ -15,7 +15,7 @@ namespace Back_end.Respository
         Task<Feedback> GetFeedbacksAsync(string idString);
         void UpdateFeedBack(string id, UpdateFeedbackModel feedbackModel);
 
-        
+        ICollection<Feedback> GetFeedbacksOfParking(string parkingID);
     }
 
     public class FeedBackReposiotory : IFeedBackReposiotory
@@ -117,6 +117,11 @@ namespace Back_end.Respository
             _dbContext.SaveChanges();
         }
 
+        public ICollection<Feedback> GetFeedbacksOfParking(string parkingID)
+        {
+            return _dbContext.Feedbacks.Include(f=>f.Parking).Include(f=>f.FeedbackBy)
+                .Where(f => f.Parking.ID.ToString().ToLower().Trim().Equals(parkingID.ToLower().Trim())).ToList();
+        }
     }
 
     public class UpdateFeedbackModel

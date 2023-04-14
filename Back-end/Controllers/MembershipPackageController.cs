@@ -111,9 +111,16 @@ namespace Back_end.Controllers
             response.Transactor = transactor;
 
             _dbContext.Transactions.Add(response);
+
+            foreach (var parking in transactor.Parkings)
+            {
+                parking.Status = Status.Available;
+            }
+
+            _dbContext.Parkings.UpdateRange(transactor.Parkings);
             _dbContext.SaveChanges();
 
-            return Ok(response);
+            return Ok("Transaction done");
         }
 
 

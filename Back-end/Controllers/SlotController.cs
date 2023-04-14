@@ -103,7 +103,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/slots/{parkingID}")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner,Role.ParkingManager)]
         public async Task<IActionResult> GetSlotOfParking(string parkingID)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
