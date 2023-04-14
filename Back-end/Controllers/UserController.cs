@@ -108,7 +108,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingManager)]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetUser(string id)
         {
             
