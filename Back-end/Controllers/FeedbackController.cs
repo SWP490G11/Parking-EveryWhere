@@ -53,21 +53,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var feedbacks =  _reposiotory.GetFeedbacksOfParking(parkingID); 
 
-            return Ok(feedbacks.Select(fb =>
-                 new
-                 {
-                     fb.ID,
-                     fb.Rating,
-                     fb.Content,
-                     ParkingID = fb.Parking.ID.ToString(),
-                     Images = fb.Images.Select(i => i.URL),
-                     Feedbackby = new
-                     {
-                         fb.FeedbackBy.ID,
-                         fb.FeedbackBy.UserName
-                     },
-                 }
-            ));
+            return Ok(feedbacks);
         }
 
 

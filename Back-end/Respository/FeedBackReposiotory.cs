@@ -119,7 +119,7 @@ namespace Back_end.Respository
 
         public ICollection<Feedback> GetFeedbacksOfParking(string parkingID)
         {
-            return _dbContext.Feedbacks.Include(f=>f.Parking).Include(f=>f.FeedbackBy)
+            return _dbContext.Feedbacks
                 .Where(f => f.Parking.ID.ToString().ToLower().Trim().Equals(parkingID.ToLower().Trim())).ToList();
         }
     }
