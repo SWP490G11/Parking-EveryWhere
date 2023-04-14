@@ -48,9 +48,10 @@ namespace Back_end.Controllers
             return Ok(new
             {
                 r.ID,
+                r.Note,
                 r.Status,
-                RequestbyID = r.Requestby.ID.ToString(),
-                r.RequestAt
+                ParkingId = r.Parking,
+                r.RequestAt,
             });
         }
 
@@ -65,8 +66,12 @@ namespace Back_end.Controllers
 
             return Ok(requests.Select(r=>
           new  {
-              r.ID,r.Status,RequestbyID=  r.Requestby.ID.ToString(),r.RequestAt
-            } 
+              r.ID,
+              r.Note,
+              r.Status,
+              ParkingId = r.Parking,
+              r.RequestAt,
+          } 
             ));
         }
 
@@ -82,9 +87,10 @@ namespace Back_end.Controllers
             return Ok(requests.Select(r =>
           new {
               r.ID,
+              r.Note,
               r.Status,
-              RequestbyID = r.Requestby.ID.ToString(),
-              r.RequestAt
+              ParkingId = r.Parking,
+              r.RequestAt,
           }
             ));
         }
@@ -102,9 +108,10 @@ namespace Back_end.Controllers
             return Ok(requests.Select(r =>
           new {
               r.ID,
+              r.Note,
               r.Status,
-              RequestbyID = r.Requestby.ID.ToString(),
-              r.RequestAt
+              ParkingId = r.Parking,
+              r.RequestAt,
           }
             ));
         }
