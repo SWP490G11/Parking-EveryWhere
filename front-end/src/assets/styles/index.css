@@ -135,9 +135,9 @@ code {
 }
 
 .avatar {
-  width: 30vw;
+  
   display: block;
-  background-color: aquamarine;
+  background-color: whitesmoke;
   text-align: center;
 }
 .imgz {
@@ -152,7 +152,8 @@ code {
   text-align: center;
 }
 .user-name {
-  margin: 20px;
+
+  text-align: center;
   font-weight: bold;
   font-size: large;
 }

@@ -1,125 +1,122 @@
-import {Table, Modal, Button,Row,Col,Input} from 'antd';
-import axios from 'axios';
+import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form} from 'antd';
+
 import React, {useEffect, useState} from 'react';
-import {CheckOutlined, CloseOutlined, CloseSquareOutlined} from "@ant-design/icons";
+import {ExclamationCircleFilled, CloseOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
-export default function ManageRequest() {
+ const ManageRequest=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
         data: {},
     });
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isModalCancelVisible, setIsModalCancelVisible] = useState(false);
    
-    const [idCompleted, setIdCompleted] = useState();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
-    const showModal = () => {
-        setIsModalVisible(true);
-
-    };
-    const handleOk = () => {
-        setIsModalVisible(false);
-
-        axios
-            .put(`https://rookiesgroup3.azurewebsites.net/api/Assignments/${idCompleted}/accepted`)
+    const [status,setStatus] = useState("Status");
+    const handleDeleteOk = (id) => {
+       
+        api
+            .patch(`request/cancel-request/${id}`)
             .then((res) => {
-                window.location.reload();
-                setIdCompleted(null)
-            }).catch(() => {
-
-        })
-
-
-    };
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleCheckId = (id) => {
-        setIdCompleted(id)
-    }
-//===============================================================
-    const showModalDelete = () => {
-        setIsModalCancelVisible(true);
-
-    };
-    const handleCheckDeleteId = (id) => {
-
-        setIdCompleted(id)
-    }
-    const handleDeleteOk = () => {
-        setIsModalCancelVisible(false);
-        axios
-            .put(`https://rookiesgroup3.azurewebsites.net/api/Assignments/${idCompleted}/declined`)
-            .then((res) => {
-                setIdCompleted(null)
-
-                window.location.reload();
+                
+                notification.success({
+                    message: `Thành công`,
+                    description: "Bạn đã hủy yêu cầu",
+                    placement: "topLeft",
+                  });
+                //window.location.reload();
             }).catch((error) => {
-
+                notification.warning({
+                    message: `Thât bại`,
+                    description: "Vui lòng thử lại",
+                    placement: "topLeft",
+                  });
         })
     }
-    const handleCancelModal = () => {
-        setIsModalCancelVisible(false);
-    };
+    const showPromiseDelete = (id) => {
+        Modal.confirm({
+          title: 'Do you want to delete these items?',
+          icon: <ExclamationCircleFilled />,
+          okText: 'Đồng ý',
+    okType: 'danger',
+    cancelText: 'Hủy',
+          content: 'When clicked the OK button, this dialog will be closed after 1 second',
+          onOk() {
+            return new Promise((resolve, reject) => {
+                handleDeleteOk(id);
+              setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+            }).catch(() => console.log('Oops errors!'));
+          },
+          onCancel() {},
+        });
+      };
 //===========================================================
 //===============================================
 
     useEffect(() => {
-        api.get(`pending-parkings`, {})
-            .then((response) => {
-                let respData = response.data
-                respData.forEach((element) => {
-                    //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-                    element.lastModifyAt = moment(new Date(element.lastModifyAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                    element.requestBy = element.requestby.userName;
-                    element.parkingName = element.parkings.parkingName;
+        api.get(`pending-request-of-all-parkings-of-owner`, {})
+        .then(function(response)  {
+            let respData = response.data
+            respData.forEach((element) => {
+                //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
+                element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
+                element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+                element.parkingName = element.parkingId.parkingName;
+                
+
+
+                element.action = [
                     
+                    <Button disabled={element.status==="Từ chối"? true : false}
+                        className="buttonState"
+                       
+                        onClick={() => {
+                            showPromiseDelete(element.id);
+                            
+                        }}
+                    >
+                        <CloseOutlined/>
+                    </Button>,
+                  
 
-
-                    element.action = [
-                        <Button
-                            className='buttonState'
-                            disabled={element.state === 'Cancel' || element.isInProgress === false}
-                            onClick={() => {
-                                showModal()
-                                handleCheckId(element.id)
-                            }}
-                        >
-                            <CheckOutlined
-                                style={{color: 'red'}}
-                            />
-                        </Button>,
-                        <Button
-                            className="buttonState"
-                            disabled={element.state === 'Done' || element.isInProgress === false}
-                            onClick={() => {
-                                showModalDelete()
-                                handleCheckDeleteId(element.id)
-                            }}
-                        >
-                            <CloseOutlined/>
-                        </Button>,
-                      
-
-                    ]
-                })
-                setData(response.data);
-
-
+                ]
             })
-            .catch((error) => {
+            setData(respData.sort((a, b) => {
+                if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+                  return 1;
+                }
+                if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+                  return -1;
+                }
+                return 0;
+              })
+            );
+          }, [])
+        .catch((error) => {
 
-            })
-    }, [])
+        })
+}, [data])
 
     const columns = [
         {
-            title: "Parking Name",
+            title: "Mã số",
+            dataIndex: "id",
+            key: "id",
+            sorter: (a, b) => {
+                if (a.id > b.id) {
+                    return -1;
+                }
+                if (b.id > a.id) {
+                    return 1;
+                }
+                return 0;
+            },
+            width: "15%",
+        },
+        {
+            title: "Bãi đỗ",
             dataIndex: "parkingName",
             key: "parkingName",
             sorter: (a, b) => {
@@ -134,9 +131,9 @@ export default function ManageRequest() {
         },
 
         {
-            title: "Assigned Date",
-            dataIndex: "assignedDate",
-            key: "assignedDate",
+            title: "Ngày gửi yêu cầu",
+            dataIndex: "requestAt",
+            key: "requestAt",
             sorter: (a, b) => {
                 if (a.requestAt > b.requestAt) {
                     return -1;
@@ -147,22 +144,9 @@ export default function ManageRequest() {
                 return 0;
             },
         },
+        
         {
-            title: "Assigned By",
-            dataIndex: "assignedBy",
-            key: "assignedBy",
-            sorter: (a, b) => {
-                if (a.requestBy > b.requestBy) {
-                    return -1;
-                }
-                if (b.requestBy > a.requestBy) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
-        {
-            title: "Note",
+            title: "Nội dung",
             dataIndex: "note",
             key: "note",
             sorter: (a, b) => {
@@ -176,9 +160,9 @@ export default function ManageRequest() {
             },
         },
         {
-            title: "State",
-            dataIndex: "state",
-            key: "state",
+            title: "Trạng thái",
+            dataIndex: "status",
+            key: "status",
             sorter: (a, b) => {
                 if (a.status > b.status) {
                     return -1;
@@ -195,17 +179,17 @@ export default function ManageRequest() {
             key: "action",
         },
     ];
+    const dataByStatus =
+        status === "Status" ? data : data.filter((u) => u.status === status);
     const finalData =
     searchText === ""
-      ? data
-      : (data.filter(
+      ? dataByStatus
+      : dataByStatus.filter(
           (u) =>
-            u.parkingName
-              .toLowerCase()
-              .replace(/\s+/g, "")
-              .includes(searchText.toLowerCase().replace(/\s+/g, "")) ||
-            u.requestBy.toLowerCase().replace(/\s+/g, "").includes(searchText.toLowerCase().replace(/\s+/g, ""))
-        ) 
+            u.parkingId.parkingName
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(searchText.toLowerCase().replace(/\s+/g, ""))
         );
     const pagination = {
         current: page,
@@ -221,9 +205,65 @@ export default function ManageRequest() {
        showSizeChanger:true, 
           showTotal: total => `Total ${total} Request`
       };
+      const renderContent = () => {
+        switch(status) {
+            case 'Status':
+              return 'Tất cả'
+            case 'Pending':
+              return 'Chờ duyệt'
+            case 'Cancel':
+              return 'Từ chối'
+            default:
+              return 'Tất cả'
+          }
+      };
     return (
         <>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
+        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+            {/*Filter Gender */}
+            <Form.Item label={'Trạng thái'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  value="Male"
+                  onClick={() => {
+                    setStatus("Chờ duyệt");
+                  }}
+                >
+                  {" "}
+                  Chờ duyệt
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setStatus("Từ chối");
+                  }}
+                >
+                  {" "}
+                  Từ chối
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setStatus("Status");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderContent()}
+            
+          </Dropdown.Button>
+            </Form.Item>
+        
+          </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
             placeholder="Search User"
@@ -308,31 +348,7 @@ export default function ManageRequest() {
 
 
             </Modal>
-            <Modal
-                closable={false}
-                title="Are You Sure?" visible={isModalVisible} okText="Yes" cancelText="No" onOk={handleOk}
-                onCancel={handleCancel}
-                footer={[
-                    <div style={{textAlign: "left"}}>
-                        <Button key="Yes" onClick={handleOk} className="buttonSave">Accept</Button>
-                        <Button key="No" onClick={handleCancel} className='buttonCancel'>Cancel</Button>
-                    </div>
-                ]}>
-                <p>Do you want to accept this request?</p>
-            </Modal>
-            <Modal
-                closable={false}
-                title="Are You Sure?" visible={isModalCancelVisible} okText="Yes" cancelText="No" onOk={handleDeleteOk}
-                onCancel={handleCancelModal}
-                footer={[
-                    <div style={{textAlign: "left"}}>
-                        <Button key="Yes" onClick={handleDeleteOk} className="buttonSave">Decline</Button>
-                        <Button key="No" onClick={handleCancelModal} className=' buttonCancel'>Cancel</Button>
-                    </div>
-                ]}>
-                <p>Do you want to cancel this request?</p>
-            </Modal>
-          
+           
 
 
             <div>
@@ -340,7 +356,7 @@ export default function ManageRequest() {
                 <Table
                     columns={columns}
                     pagination={pagination}
-                    dataSource={data}
+                    dataSource={finalData}
                     onRow={(record) => {
                         return {
                             onClick: (e) => {
@@ -378,3 +394,4 @@ export default function ManageRequest() {
         </>
     )
 }
+export default ManageRequest;

@@ -4,30 +4,12 @@ import ParkingInfo from '../../containers/pages/ParkingDetail/ParkingInfo';
 import ContactInfo from '../../containers/pages/ParkingDetail/ContactInfo';
 import MapInfo from '../../containers/pages/ParkingDetail/MapInfo';
 import { useParams } from 'react-router-dom';
-import { getParkingByID } from '../../services/parkingDetailServices';
+import { getParkingByID,getFeedbackByParkingID } from '../../services/parkingDetailServices';
 import { Feedback } from '../../containers/pages/ParkingDetail/Feedback';
 import {FormOutlined} from '@ant-design/icons';
 import config from '../../config';
 import api from "../../services/api";
-const feedbacks = [
-    {
-      username: 'User1',
-      content: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-      avatar: config.DEFAULT_IMG_URL
-    },
-    {
-      username: 'user2',
-      content: 'Ant Design, a design language for background applications, is refined by Ant UED Team'
-    },
-    {
-      username: 'user3',
-      content: 'Ant Design, a design language for background applications, is refined by Ant UED Team'
-    },
-    {
-      username: 'user4',
-      content: 'Ant Design, a design language for background applications, is refined by Ant UED Team'
-    },
-  ];
+ 
   const { TextArea } = Input;
 function ParkingDetail() {
     const param = useParams();
@@ -38,6 +20,9 @@ function ParkingDetail() {
     const [destination, setDestination] = useState({})
     const [open, setOpen] = useState(false);
     const [note,setNote] = useState('');
+  
+    
+   
     useEffect(() => {
         getParkingByID(id, setParkingDetail, setLoading);
     }, [id]);
@@ -95,7 +80,7 @@ function ParkingDetail() {
             </Row>
             <div>
                 <Card title="Phản hồi" bordered={true}>
-                    <Feedback feedbacks={feedbacks} />
+                    <Feedback />
                 </Card>
             </div>
             <Modal
@@ -109,6 +94,7 @@ function ParkingDetail() {
             return new Promise((resolve, reject) => {
                 setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
                 handleOk();
+                setNote("");
               }).catch(() => console.log('Oops errors!'));
         }}
         

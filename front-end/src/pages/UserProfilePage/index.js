@@ -1,27 +1,35 @@
 import { 
   Form,
-  Input,
-  DatePicker,
-  notification,Spin,
-  Radio, Space, Button,Avatar } from "antd";
+  notification,Spin,Row,Col,Card,Divider,
+   Space, Button,Avatar } from "antd";
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
+
 import { useNavigate,useLocation } from "react-router-dom";
 import {getProfile} from "../../services/userProfileServices";
 import {toRoute} from '../../utils/helpers'
 import { EditProfile } from "../../containers/pages/EditUserProfile";
 import { routes } from '../../utils/routes';
-
+import moment from "moment";
 const UserProfile=()=> {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [fullname,setFullName]=useState("");
- 
+  
   const location = useLocation();
   const [image,setImage]=useState([]);
   const [profile,setProfile] = useState("");
   const [isUpdate, setUpdate] = useState(false)
+  const [infor,setInfor]= useState({
+    firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        phoneNumber: "",
+         dateOfBirth:"",
+        gender: "",
+        role: "",
+  });
   const formItemLayout = {
     labelCol: {
       xs: {
@@ -56,23 +64,16 @@ const UserProfile=()=> {
   useEffect(()=>{
    
     getProfile()
-    .then((response) =>{
+    .then(function(response){
      
       setProfile(response.data.id);
       
       
       setLoading(false);
+      const resData = response.data;
+        setInfor({ ...resData, dateOfBirth:moment(new Date(resData.dateOfBirth).toLocaleDateString('en-CA')).format('DD-MM-YYYY') });
       setFullName(response.data.lastName+" "+response.data.firstName);
-      form.setFieldsValue({
-        firstName: response.data.firstName,
-        lastName: response.data.lastName,
-        userName: response.data.userName,
-        email: response.data.email,
-        phoneNumber: response.data.phoneNumber,
-         dateOfBirth:dayjs(response.data.dateOfBirth, 'YYYY-MM-DD'),
-        gender: response.data.gender,
-        role: response.data.role,
-      });
+     
       setImage(response.data.image.url);
       console.log(image);
     }).catch((error) => {
@@ -94,29 +95,36 @@ const UserProfile=()=> {
                         <EditProfile profile={profile} image={image}  />
                     </>
     :
-    <div id="profile">
-        <div className="avatar">
+    <Row gutter={16}>
+    <Col span={10}>
+      <Card >
+      <div className="avatar">
           <div className="user-avatar">
            <Space>
-              {image === null ? 
+              {image.length >0 ? 
+              <Avatar className="avatar-avatar"
+              src={image}
+            /> 
+              :
               <Avatar className="avatar-avatar" 
             
             src={"https://thumbsnap.com/i/nJ5ET935.jpg"}/>
-              :
-              <Avatar className="avatar-avatar"
-                src={image}
-              /> }
+              }
               
               
               </Space>
           </div>
-          <div className="user-name">
+          
+        </div>
+        <Divider />
+        <div className="user-name">
             {fullname}
           </div>
-        </div>
-        <div className="formz">
-
-        <Form
+      </Card>
+    </Col>
+    <Col span={14}>
+      <Card title="Thông tin người dùng" bordered={true}>
+      <Form
           {...formItemLayout}
           form={form}
           initialValues={{
@@ -124,31 +132,31 @@ const UserProfile=()=> {
           }}
           style={{
          
-            maxWidth: 600,
+            maxWidth: 400,
           }}
           scrollToFirstError
         >
-          
-          <Form.Item
-            name="firstName"
-            label="FirstName"
-             
-          >
-            <Input disabled/>
-          </Form.Item>
           <Form.Item
             name="lastName"
-            label="LastName"
+            label="Họ"
            
-          >
-            <Input disabled />
+          >{infor.lastName}
+            {/* <Input disabled /> */}
           </Form.Item>
+          <Form.Item
+            name="firstName"
+            label="Tên"
+             
+          >
+            {infor.firstName}
+          </Form.Item>
+          
 
           <Form.Item
             name="userName"
-            label="UserName"
+            label="Tài khoản"
           >
-            <Input disabled/>
+            {infor.userName}
           </Form.Item>
          
           <Form.Item
@@ -156,39 +164,33 @@ const UserProfile=()=> {
             label="E-mail"
             
           >        
-              <Input disabled/>
+              {infor.email}
           </Form.Item>
           <Form.Item
             name="phoneNumber"
             label="Phone Number"
            
           >
-            <Input            
-             disabled
-            />
+            {infor.phoneNumber}
           </Form.Item>
           <Form.Item
             name="dateOfBirth"
-            label="Date of birth"
-            
+            label="Ngày sinh"
+           
           >
-            <DatePicker disabled style={{width: 332}} />
+            {infor.dateOfBirth}
           </Form.Item>
           <Form.Item
             name="gender"
-            label="Gender"
+            label="Giới tính"
           >
-            <Radio.Group disabled>
-              <Radio value={"Male"}>Male</Radio>
-              <Radio value={"FeMale"}>FeMale</Radio>
-              <Radio value={'Other'}>Other</Radio>
-            </Radio.Group>
+            {infor.gender}
           </Form.Item>
           <Form.Item
             name="role"
-            label="Role"
+            label="Chức vụ"
           >
-            <Input disabled/>
+            {infor.role}
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary"  onClick={e => navigate(toRoute(routes.USER_PROFILE_UPDATE, { id: profile }))}
@@ -200,8 +202,11 @@ const UserProfile=()=> {
             </Button>
           </Form.Item>
         </Form>
-        </div>
-      </div>
+      </Card>
+    </Col>
+    
+  </Row>
+    
   }
       </Spin>
     

@@ -11,5 +11,8 @@ export const routes = {
     MANAGEPARKINGMANAGER: "/manage-parking-manager",
     APPROVEPARKING:"/appreve-parking",
     MANAGECARMODEL: "/manage-carmodel",
-    USER_PROFILE_UPDATE: "/user-profile/:id/update"
+    USER_PROFILE_UPDATE: "/user-profile/:id/update",
+    MY_REQUEST: "/my-request",
+    MY_CAR: "/my-car",
+    MANAGE_REQUEST: "/manager-request",
 }

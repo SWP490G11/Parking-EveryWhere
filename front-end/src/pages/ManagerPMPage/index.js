@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,notification } from "antd";
 import {
   FilterOutlined,
-  EditFilled,
-  CloseCircleOutlined,
-  CloseSquareOutlined,
+  RedoOutlined,ExclamationCircleFilled
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import moment from "moment";
 import api from "../../services/api";
 import AddPM from "../../containers/pages/ManageParking/AddPM";
@@ -17,19 +13,18 @@ export default function ManageParkingManager() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Gender");
-  const [role, setRole] = useState("Role");
   const [open, setOpen] = useState(false);
+  
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
   });
-
   const columns = [
     {
         title: "ID",
         dataIndex: "id",
         key: "id",
-       
+        width: "15%",
       },
       {
         title: "FullName",
@@ -78,11 +73,28 @@ export default function ManageParkingManager() {
       dataIndex: "phoneNumber",
       key: "phoneNumber",
     },
+    
     {
         title: "Role",
         dataIndex: "role",
         key: "role",
       },
+      {
+        title: "Trạng thái",
+        dataIndex: "trangthai",
+        key: "trangthai",
+        sorter: (a, b) => {
+          if (a.trangthai > b.trangthai) {
+            return -1;
+          }
+          if (b.trangthai > a.trangthai) {
+            return 1;
+          }
+          return 0;
+        },
+        width: "10%",
+      },
+      
     {
       title: "Action",
       dataIndex: "action",
@@ -90,84 +102,56 @@ export default function ManageParkingManager() {
       
     },
   ];
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    title: "Notice",
-    content: <p>Do you want to disable student?</p>,
-    footer: (
-      <div style={{ textAlign: "left" }}>
-        <Button className="buttonSave">Disable</Button>
-       
-      </div>
-    ),
-  });
-  // const [listParking,setListParking]=useState([]);
 
- 
-  
-  
+  const showPromiseConfirm = (ID) => {
+    Modal.confirm({
+      title: 'Thay đổi trạng thái của người dùng',
+      icon: <ExclamationCircleFilled />,
+      content: 'Bạn có muốn thay đổi trạng thái của người này không',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          api.patch(`api/User/DisableOrActive?id=${ID}`).then(()=>{notification.success({
+            message: `Thành công`,
+            description: 'Thay đổi trạng thái thành cong',
+            placement: 'topLeft',
+          });}).catch(()=>{
+            notification.error({
+              message: `Thất bại`,
+              description: 'Thay đổi trạng thái thất bại',
+              placement: 'topLeft',
+            });
+          });
+        }).catch(() => console.log('Xảy ra lỗi'));
+      },
+      onCancel() {},
+    });
+  };
   useEffect(() => {
     api.get(`parking-manager-of-owner`)
       .then(function (response) {
         let respData = response.data;
-        console.log(respData);
+      
 
         respData.forEach((element) => {
             element.fullName = element.lastName + " " + element.firstName;
+            element.trangthai = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
           element.dateOfBirth = moment(
             new Date(element.dateOfBirth).toLocaleDateString("en-US")
           ).format("DD/MM/YYYY");
           element.action = [
-            <Link to={`/editUser/${element.studentId}`} id="editButton">
-              <EditFilled style={{  fontSize: "25px" }} />
-            </Link>,
-            <CloseCircleOutlined
-              onClick={() => {
-                setDeleteModal({
-                  ...deleteModal,
-                  footer: (
-                    <div >
-                      <Button 
-                        className="ant-btn ant-btn-danger"
-                        onClick={() => {
-                          axios
-                            .put(
-                              `${process.env.REACT_APP_Backend_URI}api/Student/Diable/${element.studentId}`
-                            )
-                            .then(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: false,
-                              });
-                              window.location.reload();
-                            })
-                            .catch(() => {
-                              setDeleteModal({
-                                ...deleteModal,
-                                isOpen: true,
-                                footer: null,
-                                title: "Can not disable user",
-                                content: (
-                                  <p>
-                                    There are valid assignments belonging to
-                                    this user. Please Close all assignments
-                                    before disabling user.
-                                  </p>
-                                ),
-                              });
-                            });
-                        }}
-                      >
-                        Disable
-                      </Button>
-                      
-                    </div>
-                  ),
-                  isOpen: true,
-                });
-              }}
-              style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
-            />,
+           
+            <Button 
+            className="ant-btn ant-btn-danger"
+            onClick={() => { 
+             
+              showPromiseConfirm(element.id);
+            }}
+          >
+            <RedoOutlined               
+            />
+          </Button>
+            
           ];
         });
         setData(
@@ -189,7 +173,7 @@ export default function ManageParkingManager() {
         );
       }, [])
       .catch(() => {});
-  }, [deleteModal]);
+  }, [data]);
 
   const dataBytype = type === "Gender" ? data : data.filter((u) => u.gender === type);
   const finalData =
@@ -282,57 +266,7 @@ export default function ManageParkingManager() {
           >
             {type}
           </Dropdown.Button>
-           {/*Filter Role */}
-          <Dropdown.Button
-            placement="bottom"
-            icon={<FilterOutlined />}
-            overlay={
-                <Menu>
-                <Menu.Item
-               onClick={() => {
-                 setRole("ParkingManager");
-               }}
-             >
-               {" "}
-               ParkingManager
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setRole("ParkingOwner");
-               }}
-             >
-               {" "}
-               ParkingOwner
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setRole("Customer");
-               }}
-             >
-               {" "}
-               Customer
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setRole("Admin");
-               }}
-             >
-               {" "}
-               Admin
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setRole("Role");
-               }}
-             >
-               {" "}
-               All
-             </Menu.Item>
-              </Menu>
-            }
-          >
-            {role}
-          </Dropdown.Button>
+        
       
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
@@ -352,21 +286,7 @@ export default function ManageParkingManager() {
           </Button>
         </Col>
       </Row>
-      {/* Delete Modal */}
-      <Modal
-        open={deleteModal.isOpen}
-        title={deleteModal.title}
-        footer={deleteModal.footer}
-        onCancel={() => {
-          setDeleteModal({ ...deleteModal, isOpen: false });
-        }}
-        destroyOnClose={true}
-        closeIcon={
-          <CloseSquareOutlined style={{ color: "red", fontSize: "20px" }} />
-        }
-      >
-        {deleteModal.content}
-      </Modal>
+      
       <Modal
         open={modal.isOpen}
         title="Detail Student"

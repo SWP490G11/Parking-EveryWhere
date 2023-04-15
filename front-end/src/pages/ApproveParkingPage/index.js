@@ -1,8 +1,7 @@
-import {Table, Modal, Button,Row,Col,Input,Dropdown,Menu,Empty} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,Dropdown,Menu,Empty,Form} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {CheckOutlined, CloseOutlined,FilterOutlined} from "@ant-design/icons";
 import api from "../../services/api";
-
  const ApproveParking=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
@@ -68,12 +67,12 @@ import api from "../../services/api";
                 console.log(respData);
                 respData.forEach((element) => {
                     element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
-                   // {element.status ==="Pending"?(<>Chờ duyệt</>):(<>Từ chối</>)}
+                  
                   
                     element.action = [
-                        <Button
+                        <Button disabled={element.status==="Từ chối"? true : false}
                             className='buttonState'
-                            disabled={element.status === 'Cancel'}
+                           
                             onClick={() => {
                                 showModal()
                                 handleCheckId(element.parkingID)
@@ -83,7 +82,7 @@ import api from "../../services/api";
                                 style={{color: 'red'}}
                             />
                         </Button>,
-                        <Button
+                        <Button disabled={element.status==="Từ chối"? true : false}
                             style={{paddingLeft:"10px"}}
                             className="buttonState"
                             // disabled={element.status === 'Pending' || element.isInProgress === false}
@@ -200,12 +199,25 @@ import api from "../../services/api";
        showSizeChanger:true, 
           showTotal: total => `Total ${total} Request`
       };
+      const renderContent = () => {
+        switch(status) {
+            case 'Status':
+              return 'Tất cả'
+            case 'Pending':
+              return 'Chờ duyệt'
+            case 'Cancel':
+              return 'Từ chối'
+            default:
+              return 'Tất cả'
+          }
+      };
     return (
         <>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
             {/*Filter Gender */}
-        <Dropdown.Button
+            <Form.Item label={'Trạng thái'}>
+            <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
             overlay={
@@ -213,7 +225,7 @@ import api from "../../services/api";
                 <Menu.Item
                   value="Male"
                   onClick={() => {
-                    setStatus("Pending");
+                    setStatus("Chờ duyệt");
                   }}
                 >
                   {" "}
@@ -222,7 +234,7 @@ import api from "../../services/api";
                 <Menu.Item
                   value="Female"
                   onClick={() => {
-                    setStatus("Cancel");
+                    setStatus("Từ chối");
                   }}
                 >
                   {" "}
@@ -239,19 +251,12 @@ import api from "../../services/api";
                 </Menu.Item>
               </Menu>
             }
-          >   {(() => {
-            switch(status) {
-              case 'Status':
-                return <>Tất cả</>
-              case 'Pending':
-                return <>Chờ duyệt</>
-              case 'Cancel':
-                return <>Từ chối</>
-              default:
-                return null
-            }
-          })}
+          > 
+          {renderContent()}
+            
           </Dropdown.Button>
+            </Form.Item>
+        
           </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search

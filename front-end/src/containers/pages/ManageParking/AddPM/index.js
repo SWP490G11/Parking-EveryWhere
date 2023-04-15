@@ -25,8 +25,11 @@ const AddPM=({open,setOpen})=>{
   useEffect(() => {
     ParkingService.getAllParkingOwner(setParking);
 }, [])
-  const onFinish = (values) => {
-    
+  const onFinish = (fieldsValue) => {
+    const values = {
+      ...fieldsValue,
+      dateOfBirth: fieldsValue["dateOfBirth"].format("YYYY-MM-DD"),
+    };
     api
       .post(`api/User/RegisterForParkingManager`, {
         
@@ -189,14 +192,17 @@ const AddPM=({open,setOpen})=>{
             name="dateOfBirth"
             label="Ngày sinh"
             rules={[
+              
               {
-                type: "object",
+               
                 required: true,
                 message: "Vui lòng nhập dữ liệu",
               },
+             
             ]}
           >
-            <DatePicker style={{width: 332}} />
+            <DatePicker style={{width: 332 }} 
+            format="DD-MM-YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

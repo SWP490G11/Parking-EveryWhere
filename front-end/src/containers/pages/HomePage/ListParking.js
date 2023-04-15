@@ -11,7 +11,36 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
     const [authState] = useAuthState()
     const [locationState] = useLocationState()
     const navigateTo = useNavigate();
-   
+    const data = parkings
+    .filter((item) => {
+        if (search) {
+            if (
+                item.parkingName.toLowerCase().includes(String(search).toLowerCase())
+                ||
+                item.addressDetail.toLowerCase().includes(String(search).toLowerCase())
+                ||
+                item.discription.toLowerCase().includes(String(search).toLowerCase())
+            ) {
+                return true
+            }
+            return false
+        }
+        return true
+    })
+    .filter((item) => {
+        try {
+            if (filter?.distance) {
+                const distance = calDistance(locationState.lat, locationState.lng, item.lat, item.lon)
+                if(distance >= filter?.distance[0] && distance <= filter?.distance[1]){
+                    return true
+                }
+                return false
+            }
+            return true
+        } catch(e) {
+            return true
+        }
+    });
     return (
         <List
             className="parking-list"
@@ -23,7 +52,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                 pageSize: 8,
             }}
 
-            dataSource={parkings}
+            dataSource={data}
             renderItem={(item) => (
                 <List.Item
                     className='parking-list-item'
