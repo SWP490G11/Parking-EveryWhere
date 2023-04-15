@@ -108,7 +108,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingManager)]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetUser(string id)
         {
             
@@ -129,7 +129,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var u = mwi.User;
 
-            return Ok(new
+            return Ok(/*new
             {
                 u.ID,
                 u.Gender,
@@ -144,7 +144,12 @@ namespace Back_end.Controllers
                 u.CitizenID,
                 u.Image,
                 u.Role,
-            }
+                Parkings = u.Parkings.Select(p=>new
+                {
+                    p.ID,p.ParkingName,p.IsLegal,p.Status
+                })
+            }*/
+                u
                 );
         }
 
@@ -203,7 +208,7 @@ namespace Back_end.Controllers
         }
 
         [HttpPatch("[action]")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
         public async Task<IActionResult> DisableOrActive(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;

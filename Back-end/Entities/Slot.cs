@@ -24,7 +24,6 @@ namespace Back_end.Entities
         [JsonInclude]
         public Parking Parking { get; set; }
 
-        public CarModel CarModel { get; set; }
 
         public ICollection<ParkingDetail>? ParkingDetail { get; set; } = new List<ParkingDetail>();
 

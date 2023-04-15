@@ -98,12 +98,13 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Parking>> GetAllAsync()
         {
-            return await _dbContext.Parkings.Include(p => p.ParkingManagers)
+            return await _dbContext.Parkings.Include(p => p.ParkingManagers).ThenInclude(pm=>pm.Image)
+                .Include(p=>p.Feedbacks)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images).
                 Include(p => p.Requests)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+                .Include(p => p.Slots)
                 .ToListAsync();
         }
 
@@ -116,7 +117,7 @@ namespace Back_end.Respository
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
+                .Include(p => p.Slots)
                 .Include(p=>p.Slots).ThenInclude(s=>s.ParkingDetail)
                 .FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
@@ -127,8 +128,8 @@ namespace Back_end.Respository
         {
             var searchTextHD = Regex.Replace(searchText, @"^\s+$", "", RegexOptions.IgnoreCase);
             var parkings = await _dbContext.Parkings.Include(p => p.ParkingManagers)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel)
-
+                .Include(p => p.Slots)
+                    .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Images)
                 .Include(p => p.Owner).Where(p => p.ParkingName.Contains(searchTextHD.Trim()))
                 .ToListAsync();
@@ -152,7 +153,7 @@ namespace Back_end.Respository
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
                 .Include(p => p.Images)
-                .Include(p => p.Slots).ThenInclude(s => s.CarModel).ToListAsync();
+                .Include(p => p.Slots).ToListAsync();
             return pendingparkings;
         }
 

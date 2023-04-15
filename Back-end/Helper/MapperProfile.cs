@@ -23,7 +23,7 @@ namespace Back_end.Helper
 
             CreateMap<Slot, SlotModel>()
                 .ForMember(sm => sm.ParkingID, opt => opt.MapFrom(s => s.Parking.ID.ToString()))
-                .ForMember(sm => sm.CarModelID, opt => opt.MapFrom(s => s.CarModel.ID.ToString()))
+             
                 .ForMember(sm => sm.LastModifyByID, opt => opt.MapFrom(s => s.LastModifyBy.ID.ToString()));
 
 

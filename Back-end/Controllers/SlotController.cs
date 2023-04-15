@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Back_end.Authorization;
 using Back_end.Common;
+using Back_end.Entities;
+using Back_end.Helper;
 using Back_end.Models;
 using Back_end.Models.User;
 using Back_end.Respository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 
 namespace Back_end.Controllers
@@ -15,16 +18,18 @@ namespace Back_end.Controllers
     public class SlotController : ControllerBase
     {
         private readonly ISlotRepository _respository;
-        private readonly IJwtUtils _jwtUtils;
+        private readonly IParkingRespository _parkingRespository;
         private readonly IMapper _mapper;
+        private readonly ParkingDbContext _dbContext;
 
-        public SlotController(ISlotRepository slotRepository, IJwtUtils jwtUtils
-            , IMapper mapper
+        public SlotController(ISlotRepository slotRepository, IParkingRespository jwtUtils
+            , IMapper mapper, ParkingDbContext dbContext
             )
         {
             _respository = slotRepository;
-            _jwtUtils = jwtUtils;
+            _parkingRespository = jwtUtils;
             _mapper=mapper;
+            _dbContext=dbContext;
             
         }
 
@@ -41,10 +46,10 @@ namespace Back_end.Controllers
            new {
                SlotID= s.ID,
                s.Price,
-               CarModelID= s.CarModel.ID,
+               s.TypeOfSlot,
                ParkingID = s.Parking.ID,
                s.Discription,
-               ParkingDetail = s.ParkingDetail.Select(pd=> pd.ID.ToString() ).ToList(),
+               ParkingDetail = s.ParkingDetail,
                s.Status,
                s.LastModifyAt,
               LastModifyBy= s.LastModifyBy.ID,
@@ -64,10 +69,10 @@ namespace Back_end.Controllers
            new {
                SlotID = s.ID,
                s.Price,
-               CarModelID = s.CarModel.ID,
+               s.TypeOfSlot,
                ParkingID = s.Parking.ID,
                s.Discription,
-               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               ParkingDetail = s.ParkingDetail,
                s.Status,
                s.LastModifyAt,
                LastModifyBy = s.LastModifyBy.ID,
@@ -87,10 +92,10 @@ namespace Back_end.Controllers
            new {
                SlotID = s.ID,
                s.Price,
-               CarModelID = s.CarModel.ID,
+               s.TypeOfSlot,
                ParkingID = s.Parking.ID,
                s.Discription,
-               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               ParkingDetail = s.ParkingDetail,
                s.Status,
                s.LastModifyAt,
                LastModifyBy = s.LastModifyBy.ID,
@@ -98,7 +103,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/slots/{parkingID}")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner,Role.ParkingManager)]
         public async Task<IActionResult> GetSlotOfParking(string parkingID)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
@@ -109,10 +114,10 @@ namespace Back_end.Controllers
            new {
                SlotID = s.ID,
                s.Price,
-               CarModelID = s.CarModel.ID,
+               s.TypeOfSlot,
                ParkingID = s.Parking.ID,
                s.Discription,
-               ParkingDetail = s.ParkingDetail.Select(pd => pd.ID.ToString()).ToList(),
+               ParkingDetail = s.ParkingDetail,
                s.Status,
                s.LastModifyAt,
                LastModifyBy = s.LastModifyBy.ID,
@@ -128,13 +133,12 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
 
             var slots = await _respository.GetSlotByParkingAsync(parkingID);
-            return Ok( slots.GroupBy(s => s.Price).Select(
+            return Ok( slots.GroupBy(s => s.TypeOfSlot).Select(
                    group => new
                    {
-                       Price = group.Key,
-                       CarModelID = group.FirstOrDefault().CarModel.ID.ToString() ?? "khong tim thay",
-                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "khong thay",
-                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                       TypeOfSlot = group.Key,
+                      
+                       Price = group.FirstOrDefault().Price,
                    }
                     ));
         }
@@ -169,12 +173,23 @@ namespace Back_end.Controllers
         [HttpPatch("/slot/update-range-price")]
 
         [Authorization.Authorize(Role.Admin)]
-        public IActionResult UpdatePrice(double oldPrice,double updatedPrice)
+        public IActionResult UpdatePrice(string parkingID,TypeOfSlot tos,double updatedPrice)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-             _respository.UpdatePriceOfSlot(oldPrice,updatedPrice);
+
+            var parking = _parkingRespository.GetAsync(parkingID);
+            var slots = parking.Slots==null ? new List<Slot>() : parking.Slots.Where(s=>s.TypeOfSlot==tos);
+
+            foreach (var slot in slots)
+            {
+                slot.Price = updatedPrice;
+            }
+
+            _dbContext.Slots.UpdateRange(slots);
+            _dbContext.SaveChanges();
+
             return Ok("Update Success");
         }
 
@@ -191,17 +206,20 @@ namespace Back_end.Controllers
         }
 
 
-        [HttpDelete("/slotModel/{price}")]
+        [HttpDelete("/slotModel/{tos}")]
 
         [Authorization.Authorize(Role.Admin)]
-        public IActionResult DeleteRange(double price)
+        public IActionResult DeleteRange(string parkingID, TypeOfSlot tos)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-             _respository.DeleteRangeAsync(price);
-            
-           
+
+            var parking = _parkingRespository.GetAsync(parkingID);
+            var slots = parking.Slots == null ? new List<Slot>() : parking.Slots.Where(s => s.TypeOfSlot == tos);
+
+            _dbContext.Slots.RemoveRange(slots);
+            _dbContext.SaveChanges();
             return Ok("Deletes Success");
         }
 

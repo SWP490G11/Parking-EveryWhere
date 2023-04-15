@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Back_end.Common;
 
 namespace Back_end.Entities
 {
@@ -19,5 +20,8 @@ namespace Back_end.Entities
         public User CarOwner { get; set; }
 
         public ICollection<ParkingDetail>? ParkingDetails { get; set; } = new List<ParkingDetail>();
+
+
+        public Status Status { get; set; }
     }
 }

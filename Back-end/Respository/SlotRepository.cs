@@ -25,9 +25,7 @@ namespace Back_end.Respository
         ICollection<Slot> GetListSlotParking();
 
 
-        void UpdatePriceOfSlot(double price,double updatePrice);
-
-        void DeleteRangeAsync(double price);
+     
 
 
     }
@@ -59,7 +57,7 @@ namespace Back_end.Respository
         public async Task AddAsync(uint quantity, SlotModel model)
         {
            
-                var carmodel = await _dbContext.CarModels.FirstOrDefaultAsync(c => c.ID.ToString().ToLower().Trim().Equals(model.CarModelID.ToLower().Trim()));
+                
                 var parking = await _dbContext.Parkings.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.ParkingID.ToLower().Trim()));
                 var modifyuer = await _dbContext.Users.FirstOrDefaultAsync(p => p.ID.ToString().ToLower().Trim().Equals(model.LastModifyByID.ToLower().Trim()));
                 
@@ -70,7 +68,7 @@ namespace Back_end.Respository
                 {
                     var slot = new Slot()
                     {
-                        CarModel = carmodel,
+                      
                         Parking = parking,
                         Discription = model.Discription,
                         LastModifyAt = DateTime.Now,
@@ -105,7 +103,7 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Slot>> GetAllAsync()
         {
-            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(s=>s.CarModel).Include(p=>p.ParkingDetail).ToListAsync();
+            var slots= await _dbContext.Slots.Include(p=>p.Parking).Include(p=>p.ParkingDetail).ToListAsync();
 
             return slots;
         }
@@ -114,7 +112,7 @@ namespace Back_end.Respository
         {
             var slots = await _dbContext.Slots
                 .Include(p => p.Parking)
-                .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+                .Include(p => p.ParkingDetail)
                 .Where(s=>s.Parking.ID.ToString()
                 .ToLower().Trim().Equals(parkingID
                 .ToLower().Trim())).ToListAsync();
@@ -153,8 +151,7 @@ namespace Back_end.Respository
             updated.Price = updateModel.Price;
             updated.Discription = updated.Discription;
 
-            var carModel = _dbContext.CarModels.First(cm=>cm.ID.ToString().ToLower().Equals(updateModel.CarModelID.ToLower()));
-            if (carModel != null) updated.CarModel = carModel;
+           
 
             _dbContext.Slots.Update(updated);
             _dbContext.SaveChanges();
@@ -166,7 +163,7 @@ namespace Back_end.Respository
         {
             var slots =  _dbContext.Slots
                .Include(p => p.Parking)
-               .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+               .Include(p => p.ParkingDetail)
                .Where(s => s.Status==Status.Available).ToList();
 
             return slots;
@@ -176,7 +173,7 @@ namespace Back_end.Respository
         {
             var slots = _dbContext.Slots
                .Include(p => p.Parking)
-               .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+              .Include(p => p.ParkingDetail)
                .Where(s => s.Status == Status.Parking).ToList();
 
             return slots;

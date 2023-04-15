@@ -53,6 +53,7 @@ namespace Back_end.Respository
                     CarOwner = ownner,
                     LastModifyAt = DateTime.Now,
                     CarModel=carmodel
+                   , Status = Status.Available,
                 }
                 );
            await _dbContext.SaveChangesAsync();

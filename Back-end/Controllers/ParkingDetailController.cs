@@ -31,7 +31,7 @@ namespace Back_end.Controllers
             return Ok(parkingdetails.Select(pd=>new
             {
                 pd.ID,Car = new {pd.Car.ID,pd.Car.CarNumber,CarOnerID = pd.Car.CarOwner.ID, }
-                ,Slot =new {pd.Slot.ID,CarmodelID = pd.Slot.CarModel.ID,pd.Slot.TypeOfSlot},
+                ,Slot =new {pd.Slot.ID,pd.Slot.TypeOfSlot},
                 pd.ParkingDate,pd.PickUpDate,pd.TotalPrice,
             }));
         }
@@ -52,7 +52,7 @@ namespace Back_end.Controllers
                 pd.ID,
                 Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
                 ,
-                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                Slot = new { pd.Slot.ID, pd.Slot.TypeOfSlot, pd.Slot.Price },
                 pd.ParkingDate,
                 pd.PickUpDate,
                 pd.TotalPrice,
@@ -75,7 +75,7 @@ namespace Back_end.Controllers
                 pd.ID,
                 Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
                 ,
-                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                Slot = new { pd.Slot.ID,  pd.Slot.TypeOfSlot,pd.Slot.Price },
                   pd.ParkingDate,
                 pd.PickUpDate,
                 pd.TotalPrice,
@@ -96,7 +96,7 @@ namespace Back_end.Controllers
                 pd.ID,
                 Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
                 ,
-                Slot = new { pd.Slot.ID, CarmodelID = pd.Slot.CarModel.ID, pd.Slot.TypeOfSlot },
+                Slot = new { pd.Slot.ID, pd.Slot.TypeOfSlot,pd.Slot.Price },
                 pd.ParkingDate,
                 pd.PickUpDate,
                 pd.TotalPrice,

@@ -15,7 +15,7 @@ namespace Back_end.Entities
         public float Rating { get; set; }
 
         public User FeedbackBy { get; set; }
-        public ICollection<Image>? Images { get; set; }
+        public ICollection<Image>? Images { get; set; } = new List<Image>();
 
         public Parking Parking { get; set; }
 

@@ -53,17 +53,19 @@ namespace Back_end.Controllers
                 p.LON,
                 p.Status,
                 p.Discription,
-                p.AddressDetail,
-                ParkingManagers = p.ParkingManagers.Select(
+                p.AddressDetail
+               /* ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl =pm.Image.URL,
                     }
-                    ),
-                Feedbacks = p.Feedbacks.Select(
+                    )*/
+               ,
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -71,7 +73,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    )*/,
 
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -109,11 +111,12 @@ namespace Back_end.Controllers
             if (user == null) return NotFound();
 
 
-            return Ok(user.Parkings.SelectMany(p => p.ParkingManagers).Select(pm =>
+            return Ok(user.Parkings.SelectMany(p => p.ParkingManagers)/*.Select(pm =>
             new { pm.ID,FullName = pm.LastName + pm.FirstName,pm.UserName,WorkIn= pm.Parking.ID,pm.Gender,ImageURL=pm.Image.URL,pm.CitizenID,pm.DateOfBirth,
             pm.PhoneNumber,pm.Email
             }
-            )) ;
+            )*/
+                ) ;
         }
 
 
@@ -138,13 +141,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -152,7 +156,7 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    )*/,
              
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -196,13 +200,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -210,15 +215,14 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    ),*/,
            
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
               new
               {
                   SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
+                  s.Price,
                   s.TypeOfSlot,
                   s.Status,
                   s.Discription,
@@ -249,13 +253,14 @@ namespace Back_end.Controllers
                 ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
-                        p.ID,
+                        pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
+                        ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks.Select(
+                Feedbacks = p.Feedbacks,/*.Select(
                     fb => new
                     {
                         fb.ID,
@@ -263,15 +268,14 @@ namespace Back_end.Controllers
                         fb.Content,
                         FeebackBy = fb.FeedbackBy.ID.ToString()
                     }
-                    ),
+                    ),*/
 
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 Slot = p.Slots.Select(s =>
               new
               {
                   SlotID = s.ID,
-                  CarModelID = s.CarModel.ID,
-                  CarModelName = s.CarModel.Model,
+                 s.Price,
                   s.TypeOfSlot,
                   s.Status,
                   s.Discription,
@@ -362,8 +366,7 @@ namespace Back_end.Controllers
                 PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
                    group => new
                    {
-                       Price = group.Key,
-                       CarModelName = group.FirstOrDefault().CarModel.Model ?? "",
+                       Price = group.Key,   
                        SlotType = group.FirstOrDefault().TypeOfSlot,
                    }
                     )
