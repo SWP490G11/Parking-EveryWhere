@@ -86,7 +86,7 @@ namespace Back_end.Respository
 
 
 
-                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges(true);
             
            
         }
@@ -112,7 +112,7 @@ namespace Back_end.Respository
         {
             var slots = await _dbContext.Slots
                 .Include(p => p.Parking)
-                .Include(p => p.ParkingDetail)
+                .Include(p => p.ParkingDetail).ThenInclude(pd=>pd.Car)
                 .Where(s=>s.Parking.ID.ToString()
                 .ToLower().Trim().Equals(parkingID
                 .ToLower().Trim())).ToListAsync();
@@ -129,7 +129,7 @@ namespace Back_end.Respository
         }
 
 
-
+        
 
         public ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize)
         {
@@ -163,7 +163,7 @@ namespace Back_end.Respository
         {
             var slots =  _dbContext.Slots
                .Include(p => p.Parking)
-               .Include(p => p.ParkingDetail)
+               .Include(p => p.ParkingDetail).ThenInclude(pd => pd.Car)
                .Where(s => s.Status==Status.Available).ToList();
 
             return slots;
@@ -174,6 +174,7 @@ namespace Back_end.Respository
             var slots = _dbContext.Slots
                .Include(p => p.Parking)
               .Include(p => p.ParkingDetail)
+              .ThenInclude(pd => pd.Car)
                .Where(s => s.Status == Status.Parking).ToList();
 
             return slots;

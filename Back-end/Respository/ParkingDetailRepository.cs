@@ -21,7 +21,9 @@ namespace Back_end.Respository
         ICollection<ParkingDetail> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, ParkingDetailModel updateModel);
 
-        Task CarOut(string id);
+        ICollection<ParkingDetail> GetAllParkingDetailsOfParking(string parkingID);
+
+        Task<ParkingDetail> CarOut(string id);
     }
 
     public class ParkingDetailRepository : IParkingDetailRepository
@@ -73,7 +75,7 @@ namespace Back_end.Respository
             _dbContext.SaveChanges(true);
         }
 
-        public async Task CarOut(string id)
+        public async Task<ParkingDetail> CarOut(string id)
         {
             var pd = await GetAsync(id);
             pd.PickUpDate = DateTime.Now;
@@ -88,6 +90,7 @@ namespace Back_end.Respository
             _dbContext.ParkingDetails.Update(pd);
             _dbContext.SaveChanges();
 
+            return pd;
         }
 
         public async Task DeleteAsync(string idString)
@@ -107,6 +110,11 @@ namespace Back_end.Respository
         .ToListAsync();
         }
 
+        public ICollection<ParkingDetail> GetAllParkingDetailsOfParking(string parkingID)
+        {
+            var parking = _dbContext.Parkings.FirstOrDefault(p=>p.ID.ToString().ToLower().Trim().Equals(parkingID.ToLower().Trim()));
+            return parking.Slots.SelectMany(s=>s.ParkingDetail).ToList();
+        }
 
         public async Task<ParkingDetail> GetAsync(string idString)
         {

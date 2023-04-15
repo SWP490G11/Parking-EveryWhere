@@ -16,9 +16,9 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("parking-income-by-day/{parkingId}")]
-        public IActionResult TotalIncomeOfParkingByDay(string id)
+        public IActionResult TotalIncomeOfParkingByDay(string parkingId)
         {
-            var parking = _reporsitory.GetAsync(id);
+            var parking = _reporsitory.GetAsync(parkingId);
             var currentday = DateTime.Now.Day ;
             var totalIncomebyDay = parking.Slots.SelectMany(s => s.ParkingDetail).Where(pd =>
             {
@@ -30,9 +30,9 @@ namespace Back_end.Controllers
 
 
         [HttpGet("parking-income-by-month/{parkingId}")]
-        public IActionResult TotalIncomeOfParkingByMonth(string id)
+        public IActionResult TotalIncomeOfParkingByMonth(string parkingId)
         {
-            var parking = _reporsitory.GetAsync(id);
+            var parking = _reporsitory.GetAsync(parkingId);
             var currentday = DateTime.Now.Day;
             var totalIncomebyMonth = parking.Slots.SelectMany(s => s.ParkingDetail).Where(pd =>
             {
@@ -43,9 +43,9 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("parking-income-by-year/{parkingId}")]
-        public IActionResult TotalIncomeOfParkingByYear(string id)
+        public IActionResult TotalIncomeOfParkingByYear(string parkingId)
         {
-            var parking = _reporsitory.GetAsync(id);
+            var parking = _reporsitory.GetAsync(parkingId);
             var currentday = DateTime.Now.Day;
             var totalIncomebyYear = parking.Slots.SelectMany(s => s.ParkingDetail).Where(pd =>
             {

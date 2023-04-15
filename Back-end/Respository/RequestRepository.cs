@@ -138,7 +138,7 @@ namespace Back_end.Respository
         public async Task AproveRequest(string idString)
         {
             var updateRequest = await GetAsync(idString);
-            updateRequest.Status = Status.Cancel;
+            updateRequest.Status = Status.Done;
 
             _dbContext.Update(updateRequest);
             _dbContext.SaveChanges();

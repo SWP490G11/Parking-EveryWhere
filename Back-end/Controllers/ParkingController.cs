@@ -101,7 +101,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/parking-manager-of-owner")]
-        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner,Role.ParkingManager)]
         public async Task<IActionResult> GetParkingManagerOfOwner()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;

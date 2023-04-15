@@ -28,12 +28,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var parkingdetails = await _repository.GetAllAsync();
 
-            return Ok(parkingdetails.Select(pd=>new
-            {
-                pd.ID,Car = new {pd.Car.ID,pd.Car.CarNumber,CarOnerID = pd.Car.CarOwner.ID, }
-                ,Slot =new {pd.Slot.ID,pd.Slot.TypeOfSlot},
-                pd.ParkingDate,pd.PickUpDate,pd.TotalPrice,
-            }));
+            return Ok(parkingdetails);
         }
 
      
@@ -47,16 +42,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var pd = await _repository.GetAsync(id);
 
-            return Ok(new
-            {
-                pd.ID,
-                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
-                ,
-                Slot = new { pd.Slot.ID, pd.Slot.TypeOfSlot, pd.Slot.Price },
-                pd.ParkingDate,
-                pd.PickUpDate,
-                pd.TotalPrice,
-            });
+            return Ok(pd);
         }
 
 
@@ -70,16 +56,7 @@ namespace Back_end.Controllers
             var parkingdetails = await _repository.GetParkingDetailsByCar(carID);
 
 
-            return Ok(parkingdetails.Select(pd => new
-            {
-                pd.ID,
-                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
-                ,
-                Slot = new { pd.Slot.ID,  pd.Slot.TypeOfSlot,pd.Slot.Price },
-                  pd.ParkingDate,
-                pd.PickUpDate,
-                pd.TotalPrice,
-            }));
+            return Ok(parkingdetails);
         }
 
         [HttpGet("/parkingdetails/{SlotID}/GetParkingDetailsBySlot")]
@@ -91,20 +68,36 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var parkingdetails = await _repository.GetParkingDetailsBySlot(SlotID);
 
-            return Ok(parkingdetails.Select(pd => new
-            {
-                pd.ID,
-                Car = new { pd.Car.ID, pd.Car.CarNumber, CarOnerID = pd.Car.CarOwner.ID, }
-                ,
-                Slot = new { pd.Slot.ID, pd.Slot.TypeOfSlot,pd.Slot.Price },
-                pd.ParkingDate,
-                pd.PickUpDate,
-                pd.TotalPrice,
-              
-            }));
+            return Ok(parkingdetails);
         }
 
-       
+
+        [HttpGet("/parkingdetails/{parkingID}/GetParkingDetailsByParking")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public IActionResult GetAllParkingDetailsOfParking(string parkingID)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var parkingdetails = _repository.GetAllParkingDetailsOfParking(parkingID);
+
+            return Ok(parkingdetails);
+        }
+
+
+        [HttpGet("/parkingdetails/all-parking-of-owner")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public IActionResult GetAllParkingDetailsOfOwner()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            
+
+            return Ok(mwi.User.Parkings.SelectMany(p=>p.Slots).SelectMany(s=>s.ParkingDetail));
+        }
+
+
 
         [HttpPost("/parkingdetail")]
 
@@ -138,8 +131,8 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-           await _repository.CarOut(id);
-            return Ok("Car out of the slot");
+         var parkingdetail =  await _repository.CarOut(id);
+            return Ok(parkingdetail);
         }
 
 

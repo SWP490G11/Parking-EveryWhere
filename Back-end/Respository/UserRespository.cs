@@ -159,6 +159,8 @@ namespace Back_end.Respository
                 .Include(u => u.Parkings).ThenInclude(p => p.Images)
                 .Include(u => u.Parkings).ThenInclude(p => p.Feedbacks)
                 .Include(u => u.Parkings).ThenInclude(p => p.Slots)
+                .Include(u => u.Parkings).ThenInclude(p => p.Slots)
+                  .Include(u => u.Parkings).ThenInclude(p => p.Slots).ThenInclude(s=>s.ParkingDetail)
                  .Include(u => u.Parking)
                 .Include(u => u.Parking).ThenInclude(p => p.Requests)
                 .Include(u => u.Parking).ThenInclude(p => p.ParkingManagers)
@@ -176,6 +178,7 @@ namespace Back_end.Respository
                  .Include(u=>u.Requests).ThenInclude(r=>r.Parking)
                  .Include(u => u.Feedbacks).ThenInclude(f=>f.Images)
                   .Include(u => u.Feedbacks).ThenInclude(f => f.Parking)
+                  .Include(u=>u.Parking).ThenInclude(p=>p.Slots)
                 .FirstOrDefaultAsync(u => u.ID.ToString().ToUpper().Trim().
                 Equals(guidString.ToUpper().Trim()
                 ));
