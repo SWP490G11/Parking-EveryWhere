@@ -51,13 +51,13 @@ const MyCar = () => {
 
   const columns = [
     {
-      title: "ID",
+      title: "Mã",
       dataIndex: "id",
       key: "id",
      
     },
     {
-      title: "CarNumber",
+      title: "Biển số",
       dataIndex: "carNumber",
       key: "carNumber",
       sorter: (a, b) => {
@@ -71,7 +71,7 @@ const MyCar = () => {
       
     },
     {
-      title: "Model",
+      title: "Loại xe",
       dataIndex: "model",
       key: "model",
       sorter: (a, b) => {
@@ -85,12 +85,17 @@ const MyCar = () => {
      
     },
     {
-      title: "Discript",
+      title: "Thông tin",
       dataIndex: "discript",
       key: "discript",
     },
     {
-      title: "Action",
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: " ",
       dataIndex: "action",
       key: "action",
     },

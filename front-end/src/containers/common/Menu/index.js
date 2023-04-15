@@ -12,7 +12,7 @@ const getItem = (key, label, icon = null, children = null) => {
 const menuOwner = [
     getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
     getItem(routes.MANAGERPARKING, 'Quản lý bãi xe', <CarOutlined />),
-   
+    getItem(routes.MANAGE_PARKINGDETAIL, 'Quản lý đỗ xe', <CarOutlined />),
     getItem(routes.MANAGEPARKINGMANAGER, 'Quản lý nhân viên', <CarOutlined />),
     getItem(routes.MANAGE_REQUEST, (<Badge count={1}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />),
 ]

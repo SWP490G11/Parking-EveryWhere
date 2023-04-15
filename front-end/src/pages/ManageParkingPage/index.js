@@ -792,7 +792,7 @@ const [addSlot,setAddSlot]= useState(false)
         <p>
           {e.status !== 'Available' ?  
         // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
-        <>{e.parkingDetail[e.parkingDetail.length -1].note}</>
+        <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
         :
         <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
         </p>
@@ -908,7 +908,7 @@ const [addSlot,setAddSlot]= useState(false)
                 
               }}}
                     columns={carColumns}
-                    dataSource={finalCar}
+                    dataSource={finalCar.filter(u=>u.status==='Available')}
                     rowKey="id"
                     pagination={pagination}
                     on

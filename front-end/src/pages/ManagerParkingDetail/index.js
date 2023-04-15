@@ -54,16 +54,16 @@ import api from "../../services/api";
       };
       const showPromiseOk = (id) => {
         Modal.confirm({
-          title: 'Bạn  muốn chấp thuận yêu cầu ?',
+          title: 'Bạn  có muốn thanh toán ?',
           icon: <ExclamationCircleFilled />,
           okText: 'Đồng ý',
     
             cancelText: 'Hủy',
-          content: 'Bạn sẽ chấp thuận yêu cầu của khách hàng !',
+          content: 'Bạn sẽ thanh toán với xe này !',
           onOk() {
             return new Promise((resolve, reject) => {
                 api
-            .patch(`request/aprove-request/${id}`)
+            .patch(`parkingdetail/${id}/CarOut`)
             .then((res) => {
                 
                 notification.success({
@@ -89,19 +89,20 @@ import api from "../../services/api";
 //===============================================
 
     useEffect(() => {
-        api.get(`pending-request-of-all-parkings-of-owner`, {})
+        api.get(`parkingdetails/all-parking-of-owner`, {})
         .then(function(response)  {
             let respData = response.data
             respData.forEach((element) => {
                 //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-                element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
-                element.parkingName = element.parkingId.parkingName;
+             element.parkingDate = moment(new Date(element.parkingDate).toLocaleDateString("en-US")).format('DD/MM/YYYY');
+             element.pickUpDate = element.pickUpDate !==null ?   moment(new Date(element.pickUpDate).toLocaleDateString("en-US")).format('DD/MM/YYYY') :'Xe đang đỗ';
+                // element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+                // element.parkingName = element.parkingId.parkingName;
                 
 
 
                 element.action = [
-                    <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận") ? true : false}
+                    <Button disabled={element.pickUpDate ==='Xe đang đỗ' ? false : true}
                     className="buttonState"
                    
                     onClick={() => {
@@ -111,25 +112,16 @@ import api from "../../services/api";
                 >
                    <CheckOutlined style={{color:"green"}} />
                 </Button>,
-                    <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận")? true : false}
-                        className="buttonState"
-                       
-                        onClick={() => {
-                            showPromiseDelete(element.id);
-                            
-                        }}
-                    >
-                        <CloseOutlined/>
-                    </Button>,
+                    
                   
 
                 ]
             })
             setData(respData.sort((a, b) => {
-                if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+                if (a.id.trim().toLowerCase() > b.id.trim().toLowerCase()) {
                   return 1;
                 }
-                if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+                if (b.id.trim().toLowerCase() > a.id.trim().toLowerCase()) {
                   return -1;
                 }
                 return 0;
@@ -188,6 +180,21 @@ import api from "../../services/api";
         },
         
         {
+            title: "Ngày trả ",
+            dataIndex: "pickUpDate",
+            key: "pickUpDate",
+            sorter: (a, b) => {
+                if (a.pickUpDate > b.pickUpDate) {
+                    return -1;
+                }
+                if (b.pickUpDate > a.pickUpDate) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        
+        {
             title: "Nội dung",
             dataIndex: "note",
             key: "note",
@@ -202,7 +209,7 @@ import api from "../../services/api";
             },
         },
         {
-            title: "Trạng thái",
+            title: "Đơn giá",
             dataIndex: "totalPrice",
             key: "totalPrice",
             sorter: (a, b) => {

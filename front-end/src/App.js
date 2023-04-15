@@ -11,6 +11,7 @@ import Register from './pages/RegisterPage';
 import HeaderContainer from './containers/common/Header';
 import ManageParking from './pages/ManageParkingPage';
 import MyCar from './pages/MyCarPage';
+import ManageParkingDetail from './pages/ManagerParkingDetail';
 import ApproveParking from './pages/ApproveParkingPage';
 import ManageParkingManager from './pages/ManagerPMPage';
 import MyRequest from './pages/MyRequestPage';
@@ -76,6 +77,7 @@ function App() {
               <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />
               <Route path={routes.MANAGECARMODEL} element={<ManageCarModel />} />
               <Route path={routes.MY_CAR} element={<MyCar />} />
+              <Route path={routes.MANAGE_PARKINGDETAIL} element={<ManageParkingDetail />} />
               <Route path={routes.MY_REQUEST} element={<MyRequest />} />
               <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
               <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
