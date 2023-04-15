@@ -101,15 +101,14 @@ namespace Back_end.Respository
         public async Task<ICollection<Request>> GetRequestToParking(string parkingID)
         {
             var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
-            .Equals(parkingID.Trim().ToLower())).ToListAsync();
+            .Equals(parkingID.Trim().ToLower())).Where(r => r.Status == Status.Pending).ToListAsync();
             return requests;
         }
 
 
         public async Task<ICollection<Request>> GetRequestPendingToParking(string parkingID)
         {
-            var requests = await _dbContext.Requests.Include(x => x.Requestby).Include(r => r.Parking).Where(x => x.Parking.ID.ToString().Trim().ToLower()
-            .Equals(parkingID.Trim().ToLower()) && x.Status==Status.Pending).ToListAsync();
+            var requests = await _dbContext.Requests.Include(x => x.Requestby).Include(r => r.Parking).ToListAsync();
             return requests;
         }
 

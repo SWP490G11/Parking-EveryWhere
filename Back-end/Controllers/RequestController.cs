@@ -99,11 +99,11 @@ namespace Back_end.Controllers
         [HttpGet("/pending-request-of-all-parkings-of-owner")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
-        public async Task<IActionResult> GetListRequestPendingToTheAllParkingsOfOwner()
+        public async Task<IActionResult> GetListRequestToTheAllParkingsOfOwner()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var requests = mwi.User.Parkings.SelectMany(p=>p.Requests).Where(r=>r.Status ==Status.Pending).ToList();
+            var requests = mwi.User.Parkings.SelectMany(p=>p.Requests).ToList();
 
             return Ok(requests.Select(r =>
           new {
@@ -116,6 +116,18 @@ namespace Back_end.Controllers
             ));
         }
 
+
+        [HttpGet("/pending-request-of-all-parkings-of-owner-number")]
+
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
+        public async Task<IActionResult> GetListRequestToTheAllParkingsOfOwnerNumber()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var requests = mwi.User.Parkings.SelectMany(p => p.Requests).ToList();
+
+            return Ok(requests.Where(r=>r.Status == Status.Pending).ToList().Count);
+        }
 
         [HttpGet("/pending-request-number/{parkingid}")]
 

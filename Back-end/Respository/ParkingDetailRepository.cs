@@ -54,7 +54,7 @@ namespace Back_end.Respository
             slot.Status = Status.Parking;
 
 
-           
+
 
             var parkingDetail = new ParkingDetail()
             {
@@ -66,6 +66,9 @@ namespace Back_end.Respository
                 TotalPrice = slot.Price,
 
             };
+
+             car.Status = Status.Parking;
+            _dbContext.Cars.Update(car);
             _dbContext.ParkingDetails.Add(parkingDetail);
             _dbContext.SaveChanges(true);
         }
@@ -80,6 +83,7 @@ namespace Back_end.Respository
             if (totaldays < 1) totaldays = 1;
 
             pd.TotalPrice = totaldays * pd.Slot.Price;
+            pd.Car.Status=Status.Available;
 
             _dbContext.ParkingDetails.Update(pd);
             _dbContext.SaveChanges();

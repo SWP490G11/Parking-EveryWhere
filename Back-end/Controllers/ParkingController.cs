@@ -53,8 +53,8 @@ namespace Back_end.Controllers
                 p.LON,
                 p.Status,
                 p.Discription,
-                p.AddressDetail,
-                ParkingManagers = p.ParkingManagers.Select(
+                p.AddressDetail
+               /* ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
                         pm.ID,
@@ -63,7 +63,8 @@ namespace Back_end.Controllers
                         pm.Email,
                         ImageUrl =pm.Image.URL,
                     }
-                    ),
+                    )*/
+               ,
                 Feedbacks = p.Feedbacks/*.Select(
                     fb => new
                     {

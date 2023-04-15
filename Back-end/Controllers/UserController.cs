@@ -208,7 +208,7 @@ namespace Back_end.Controllers
         }
 
         [HttpPatch("[action]")]
-        [Authorization.Authorize(Role.Admin)]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner)]
         public async Task<IActionResult> DisableOrActive(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
