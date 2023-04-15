@@ -1,127 +1,97 @@
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import './App.css';
-import axios from "axios";
-import React, { createContext,useState, useEffect } from "react";
-import AuthRoutes from './routes/AuthRoutes';
-import RouteComponent from './components/RouteComp';
-import HeaderComp from './components/HeaderComp';
-import  {AppRoutes } from './routes/AppRoutes';
-import  {OwnerRoutes}  from './routes/OwnerRoutes';
-import  {CustomerRoutes}  from './routes/CustomerRoutes';
-import  {ManagerRoutes}  from './routes/ManagerRoutes';
-import FooterComp from './components/FooterComp';
+import Home from './pages/HomePage';
+import Login from './pages/LoginPage';
+import PackingDetail from './pages/PackingDetail';
+import NotFound from './pages/NotFoundPage';
+import UserProfile from './pages/UserProfilePage';
+import ManageCarModel from './pages/CarModelPage';
+import Register from './pages/RegisterPage';
+import HeaderContainer from './containers/common/Header';
+import ManageParking from './pages/ManageParkingPage';
+import MyCar from './pages/MyCarPage';
+import ApproveParking from './pages/ApproveParkingPage';
+import ManageParkingManager from './pages/ManagerPMPage';
+import MyRequest from './pages/MyRequestPage';
+import FooterContainer from './containers/common/Footer';
+import MenuContainer from './containers/common/Menu';
+import ManageRequest from './pages/ManageRequest';
+import { useLocationState } from './hooks/locationState';
+import { Layout } from 'antd';
+import { routes } from './utils/routes';
+const { Content } = Layout;
 
-export const Context = createContext();
 function App() {
-  const [loginState, setLoginState] = useState({
-    token: localStorage.token,
-    role: localStorage.role,
-    username: localStorage.username,
-    id: localStorage.id,
-    isLogin:false,
-  });
-  
-  axios.defaults.baseURL = `${process.env.REACT_APP_UNSPLASH_BASEURL}`;
-  axios.defaults.headers.common["Authorization"] = loginState.token;
-  axios.defaults.headers.post["Content-Type"] = "application/json";
-
-  axios.interceptors.request.use(
-    (request) => {
-      // Edit request config
-      return request;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-
-  axios.interceptors.response.use(
-    (response) => {
-      // Edit response config
-      return response;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+  const [locationState, setLocationState] = useLocationState()
 
   useEffect(() => {
-    if (localStorage.getItem("loginState") !== null) {
-      setLoginState(JSON.parse(localStorage.getItem("loginState")));
-    }
-  }, [loginState.token]);
-  const role= loginState.role;
-  const renderContent = () => {
-    switch (role) {
-      case 'Admin':
-        return (<>
-       
-      <RouteComponent routes={AppRoutes} />
-     
-      </>);
-      case 'ParkingOwner':
-        return (<>
-       
-      <RouteComponent routes={OwnerRoutes} />
-      
-      </>);
-      case 'Customer':
-        return (<>
-         <RouteComponent routes={CustomerRoutes} />
-        </>);
-      case 'ParkingManager':
-        return (<>
-          <RouteComponent routes={ManagerRoutes} />
-         </>);
-      default:
-        return null
-    }
-  };
+    position();
+  }, [])
+
+  const position = async () => {
+    await navigator.geolocation.getCurrentPosition(
+      position => {
+        setLocationState({
+          ...locationState,
+          hasYourLocation: true,
+          lng: position.coords.longitude,
+          lat: position.coords.latitude
+        })
+      },
+      err => {
+        setLocationState({
+          ...locationState,
+          hasYourLocation: false
+        })
+        console.log(err)
+      }
+    );
+  }
+  const token = localStorage.getItem('token');
   return (
-    
-    <Context.Provider value={[loginState, setLoginState]}>
+    <Router>
+      <Layout className="layout">
+      <HeaderContainer />
+       
+        <Content
+          style={{
+            padding: '0 50px',
+          }}
+        >
+          {token ? (<MenuContainer />):(<></>)}
+          
+
+          <div
+            className="site-layout-content"
+            style={{
+              background: '#FFF',
+            }}
+          >
+            <Routes>
+              <Route exact path={routes.HOME} element={<Home />} />
+              <Route path={routes.LOGIN} element={<Login />} />
+              <Route path={routes.REGISTER} element={<Register />} />
+              <Route path={routes.MANAGERPARKING} element={<ManageParking />} />
+              <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />
+              <Route path={routes.MANAGECARMODEL} element={<ManageCarModel />} />
+              <Route path={routes.MY_CAR} element={<MyCar />} />
+              <Route path={routes.MY_REQUEST} element={<MyRequest />} />
+              <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
+              <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
+              <Route path={routes.USERPROFILE} element={<UserProfile />} />
+              <Route path={routes.USER_PROFILE_UPDATE} element={<UserProfile />} />
+              <Route path={routes.PARKING_DETAIL} element={<PackingDetail />} />
+              <Route path={routes.PARKING_DETAIL_UPDATE} element={<PackingDetail />} />
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          </div>
+        </Content>
         
-      {(loginState.isLogin === false ) ? ( 
-          //  <Login/>
-           <RouteComponent routes={AuthRoutes} />
-          // <LoginPage/>
-        ) : (
-          <>
-           <HeaderComp
-                username={loginState.username}
-                id = {loginState.id}
-                role= {loginState.role}
-              />
-              {renderContent()}
-          {/* {(() => {
-            if(loginState.role === "Admin"){
-      
-              
-              <RouteComponent routes={AppRoutes} />
-            
-              
-            }else if(loginState.role === "ParkingOwner"){
-              
-              <RouteComponent routes={OwnerRoutes} />
-              
-
-            }else if(loginState.role === "Customer"){
-
-            }else {
-
-            }
-            // switch(role) {
-             
-            // }
-          })()} */}
-          <FooterComp/>
-       </>
-       )}
-      
-    
-  </Context.Provider>
-   
-   
+        {token ? (<FooterContainer />):(<></>)}
+        
+      </Layout>
+    </Router>
   );
 }
 
