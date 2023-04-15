@@ -31,7 +31,7 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("/parkings-of-owner")]
-        [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner,Role.ParkingManager)]
         public async Task<IActionResult> GetParkingsOfOwnerAsync()
         {
 
