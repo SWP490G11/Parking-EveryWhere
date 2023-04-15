@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
- const ManageRequest=()=> {
+ const ManageParkingDetail=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
@@ -158,14 +158,14 @@ import api from "../../services/api";
             width: "15%",
         },
         {
-            title: "Bãi đỗ",
-            dataIndex: "parkingName",
-            key: "parkingName",
+            title: "Biển số xe",
+            dataIndex: "carNumber",
+            key: "carNumber",
             sorter: (a, b) => {
-                if (a.parkingName > b.parkingName) {
+                if (a.carNumber > b.carNumber) {
                     return -1;
                 }
-                if (b.parkingName > a.parkingName) {
+                if (b.carNumber > a.carNumber) {
                     return 1;
                 }
                 return 0;
@@ -173,14 +173,14 @@ import api from "../../services/api";
         },
 
         {
-            title: "Ngày gửi yêu cầu",
-            dataIndex: "requestAt",
-            key: "requestAt",
+            title: "Ngày gửi ",
+            dataIndex: "parkingDate",
+            key: "parkingDate",
             sorter: (a, b) => {
-                if (a.requestAt > b.requestAt) {
+                if (a.parkingDate > b.parkingDate) {
                     return -1;
                 }
-                if (b.requestAt > a.requestAt) {
+                if (b.parkingDate > a.parkingDate) {
                     return 1;
                 }
                 return 0;
@@ -203,13 +203,13 @@ import api from "../../services/api";
         },
         {
             title: "Trạng thái",
-            dataIndex: "status",
-            key: "status",
+            dataIndex: "totalPrice",
+            key: "totalPrice",
             sorter: (a, b) => {
-                if (a.status > b.status) {
+                if (a.totalPrice > b.totalPrice) {
                     return -1;
                 }
-                if (b.status > a.status) {
+                if (b.totalPrice > a.totalPrice) {
                     return 1;
                 }
                 return 0;
@@ -436,4 +436,4 @@ import api from "../../services/api";
         </>
     )
 }
-export default ManageRequest;
+export default ManageParkingDetail;

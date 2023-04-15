@@ -27,7 +27,7 @@ const getAllParkingOwner = async (setParking,setLoading) => {
                 setLoading(false);
             })
             .catch(err => {
-                Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu');
+                //Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu');
                 setLoading(false);
                 console.error(err)
             })
@@ -58,7 +58,7 @@ const createParking = async (data, setParking, parkings) => {
             .then(res => {
                 if (res) {
                     Message(TypeMessage.SUCCESS, 'Tạo bãi đỗ thành công')
-                    getAllParkingOwner(setParking)
+                    //getAllParkingOwner(setParking)
                 }
             })
             .catch(err => {

@@ -24,7 +24,7 @@ const AddPM=({open,setOpen})=>{
   }));
   useEffect(() => {
     ParkingService.getAllParkingOwner(setParking);
-}, [])
+}, [parkings])
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,

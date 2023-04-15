@@ -21,6 +21,7 @@ export default function ManageParking() {
   const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [status,setStatus]= useState("Status");
+  const [type,setType]= useState("Type");
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -226,7 +227,7 @@ const carColumns = [
   });
   const [searchCar, setSearchCar] = useState("");
   const[open1,setOpen1]=useState(false)
-
+ 
   const onClosez = () => {
     setOpen1(false);
   };
@@ -244,13 +245,15 @@ const carColumns = [
           placement: "topLeft",
         });});
     }
+  
   useEffect(() => {
+    
     api.get(`parkings-of-owner`)
       .then(function (response) {
         let respData = response.data;
       
         respData.forEach((element) => {
-          element.parkingmanager= element.parkingManagers.userName;
+         
           element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
           element.action = [
              <Button className='buttonState'
@@ -327,7 +330,8 @@ const [addSlot,setAddSlot]= useState(false)
               // || u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
-      
+  const dataType =
+        type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
   const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -353,6 +357,17 @@ const [addSlot,setAddSlot]= useState(false)
     },
    showSizeChanger:true, 
       showTotal: total => `Total ${total} Student`
+  };
+  const renderType = () => {
+    switch(type) {
+        case 'NONROOF':
+          return 'Không có mái che'
+        case 'ROOFED':
+          return 'Có mái che'
+       
+        default:
+          return 'Tất cả'
+      }
   };
   const renderContent = () => {
     switch(status) {
@@ -393,7 +408,7 @@ const [addSlot,setAddSlot]= useState(false)
             overlay={
               <Menu>
                 <Menu.Item
-                  value="Male"
+                  
                   onClick={() => {
                     setStatus("Chờ duyệt");
                   }}
@@ -402,7 +417,7 @@ const [addSlot,setAddSlot]= useState(false)
                   Chờ duyệt
                 </Menu.Item>
                 <Menu.Item
-                  value="Female"
+                
                   onClick={() => {
                     setStatus("Từ chối");
                   }}
@@ -411,7 +426,7 @@ const [addSlot,setAddSlot]= useState(false)
                   Từ chối
                 </Menu.Item>
                 <Menu.Item
-                  value="Female"
+                
                   onClick={() => {
                     setStatus("Khả dụng");
                   }}
@@ -717,12 +732,53 @@ const [addSlot,setAddSlot]= useState(false)
         open={open1}
         closable={true}
       >
+          <Form.Item label={'Loại'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setType('ROOFED');
+                  }}
+                >
+                  {" "}
+                  Có mái che
+                </Menu.Item>
+               
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setType('NONROOF');
+                  }}
+                >
+                  {" "}
+                  Không mái che
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setType("Type");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderType()}
+            
+          </Dropdown.Button>
+            </Form.Item>
           <Collapse  >{
-            slotParking.map((e,index)=>(
+            dataType.map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>
-                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí{index+1}  </Col>
+                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí {index+1}  </Col>
                
                 <Col span={8}>
               {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
@@ -733,7 +789,13 @@ const [addSlot,setAddSlot]= useState(false)
               </Row>
              
               </>}>
-        <p>{e.parkingDetail.length >0 ?  "detailSlot" :<Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}</p>
+        <p>
+          {e.status !== 'Available' ?  
+        // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+        <>{e.parkingDetail[e.parkingDetail.length -1].note}</>
+        :
+        <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
+        </p>
       </Panel>
           ))
           }

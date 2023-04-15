@@ -35,7 +35,7 @@ const ParkingInfo = (props) => {
                     <div className="info-right">
                         <div className="right-parking-name">
                             <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Parking name: </div>
-                            <div>{props.parking?.parkingName}</div>
+                            {props.parking?.parkingName}
                         </div>
                         <div className="right-parking-desc">
                             <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Description: </div>

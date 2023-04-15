@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import GoogleMapComponent, { AutocompleteMap } from '../../components/GoogleMapComponent';
 import { Button, Card, Col, Row, Spin,Input } from 'antd';
-import { ListParking, Filter, Search, CreateParking } from '../../containers/pages/HomePage';
+import { ListParking, Filter, CreateParking } from '../../containers/pages/HomePage';
 import {
     PlusOutlined,
 } from '@ant-design/icons';
@@ -19,11 +19,11 @@ function HomePage() {
     const [parkings, setParking] = useState([]);
    
     useEffect(() => {
-        if (authState?.data?.role === Role.ParkingOwner) {
-            ParkingService.getAllParkingOwner(setParking,setLoading)
-        } else {
+        // if (authState?.data?.role === Role.ParkingOwner) {
+        //     ParkingService.getAllParkingOwner(setParking,setLoading)
+        // } else {
             ParkingService.getAllParking(setParking, setLoading)
-        }
+        //}
     }, [authState])
     const finalData =
     search === ""? parkings : (parkings.filter((u) =>
@@ -49,30 +49,34 @@ function HomePage() {
              
                 setSearch(e.replace(/ /g, ""));
             }}
-          />
+          /> 
                         <Filter setFilter={setFilter} filter={filter} />
                     </Col>
                     <Col span={8} style={{ textAlign: 'right' }}>
                         {
                             authState?.data?.role === Role.ParkingOwner && 
                             <Button onClick={e => setOpen(true)} type="primary">
-                                <PlusOutlined /> Create Parking
+                                <PlusOutlined /> Tạo bãi đỗ
                             </Button>
                         }
                     </Col>
                 </Row>
             </div>
             <Row gutter={10}>
-                <Col span={14}>
+                <Col span={10}>
                     <Card title="Danh sách bãi đỗ xe" bordered={true}>
                         <ListParking search={search} filter={filter} parkings={finalData.filter((u)=>u.status ==="Available")} setLocation={setLocation} setParking={setParking} />
                     </Card>
                 </Col>
                 {
                     !open ?
-                        <Col span={10} >
-                            <AutocompleteMap setLocation={setLocation} />
+                    <Col span={14} >
+                    <Card title={<AutocompleteMap setLocation={setLocation} />} bordered={true}>
+                    
                             <GoogleMapComponent location={location} parkings={parkings.filter((u)=>u.status ==="Available")} />
+                </Card>
+                        
+                           
                         </Col>
                         :
                         <CreateParking open={open} setOpen={setOpen} setParking={setParking} parkings={parkings} />

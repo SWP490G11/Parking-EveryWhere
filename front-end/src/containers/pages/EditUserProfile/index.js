@@ -101,7 +101,7 @@ export const EditProfile=(profile)=> {
           description: 'Updated user profile',
           placement: 'topLeft',
         });
-        navigate(`/user-profile`);
+        navigate(`/`);
       }).catch((error)=>{
         notification.warning({
             message: `Save fail`,
@@ -114,8 +114,8 @@ export const EditProfile=(profile)=> {
 
   return (
     
-    <Row gutter={16}>
-    <Col span={10}>
+    <Row gutter={70}>
+    <Col span={8}>
     <Card >
     <div className="avatar">
           <div className="user-avatar">
@@ -146,7 +146,7 @@ export const EditProfile=(profile)=> {
         
     </Card>
     </Col>
-    <Col span={14}>
+    <Col span={16}>
       <Card>
       <Form
           {...formItemLayout}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select, Form, Slider } from 'antd'
+import {  Form, Slider } from 'antd'
 import { Sort } from '../../../utils/constants'
 import { useLocationState } from '../../../hooks/locationState'
 export const Filter = ({filter, setFilter }) => {
@@ -15,7 +15,9 @@ export const Filter = ({filter, setFilter }) => {
                 }}
             >
                 <div style={{width: '50%'}}>
-                    Khoảng cách
+                    <br/>
+                    <Form.Item label={"Khoảng cách"}>
+
                     <Slider 
                         range 
                         defaultValue={[0, 500]} 
@@ -30,6 +32,8 @@ export const Filter = ({filter, setFilter }) => {
                             })
                         }}
                     />
+                    </Form.Item>
+                    
                 </div>
                
             </div>

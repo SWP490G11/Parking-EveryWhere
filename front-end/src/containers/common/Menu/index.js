@@ -28,6 +28,7 @@ const menuAdmin = [
 ]
 const menuPM = [
     getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
+    getItem(routes.MANAGERPARKING, 'Quản lý bãi xe', <CarOutlined />),
 ]
 
 function MenuContainer() {

@@ -81,7 +81,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                         </div>}
                     />
                     <div className='parking-content'>
-                        <div className='parking-status'>
+                        {/* <div className='parking-status'>
                             <h4>STATUS</h4>
                             <div>
                                 20/20
@@ -96,7 +96,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                                 }
                             </Tag>
                             
-                        </div>
+                        </div> */}
                         <div className='parking-button-wapper'>
                            
                                     <Button
