@@ -10,11 +10,13 @@ import ManageCarModel from './pages/CarModelPage';
 import Register from './pages/RegisterPage';
 import HeaderContainer from './containers/common/Header';
 import ManageParking from './pages/ManageParkingPage';
+import MyCar from './pages/MyCarPage';
 import ApproveParking from './pages/ApproveParkingPage';
 import ManageParkingManager from './pages/ManagerPMPage';
+import MyRequest from './pages/MyRequestPage';
 import FooterContainer from './containers/common/Footer';
 import MenuContainer from './containers/common/Menu';
-
+import ManageRequest from './pages/ManageRequest';
 import { useLocationState } from './hooks/locationState';
 import { Layout } from 'antd';
 import { routes } from './utils/routes';
@@ -73,6 +75,9 @@ function App() {
               <Route path={routes.MANAGERPARKING} element={<ManageParking />} />
               <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />
               <Route path={routes.MANAGECARMODEL} element={<ManageCarModel />} />
+              <Route path={routes.MY_CAR} element={<MyCar />} />
+              <Route path={routes.MY_REQUEST} element={<MyRequest />} />
+              <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
               <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
               <Route path={routes.USERPROFILE} element={<UserProfile />} />
               <Route path={routes.USER_PROFILE_UPDATE} element={<UserProfile />} />

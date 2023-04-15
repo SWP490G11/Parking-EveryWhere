@@ -31,30 +31,7 @@ export const Filter = ({filter, setFilter }) => {
                         }}
                     />
                 </div>
-                <div>
-                    <Select
-                        options={[
-                            { value: Sort.ASC, label: 'Tăng' },
-                            { value: Sort.DESC, label: 'Giảm' },
-                        ]}
-                        placeholder="Khu Vực"
-                        onChange={e=>{
-                            console.log(e)
-                        }}
-                    />
-                </div>
-                <div>
-                    <Select
-                        options={[
-                            { value: Sort.ASC, label: 'Tăng' },
-                            { value: Sort.DESC, label: 'Giảm' },
-                        ]}
-                        placeholder="Thành Phố"
-                        onChange={e=>{
-                            console.log(e)
-                        }}
-                    />
-                </div>
+               
             </div>
         </div>
     )

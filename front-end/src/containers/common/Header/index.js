@@ -48,6 +48,7 @@ function HeaderContainer() {
             return new Promise((resolve, reject) => {
               setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
               localStorage.removeItem('token');
+              
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -64,7 +65,7 @@ function HeaderContainer() {
                     token: token
                 })
             });
-        } else if (location.pathname !== '/login') {
+        } else if (location.pathname !== '/login' && location.pathname !=='/register') {
             window.location.replace('/login')
         }
     }, [location.pathname, token]);
@@ -78,12 +79,7 @@ function HeaderContainer() {
           onClick: ()=>navigate(`/user-profile`),
           icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
         },
-        {
-          label: 'My Car',
-          key: '2',
-          onClick: ()=>navigate(`/mycar`),
-          icon: <CarOutlined  style={{ color: "red", fontWeight: "bold" }} />,
-        },
+       
         {
           
         label: 'Change Password',
@@ -105,7 +101,7 @@ function HeaderContainer() {
             <div className='header-user'>
 
                 {profileState?.token ?
-                    <><Avatar src="https://avatars.githubusercontent.com/u/63761141?s=120&v=4" style={{ marginRight: '0.5rem' }} />
+                    <><Avatar src={profileState?.data?.image?.url} style={{ marginRight: '0.5rem' }} />
                         
                         <Dropdown menu={{ items }} placement="bottomRight" trigger={["click"]}>
                             <div className='text-upper' style={{ color: '#FFF', cursor: 'pointer', fontWeight: 600 }}

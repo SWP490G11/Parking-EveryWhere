@@ -1,5 +1,5 @@
-import { Form,Input,DatePicker,notification,Radio, Space, Button,Avatar,Upload
-     } from "antd";
+import { Form,Input,DatePicker,notification,Radio, Space, Button,Avatar,Row,Col,Card
+    ,Divider } from "antd";
 import UploadImage from "../../../components/UploadImage";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -114,12 +114,14 @@ export const EditProfile=(profile)=> {
 
   return (
     
-      <div id="profile">
-        <div className="avatar">
+    <Row gutter={16}>
+    <Col span={10}>
+    <Card >
+    <div className="avatar">
           <div className="user-avatar">
           <Space>
               {newimage.length >0 ? 
-            <Avatar className="avatar-avatar"
+            <Avatar  className="avatar-avatar"
             src={newimage[0]}
           />
               :
@@ -131,32 +133,22 @@ export const EditProfile=(profile)=> {
               
               </Space>
           </div>
-         
-          <div className="user-name">
+
+        </div>
+        <Divider />
+        <div className="user-name">
             {fullname}
           </div>
-          <div>
-                <UploadImage setImages={setImage} images={newimage} count={1}/>
-          </div>
-          {/* <Form
-            name="validate_other"
-            {...formItemLayout2}
-            style={{
-                width: 600,
-            }}
-        >
-            <Form.Item>
-                <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                    <Upload name="files" maxCount={1} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}>
-                    <Button icon={<UploadOutlined />}>Upload</Button>
-                    </Upload>
-                </Form.Item>
-            </Form.Item>
-        </Form> */}
-        </div>
-        <div className="form">
-
-        <Form
+        <Divider />
+               
+                <UploadImage  setImages={setImage} images={newimage} count={1}/>
+        
+        
+    </Card>
+    </Col>
+    <Col span={14}>
+      <Card>
+      <Form
           {...formItemLayout}
           form={form}
           onFinish={onFinish}
@@ -242,8 +234,10 @@ export const EditProfile=(profile)=> {
             </Button>
           </Form.Item>
         </Form>
-        </div>
-      </div>
+      </Card>
+    </Col>
+    </Row>
+     
     
   );
 }

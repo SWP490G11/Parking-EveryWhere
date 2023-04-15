@@ -20,6 +20,23 @@ const getParkingByID = async (id, setParking, setLoading) => {
     }
 }
 
+const getFeedbackByParkingID = async (id, setFeedback) => {
+    try {
+        api.get(`/parking/${id}`)
+            .then(res => {
+                setFeedback(res.data);
+                
+            })
+            .catch(err => {
+                Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu')
+               
+                console.error(err)
+            })
+    } catch (error) {
+        
+        Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu')
+    }
+}
 const updateParkingByID = (id, data, setLoading) => {
     try {
         api.put(`/parking/${id}`, data)
@@ -38,4 +55,4 @@ const updateParkingByID = (id, data, setLoading) => {
     }
 }
 
-export { getParkingByID, updateParkingByID }
+export { getParkingByID, updateParkingByID,getFeedbackByParkingID }

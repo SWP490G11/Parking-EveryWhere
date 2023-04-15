@@ -77,20 +77,6 @@ export default function ManageCarModel() {
       width: "50%",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-      sorter: (a, b) => {
-        if (a.price > b.price) {
-          return -1;
-        }
-        if (b.price > a.price) {
-          return 1;
-        }
-        return 0;
-      },
-    },
-    {
       title: "Action",
       dataIndex: "action",
       key: "action",
@@ -318,7 +304,6 @@ export default function ManageCarModel() {
 >>>>>>> main:front-end/src/pages/carpage/carmodelpage/ManageCarModel.jsx
         model: values.model,
         discript: values.discript,
-        price: values.price,
         lastModifyAt: new Date(),
       })
       .then(() => {
@@ -361,7 +346,6 @@ export default function ManageCarModel() {
 >>>>>>> main:front-end/src/pages/carpage/carmodelpage/ManageCarModel.jsx
         model: values.model,
         discript: values.discript,
-        price: values.price,
         lastModifyAt: new Date(),
       })
       .then(() => {
@@ -614,11 +598,10 @@ export default function ManageCarModel() {
                     ...modal,
                     isOpen: true,
                     data: {
-                      id: record.id,
-                      model: record.model,
-
+                        id: record.id,
+                        model: record.model,
                       discript: record.discript,
-                      price: record.price,
+
                     },
                   });
                  
@@ -630,11 +613,10 @@ export default function ManageCarModel() {
                     ...modal,
                     isOpen: true,
                     data: {
-                      id: record.id,
-                      model: record.model,
-
+                        id: record.id,
+                        model: record.model,                     
                       discript: record.discript,
-                      price: record.price,
+
                     },
                   });
                   
@@ -674,28 +656,7 @@ export default function ManageCarModel() {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="price"
-                  label="Giá"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng kiểm tra thông tin ",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Vui lòng nhập giá "
-                  />
-                 
-                </Form.Item>
-              </Col>
-            </Row>
+           
           
             <Row gutter={16}>
               <Col span={24}>
@@ -890,28 +851,7 @@ export default function ManageCarModel() {
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-                <Form.Item
-                  name="price"
-                  label="Giá"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng kiểm tra lại giá ",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Vui lòng nhập giá"
-                  />
-                 
-                </Form.Item>
-              </Col>
-            </Row>
+           
           
             <Row gutter={16}>
               <Col span={24}>

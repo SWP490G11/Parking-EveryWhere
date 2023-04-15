@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Menu } from 'antd';
+import { Menu,Badge } from 'antd';
 import { HomeOutlined, CarOutlined } from '@ant-design/icons';
 import { routes } from '../../../utils/routes';
 import {useLocation, useNavigate} from 'react-router-dom';
@@ -12,10 +12,14 @@ const getItem = (key, label, icon = null, children = null) => {
 const menuOwner = [
     getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
     getItem(routes.MANAGERPARKING, 'Quản lý bãi xe', <CarOutlined />),
+   
     getItem(routes.MANAGEPARKINGMANAGER, 'Quản lý nhân viên', <CarOutlined />),
+    getItem(routes.MANAGE_REQUEST, (<Badge count={1}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />),
 ]
 const menuCustomer = [
     getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
+    getItem(routes.MY_REQUEST, 'Yêu cầu của tôi', <HomeOutlined />),
+    getItem(routes.MY_CAR, 'Xe của tôi', <HomeOutlined />),
 ]
 const menuAdmin = [
     getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
