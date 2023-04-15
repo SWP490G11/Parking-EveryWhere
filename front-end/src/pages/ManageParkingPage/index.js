@@ -250,7 +250,7 @@ const carColumns = [
         let respData = response.data;
       
         respData.forEach((element) => {
-          element.parkingmanager= element.parkingManagers.userName;
+       
           element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
           element.action = [
              <Button className='buttonState'

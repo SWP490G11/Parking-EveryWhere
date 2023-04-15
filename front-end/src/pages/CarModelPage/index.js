@@ -13,7 +13,7 @@ import api from "../../services/api";
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Model");
-
+ 
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -24,26 +24,28 @@ import api from "../../services/api";
   });
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: "25%",
-    },
-    {
-      title: "Model",
-      dataIndex: "model",
-      key: "model",
-      sorter: (a, b) => {
-        if (a.model > b.model) {
-          return -1;
-        } else if (b.model > a.model) {
-          return 1;
-        }
-        return 0;
+    {   
+        title: "ID",
+        dataIndex: "id",
+        key: "id",
+        width: "25%",
+       
       },
-      width: "7%",
-    },
+      {
+        title: "Model",
+        dataIndex: "model",
+        key: "model",
+        sorter: (a, b) => {
+          if (a.model > b.model) {
+            return -1;
+          }else
+          if (b.model > a.model) {
+            return 1;
+          }
+          return 0;
+        },
+        width: "7%",
+      },
     {
       title: "Discript",
       dataIndex: "discript",
@@ -64,7 +66,7 @@ import api from "../../services/api";
   //   // footer: (
   //   //   <div style={{ textAlign: "left" }}>
   //   //     <Button className="buttonSave">Delete</Button>
-
+       
   //   //   </div>
   //   // ),
   // });
@@ -83,6 +85,7 @@ import api from "../../services/api";
         console.log(respData);
 
         respData.forEach((element) => {
+           
           element.action = [
             <Button className='buttonState'
                            
@@ -145,10 +148,16 @@ import api from "../../services/api";
         });
         setData(
           respData.sort((a, b) => {
-            if (a.model.trim().toLowerCase() > b.model.trim().toLowerCase()) {
+            if (
+              a.model.trim().toLowerCase() >
+              b.model.trim().toLowerCase()
+            ) {
               return 1;
             }
-            if (b.model.trim().toLowerCase() > a.model.trim().toLowerCase()) {
+            if (
+              b.model.trim().toLowerCase() >
+              a.model.trim().toLowerCase()
+            ) {
               return -1;
             }
             return 0;
@@ -164,11 +173,13 @@ import api from "../../services/api";
   const finalData =
     searchText === ""
       ? dataBytype
-      : dataBytype.filter((u) =>
-          u.model
-            .toLowerCase()
-            .replace(/\s+/g, "")
-            .includes(searchText.toLowerCase().replace(/\s+/g, ""))
+      : (dataBytype.filter(
+          (u) =>
+            u.model
+              .toLowerCase()
+              .replace(/\s+/g, "")
+              .includes(searchText.toLowerCase().replace(/\s+/g, "")) 
+        ) 
         );
 
   const pagination = {
@@ -182,8 +193,8 @@ import api from "../../services/api";
       setPage(page);
       setPageSize(pageSize);
     },
-    showSizeChanger: true,
-    showTotal: (total) => `Total ${total} Student`,
+   showSizeChanger:true, 
+      showTotal: total => `Total ${total} Student`
   };
   const showDrawer = () => {
     setOpen(true);
@@ -191,7 +202,7 @@ import api from "../../services/api";
   const onClose = () => {
     setOpen(false);
   };
-
+  
   const onFinish = (values) => {
     
     api
@@ -205,16 +216,17 @@ import api from "../../services/api";
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Successfully`,
-          description: "Create new car model successfully",
+          description: "Create new parking successfully",
           placement: "topLeft",
         });
         form.setFieldsValue({
-          model: "",
-          discript: "",
-          price: "",
-        });
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
         setOpen(false);
-        // window.location.reload();
+       // window.location.reload();
       })
       .catch((error) => {
         notification.warning({
@@ -223,10 +235,11 @@ import api from "../../services/api";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          model: "",
-          discript: "",
-          price: "",
-        });
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
       });
   };
   const onFinishEdit = (values) => {
@@ -246,12 +259,13 @@ import api from "../../services/api";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          model: "",
-          discript: "",
-          price: "",
-        });
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
         setOpen(false);
-        // window.location.reload();
+       // window.location.reload();
       })
       .catch((error) => {
         notification.warning({
@@ -260,10 +274,11 @@ import api from "../../services/api";
           placement: "topLeft",
         });
         form.setFieldsValue({
-          model: "",
-          discript: "",
-          price: "",
-        });
+            model: "",
+            discript:"",
+            price: "",
+            
+          })
       });
   };
  
@@ -284,57 +299,60 @@ import api from "../../services/api";
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
-          {/*Filter Role */}
+         
+      
+           {/*Filter Role */}
           <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
             overlay={
-              <Menu>
+                <Menu>
                 <Menu.Item
-                  onClick={() => {
-                    setType("ParkingManager");
-                  }}
-                >
-                  {" "}
-                  ParkingManager
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    setType("ParkingOwner");
-                  }}
-                >
-                  {" "}
-                  ParkingOwner
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    setType("Customer");
-                  }}
-                >
-                  {" "}
-                  Customer
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    setType("Admin");
-                  }}
-                >
-                  {" "}
-                  Admin
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    setType("Model");
-                  }}
-                >
-                  {" "}
-                  All
-                </Menu.Item>
+               onClick={() => {
+                setType("ParkingManager");
+               }}
+             >
+               {" "}
+               ParkingManager
+             </Menu.Item>
+             <Menu.Item
+               onClick={() => {
+                setType("ParkingOwner");
+               }}
+             >
+               {" "}
+               ParkingOwner
+             </Menu.Item>
+             <Menu.Item
+               onClick={() => {
+                setType("Customer");
+               }}
+             >
+               {" "}
+               Customer
+             </Menu.Item>
+             <Menu.Item
+               onClick={() => {
+                setType("Admin");
+               }}
+             >
+               {" "}
+               Admin
+             </Menu.Item>
+             <Menu.Item
+               onClick={() => {
+                setType("Model");
+               }}
+             >
+               {" "}
+               All
+             </Menu.Item>
               </Menu>
             }
           >
             {type}
           </Dropdown.Button>
+      
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
@@ -368,7 +386,7 @@ import api from "../../services/api";
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
-        style={{ width: 400 }}
+        style={{width:400}}
         footer={[
           <Button
             style={{ background: "#e30c18", color: "white" }}
@@ -384,9 +402,7 @@ import api from "../../services/api";
       >
         {/* <table>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              ID
-            </td>
+            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
             <td
               style={{
                 fontSize: "18px",
@@ -399,9 +415,7 @@ import api from "../../services/api";
             </td>
           </tr>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Model
-            </td>
+            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>Model</td>
             <td
               style={{
                 fontSize: "18px",
@@ -414,9 +428,7 @@ import api from "../../services/api";
             </td>
           </tr>
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Discript
-            </td>
+            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Discript</td>
             <td
               style={{
                 fontSize: "18px",
@@ -428,11 +440,9 @@ import api from "../../services/api";
               {modal.data.discript}
             </td>
           </tr>
-
+        
           <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Price{" "}
-            </td>
+            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Price </td>
             <td
               style={{
                 fontSize: "18px",
@@ -461,6 +471,7 @@ import api from "../../services/api";
           onRow={(record) => {
             return {
               onClick: (e) => {
+               
                 if (
                   e.target.className ===
                   "ant-table-cell ant-table-cell-row-hover"
@@ -580,6 +591,7 @@ import api from "../../services/api";
             paddingBottom: 80,
           }}
         >
+          <Form form={form1} onFinish={onFinishEdit} layout="vertical" hideRequiredMark>
           <Row gutter={16}>
               <Col span={24}>
                 <Form.Item
@@ -644,10 +656,13 @@ import api from "../../services/api";
                 Lưu
               </Button>
               </Space>
-            </Col>
-          </Row>
-        {/* </Form> */}
-      </Drawer>
+           
+              </Col>
+           
+            </Row>
+           
+          </Form>
+        </Drawer>
     </>
   );
 }
