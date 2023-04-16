@@ -58,7 +58,7 @@ namespace Back_end.Controllers
               c.ID,
               c.CarNumber,
               c.CarModel,
-              
+              c.ParkingDetails,
             })) ;
         }
 
