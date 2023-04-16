@@ -25,11 +25,11 @@ namespace Back_end.Controllers
         private readonly IMapper _mapper;
         private readonly IImageService _imageService;
         private readonly ParkingDbContext _dbContext;
-
+        private readonly IEmailSender _emailSender;
 
         public UserController(IUserRespository userRespository
  , IJwtUtils jwtUtils, IMapper mapper, IImageService imageService
-, ParkingDbContext dbContext            
+, ParkingDbContext dbContext, IEmailSender emailSender
             )
         {
             _userRespository = userRespository;
@@ -37,6 +37,7 @@ namespace Back_end.Controllers
             _mapper = mapper;
             _imageService = imageService;
             _dbContext = dbContext;
+            _emailSender = emailSender;
         }
 
         [AllowAnonymous]
@@ -167,6 +168,16 @@ namespace Back_end.Controllers
                  _userRespository.Register(userModel);
          
             return Ok(userModel);
+
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public IActionResult  TestSendMail()
+        {
+
+            _emailSender.SendForgotPasswordEmailAsync("phucnvhd772000@gmail.com", "ddddddd");
+            return Ok("Send sucess");
 
         }
 

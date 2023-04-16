@@ -53,7 +53,7 @@ namespace Back_end.Respository
             if (slot.Status == Status.Parking) throw new AppException("Slot still have a car is parking") ;
 
 
-            slot.Status = Status.Parking;
+            slot.Status = Status.NotAvailable;
 
 
 

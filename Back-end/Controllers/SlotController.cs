@@ -110,18 +110,7 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var slots = await _respository.GetSlotByParkingAsync(parkingID);
 
-            return Ok(slots.Select(s =>
-           new {
-               SlotID = s.ID,
-               s.Price,
-               s.TypeOfSlot,
-               ParkingID = s.Parking.ID,
-               s.Discription,
-               ParkingDetail = s.ParkingDetail,
-               s.Status,
-               s.LastModifyAt,
-               LastModifyBy = s.LastModifyBy.ID,
-           }));
+            return Ok(slots);
         }
 
 

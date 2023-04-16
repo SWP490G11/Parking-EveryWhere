@@ -1,4 +1,4 @@
-using Back_end.Authorization;
+﻿using Back_end.Authorization;
 using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
@@ -6,6 +6,7 @@ using Back_end.Respository;
 using Back_end.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Configuration;
 using System.Text.Json.Serialization;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -51,6 +52,12 @@ service.AddDbContext<ParkingDbContext>(
 
 );
 
+service.AddTransient<IEmailSender, EmailSender>();
+
+// Đăng ký các tùy chọn cấu hình của EmailSender
+service.Configure<EmailSenderOptions>(builder.Configuration.GetSection("SendGrid"));
+
+
 service.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 service.Configure<CloudarySettings>(builder.Configuration.GetSection("CloudarySettings"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -64,7 +71,7 @@ service.AddTransient<ICarRepository, CarRepository>();
 service.AddTransient<ISlotRepository, SlotRepository>();
 service.AddTransient<IRequestRepository, RequestRepository>();
 service.AddTransient<IImageRepository, ImageRepository>();
-
+service.AddTransient<IEmailSender, EmailSender>();
 
 service.AddTransient<IFeedBackReposiotory , FeedBackReposiotory>();
 /*service.AddTransient<ICRUDSRespository<Image, ImageModel>, ImageRepository>();
