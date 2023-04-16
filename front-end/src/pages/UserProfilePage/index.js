@@ -77,11 +77,11 @@ const UserProfile=()=> {
       setImage(response.data.image.url);
       console.log(image);
     }).catch((error) => {
-      notification.warning({
-        message: `Load profile fail`,
-        description: 'Please check input again',
-        placement: 'topLeft',
-      });
+      // notification.warning({
+      //   message: `Load profile fail`,
+      //   description: 'Please check input again',
+      //   placement: 'topLeft',
+      // });
     });
   },[image]);
   useEffect(()=>{

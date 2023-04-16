@@ -47,7 +47,7 @@ const ParkingInfo = (props) => {
                         </div>
                         <div className="right-parking-price">
                             <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Price: </div>
-                            <div>Chưa tính được giá</div>
+                            <div>{props.parking?.slots[0].price}</div>
                         </div>
                     </div>
                 }

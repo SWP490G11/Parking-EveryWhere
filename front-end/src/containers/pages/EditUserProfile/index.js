@@ -70,11 +70,11 @@ export const EditProfile=(profile)=> {
       
       console.log(profile.image);
     }).catch((error) => {
-      notification.warning({
-        message: `Load profile fail`,
-        description: 'Please check input again',
-        placement: 'topLeft',
-      });
+      // notification.warning({
+      //   message: `Load profile fail`,
+      //   description: 'Please check input again',
+      //   placement: 'topLeft',
+      // });
     });
   },[]);
   const onFinish = (fieldsValue) => {

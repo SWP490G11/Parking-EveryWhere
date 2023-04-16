@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toRoute } from '../../utils/helpers';
 import api from "../../services/api";
+import { Role } from '../../utils/constants';
 import { routes } from '../../utils/routes';
 import { useAuthState } from '../../hooks/authState';
 const { Panel } = Collapse;
@@ -234,21 +235,19 @@ const carColumns = [
   const onClose = () => {
         setOpen(false);
     };
-    const loadSlotParking=(values)=>{
-      console.log(values);
-      api.get(`slots/${values}`)
-        .then((response) =>{
-          setSlotParking(response.data)})
-          .catch((e)=>{notification.warning({
-          message: `Lỗi dữ liệu`,
-          description: "Tải dữ liệu bị lỗi",
-          placement: "topLeft",
-        });});
-    }
   
+  const setUpData =()=>{
+    switch (authState?.data?.role){
+      case Role.ParkingOwner:
+        return (api.get(`parkings-of-owner`))
+      case Role.Admin:
+        return (api.get(`parkings`))
+      
+    }
+  }
+
   useEffect(() => {
-    
-    api.get(`parkings-of-owner`)
+   setUpData()
       .then(function (response) {
         let respData = response.data;
       
@@ -287,8 +286,11 @@ const carColumns = [
             return 0;
           })
         );
-      }, [])
-      .catch(() => {});
+      },[])
+      .catch(() => {})
+   
+   
+   
   }, [data]);
   useEffect(() => {
     api.get(`cars`)
@@ -343,11 +345,35 @@ const [addSlot,setAddSlot]= useState(false)
             );
             // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
  
-  
+ const loadSlotParking=(values)=>{
+    console.log(values);
+      api.get(`slots/${values}`)
+      .then((response) =>{
+        setSlotParking(response.data)})
+      .catch((e)=>{notification.warning({
+        message: `Lỗi dữ liệu`,
+      description: "Tải dữ liệu bị lỗi",
+    placement: "topLeft",
+     });});
+            }
   const pagination = {
     current: page,
     PageSize: pageSize,
     total: finalData.length,
+    pageSizeOptions: [5, 10, 15, 20],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page, pageSize) => {
+      setPage(page);
+      setPageSize(pageSize);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Total ${total} Student`
+  }; 
+  const pagination1 = {
+    current: page,
+    PageSize: pageSize,
+    total: finalCar.length,
     pageSizeOptions: [5, 10, 15, 20],
     className: "ant-btn-dangerous",
     dangerous: true,
@@ -910,7 +936,7 @@ const [addSlot,setAddSlot]= useState(false)
                     columns={carColumns}
                     dataSource={finalCar.filter(u=>u.status==='Available')}
                     rowKey="id"
-                    pagination={pagination}
+                    pagination={pagination1}
                     on
                 />
       </Modal>

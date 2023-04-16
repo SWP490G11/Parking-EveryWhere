@@ -15,43 +15,36 @@ import api from "../../services/api";
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
     const [status,setStatus] = useState("Status");
-    const handleDeleteOk = (id) => {
+    const [open, setOpen] =useState(false);
+    const [infor,setInfor]= useState({
+      id:"",
+               carNumber:"",
+               note:"",
+                parkingDate:"",
+               pickUpDate:"",
+               totalPrice:"",
+    });
+    // const handleDeleteOk = (id) => {
        
-        api
-            .patch(`request/cancel-request/${id}`)
-            .then((res) => {
+    //     api
+    //         .patch(`request/cancel-request/${id}`)
+    //         .then((res) => {
                 
-                notification.success({
-                    message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
-                    placement: "topLeft",
-                  });
-                //window.location.reload();
-            }).catch((error) => {
-                notification.warning({
-                    message: `Thât bại`,
-                    description: "Vui lòng thử lại",
-                    placement: "topLeft",
-                  });
-        })
-    }
-    const showPromiseDelete = (id) => {
-        Modal.confirm({
-          title: 'Bạn  muốn từ chối yêu cầu ?',
-          icon: <ExclamationCircleFilled />,
-          okText: 'Đồng ý',
-    okType: 'danger',
-    cancelText: 'Hủy',
-          content: 'Bạn sẽ từ chối yêu cầu của khách hàng !',
-          onOk() {
-            return new Promise((resolve, reject) => {
-                handleDeleteOk(id);
-              setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-            }).catch(() => console.log('Oops errors!'));
-          },
-          onCancel() {},
-        });
-      };
+    //             notification.success({
+    //                 message: `Thành công`,
+    //                 description: "Bạn đã hủy yêu cầu",
+    //                 placement: "topLeft",
+    //               });
+    //             //window.location.reload();
+    //         }).catch((error) => {
+    //             notification.warning({
+    //                 message: `Thât bại`,
+    //                 description: "Vui lòng thử lại",
+    //                 placement: "topLeft",
+    //               });
+    //     })
+    // }
+    
       const showPromiseOk = (id) => {
         Modal.confirm({
           title: 'Bạn  có muốn thanh toán ?',
@@ -65,12 +58,11 @@ import api from "../../services/api";
                 api
             .patch(`parkingdetail/${id}/CarOut`)
             .then((res) => {
+                setOpen(true);
+                setInfor({...res.data,parkingDate:moment(new Date(res.data.parkingDate).toLocaleDateString('en-CA')).format('DD-MM-YYYY')
+                ,pickUpDate:moment(new Date(res.data.pickUpDate).toLocaleDateString('en-CA')).format('DD-MM-YYYY'),carNumber: res.data.car.carNumber
+              })
                 
-                notification.success({
-                    message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
-                    placement: "topLeft",
-                  });
                 //window.location.reload();
             }).catch((error) => {
                 notification.warning({
@@ -439,7 +431,69 @@ import api from "../../services/api";
                 </Table>
             </div>
 
+            <Modal
+        title="Hóa đơn"
+        open={open}
+        footer={null}
+        onCancel={()=>setOpen(false)}
+        onOk={()=>setOpen(false) }
+      >
+           <Form
+        >
+          <Form.Item
+            name="lastName"
+            label="Mã hóa đơn:"
+           
+          > {infor.id}
+            {/* <Input disabled /> */}
+          </Form.Item>
+          <Form.Item
+            name="firstName"
+            label="Biển số xe :"
+             
+          >
+              {infor.carNumber}
+          </Form.Item>
+          
 
+          <Form.Item
+            name="userName"
+            label=" Ghi chú :"
+          >
+            {infor.note}
+          </Form.Item>
+         
+          <Form.Item
+            name="email"
+            label=" Ngày đỗ xe :"
+            
+          >        
+             {infor.parkingDate}
+          </Form.Item>
+          <Form.Item
+            name="phoneNumber"
+            label="Ngày lấy xe :"
+           
+          >
+            {infor.pickUpDate}
+          </Form.Item>
+          <Form.Item
+            name="dateOfBirth"
+            label="Thành tiền :"
+           
+          >
+              {infor.totalPrice}
+          </Form.Item>
+         
+          
+        </Form>
+        
+              
+               
+                
+               
+               
+      </Modal>
         </>
     )
 }

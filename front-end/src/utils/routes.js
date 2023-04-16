@@ -16,4 +16,5 @@ export const routes = {
     MY_CAR: "/my-car",
     MANAGE_REQUEST: "/manager-request",
     MANAGE_PARKINGDETAIL: "/manager-parking-detail",
+    MANAGE_SLOT: "/manage-slot"
 }

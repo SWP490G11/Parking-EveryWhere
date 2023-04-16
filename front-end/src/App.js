@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/HomePage';
@@ -17,10 +17,12 @@ import ManageParkingManager from './pages/ManagerPMPage';
 import MyRequest from './pages/MyRequestPage';
 import FooterContainer from './containers/common/Footer';
 import MenuContainer from './containers/common/Menu';
+import ManageSlot from './pages/ManageSlot';
 import ManageRequest from './pages/ManageRequest';
 import { useLocationState } from './hooks/locationState';
 import { Layout } from 'antd';
 import { routes } from './utils/routes';
+
 const { Content } = Layout;
 
 function App() {
@@ -49,6 +51,7 @@ function App() {
       }
     );
   }
+  
   const token = localStorage.getItem('token');
   return (
     <Router>
@@ -60,7 +63,7 @@ function App() {
             padding: '0 50px',
           }}
         >
-          {token ? (<MenuContainer />):(<></>)}
+          {token ? (<MenuContainer  />):(<></>)}
           
 
           <div
@@ -77,6 +80,7 @@ function App() {
               <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />
               <Route path={routes.MANAGECARMODEL} element={<ManageCarModel />} />
               <Route path={routes.MY_CAR} element={<MyCar />} />
+              <Route path={routes.MANAGE_SLOT} element={<ManageSlot />} />
               <Route path={routes.MANAGE_PARKINGDETAIL} element={<ManageParkingDetail />} />
               <Route path={routes.MY_REQUEST} element={<MyRequest />} />
               <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />

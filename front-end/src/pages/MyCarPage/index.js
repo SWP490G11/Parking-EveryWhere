@@ -110,7 +110,7 @@ const MyCar = () => {
   const [idcar, setIdCar] = useState("");
   useEffect(() => {
     api
-      .get(`cars`, {})
+      .get(`cars-of-owner`, {})
       .then(function (response) {
         let respData = response.data;
         console.log(respData);

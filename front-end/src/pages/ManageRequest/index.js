@@ -1,8 +1,9 @@
 import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form} from 'antd';
-
+import { useAuthState } from '../../hooks/authState';
 import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
 import moment from "moment";
+import { Role } from '../../utils/constants';
 import api from "../../services/api";
  const ManageRequest=()=> {
     const [data, setData] = useState([])
@@ -15,6 +16,7 @@ import api from "../../services/api";
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
     const [status,setStatus] = useState("Status");
+    const [authState] = useAuthState();
     const handleDeleteOk = (id) => {
        
         api
@@ -87,59 +89,70 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-
-    useEffect(() => {
-        api.get(`pending-request-of-all-parkings-of-owner`, {})
-        .then(function(response)  {
-            let respData = response.data
-            respData.forEach((element) => {
-                //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-                element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
-                element.parkingName = element.parkingId.parkingName;
-                
+const setUpData =(response)=>{
+  let respData = response.data
+  respData.forEach((element) => {
+      //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
+      element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
+      element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+      element.parkingName = element.parkingId.parkingName;
+      
 
 
-                element.action = [
-                    <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận") ? true : false}
-                    className="buttonState"
-                   
-                    onClick={() => {
-                        showPromiseOk(element.id);
-                        
-                    }}
-                >
-                   <CheckOutlined style={{color:"green"}} />
-                </Button>,
-                    <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận")? true : false}
-                        className="buttonState"
-                       
-                        onClick={() => {
-                            showPromiseDelete(element.id);
-                            
-                        }}
-                    >
-                        <CloseOutlined/>
-                    </Button>,
+      element.action = [
+          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận") ? true : false}
+          className="buttonState"
+         
+          onClick={() => {
+              showPromiseOk(element.id);
+              
+          }}
+      >
+         <CheckOutlined style={{color:"green"}} />
+      </Button>,
+          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận")? true : false}
+              className="buttonState"
+             
+              onClick={() => {
+                  showPromiseDelete(element.id);
                   
+              }}
+          >
+              <CloseOutlined/>
+          </Button>,
+        
 
-                ]
-            })
-            setData(respData.sort((a, b) => {
-                if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
-                  return 1;
-                }
-                if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
-                  return -1;
-                }
-                return 0;
-              })
-            );
+      ]
+  })
+  setData(respData.sort((a, b) => {
+      if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+        return 1;
+      }
+      if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    })
+  );
+}
+const ParkingID =localStorage.getItem("parkingID"); 
+const role =localStorage.getItem("role"); 
+    useEffect(() => {
+      if( authState?.data?.role ===Role.ParkingOwner){
+        api.get(`pending-request-of-all-parkings-of-owner`,)
+        .then(function(response)  {
+          setUpData(response);
           }, [])
-        .catch((error) => {
+          .catch(() => {});}
+        else{
+          api.get(`pending-request/${ParkingID}`)
+      .then(function (response) {
+        setUpData(response)
+      }, [])
+      .catch(() => {});
+        }
 
-        })
-}, [])
+}, [data])
 
     const columns = [
         {

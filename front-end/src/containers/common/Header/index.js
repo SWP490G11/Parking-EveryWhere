@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useAuthState } from '../../../hooks/authState';
+import { useCountState } from '../../../hooks/countState';
 import { useLocation } from 'react-router-dom';
 import { getProfile } from '../../../services/userProfileServices';
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,7 @@ const formItemLayout = {
 };
 function HeaderContainer() {
     const [profileState, setProfileState] = useAuthState();
+    const [countState,setCountState] = useCountState();
     const [isModal, setModal] = React.useState({
         isOpen: false,
         isLoading: false,
@@ -56,6 +58,8 @@ function HeaderContainer() {
           onCancel() {},
         });
       };
+      const ParkingID =localStorage.getItem("parkingID"); 
+      const role =localStorage.getItem("role"); 
     useEffect(() => {
         if (token !== '') {
             getProfile().then((data) => {
@@ -64,12 +68,26 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
+                localStorage.setItem("parkingID",data.data.parking.id);
+                localStorage.setItem("role",data.data.role);
+
             });
+            
+          
         } else if (location.pathname !== '/login' && location.pathname !=='/register') {
             window.location.replace('/login')
         }
     }, [location.pathname, token]);
-
+    useEffect(() => {
+      if (profileState?.data?.role === 'Admin') {
+        api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
+        
+      } if(profileState?.data?.role === 'ParkingOwner') {
+        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})
+      } if(profileState?.data?.role === 'ParkingManager') {
+        api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
+      }
+  }, [countState]);
 
     const navigate = useNavigate();
     const items = [
