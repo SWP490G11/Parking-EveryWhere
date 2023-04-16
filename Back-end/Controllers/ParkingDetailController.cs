@@ -125,7 +125,7 @@ namespace Back_end.Controllers
 
         [HttpPatch("/parkingdetail/{id}/CarOut")]
 
-        [Authorization.Authorize(Role.ParkingManager, Role.Admin)]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.ParkingManager)]
         public async Task<IActionResult> CarOut(string id)
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
