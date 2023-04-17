@@ -155,7 +155,7 @@ namespace Back_end.Respository
             return await _dbContext.Users
                 .Include(u => u.Parkings)
                 .Include(u => u.Parkings).ThenInclude(p => p.Requests)
-                .Include(u => u.Parkings).ThenInclude(p => p.ParkingManagers)
+                .Include(u => u.Parkings).ThenInclude(p => p.ParkingManagers).ThenInclude(pm=>pm.Image)
                 .Include(u => u.Parkings).ThenInclude(p => p.Images)
                 .Include(u => u.Parkings).ThenInclude(p => p.Feedbacks)
                 .Include(u => u.Parkings).ThenInclude(p => p.Slots)

@@ -53,17 +53,17 @@ namespace Back_end.Controllers
                 p.LON,
                 p.Status,
                 p.Discription,
-                p.AddressDetail
-               /* ParkingManagers = p.ParkingManagers.Select(
+                p.AddressDetail,
+                ParkingManagers = p.ParkingManagers.Select(
                     pm => new
                     {
                         pm.ID,
                         FullName = pm.LastName + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
-                        ImageUrl =pm.Image.URL,
+                        ImageUrl = pm.Image.URL,
                     }
-                    )*/
+                    )
                ,
                 Feedbacks = p.Feedbacks/*.Select(
                     fb => new
@@ -197,22 +197,14 @@ namespace Back_end.Controllers
                         ImageUrl = pm.Image.URL,
                     }
                     ),
-                Feedbacks = p.Feedbacks/*.Select(
-                    fb => new
-                    {
-                        fb.ID,
-                        fb.Rating,
-                        fb.Content,
-                        FeebackBy = fb.FeedbackBy.ID.ToString()
-                    }
-                    )*/,
+              p.Feedbacks,
 
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
-                NumberOfRoofAvailableSlot = p.Slots.Count(x => { return x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.ROOFED; }),
+                NumberOfRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.NONROOF),
 
-                ImageUrls = p.Images.Select(i => i.URL).ToList(),
+                  ImageUrls = p.Images.Select(i => i.URL).ToList(),
                  PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
                    group => new
                    {

@@ -113,13 +113,11 @@ namespace Back_end.Respository
         public Parking GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return _dbContext.Parkings.Include(p => p.ParkingManagers)
+            return _dbContext.Parkings.Include(p => p.ParkingManagers).ThenInclude(pm=>pm.Image)
                  .Include(p => p.Feedbacks).ThenInclude(f => f.Images)
                 .Include(p => p.Owner)
-                .Include(p => p.Images)
-                .Include(p => p.Slots)
-                .Include(p=>p.Slots).ThenInclude(s=>s.ParkingDetail)
-                .FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
+                .Include(p => p.Images)           
+                .Include(p=>p.Slots).ThenInclude(s=>s.ParkingDetail).FirstOrDefault(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
