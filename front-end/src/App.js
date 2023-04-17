@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/HomePage';
-import Login from './pages/LoginPage';
+import Home from './pages/Home';
+import Login from './pages/Login';
 import PackingDetail from './pages/PackingDetail';
 import NotFound from './pages/NotFoundPage';
 import UserProfile from './pages/UserProfilePage';
