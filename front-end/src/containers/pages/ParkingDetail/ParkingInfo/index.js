@@ -64,10 +64,21 @@ const ParkingInfo = (props) => {
                             
                            
                         </div>
-                          Có mái che:  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot} <Tag color= {'green'} >{props.parking?.status}</Tag>
+                          Có mái che:  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot}  -
+                          {props.parking?.numberOfRoofAvailableSlot >0 ? <><Tag color= {'green'} >{props.parking?.status}</Tag></> :<> <Tag color= {'red'} >{props.parking?.status}</Tag></> } 
                           <br/>
-                          Không có mái che :  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot} <Tag color= {'green'} >{props.parking?.status}</Tag>
-                    </div>
+                          Không có mái che :  {props.parking?.numberOfNonRoofAvailableSlot}/{props.parking?.numberOfNonRoofSlot}  -
+                          {props.parking?.numberOfRoofAvailableSlot >0 ? <><Tag color= {'green'} >{props.parking?.status}</Tag></> :<> <Tag color= {'red'} >{props.parking?.status}</Tag></> } 
+
+                          <div className="right-parking-desc">
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div>
+                            
+                        </div>
+                        <div>{props.parking?.priceDetails?.map((e)=>{
+                            return(
+                              e.slotType + e.price )
+                        })}</div>
+                        </div>
                 }
             </div>
         </div>

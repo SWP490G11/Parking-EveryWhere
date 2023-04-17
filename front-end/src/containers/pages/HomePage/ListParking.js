@@ -1,4 +1,4 @@
-import { Button, List, Tag } from 'antd';
+import { Button, List, Tag,Image } from 'antd';
 import { Role, Status } from '../../../utils/constants';
 import { calDistance, toRoute } from '../../../utils/helpers';
 import { routes } from '../../../utils/routes';
@@ -69,8 +69,8 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                     style={{ cursor: 'pointer' }}
                 >
                     <List.Item.Meta
-                        avatar={<img style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls[0] ? item.imageUrls[0] : config.DEFAULT_IMG_URL} alt='' />}
-                        title={<a onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
+                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls[0] ? item.imageUrls[0] : config.DEFAULT_IMG_URL} alt='' />}
+                        title={<a onClick={(e)=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>
                             <div style={{ marginBottom: '0.25rem' }}>
                                 {item.addressDetail}
@@ -99,13 +99,22 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                         </div> */}
                         <div className='parking-button-wapper'>
                            
-                                    <Button
+                        <Tag color={item.status === Status.Available ? 'green' : 'volcano'} key={'tag'}>
+                                {
+                                    item.status === Status.Available
+                                        ?
+                                        Status.Available
+                                        :
+                                        Status.NotAvailable
+                                }
+                            </Tag>
+                                    {/* <Button
                                         type='primary'
                                         style={{ marginBottom: '0.25rem' }}
                                         onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}
                                     >
                                         Detail
-                                    </Button>
+                                    </Button> */}
                             
                         </div>
                     </div>

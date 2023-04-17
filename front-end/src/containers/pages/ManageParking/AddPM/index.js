@@ -9,20 +9,9 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
   
   const [parkings, setParking] = useState([]);
  
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const onEmailChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        ["@gmail.com", "@yahoo.com"].map((domain) => `${value}${domain}`)
-      );
-    }
-  };
-  const emailOptions = autoCompleteResult.map((email) => ({
-    label: email,
-    value: email,
-  }));
+  
+  
+  
   useEffect(() => {
     ParkingService.getAllParkingOwner(setParking);
 }, [parkings])
@@ -108,6 +97,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
                 message: "Vui lòng chọn bãi đỗ",
               },
             ]}
+            hasFeedback
           >
             <Select
           placeholder="Chọn bãi đỗ"
@@ -123,7 +113,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
           </Select>
           </Form.Item>
           <Form.Item
-            name="firstName"
+            name="lastName"
             label="Họ"
             rules={[
               {
@@ -137,7 +127,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
             <Input />
           </Form.Item>
           <Form.Item
-            name="lastName"
+            name="firstName"
             label="Tên"
             rules={[
               {
@@ -151,24 +141,22 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
             <Input />
           </Form.Item>
          
+         
           <Form.Item
             name="email"
             label="E-mail"
             rules={[
               {
+                required: true,
                 type: "email",
                 message: "E-mail không hợp lệ!",
               },
-              {
-                required: true,
-                message: "Vui lòng nhập E-mail",
-              },
+             
             ]}
             hasFeedback
           >
             <AutoComplete
-              options={emailOptions}
-              onChange={onEmailChange}
+
               placeholder="Email"
             >
               <Input />
@@ -183,6 +171,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
                 message: "Vui lòng nhập dữ liệu",
               },
             ]}
+            hasFeedback
           >
             <Input
              
