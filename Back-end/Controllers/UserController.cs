@@ -67,31 +67,15 @@ namespace Back_end.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorization.Authorize(Role.Admin)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetUserbyUserName(string username)
         {
-            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
-            if (mwi == null) return Unauthorized("You must login to see this information");
-            var users = await _userRespository.GetUserByUserNames(username);
-
-            return Ok(users.Select(
-                u=>new 
-                {
-                u.ID,
-                u.Gender,
-                u.IsDisable,
-                u.UserName,
-                u.DateOfBirth,
-                u.Email,
-                u.PhoneNumber,
-                u.FirstName,
-                u.LastName,
-                PakingID= u.Parking.ID,
-                 u.CitizenID,
-                 u.Image,
-                 u.Role,
-                }
-                ));
+           
+            var u = await _userRespository.GetUserByUserNames(username);
+            if (u == null) return NotFound("Not Found this user");
+            return Ok(
+               u
+                );
         }
 
         [HttpGet("[action]")]
@@ -171,15 +155,7 @@ namespace Back_end.Controllers
 
         }
 
-        [HttpPost("[action]")]
-        [AllowAnonymous]
-        public IActionResult  TestSendMail()
-        {
-
-            _emailSender.SendForgotPasswordEmailAsync("phucnvhd772000@gmail.com", "ddddddd");
-            return Ok("Send sucess");
-
-        }
+        
 
         [HttpPost("[action]")]
         [Authorization.Authorize(Role.ParkingOwner,Role.Admin)]
@@ -229,7 +205,15 @@ namespace Back_end.Controllers
             return Ok("Change state success");
         }
 
+        [HttpPatch("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(string username)
+        {
+           
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            await _userRespository.ResetPassword(username);
+            return Ok("send mail thanh cong");
+        }
 
-       
     }
 }
