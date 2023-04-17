@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
+using MimeKit;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using MailKit.Net.Smtp;
 using System.Threading.Tasks;
 
 public interface IEmailSender
 {
-    Task SendForgotPasswordEmailAsync(string email, string resetToken);
+    void SendForgotPasswordEmailAsync(string name, string email, string newPassword);
 }
 
 public class EmailSender : IEmailSender
@@ -17,15 +19,24 @@ public class EmailSender : IEmailSender
         _emailSenderOptions = emailSenderOptions.Value;
     }
 
-    public async Task SendForgotPasswordEmailAsync(string email, string resetToken)
+    public void SendForgotPasswordEmailAsync(string name,string email, string newPassword)
     {
-        var client = new SendGridClient(_emailSenderOptions.ApiKey);
-        var from = new EmailAddress(_emailSenderOptions.Email, _emailSenderOptions.DisplayName);
-        var to = new EmailAddress(email);
-        var subject = "Reset Password";
-        var plainTextContent = $"Please reset your password by clicking the link below:\n\n{_emailSenderOptions.ResetPasswordUrl}?token={resetToken}";
-        var htmlContent = $"<strong>Please reset your password by clicking the link below:</strong><br><br><a href='{_emailSenderOptions.ResetPasswordUrl}?token={resetToken}'>Reset Password</a>";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-        await client.SendEmailAsync(msg);
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress("Parking Everwhere", "swp391g11@fpt.edu.vn"));
+        message.To.Add(new MailboxAddress(name, email));
+        message.Subject = "Mail cung cap mat khau tam thoi";
+        message.Body = new TextPart("plain")
+        {
+            Text = $"Password mới tạm thời của bạn là: {newPassword}",
+          
+        };
+
+        using (var client = new SmtpClient())
+        {
+            client.Connect("smtp.ethereal.email", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            client.Authenticate("ken.weimann61@ethereal.email", "K44HaCPQZ7WGsyGY6X");
+            client.Send(message);
+            client.Disconnect(true);
+        }
     }
 }

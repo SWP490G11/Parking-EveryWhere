@@ -32,9 +32,12 @@ namespace Back_end.Respository
 
         public Task DisableOrActiveUser(string id);
 
-        public Task<ICollection<User>> GetUserByUserNames(string username);
+        public Task<User> GetUserByUserNames(string username);
 
         public Task ChangePassword(string id, ChangePasswordModel model);
+
+
+        public Task ResetPassword(string userName);
 
 
         public Task<ICollection<User>> GetParkingManagers();
@@ -50,18 +53,19 @@ namespace Back_end.Respository
         private readonly ParkingDbContext _dbContext;
         private readonly IJwtUtils _jwtUtils;
         private readonly IImageRepository _imageRepository;
-
+        private readonly IEmailSender _emailSender;
 
 
         public UserRespository(ParkingDbContext dbContext,
-            IJwtUtils jwtUtils, IImageRepository imageRepository
+            IJwtUtils jwtUtils, IImageRepository imageRepository,
+            IEmailSender emailSender
             )
         {
             _dbContext = dbContext;
             _dbContext.Database.AutoSavepointsEnabled = true;
             _jwtUtils = jwtUtils;
             _imageRepository = imageRepository;
-
+            _emailSender = emailSender;
 
         }
 
@@ -186,7 +190,7 @@ namespace Back_end.Respository
 
         }
 
-        public async Task<ICollection<User>> GetUserByUserNames(string username)
+        public async Task<User> GetUserByUserNames(string username)
         {
             return await _dbContext.Users.Include(u => u.Parkings)
                 .ThenInclude(p => p.Slots).Include(u => u.Parkings)
@@ -200,8 +204,8 @@ namespace Back_end.Respository
                 .Include(u => u.Image).
                 Include(u => u.Parkings).ThenInclude(p => p.Requests)
                 .Include(u => u.Parkings).ThenInclude(p => p.Images)
-                .Where(u => u.UserName.ToLower()
-                .Contains(username.ToLower().Trim())).ToListAsync();
+                .FirstAsync(u => u.UserName.ToLower().Trim()
+                .Equals(username.ToLower().Trim()));
         }
 
         public async Task<ICollection<User>> GetUsers()
@@ -412,6 +416,31 @@ namespace Back_end.Respository
             return username + "@" + dob.ToString("ddMMyyyy");
         }
 
+        public async Task ResetPassword(string userName)
+        {
+            Random random = new Random();
+
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$%^*&";
+            var user = await GetUserByUserNames(userName);
+            if (user == null) throw new AppException("Not found this user");
+
+            var length = random.Next(6, 25);
+            var password = "";
+            for (int i = 0; i < length; i++)
+            {
+                password += chars[random.Next(chars.Length)];
+            }
+
+            var name = user.LastName+" "+user.FirstName ;
+            _emailSender.SendForgotPasswordEmailAsync(name, user.Email, password);
+
+            user.HashPassword = BCryptNet.HashPassword(password);
+
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
+
+
+        }
     }
 
 
