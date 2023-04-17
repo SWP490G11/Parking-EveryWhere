@@ -4,7 +4,7 @@ import PlaceInfo from "../PlaceInfo";
 import { useLocationState } from "../../hooks/locationState";
 import { DEFAULT_LOCATION } from "../../utils/constants";
 import { ScriptLoaded } from "./ScriptLoaded";
-import {Form} from "antd";
+
 const mapContainerStyle = {
     height: "70vh",
     width: "100%"
@@ -105,9 +105,8 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                     setPlace(e)
                 }}
             >
-              
                 <input
-                    className='ant-input css-dev-only-do-not-override-1e3x2xa pac-target-input'
+                    className="ant-input css-dev-only-do-not-override-1e3x2xa "
                     type="text"
                     placeholder="Tìm tìm vị trí"
                     defaultValue={defaultValue}
@@ -120,7 +119,6 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                     //     marginTop: 20
                     // }}
                 />
-
             </Autocomplete>
         </ScriptLoaded>
     )

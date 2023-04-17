@@ -97,9 +97,9 @@ code {
 }
 
 .ant-select-selector,
-.ant-input {
+/* .ant-input {
   border-color: rgb(30, 129, 210) !important;
-}
+} */
 
 .parking-detail-info {
   display: flex;
