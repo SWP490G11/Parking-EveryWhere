@@ -111,14 +111,14 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                     type="text"
                     placeholder="Tìm tìm vị trí"
                     defaultValue={defaultValue}
-                    style={{
-                        minHeight: 36,
-                        marginBottom: 20,
-                        borderRadius: 7,
-                        width: '100%',
-                        border: '1px solid rgb(30, 129, 210)',
-                        marginTop: 20
-                    }}
+                    // style={{
+                    //     minHeight: 36,
+                    //     marginBottom: 20,
+                    //     borderRadius: 7,
+                    //     width: '100%',
+                    //     border: '1px solid rgb(30, 129, 210)',
+                    //     marginTop: 20
+                    // }}
                 />
 
             </Autocomplete>
