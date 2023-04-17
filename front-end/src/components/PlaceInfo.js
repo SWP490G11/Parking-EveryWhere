@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Marker, InfoWindow } from "@react-google-maps/api";
-import YourLocation from '../assets/images/icon/yourlocation.png'
-import ParkingCar from '../assets/images/icon/parkingcar.png'
+import YourLocation from '../assets/images/yourlocation.png'
+import ParkingCar from '../assets/images/parkingcar.png'
 import { useLocationState } from "../hooks/locationState";
 import Markeerr from '../assets/images/marker.png';
 
