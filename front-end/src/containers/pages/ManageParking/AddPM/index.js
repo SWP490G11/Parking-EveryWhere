@@ -1,8 +1,9 @@
 import { ParkingService } from "../../../../services/parkingServices";
-import { Input, Button,Form,Drawer,Space,notification,AutoComplete,DatePicker,Radio,Select } from "antd";
+import { Input, Button,Form,Drawer,Space,notification,AutoComplete,DatePicker,Radio,Select,Modal } from "antd";
 import api from "../../../../services/api";
+import moment from "moment";
 import React, { useState, useEffect } from "react";
-const AddPM=({open,setOpen})=>{
+const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
 
   const [form] = Form.useForm();
   
@@ -24,7 +25,7 @@ const AddPM=({open,setOpen})=>{
   }));
   useEffect(() => {
     ParkingService.getAllParkingOwner(setParking);
-}, [])
+}, [parkings])
   const onFinish = (fieldsValue) => {
     const values = {
       ...fieldsValue,
@@ -44,8 +45,9 @@ const AddPM=({open,setOpen})=>{
           imageURL: 'https://thumbsnap.com/i/nJ5ET935.jpg'
         
       })
-      .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+      .then((res) => {
+        setInfor({...res.data,fullname: res.data.lastName+ res.data.firstName, password: res.data.userName+"@"+(moment(new Date(res.data.dateOfBirth).toLocaleDateString('en-CA')).format('DDMMYYYY'))})
+        setOpenInfor(true);
         notification.success({
           message: `Thành công`,
           description: "Thêm nhân viên quản lý thành công",
@@ -86,6 +88,7 @@ const AddPM=({open,setOpen})=>{
     setOpen(false);
 };
     return(
+      <>
       <Drawer
           title="Thêm nhân viên quản lý"
           width={550}
@@ -242,6 +245,8 @@ const AddPM=({open,setOpen})=>{
           
         </Form>
         </Drawer>
+      
+     </>   
     )
 }
 export default AddPM;

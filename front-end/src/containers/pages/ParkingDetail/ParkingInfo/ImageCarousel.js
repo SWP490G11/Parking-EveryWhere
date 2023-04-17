@@ -18,7 +18,7 @@ const ImageCarousel = (props) => {
             {
                 listImage?.map((data, key) => (
                     <div key={key}>
-                        <img style={contentStyle} src={data?.url} alt="" />
+                        <img style={contentStyle} src={data} alt="" />
                     </div>
                 ))
             }

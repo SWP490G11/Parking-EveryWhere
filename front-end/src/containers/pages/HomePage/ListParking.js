@@ -31,7 +31,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
         try {
             if (filter?.distance) {
                 const distance = calDistance(locationState.lat, locationState.lng, item.lat, item.lon)
-                if(distance >= filter?.distance[0] && distance <= filter?.distance[1]){
+                if(distance <= filter?.distance){
                     return true
                 }
                 return false
@@ -70,7 +70,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                 >
                     <List.Item.Meta
                         avatar={<img style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls[0] ? item.imageUrls[0] : config.DEFAULT_IMG_URL} alt='' />}
-                        title={<div>{item.parkingName}</div>}
+                        title={<a onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>
                             <div style={{ marginBottom: '0.25rem' }}>
                                 {item.addressDetail}
@@ -81,7 +81,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                         </div>}
                     />
                     <div className='parking-content'>
-                        <div className='parking-status'>
+                        {/* <div className='parking-status'>
                             <h4>STATUS</h4>
                             <div>
                                 20/20
@@ -96,7 +96,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                                 }
                             </Tag>
                             
-                        </div>
+                        </div> */}
                         <div className='parking-button-wapper'>
                            
                                     <Button

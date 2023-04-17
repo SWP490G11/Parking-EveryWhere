@@ -1,11 +1,10 @@
 import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form} from 'antd';
-import { useAuthState } from '../../hooks/authState';
+
 import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
 import moment from "moment";
-import { Role } from '../../utils/constants';
 import api from "../../services/api";
- const ManageRequest=()=> {
+ const ManageParkingDetail=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
@@ -16,63 +15,54 @@ import api from "../../services/api";
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
     const [status,setStatus] = useState("Status");
-    const [authState] = useAuthState();
-    const handleDeleteOk = (id) => {
+    const [open, setOpen] =useState(false);
+    const [infor,setInfor]= useState({
+      id:"",
+               carNumber:"",
+               note:"",
+                parkingDate:"",
+               pickUpDate:"",
+               totalPrice:"",
+    });
+    // const handleDeleteOk = (id) => {
        
-        api
-            .patch(`request/cancel-request/${id}`)
-            .then((res) => {
+    //     api
+    //         .patch(`request/cancel-request/${id}`)
+    //         .then((res) => {
                 
-                notification.success({
-                    message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
-                    placement: "topLeft",
-                  });
-                //window.location.reload();
-            }).catch((error) => {
-                notification.warning({
-                    message: `Thât bại`,
-                    description: "Vui lòng thử lại",
-                    placement: "topLeft",
-                  });
-        })
-    }
-    const showPromiseDelete = (id) => {
-        Modal.confirm({
-          title: 'Bạn  muốn từ chối yêu cầu ?',
-          icon: <ExclamationCircleFilled />,
-          okText: 'Đồng ý',
-    okType: 'danger',
-    cancelText: 'Hủy',
-          content: 'Bạn sẽ từ chối yêu cầu của khách hàng !',
-          onOk() {
-            return new Promise((resolve, reject) => {
-                handleDeleteOk(id);
-              setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-            }).catch(() => console.log('Oops errors!'));
-          },
-          onCancel() {},
-        });
-      };
+    //             notification.success({
+    //                 message: `Thành công`,
+    //                 description: "Bạn đã hủy yêu cầu",
+    //                 placement: "topLeft",
+    //               });
+    //             //window.location.reload();
+    //         }).catch((error) => {
+    //             notification.warning({
+    //                 message: `Thât bại`,
+    //                 description: "Vui lòng thử lại",
+    //                 placement: "topLeft",
+    //               });
+    //     })
+    // }
+    
       const showPromiseOk = (id) => {
         Modal.confirm({
-          title: 'Bạn  muốn chấp thuận yêu cầu ?',
+          title: 'Bạn  có muốn thanh toán ?',
           icon: <ExclamationCircleFilled />,
           okText: 'Đồng ý',
     
             cancelText: 'Hủy',
-          content: 'Bạn sẽ chấp thuận yêu cầu của khách hàng !',
+          content: 'Bạn sẽ thanh toán với xe này !',
           onOk() {
             return new Promise((resolve, reject) => {
                 api
-            .patch(`request/aprove-request/${id}`)
+            .patch(`parkingdetail/${id}/CarOut`)
             .then((res) => {
+                setOpen(true);
+                setInfor({...res.data,parkingDate:moment(new Date(res.data.parkingDate).toLocaleDateString('en-CA')).format('DD-MM-YYYY')
+                ,pickUpDate:moment(new Date(res.data.pickUpDate).toLocaleDateString('en-CA')).format('DD-MM-YYYY'),carNumber: res.data.car.carNumber
+              })
                 
-                notification.success({
-                    message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
-                    placement: "topLeft",
-                  });
                 //window.location.reload();
             }).catch((error) => {
                 notification.warning({
@@ -89,70 +79,51 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-const setUpData =(response)=>{
-  let respData = response.data
-  respData.forEach((element) => {
-      //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-      element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-      element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
-      element.parkingName = element.parkingId.parkingName;
-      
 
-
-      element.action = [
-          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận") ? true : false}
-          className="buttonState"
-         
-          onClick={() => {
-              showPromiseOk(element.id);
-              
-          }}
-      >
-         <CheckOutlined style={{color:"green"}} />
-      </Button>,
-          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận")? true : false}
-              className="buttonState"
-             
-              onClick={() => {
-                  showPromiseDelete(element.id);
-                  
-              }}
-          >
-              <CloseOutlined/>
-          </Button>,
-        
-
-      ]
-  })
-  setData(respData.sort((a, b) => {
-      if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
-        return 1;
-      }
-      if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
-        return -1;
-      }
-      return 0;
-    })
-  );
-}
-const ParkingID =localStorage.getItem("parkingID"); 
-const role =localStorage.getItem("role"); 
     useEffect(() => {
-      if( authState?.data?.role ===Role.ParkingOwner){
-        api.get(`pending-request-of-all-parkings-of-owner`,)
+        api.get(`parkingdetails/all-parking-of-owner`, {})
         .then(function(response)  {
-          setUpData(response);
-          }, [])
-          .catch(() => {});}
-        else{
-          api.get(`pending-request/${ParkingID}`)
-      .then(function (response) {
-        setUpData(response)
-      }, [])
-      .catch(() => {});
-        }
+            let respData = response.data
+            respData.forEach((element) => {
+                //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
+             element.parkingDate = moment(new Date(element.parkingDate).toLocaleDateString("en-US")).format('DD/MM/YYYY');
+             element.pickUpDate = element.pickUpDate !==null ?   moment(new Date(element.pickUpDate).toLocaleDateString("en-US")).format('DD/MM/YYYY') :'Xe đang đỗ';
+                // element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+                // element.parkingName = element.parkingId.parkingName;
+                
 
-}, [data])
+
+                element.action = [
+                    <Button disabled={element.pickUpDate ==='Xe đang đỗ' ? false : true}
+                    className="buttonState"
+                   
+                    onClick={() => {
+                        showPromiseOk(element.id);
+                        
+                    }}
+                >
+                   <CheckOutlined style={{color:"green"}} />
+                </Button>,
+                    
+                  
+
+                ]
+            })
+            setData(respData.sort((a, b) => {
+                if (a.id.trim().toLowerCase() > b.id.trim().toLowerCase()) {
+                  return 1;
+                }
+                if (b.id.trim().toLowerCase() > a.id.trim().toLowerCase()) {
+                  return -1;
+                }
+                return 0;
+              })
+            );
+          }, [])
+        .catch((error) => {
+
+        })
+}, [])
 
     const columns = [
         {
@@ -171,14 +142,14 @@ const role =localStorage.getItem("role");
             width: "15%",
         },
         {
-            title: "Bãi đỗ",
-            dataIndex: "parkingName",
-            key: "parkingName",
+            title: "Biển số xe",
+            dataIndex: "carNumber",
+            key: "carNumber",
             sorter: (a, b) => {
-                if (a.parkingName > b.parkingName) {
+                if (a.carNumber > b.carNumber) {
                     return -1;
                 }
-                if (b.parkingName > a.parkingName) {
+                if (b.carNumber > a.carNumber) {
                     return 1;
                 }
                 return 0;
@@ -186,14 +157,29 @@ const role =localStorage.getItem("role");
         },
 
         {
-            title: "Ngày gửi yêu cầu",
-            dataIndex: "requestAt",
-            key: "requestAt",
+            title: "Ngày gửi ",
+            dataIndex: "parkingDate",
+            key: "parkingDate",
             sorter: (a, b) => {
-                if (a.requestAt > b.requestAt) {
+                if (a.parkingDate > b.parkingDate) {
                     return -1;
                 }
-                if (b.requestAt > a.requestAt) {
+                if (b.parkingDate > a.parkingDate) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        
+        {
+            title: "Ngày trả ",
+            dataIndex: "pickUpDate",
+            key: "pickUpDate",
+            sorter: (a, b) => {
+                if (a.pickUpDate > b.pickUpDate) {
+                    return -1;
+                }
+                if (b.pickUpDate > a.pickUpDate) {
                     return 1;
                 }
                 return 0;
@@ -215,14 +201,14 @@ const role =localStorage.getItem("role");
             },
         },
         {
-            title: "Trạng thái",
-            dataIndex: "status",
-            key: "status",
+            title: "Đơn giá",
+            dataIndex: "totalPrice",
+            key: "totalPrice",
             sorter: (a, b) => {
-                if (a.status > b.status) {
+                if (a.totalPrice > b.totalPrice) {
                     return -1;
                 }
-                if (b.status > a.status) {
+                if (b.totalPrice > a.totalPrice) {
                     return 1;
                 }
                 return 0;
@@ -445,8 +431,70 @@ const role =localStorage.getItem("role");
                 </Table>
             </div>
 
+            <Modal
+        title="Hóa đơn"
+        open={open}
+        footer={null}
+        onCancel={()=>setOpen(false)}
+        onOk={()=>setOpen(false) }
+      >
+           <Form
+        >
+          <Form.Item
+            name="lastName"
+            label="Mã hóa đơn:"
+           
+          > {infor.id}
+            {/* <Input disabled /> */}
+          </Form.Item>
+          <Form.Item
+            name="firstName"
+            label="Biển số xe :"
+             
+          >
+              {infor.carNumber}
+          </Form.Item>
+          
 
+          <Form.Item
+            name="userName"
+            label=" Ghi chú :"
+          >
+            {infor.note}
+          </Form.Item>
+         
+          <Form.Item
+            name="email"
+            label=" Ngày đỗ xe :"
+            
+          >        
+             {infor.parkingDate}
+          </Form.Item>
+          <Form.Item
+            name="phoneNumber"
+            label="Ngày lấy xe :"
+           
+          >
+            {infor.pickUpDate}
+          </Form.Item>
+          <Form.Item
+            name="dateOfBirth"
+            label="Thành tiền :"
+           
+          >
+              {infor.totalPrice}
+          </Form.Item>
+         
+          
+        </Form>
+        
+              
+               
+                
+               
+               
+      </Modal>
         </>
     )
 }
-export default ManageRequest;
+export default ManageParkingDetail;

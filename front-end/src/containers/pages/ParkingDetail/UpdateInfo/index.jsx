@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Input, Row } from 'antd';
+import { Button, Col, Input, Row,Image } from 'antd';
 import { AutocompleteMap } from '../../../../components/GoogleMapComponent';
 import { Status } from '../../../../utils/constants';
 import UploadImage from '../../../../components/UploadImage'
 import { CloseCircleFilled } from '@ant-design/icons';
 import { updateParkingByID } from '../../../../services/parkingDetailServices';
 const { TextArea } = Input;
-export const UpdateParkingInfo = ({ parking, setLoading}) => {
+const contentStyle = {
+    height: '100px',
+    width: '100%',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#1e81d2',
+};
+export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
     const [updateParking, setupdateParking] = useState({})
     const [location, setLocation] = useState(null)
     const [images, setImages] = useState([])
@@ -23,10 +31,10 @@ export const UpdateParkingInfo = ({ parking, setLoading}) => {
     }, [location])
     useEffect(() => {
         if(parking) {
-            const imagesURLs =  parking.images.length > 0 && parking.images.map(e => {
-                return e.url
+            const imagesURLs =  parkingImages.length > 0 && parkingImages.map(e => {
+                return e
             })
-            imagesURLs.push("https://thumbsnap.com/i/H4US1EmV.jpg")
+            
             setImages(imagesURLs)
             setupdateParking({
                 ...updateParking,
@@ -51,7 +59,7 @@ export const UpdateParkingInfo = ({ parking, setLoading}) => {
                             images.map((item, index) =>{
                                 return (
                                     <Col span={8} style={{padding: 5, position: 'relative'}}>
-                                        <img src={item} style={{width: 120}} />
+                                        <Image src={item} style={contentStyle} />
                                         <CloseCircleFilled 
                                             style={{
                                                 position: 'absolute',
@@ -116,7 +124,7 @@ export const UpdateParkingInfo = ({ parking, setLoading}) => {
                                 _updateParking.lastModifyAt = new Date()
                                 _updateParking.imagesURLs = images
                                 console.log(_updateParking)
-                                updateParkingByID(parking.id, _updateParking, setLoading)
+                                updateParkingByID(parking.parkingID, _updateParking, setLoading)
                             }}
                             style={{margin: "20px 0"}}
                         >

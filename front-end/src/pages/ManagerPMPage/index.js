@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,notification } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,notification,Form } from "antd";
 import {
   FilterOutlined,
   RedoOutlined,ExclamationCircleFilled
@@ -14,7 +14,15 @@ export default function ManageParkingManager() {
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Gender");
   const [open, setOpen] = useState(false);
-  
+  const [infor,setInfor]=useState({
+    fullname: "",
+    userName:"",
+    password:"",
+    email:"",
+    dateOfBirth:"",
+
+});
+  const [openInfo,setOpenInfor]=useState(false);
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -464,8 +472,65 @@ export default function ManageParkingManager() {
         />
       )}
       {!open ? <></> : 
-      <AddPM setOpen={setOpen} open={open} />
+      <AddPM setOpen={setOpen} open={open} setInfor={setInfor} setOpenInfor={setOpenInfor} infor={infor} />
       }
+        <Modal
+        title="Hóa đơn"
+        open={openInfo}
+        footer={null}
+        onCancel={()=>setOpenInfor(false)}
+        onOk={()=>setOpenInfor(false) }
+      >
+           <Form
+        >
+          <Form.Item
+            name="lastName"
+            label="Họ tên:"
+           
+          > {infor.fullname}
+            {/* <Input disabled /> */}
+          </Form.Item>
+          <Form.Item
+            name="firstName"
+            label="Tài khoản:"
+             
+          >
+              {infor.userName}
+          </Form.Item>
+          
+
+          <Form.Item
+            name="userName"
+            label="Password"
+          >
+            {infor.password}
+          </Form.Item>
+         
+          <Form.Item
+            name="email"
+            label="E-mail :"
+            
+          >        
+             {infor.email}
+          </Form.Item>
+          <Form.Item
+            name="phoneNumber"
+            label="Ngày sinh :"
+           
+          >
+            {infor.dateOfBirth}
+          </Form.Item>
+          
+         
+          
+        </Form>
+        
+              
+               
+                
+               
+               
+      </Modal>
     </>
   );
 }

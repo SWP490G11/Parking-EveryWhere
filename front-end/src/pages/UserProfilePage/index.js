@@ -77,11 +77,11 @@ const UserProfile=()=> {
       setImage(response.data.image.url);
       console.log(image);
     }).catch((error) => {
-      notification.warning({
-        message: `Load profile fail`,
-        description: 'Please check input again',
-        placement: 'topLeft',
-      });
+      // notification.warning({
+      //   message: `Load profile fail`,
+      //   description: 'Please check input again',
+      //   placement: 'topLeft',
+      // });
     });
   },[image]);
   useEffect(()=>{
@@ -95,8 +95,8 @@ const UserProfile=()=> {
                         <EditProfile profile={profile} image={image}  />
                     </>
     :
-    <Row gutter={16}>
-    <Col span={10}>
+    <Row gutter={70}>
+    <Col span={8}>
       <Card >
       <div className="avatar">
           <div className="user-avatar">
@@ -122,7 +122,7 @@ const UserProfile=()=> {
           </div>
       </Card>
     </Col>
-    <Col span={14}>
+    <Col span={16}>
       <Card title="Thông tin người dùng" bordered={true}>
       <Form
           {...formItemLayout}

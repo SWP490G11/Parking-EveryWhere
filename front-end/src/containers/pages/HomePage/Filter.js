@@ -1,9 +1,10 @@
 import React from 'react'
-import { Select, Form, Slider } from 'antd'
+import {  Form, Slider } from 'antd'
 import { Sort } from '../../../utils/constants'
 import { useLocationState } from '../../../hooks/locationState'
 export const Filter = ({filter, setFilter }) => {
     const [locationState] = useLocationState()
+    
     return (
         <div>
             <div
@@ -14,13 +15,18 @@ export const Filter = ({filter, setFilter }) => {
                     marginBottom: 20
                 }}
             >
-                <div style={{width: '50%'}}>
-                    Khoảng cách
+                <div style={{width: '80%'}}>
+                    
+                    <Form.Item label={"Khoảng cách"}>
+
                     <Slider 
-                        range 
-                        defaultValue={[0, 500]} 
+                        tooltip={{
+                            open: true,
+                            placement:"bottom"
+                          }}
+                        defaultValue={30} 
                         min={0} 
-                        max={500} 
+                        max={100} 
                         step={1} 
                         disabled={!locationState.hasYourLocation}
                         onChange={e => {
@@ -30,6 +36,8 @@ export const Filter = ({filter, setFilter }) => {
                             })
                         }}
                     />
+                    </Form.Item>
+                    
                 </div>
                
             </div>

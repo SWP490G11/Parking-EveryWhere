@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toRoute } from '../../utils/helpers';
 import api from "../../services/api";
+import { Role } from '../../utils/constants';
 import { routes } from '../../utils/routes';
 import { useAuthState } from '../../hooks/authState';
 const { Panel } = Collapse;
@@ -21,6 +22,7 @@ export default function ManageParking() {
   const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [status,setStatus]= useState("Status");
+  const [type,setType]= useState("Type");
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -226,66 +228,77 @@ const carColumns = [
   });
   const [searchCar, setSearchCar] = useState("");
   const[open1,setOpen1]=useState(false)
-
+ 
   const onClosez = () => {
     setOpen1(false);
   };
   const onClose = () => {
         setOpen(false);
     };
-    const loadSlotParking=(values)=>{
-      console.log(values);
-      api.get(`slots/${values}`)
-        .then((response) =>{
-          setSlotParking(response.data)})
-          .catch((e)=>{notification.warning({
-          message: `Lỗi dữ liệu`,
-          description: "Tải dữ liệu bị lỗi",
-          placement: "topLeft",
-        });});
-    }
-  useEffect(() => {
-    api.get(`parkings-of-owner`)
-      .then(function (response) {
-        let respData = response.data;
+  
+  const setUpData =(response)=>{
+    let respData = response.data;
       
-        respData.forEach((element) => {
-       
-          element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
-          element.action = [
-             <Button className='buttonState'
-             onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
-                        >
-                        <EditFilled/>
-                </Button>,
-                <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
-                
-                }}><PlusOutlined /></Button>,
-                <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
-                
-                }}><UnorderedListOutlined /></Button>,
-          ];
-          
-        });
-        setData(
-          respData.sort((a, b) => {
-            if (
-              a.parkingName.trim().toLowerCase() >
-              b.parkingName.trim().toLowerCase()
-            ) {
-              return 1;
-            }
-            if (
-              b.parkingName.trim().toLowerCase() >
-              a.parkingName.trim().toLowerCase()
-            ) {
-              return -1;
-            }
-            return 0;
-          })
-        );
-      }, [])
-      .catch(() => {});
+    respData.forEach((element) => {
+     
+      element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
+      element.action = [
+         <Button className='buttonState'
+         onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
+                    >
+                    <EditFilled/>
+            </Button>,
+            <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
+            
+            }}><PlusOutlined /></Button>,
+            <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+            
+            }}><UnorderedListOutlined /></Button>,
+      ];
+      
+    });
+    setData(
+      respData.sort((a, b) => {
+        if (
+          a.parkingName.trim().toLowerCase() >
+          b.parkingName.trim().toLowerCase()
+        ) {
+          return 1;
+        }
+        if (
+          b.parkingName.trim().toLowerCase() >
+          a.parkingName.trim().toLowerCase()
+        ) {
+          return -1;
+        }
+        return 0;
+      })
+    );
+  }
+
+  useEffect(() => {
+  authState?.data?.role === Role.Admin?(
+    api.get(`parkings`)
+    .then(function (response) {
+      setUpData(response)
+    },[])
+    .catch(() => {})
+   
+ ):(
+  api.get(`parkings-of-owner`)
+  .then(function (response) {
+    setUpData(response)
+  },[])
+  .catch(() => {})
+ 
+  
+  )  
+ 
+   
+      
+   
+   
+   
   }, [data]);
   useEffect(() => {
     api.get(`cars`)
@@ -327,7 +340,8 @@ const [addSlot,setAddSlot]= useState(false)
               // || u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
-      
+  const dataType =
+        type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
   const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -339,7 +353,17 @@ const [addSlot,setAddSlot]= useState(false)
             );
             // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
  
-  
+ const loadSlotParking=(values)=>{
+    console.log(values);
+      api.get(`slots/${values}`)
+      .then((response) =>{
+        setSlotParking(response.data)})
+      .catch((e)=>{notification.warning({
+        message: `Lỗi dữ liệu`,
+      description: "Tải dữ liệu bị lỗi",
+    placement: "topLeft",
+     });});
+            }
   const pagination = {
     current: page,
     PageSize: pageSize,
@@ -353,6 +377,31 @@ const [addSlot,setAddSlot]= useState(false)
     },
    showSizeChanger:true, 
       showTotal: total => `Total ${total} Student`
+  }; 
+  const pagination1 = {
+    current: page,
+    PageSize: pageSize,
+    total: finalCar.length,
+    pageSizeOptions: [5, 10, 15, 20],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page, pageSize) => {
+      setPage(page);
+      setPageSize(pageSize);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Total ${total} Student`
+  };
+  const renderType = () => {
+    switch(type) {
+        case 'NONROOF':
+          return 'Không có mái che'
+        case 'ROOFED':
+          return 'Có mái che'
+       
+        default:
+          return 'Tất cả'
+      }
   };
   const renderContent = () => {
     switch(status) {
@@ -393,7 +442,7 @@ const [addSlot,setAddSlot]= useState(false)
             overlay={
               <Menu>
                 <Menu.Item
-                  value="Male"
+                  
                   onClick={() => {
                     setStatus("Chờ duyệt");
                   }}
@@ -402,7 +451,7 @@ const [addSlot,setAddSlot]= useState(false)
                   Chờ duyệt
                 </Menu.Item>
                 <Menu.Item
-                  value="Female"
+                
                   onClick={() => {
                     setStatus("Từ chối");
                   }}
@@ -411,7 +460,7 @@ const [addSlot,setAddSlot]= useState(false)
                   Từ chối
                 </Menu.Item>
                 <Menu.Item
-                  value="Female"
+                
                   onClick={() => {
                     setStatus("Khả dụng");
                   }}
@@ -717,12 +766,53 @@ const [addSlot,setAddSlot]= useState(false)
         open={open1}
         closable={true}
       >
+          <Form.Item label={'Loại'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setType('ROOFED');
+                  }}
+                >
+                  {" "}
+                  Có mái che
+                </Menu.Item>
+               
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setType('NONROOF');
+                  }}
+                >
+                  {" "}
+                  Không mái che
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setType("Type");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderType()}
+            
+          </Dropdown.Button>
+            </Form.Item>
           <Collapse  >{
-            slotParking.map((e,index)=>(
+            dataType.map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>
-                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí{index+1}  </Col>
+                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí {index+1}  </Col>
                
                 <Col span={8}>
               {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
@@ -733,7 +823,13 @@ const [addSlot,setAddSlot]= useState(false)
               </Row>
              
               </>}>
-        <p>{e.parkingDetail.length >0 ?  "detailSlot" :<Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}</p>
+        <p>
+          {e.status !== 'Available' ?  
+        // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+        <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
+        :
+        <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
+        </p>
       </Panel>
           ))
           }
@@ -846,9 +942,9 @@ const [addSlot,setAddSlot]= useState(false)
                 
               }}}
                     columns={carColumns}
-                    dataSource={finalCar}
+                    dataSource={finalCar.filter(u=>u.status==='Available')}
                     rowKey="id"
-                    pagination={pagination}
+                    pagination={pagination1}
                     on
                 />
       </Modal>
