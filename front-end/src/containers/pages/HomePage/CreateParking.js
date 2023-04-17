@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Drawer, Input, Row,Image } from 'antd';
+import { Button, Col, Drawer, Input, Row,Image ,Form} from 'antd';
 import GoogleMapComponent, { AutocompleteMap } from '../../../components/GoogleMapComponent';
 import { Status } from '../../../utils/constants';
 import UploadImage from '../../../components/UploadImage';
@@ -25,13 +25,21 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
     };
  
     return(
-        <div>
+        
             <Drawer title="Create Parking Car" placement="right" onClose={onClose} open={open} width={"70vw"}>
                <Row>
                     <Col span={12}>
-                        <div style={{padding: 15}}>
-                            Parking name
-                            <Input placeholder='Parking name' style={{margin: "20px 0"}}
+                    <Form.Item
+            name="typeOfSlot"
+            
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng loại chỗ",
+              },
+            ]}
+          > <div style={{paddingBottom: 5}}> Tên bãi đỗ</div>
+            <Input placeholder='Tên bãi đỗ' 
                                 onChange={e => {
                                     setNewParking({
                                         ...newParking,
@@ -39,21 +47,71 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
                                     })
                                 }}
                             />
-                            Address Detail
-                            <AutocompleteMap setLocation={setLocation} />
+                            </Form.Item>
+                            <Form.Item
+            name="typeOfSlot"
+            
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng loại chỗ",
+              },
+            ]}
+          ><div style={{paddingBottom: 5}}> Địa chỉ</div>
+            <AutocompleteMap setLocation={setLocation} />
+                            </Form.Item>
+                       
+                           
+                           
                             <Row>
                                 <Col span={10} >
-                                    Longitude
-                                    <Input placeholder='Longitude' style={{margin: "20px 0"}} disabled={true} value={newParking?.lon ? newParking.lon : ''}/>
+                                <Form.Item
+            name="typeOfSlot"
+            
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng loại chỗ",
+              },
+            ]}
+          > <div style={{paddingBottom: 5}}> Kinh độ</div>
+            <Input placeholder='Longitude' disabled={true} value={newParking?.lon ? newParking.lon : ''}/>
+                            </Form.Item>
+                            </Col>
+                            <Col span={4}></Col>
+                            <Col span={10} >
+                                <Form.Item
+            name="typeOfSlot"
+            
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng loại chỗ",
+              },
+            ]}
+          > <div style={{paddingBottom: 5}}> Vĩ độ</div>
+            <Input placeholder='Latitude'  disabled={true} value={newParking?.lat ? newParking.lat : ''}/>
+                            </Form.Item>
+                                   
+                                    
+                              
+                                    
                                 </Col>
-                                <Col span={4}></Col>
-                                <Col span={10}>
-                                    Latitude
-                                    <Input placeholder='Latitude' style={{margin: "20px 0"}} disabled={true} value={newParking?.lat ? newParking.lat : ''}/>
-                                </Col>
+                                
+                               
                             </Row>
-                            Description
-                            <TextArea placeholder='Description' style={{margin: "20px 0"}}
+                            
+                                <Form.Item
+            name="typeOfSlot"
+            
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng loại chỗ",
+              },
+            ]}
+          > <div style={{paddingBottom: 5}}> Thông tin</div>
+           <TextArea placeholder='Description' style={{margin: "20px 0"}}
                                 onChange={e => {
                                     setNewParking({
                                         ...newParking,
@@ -61,6 +119,8 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
                                     })
                                 }}
                             />
+                            </Form.Item>
+                            
                             <Button type='primary'
                                 onClick={e => {
                                     const _newParking = newParking
@@ -72,30 +132,34 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
                                     ParkingService.createParking(_newParking, setParking);
                                     onClose();
                                 }}
-                                style={{margin: "20px 0"}}
+                                
                             >
                                 Thêm bãi đỗ
                             </Button>
-                        </div>
+                       
                     </Col>
+                   
                     <Col span={12}>
-                        <div style={{padding: 15}}>
+                        <div style={{padding: 10}}>
                             <Row>
                                 {
                                     images.length > 0 &&
                                     images.map(item =>{
                                         return (
-                                            <Col span={8} style={{padding: 5}}>
-                                                <Image src={item} style={{height: 120}} />
+                                            <Col span={8}>
+                                                <Image src={item} />
                                             </Col>
                                         )
                                     } )
                                 }
                             </Row>
+                            <br/>
                             <UploadImage setImages={setImages} images={images}/>
                         </div>
                     </Col>
                </Row>
+               <br/>
+               <Row>
                 <GoogleMapComponent 
                     location={location} 
                     parkings={parkings}
@@ -103,7 +167,8 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
                 >
                 
                 </GoogleMapComponent>
+                </Row>
             </Drawer>
-        </div>
+       
     )
 }

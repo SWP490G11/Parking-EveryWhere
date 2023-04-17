@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { UpdateParkingInfo } from "../UpdateInfo";
 import { useAuthState } from '../../../../hooks/authState';
 import { Role } from "../../../../utils/constants";
+import {Tag} from 'antd';
 const ParkingInfo = (props) => {
     const location = useLocation();
     const [authState] = useAuthState()
@@ -15,10 +16,11 @@ const ParkingInfo = (props) => {
         }
     }, [authState])
 
-    const parkingImages = props.parking?.images;
+    const parkingImages = props.parking?.imageUrls;
 
     return (
         <div className="parking-detail-info">
+           
             {
                 !isUpdate && 
                 <div className="info-left">
@@ -29,26 +31,42 @@ const ParkingInfo = (props) => {
             <div >
                 {isUpdate ?
                     <>
-                        <UpdateParkingInfo parking={props.parking} setLoading={props.setLoading}/>
+                        <UpdateParkingInfo parkingImages={parkingImages} parking={props.parking} setLoading={props.setLoading}/>
                     </>
                     :
                     <div className="info-right">
+                        
                         <div className="right-parking-name">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Parking name: </div>
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Tên bãi đỗ: </div>
                             {props.parking?.parkingName}
                         </div>
-                        <div className="right-parking-desc">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Description: </div>
-                            <div>{props.parking?.discription}</div>
-                        </div>
-                        <div className="right-parking-address">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Address: </div>
-                            <div>{props.parking?.addressDetail}</div>
-                        </div>
+                       
                         <div className="right-parking-price">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Price: </div>
-                            <div>{props.parking?.slots[0].price}</div>
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Trạng thái: </div>
+                            <Tag color={'green'} >
+                                {props.parking?.status}
+                             </Tag>
+                           
                         </div>
+                        
+                        <div className="right-parking-desc">
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Địa chỉ: </div>
+                            
+                        </div>
+                        {props.parking?.addressDetail}
+                        <div className="right-parking-desc">
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Mô tả: </div>
+                            
+                        </div>
+                        <div>{props.parking?.discription}</div>
+                       <div className="right-parking-price">
+                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Loại chỗ: </div>
+                            
+                           
+                        </div>
+                          Có mái che:  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot} <Tag color= {'green'} >{props.parking?.status}</Tag>
+                          <br/>
+                          Không có mái che :  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot} <Tag color= {'green'} >{props.parking?.status}</Tag>
                     </div>
                 }
             </div>

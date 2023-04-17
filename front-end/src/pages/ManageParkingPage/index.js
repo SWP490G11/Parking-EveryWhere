@@ -236,58 +236,66 @@ const carColumns = [
         setOpen(false);
     };
   
-  const setUpData =()=>{
-    switch (authState?.data?.role){
-      case Role.ParkingOwner:
-        return (api.get(`parkings-of-owner`))
-      case Role.Admin:
-        return (api.get(`parkings`))
+  const setUpData =(response)=>{
+    let respData = response.data;
       
-    }
+    respData.forEach((element) => {
+     
+      element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
+      element.action = [
+         <Button className='buttonState'
+         onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
+                    >
+                    <EditFilled/>
+            </Button>,
+            <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
+            
+            }}><PlusOutlined /></Button>,
+            <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+            
+            }}><UnorderedListOutlined /></Button>,
+      ];
+      
+    });
+    setData(
+      respData.sort((a, b) => {
+        if (
+          a.parkingName.trim().toLowerCase() >
+          b.parkingName.trim().toLowerCase()
+        ) {
+          return 1;
+        }
+        if (
+          b.parkingName.trim().toLowerCase() >
+          a.parkingName.trim().toLowerCase()
+        ) {
+          return -1;
+        }
+        return 0;
+      })
+    );
   }
 
   useEffect(() => {
-   setUpData()
-      .then(function (response) {
-        let respData = response.data;
+  authState?.data?.role === Role.Admin?(
+    api.get(`parkings`)
+    .then(function (response) {
+      setUpData(response)
+    },[])
+    .catch(() => {})
+   
+ ):(
+  api.get(`parkings-of-owner`)
+  .then(function (response) {
+    setUpData(response)
+  },[])
+  .catch(() => {})
+ 
+  
+  )  
+ 
+   
       
-        respData.forEach((element) => {
-         
-          element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
-          element.action = [
-             <Button className='buttonState'
-             onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
-                        >
-                        <EditFilled/>
-                </Button>,
-                <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
-                
-                }}><PlusOutlined /></Button>,
-                <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
-                
-                }}><UnorderedListOutlined /></Button>,
-          ];
-          
-        });
-        setData(
-          respData.sort((a, b) => {
-            if (
-              a.parkingName.trim().toLowerCase() >
-              b.parkingName.trim().toLowerCase()
-            ) {
-              return 1;
-            }
-            if (
-              b.parkingName.trim().toLowerCase() >
-              a.parkingName.trim().toLowerCase()
-            ) {
-              return -1;
-            }
-            return 0;
-          })
-        );
-      },[])
-      .catch(() => {})
    
    
    

@@ -106,18 +106,18 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                 }}
             >
                 <input
-                
+                    className="ant-input css-dev-only-do-not-override-1e3x2xa pac-target-input"
                     type="text"
-                    placeholder="Search map"
+                    placeholder="Tìm tìm vị trí"
                     defaultValue={defaultValue}
-                    style={{
-                        minHeight: 36,
-                        marginBottom: 20,
-                        borderRadius: 7,
-                        width: '100%',
-                        border: '1px solid rgb(30, 129, 210)',
-                        marginTop: 20
-                    }}
+                    // style={{
+                    //     minHeight: 36,
+                    //     marginBottom: 20,
+                    //     borderRadius: 7,
+                    //     width: '100%',
+                    //     border: '1px solid rgb(30, 129, 210)',
+                    //     marginTop: 20
+                    // }}
                 />
             </Autocomplete>
         </ScriptLoaded>

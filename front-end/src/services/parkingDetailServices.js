@@ -40,8 +40,9 @@ const getFeedbackByParkingID = async (id, setFeedback) => {
 const updateParkingByID = (id, data, setLoading) => {
     try {
         api.put(`/parking/${id}`, data)
-            .then(res => {
+            .then(() => {
                 setLoading(false);
+                window.location.href = `/parking-detail/${id}`;
                 Message(TypeMessage.SUCCESS, 'Cập nhật thành công')
             })
             .catch(err => {

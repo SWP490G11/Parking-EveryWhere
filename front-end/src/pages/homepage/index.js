@@ -40,9 +40,10 @@ function HomePage() {
           <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
             <div>
                 <Row>
-                    <Col span={16}>
+                <Col span={8}> <Filter setFilter={setFilter} filter={filter} /></Col>
+                    <Col span={8}>
                     <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm bãi đỗ"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -50,7 +51,7 @@ function HomePage() {
                 setSearch(e.replace(/ /g, ""));
             }}
           /> 
-                        <Filter setFilter={setFilter} filter={filter} />
+                       
                     </Col>
                     <Col span={8} style={{ textAlign: 'right' }}>
                         {

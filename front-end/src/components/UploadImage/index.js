@@ -67,7 +67,7 @@ const UploadImage = ({ images, setImages,count }) => {
         >
             <Form.Item>
                 <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                    <Upload name="files" maxCount={count} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}>
+                    <Upload name="files" maxCount={count} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}  >
                     <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
                 </Form.Item>

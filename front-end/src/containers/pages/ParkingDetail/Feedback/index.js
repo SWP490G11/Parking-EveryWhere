@@ -53,7 +53,7 @@ export const Feedback = () => {
             parkingID: id,
           })
           .then(() => {
-            
+            window.location.reload();
             notification.success({
               message: `Thành công`,
               description: "",
@@ -61,7 +61,7 @@ export const Feedback = () => {
             });
             form.setFieldsValue({
                 content: "",
-                imageURLs: ["string"],
+                imageURLs: [],
               })
             
           })
@@ -74,7 +74,7 @@ export const Feedback = () => {
             form.setFieldsValue({
                 content: "",
                 
-                imageURLs: ["string"],
+                imageURLs: [],
                
               })
           });

@@ -4,6 +4,7 @@ import { Sort } from '../../../utils/constants'
 import { useLocationState } from '../../../hooks/locationState'
 export const Filter = ({filter, setFilter }) => {
     const [locationState] = useLocationState()
+    
     return (
         <div>
             <div
@@ -14,15 +15,18 @@ export const Filter = ({filter, setFilter }) => {
                     marginBottom: 20
                 }}
             >
-                <div style={{width: '50%'}}>
-                    <br/>
+                <div style={{width: '80%'}}>
+                    
                     <Form.Item label={"Khoảng cách"}>
 
                     <Slider 
-                        range 
-                        defaultValue={[0, 500]} 
+                        tooltip={{
+                            open: true,
+                            placement:"bottom"
+                          }}
+                        defaultValue={30} 
                         min={0} 
-                        max={500} 
+                        max={100} 
                         step={1} 
                         disabled={!locationState.hasYourLocation}
                         onChange={e => {
