@@ -47,6 +47,7 @@ namespace Back_end.Controllers
             return Ok(user.Parkings.Select(p => new
             {
                 ParkingID = p.ID,
+                
                 p.ParkingName,
                 LAT = p.LAT,
                 IsLegal = p.IsLegal,
@@ -58,7 +59,7 @@ namespace Back_end.Controllers
                     pm => new
                     {
                         pm.ID,
-                        FullName = pm.LastName + pm.FirstName,
+                        FullName = pm.LastName + " " + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
                         ImageUrl = pm.Image.URL,
@@ -81,7 +82,7 @@ namespace Back_end.Controllers
                 NumberOfNonRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.NONROOF),
 
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
-
+                
             }));
         }
 
@@ -143,7 +144,7 @@ namespace Back_end.Controllers
                     pm => new
                     {
                         pm.ID,
-                        FullName = pm.LastName + pm.FirstName,
+                        FullName = pm.LastName + " " + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
                         ImageUrl = pm.Image.URL,
@@ -191,13 +192,21 @@ namespace Back_end.Controllers
                     pm => new
                     {
                         pm.ID,
-                        FullName = pm.LastName + pm.FirstName,
+                        FullName = pm.LastName +" "+ pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
                         ImageUrl = pm.Image.URL,
                     }
                     ),
               p.Feedbacks,
+              Owner = new {
+                  p.Owner.ID,
+              FullName = p.Owner.FirstName + " " + p.Owner.LastName,
+              PhoneNumber = p.Owner.PhoneNumber,
+              Email = p.Owner.Email,
+              p.Owner.Gender,
+              
+              },
 
                 NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
                 NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
@@ -214,7 +223,7 @@ namespace Back_end.Controllers
                     )
 
           
-            });
+            });;
         }
 
 
@@ -293,7 +302,7 @@ namespace Back_end.Controllers
                     pm => new
                     {
                         pm.ID,
-                        FullName = pm.LastName + pm.FirstName,
+                        FullName = pm.LastName + " " + pm.FirstName,
                         PhoneNumber = pm.PhoneNumber,
                         pm.Email,
                         ImageUrl = pm.Image.URL,
