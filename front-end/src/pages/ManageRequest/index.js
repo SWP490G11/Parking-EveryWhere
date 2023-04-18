@@ -90,7 +90,15 @@ import api from "../../services/api";
 //===========================================================
 //===============================================
 const setUpData =(response)=>{
-  let respData = response.data
+ 
+}
+// const ParkingID =localStorage.getItem("parkingID"); 
+// const role =localStorage.getItem("role"); 
+    useEffect(() => {
+    //  authState?.data?.role ===Role.ParkingOwner
+        api.get(`pending-request-of-all-parkings-of-owner`,)
+        .then(function(response)  {
+          let respData = response.data
   respData.forEach((element) => {
       //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
       element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
@@ -134,23 +142,15 @@ const setUpData =(response)=>{
       return 0;
     })
   );
-}
-const ParkingID =localStorage.getItem("parkingID"); 
-const role =localStorage.getItem("role"); 
-    useEffect(() => {
-      if( authState?.data?.role ===Role.ParkingOwner){
-        api.get(`pending-request-of-all-parkings-of-owner`,)
-        .then(function(response)  {
-          setUpData(response);
           }, [])
-          .catch(() => {});}
-        else{
-          api.get(`pending-request/${ParkingID}`)
-      .then(function (response) {
-        setUpData(response)
-      }, [])
-      .catch(() => {});
-        }
+          .catch(() => {});
+      //   else{
+      //     api.get(`pending-request/${ParkingID}`)
+      // .then(function (response) {
+      //   setUpData(response)
+      // }, [])
+      // .catch(() => {});
+      //   }
 
 }, [data])
 

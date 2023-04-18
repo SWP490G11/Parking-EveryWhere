@@ -70,18 +70,18 @@ function HeaderContainer() {
                
 
             });
-            
+            if (profileState?.data?.role === 'Admin') {
+              api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
+              
+            } if(profileState?.data?.role === 'ParkingOwner') {
+              api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})} 
           
         } else if (location.pathname !== '/login' && location.pathname !=='/register') {
             window.location.replace('/login')
         }
-    }, [location.pathname, token]);
+    }, [location.pathname, token,countState]);
     useEffect(() => {
-      if (profileState?.data?.role === 'Admin') {
-        api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
-        
-      } if(profileState?.data?.role === 'ParkingOwner') {
-        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})}
+      
       // } if(profileState?.data?.role === 'ParkingManager') {
       //   api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
       // }
