@@ -3,16 +3,15 @@ import { Role, Status } from '../../../utils/constants';
 import { calDistance, toRoute } from '../../../utils/helpers';
 import { routes } from '../../../utils/routes';
 import config from '../../../config';
-import { ConfirmDelete } from './ConfirmDelete';
+//import { ConfirmDelete } from './ConfirmDelete';
 import { useAuthState } from '../../../hooks/authState';
 import { useNavigate } from "react-router-dom";
 import { useLocationState } from '../../../hooks/locationState';
-const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
+const ListParking = ({ search, filter, parkings, setLocation }) => {
     const [authState] = useAuthState()
     const [locationState] = useLocationState()
     const navigateTo = useNavigate();
-    const data = parkings
-    .filter((item) => {
+    const data = parkings.filter((item) => {
         if (search) {
             if (
                 item.parkingName.toLowerCase().includes(String(search).toLowerCase())
@@ -40,7 +39,8 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
         } catch(e) {
             return true
         }
-    });
+    }).filter((u)=>u.status ==="Available")
+   ;
     return (
         <List
             className="parking-list"
@@ -69,7 +69,7 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                     style={{ cursor: 'pointer' }}
                 >
                     <List.Item.Meta
-                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls[0] ? item.imageUrls[0] : config.DEFAULT_IMG_URL} alt='' />}
+                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls ? item.imageUrls : config.DEFAULT_IMG_URL} alt='' />}
                         title={<a onClick={(e)=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>
                             <div style={{ marginBottom: '0.25rem' }}>

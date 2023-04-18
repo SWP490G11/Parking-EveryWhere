@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { UpdateParkingInfo } from "../UpdateInfo";
 import { useAuthState } from '../../../../hooks/authState';
 import { Role } from "../../../../utils/constants";
-import {Tag} from 'antd';
+import {Tag,Row,Col} from 'antd';
 const ParkingInfo = (props) => {
     const location = useLocation();
     const [authState] = useAuthState()
@@ -59,25 +59,37 @@ const ParkingInfo = (props) => {
                             
                         </div>
                         <div>{props.parking?.discription}</div>
-                       <div className="right-parking-price">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Loại chỗ: </div>
-                            
-                           
-                        </div>
-                          Có mái che:  {props.parking?.numberOfRoofAvailableSlot}/{props.parking?.numberOfRoofSlot}  -
-                          {props.parking?.numberOfRoofAvailableSlot >0 ? <><Tag color= {'green'} >{props.parking?.status}</Tag></> :<> <Tag color= {'red'} >{props.parking?.status}</Tag></> } 
-                          <br/>
-                          Không có mái che :  {props.parking?.numberOfNonRoofAvailableSlot}/{props.parking?.numberOfNonRoofSlot}  -
-                          {props.parking?.numberOfRoofAvailableSlot >0 ? <><Tag color= {'green'} >{props.parking?.status}</Tag></> :<> <Tag color= {'red'} >{props.parking?.status}</Tag></> } 
-
+                         
                           <div className="right-parking-desc">
                             <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div>
                             
                         </div>
-                        <div>{props.parking?.priceDetails?.map((e)=>{
-                            return(
-                              e.slotType + e.price )
-                        })}</div>
+                        <div>{props.parking?.priceDetails?.map((e,)=>(
+                             <Row>
+                             <Col span={12}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
+                             
+                             <Col span={5}>
+                                {e.slotType==='ROOFED' ?
+                                (props.parking?.numberOfRoofAvailableSlot >0 ?
+                                     <><Tag color= {'green'} >{props.parking?.numberOfRoofAvailableSlot+"/"+props.parking?.numberOfRoofSlot}</Tag></> 
+                                :
+                                <> <Tag color= {'red'} >{props.parking?.numberOfRoofAvailableSlot+"/"+props.parking?.numberOfRoofSlot}</Tag></>) 
+                                :(props.parking?.numberOfNonRoofAvailableSlot >0 ?
+                                    <><Tag color= {'green'} >{ props.parking?.numberOfNonRoofAvailableSlot+"/"+props.parking?.numberOfNonRoofSlot}</Tag></> 
+                               :
+                               <> <Tag color= {'red'} >{ props.parking?.numberOfNonRoofAvailableSlot+"/"+props.parking?.numberOfNonRoofSlot}</Tag></>)   }
+                            
+                           
+                         </Col>
+                         <Col span={1}>-</Col>
+                         <Col span={5}><Tag color={'geekblue'} >
+                            {e.price} Đ
+                         </Tag></Col>
+                           </Row>
+                            
+                        )
+                        )
+                        }</div>
                         </div>
                 }
             </div>

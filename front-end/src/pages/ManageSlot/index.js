@@ -222,7 +222,7 @@ const [searchCar, setSearchCar] = useState("");
         // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
         <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
         :
-        <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
+        <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
         </p>
       </Panel>
           ))

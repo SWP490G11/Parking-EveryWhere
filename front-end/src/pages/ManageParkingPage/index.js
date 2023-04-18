@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
 import {
-  FilterOutlined,
+  FilterOutlined,DeleteOutlined,
   EditFilled,
   CloseSquareOutlined,PlusOutlined,UnorderedListOutlined,SearchOutlined
 } from "@ant-design/icons";
@@ -215,6 +215,19 @@ const carColumns = [
 
         });
 };
+const showPromiseDelete = (id) => {
+  Modal.confirm({
+    title: 'Bạn muốn xóa bãi đỗ này?',
+    content: 'Bãi đỗ này sẽ bị xóa ra khỏi danh sách',
+    onOk() {
+      return new Promise((resolve, reject) => {
+        api.delete(`/parking/${id}`)
+        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+      }).catch(() => console.log('Oops errors!'));
+    },
+    onCancel() {},
+  });
+};
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     title: "Notice",
@@ -241,19 +254,27 @@ const carColumns = [
       
     respData.forEach((element) => {
      
-      element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
+      element.status = element.status ==='Available' ? "Đang hoạt động" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
       element.action = [
-         <Button className='buttonState'
+         <Button className='buttonState' disabled={element.status ==='Đang hoạt động' ? false : true}
          onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
                     >
                     <EditFilled/>
             </Button>,
-            <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
             
             }}><PlusOutlined /></Button>,
-            <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
             
             }}><UnorderedListOutlined /></Button>,
+            
+           
+            
+            <Button disabled={element.status ==='Từ chối' ? false : true} onClick={() => 
+              showPromiseDelete(element.parkingID)
+            }><DeleteOutlined /></Button>
+         
+            
       ];
       
     });
@@ -376,7 +397,7 @@ const [addSlot,setAddSlot]= useState(false)
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+      showTotal: total => `Tổng ${total} bãi đỗ`
   }; 
   const pagination1 = {
     current: page,
@@ -408,7 +429,7 @@ const [addSlot,setAddSlot]= useState(false)
         case 'Status':
           return 'Tất cả'
         case 'Available':
-          return 'Khả dụng'
+          return 'Đang hoạt động'
         case 'Pending':
           return 'Chờ duyệt'
         case 'Cancel':
@@ -462,11 +483,11 @@ const [addSlot,setAddSlot]= useState(false)
                 <Menu.Item
                 
                   onClick={() => {
-                    setStatus("Khả dụng");
+                    setStatus("Đang hoạt động");
                   }}
                 >
                   {" "}
-                  Khả dụng
+                  Đang hoạt động
                 </Menu.Item>
                
                 <Menu.Item
@@ -717,11 +738,6 @@ const [addSlot,setAddSlot]= useState(false)
           </Form.Item>
             </Col>
           </Row>
-         
-         
-         
-         
-         
           
           <Form.Item
             name="discription"
@@ -808,7 +824,7 @@ const [addSlot,setAddSlot]= useState(false)
           </Dropdown.Button>
             </Form.Item>
           <Collapse  >{
-            dataType.map((e,index)=>(
+            slotParking.map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>
@@ -828,7 +844,7 @@ const [addSlot,setAddSlot]= useState(false)
         // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
         <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
         :
-        <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
+        <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
         </p>
       </Panel>
           ))

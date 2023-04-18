@@ -19,21 +19,21 @@ function HomePage() {
     const [parkings, setParking] = useState([]);
    
     useEffect(() => {
-        // if (authState?.data?.role === Role.ParkingOwner) {
-        //     ParkingService.getAllParkingOwner(setParking,setLoading)
-        // } else {
+        if (authState?.data?.role === Role.ParkingOwner) {
+            ParkingService.getAllParkingOwner(setParking,setLoading)
+        } else {
             ParkingService.getAllParking(setParking, setLoading)
-        //}
+        }
     }, [authState])
-    const finalData =
-    search === ""? parkings : (parkings.filter((u) =>
-    u.parkingName
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .includes(search.toLowerCase().replace(/\s+/g, "")) 
-              // || u.id.toLowerCase().includes(searchText.toLowerCase())
-        ) 
-        );
+    // const finalData =
+    // search === ""? parkings : (parkings.filter((u) =>
+    // u.parkingName
+    // .toLowerCase()
+    // .replace(/\s+/g, "")
+    // .includes(search.toLowerCase().replace(/\s+/g, "")) 
+    //           // || u.id.toLowerCase().includes(searchText.toLowerCase())
+    //     ) 
+    //     );
     return (
     
        
@@ -66,7 +66,7 @@ function HomePage() {
             <Row gutter={10}>
                 <Col span={10}>
                     <Card title="Danh sách bãi đỗ xe" bordered={true}>
-                        <ListParking search={search} filter={filter} parkings={finalData.filter((u)=>u.status ==="Available")} setLocation={setLocation} setParking={setParking} />
+                        <ListParking search={search} filter={filter} parkings={parkings} setLocation={setLocation} setParking={setParking} />
                     </Card>
                 </Col>
                 {
@@ -74,7 +74,7 @@ function HomePage() {
                     <Col span={14} >
                     <Card title={<AutocompleteMap setLocation={setLocation} />} bordered={true}>
                     
-                            <GoogleMapComponent location={location} parkings={parkings.filter((u)=>u.status ==="Available")} />
+                            <GoogleMapComponent location={location} parkings={parkings} />
                 </Card>
                         
                            

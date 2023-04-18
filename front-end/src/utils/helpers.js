@@ -3,8 +3,8 @@ import { TypeMessage } from './constants';
 
 export const calDistance = (lat1, lng1, lat2, lng2) => {
     const google = window.google
-    const location_1 = new google.maps.LatLng(lat1, lng1)
-    const location_2 = new google.maps.LatLng(lat2, lng2)
+    const location_1 = new window.google.maps.LatLng(lat1, lng1)
+    const location_2 = new window.google.maps.LatLng(lat2, lng2)
     const distance = google.maps.geometry.spherical.computeDistanceBetween(location_1, location_2)
     return distance / 1000
 }

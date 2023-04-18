@@ -9,11 +9,12 @@ import { Feedback } from '../../containers/pages/ParkingDetail/Feedback';
 import {FormOutlined} from '@ant-design/icons';
 import config from '../../config';
 import api from "../../services/api";
- 
+import { useAuthState } from '../../hooks/authState';
   const { TextArea } = Input;
 function ParkingDetail() {
     const param = useParams();
     const id = param.parkingID;
+    const [authState] =useAuthState();
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [parkingDetail, setParkingDetail] = useState();
     const [loading, setLoading] = useState(true);
@@ -57,8 +58,9 @@ function ParkingDetail() {
                         <Row >
                        
                        <Col span={10} offset={14} style={{marginTop:'20px'}}>
-                       <Button className="btn-booking" onClick={showModal} type="default"  icon={<FormOutlined />}>
-                       Gửi yêu cầu</Button>
+                        {authState?.data?.role === 'Customer' ? <Button className="btn-booking" onClick={showModal} type="default"  icon={<FormOutlined />}>
+                       Gửi yêu cầu</Button>: null}
+                       
                            </Col>
                        </Row>
                     </Card>

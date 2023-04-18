@@ -68,8 +68,7 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
-                localStorage.setItem("parkingID",data.data.parking.id);
-                localStorage.setItem("role",data.data.role);
+               
 
             });
             
@@ -83,10 +82,10 @@ function HeaderContainer() {
         api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
         
       } if(profileState?.data?.role === 'ParkingOwner') {
-        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})
-      } if(profileState?.data?.role === 'ParkingManager') {
-        api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
-      }
+        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})}
+      // } if(profileState?.data?.role === 'ParkingManager') {
+      //   api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
+      // }
   }, [countState]);
 
     const navigate = useNavigate();
