@@ -86,6 +86,37 @@ namespace Back_end.Controllers
             }));
         }
 
+      [HttpGet("/parkings-of-owner-available")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner,Role.ParkingManager)]
+        public async Task<IActionResult> GetParkingsOfOwnerAvaiable()
+        {
+
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+
+            var user = mwi.User;
+            if (user == null) return NotFound();
+
+
+
+
+            return Ok(user.Parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+          
+                ImageUrls = p.Images.Select(i => i.URL).FirstOrDefault(),
+                
+            }).Where(p=>p.Status == Status.Available));
+        }
+
         [HttpGet("/parking-manager-of-parking/{id}")]
         [Authorization.Authorize(Role.Admin, Role.ParkingOwner)]
         public IActionResult GetParkingManagerOfParking(string id)
@@ -169,6 +200,30 @@ namespace Back_end.Controllers
 
             })) ;
         }
+
+         [HttpGet("/parkings-available")]
+        [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer,Role.ParkingManager)]
+        public async Task<IActionResult> GetAllAvaiable()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var parkings = await _respository.GetAllAsync();
+
+            return Ok(parkings.Select(p => new
+            {
+                ParkingID = p.ID,
+                p.ParkingName,
+                LAT = p.LAT,
+                IsLegal = p.IsLegal,
+                p.LON,
+                p.Status,
+                p.Discription,
+                p.AddressDetail,
+                ImageUrls = p.Images.Select(i => i.URL).FirstOrDefault(),
+
+            }).Where(p=>p.Status == Status.Available)) ;
+        }
+
 
         [HttpGet("/parking/{id}")]
          [Authorization.Authorize(Role.Admin, Role.ParkingOwner, Role.Customer,Role.ParkingManager)]
