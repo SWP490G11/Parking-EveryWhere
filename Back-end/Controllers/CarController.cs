@@ -37,7 +37,7 @@ namespace Back_end.Controllers
                     c.CarOwner.ID,
                     c.CarOwner.Email,
                     c.CarOwner.PhoneNumber,
-                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
 
                 },
                 ParkingDetail = c.ParkingDetails.Select(p => new {
@@ -64,24 +64,22 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var cars = await _respository.GetAllAsync();
+            var cars = await _respository.GetAllAvailable();
 
             return Ok(cars.Select(c => new {
                 c.ID,
                 c.CarNumber,
                 c.CarModel,
-                c.Status,
+                c.Status,                
                 CarOwner = new
                 {
                     c.CarOwner.ID,
                     c.CarOwner.Email,
                     c.CarOwner.PhoneNumber,
-                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
 
                 },
-                
-
-            }).Where(p=>p.Status == Status.Available)
+            })
      );
         }
         
@@ -103,7 +101,7 @@ namespace Back_end.Controllers
                     c.CarOwner.ID,
                     c.CarOwner.Email,
                     c.CarOwner.PhoneNumber,
-                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
 
                 },
                 ParkingDetail = c.ParkingDetails.Select(p => new {
