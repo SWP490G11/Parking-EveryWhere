@@ -35,7 +35,8 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Car>> GetCarByCarModel(string carModelID)
         {
-            return await _dbContext.Cars.Where(c=>c.CarModel.ID.ToString().Trim().ToLower().Equals(carModelID.ToLower().Trim())).ToListAsync();
+            return await _dbContext.Cars.Include(c => c.CarModel).Include(c => c.ParkingDetails)
+                .ThenInclude(pd => pd.Slot).Where(c=>c.CarModel.ID.ToString().Trim().ToLower().Equals(carModelID.ToLower().Trim())).ToListAsync();
         }
 
         public async Task AddAsync(CarDTO model, User ownner)
@@ -72,7 +73,9 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Car>> GetAllAsync()
         {
-            return await _dbContext.Cars.Include(c=>c.CarModel).ToListAsync();
+            return await _dbContext.Cars.Include(c=>c.CarModel).Include(c=>c.ParkingDetails)
+                .ThenInclude(pd=>pd.Slot)
+                .ToListAsync();
         }
 
  
@@ -80,7 +83,8 @@ namespace Back_end.Respository
         public async Task<Car> GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.Cars.FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Cars.Include(c => c.CarModel).Include(c => c.ParkingDetails)
+                .ThenInclude(pd => pd.Slot).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }

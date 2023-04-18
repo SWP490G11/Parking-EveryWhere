@@ -176,7 +176,7 @@ namespace Back_end.Respository
                 .Include(u => u.Image).ThenInclude(i => i.Parking)
                 .Include(u => u.Image).ThenInclude(i => i.Feedback)
                  .Include(u => u.Cars).ThenInclude(c => c.CarModel)
-                 .Include(u => u.Cars).ThenInclude(c=>c.ParkingDetails)
+                 .Include(u => u.Cars).ThenInclude(c=>c.ParkingDetails).ThenInclude(pd=>pd.Slot)
                  .Include(u => u.MembershipPackage).ThenInclude(m => m.SubcribeBy)
                  .Include(u => u.Transaction)
                  .Include(u=>u.Requests)

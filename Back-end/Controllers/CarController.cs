@@ -4,6 +4,7 @@ using Back_end.Models;
 using Back_end.Respository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Back_end.Entities;
 
 namespace Back_end.Controllers
 {
@@ -26,7 +27,35 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var cars = await _respository.GetAllAsync();
 
-            return Ok(cars);
+            return Ok(cars.Select(c => new {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+                c.Status,
+                CarOwner = new
+                {
+                    c.CarOwner.ID,
+                    c.CarOwner.Email,
+                    c.CarOwner.PhoneNumber,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+
+                },
+                ParkingDetail = c.ParkingDetails.Select(p => new {
+                    p.ID,
+                    p.ParkingDate,
+                    p.PickUpDate,
+                    p.TotalPrice,
+                    p.Note,
+                    Slot = new
+                    {
+                        p.Slot.ID,
+                        p.Slot.TypeOfSlot,
+                        p.Slot.Discription,
+                    }
+                })
+
+            })
+     );
         }
 
         [HttpGet("/cars/{carModelID}")]
@@ -41,29 +70,66 @@ namespace Back_end.Controllers
                 c.ID,
                 c.CarNumber,
                 c.CarModel,
+                c.Status,
+                CarOwner = new
+                {
+                    c.CarOwner.ID,
+                    c.CarOwner.Email,
+                    c.CarOwner.PhoneNumber,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
 
-            }));
+                },
+                ParkingDetail = c.ParkingDetails.Select(p => new {
+                    p.ID,
+                    p.ParkingDate,
+                    p.PickUpDate,
+                    p.TotalPrice,
+                    p.Note,
+                    Slot = new
+                    {
+                        p.Slot.ID,p.Slot.TypeOfSlot,p.Slot.Discription,
+                    }
+                })
+
+            })
+     );
         }
 
 
         [HttpGet("/cars-of-owner")]
-         [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
+        [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingManager, Role.ParkingOwner)]
         public async Task<IActionResult> GetCarsOfOwner()
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
 
 
-            return Ok(mwi.User.Cars.Select(c => new{
-              c.ID,
-              c.CarNumber,
-              c.CarModel,
-              c.ParkingDetails,
-            })) ;
+            return Ok(mwi.User.Cars.Select(c => new {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+                c.Status,
+               
+                ParkingDetail = c.ParkingDetails.Select(p => new {
+                    p.ID,
+                    p.ParkingDate,
+                    p.PickUpDate,
+                    p.TotalPrice,
+                    p.Note,
+                    Slot = new
+                    {
+                        p.Slot.ID,
+                        p.Slot.TypeOfSlot,
+                        p.Slot.Discription,
+                    }
+                })
+
+            })
+     );
         }
 
 
-        [HttpGet("/car/{id}")]
+            [HttpGet("/car/{id}")]
 
          [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> Get(string id)
@@ -77,6 +143,21 @@ namespace Back_end.Controllers
                 c.ID,
                 c.CarNumber,
                 c.CarModel,
+                c.Status,
+
+                ParkingDetail = c.ParkingDetails.Select(p => new {
+                    p.ID,
+                    p.ParkingDate,
+                    p.PickUpDate,
+                    p.TotalPrice,
+                    p.Note,
+                    Slot = new
+                    {
+                        p.Slot.ID,
+                        p.Slot.TypeOfSlot,
+                        p.Slot.Discription,
+                    }
+                })
 
             });
         }
