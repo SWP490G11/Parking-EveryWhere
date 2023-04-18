@@ -39,7 +39,7 @@ const ListParking = ({ search, filter, parkings, setLocation }) => {
         } catch(e) {
             return true
         }
-    }).filter((u)=>u.status ==="Available")
+    })
    ;
     return (
         <List

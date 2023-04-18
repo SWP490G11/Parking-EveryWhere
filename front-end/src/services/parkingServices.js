@@ -18,10 +18,43 @@ const getAllParking = async (setParking, setLoading) => {
         setLoading(false)
     }
 }
+const getAllParkingAvailable = async (setParking, setLoading) => {
+    try {
+        api.get('/parkings-available')
+            .then(res => {
+                setParking(res.data)
+                setLoading(false)
+            })
+            .catch(err => {
+                Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu')
+                setLoading(false)
+                console.error(err)
+            })
+    } catch (error) {
+        Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu')
+        setLoading(false)
+    }
+}
 
 const getAllParkingOwner = async (setParking,setLoading) => {
     try {
         api.get('/parkings-of-owner')
+            .then(res => {
+                setParking(res.data);
+                setLoading(false);
+            })
+            .catch(err => {
+                //Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu');
+                setLoading(false);
+                console.error(err)
+            })
+    } catch (error) {
+        Message(TypeMessage.ERROR, 'Không thể lấy dữ liệu')
+    }
+}
+const getAllParkingOwnerAvailable = async (setParking,setLoading) => {
+    try {
+        api.get('/parkings-of-owner-available')
             .then(res => {
                 setParking(res.data);
                 setLoading(false);
@@ -94,5 +127,7 @@ export const ParkingService = {
     getAllParkingOwner,
     createParking,
     deleteParking,
-    getAllParkingManager
+    getAllParkingManager,
+    getAllParkingAvailable,
+    getAllParkingOwnerAvailable
 }

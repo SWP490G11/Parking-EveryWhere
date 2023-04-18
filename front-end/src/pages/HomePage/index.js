@@ -20,9 +20,9 @@ function HomePage() {
    
     useEffect(() => {
         if (authState?.data?.role === Role.ParkingOwner) {
-            ParkingService.getAllParkingOwner(setParking,setLoading)
+            ParkingService.getAllParkingOwnerAvailable(setParking,setLoading)
         } else {
-            ParkingService.getAllParking(setParking, setLoading)
+            ParkingService.getAllParkingAvailable(setParking, setLoading)
         }
     }, [authState])
     // const finalData =
