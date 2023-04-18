@@ -17,10 +17,12 @@ const [searchCar, setSearchCar] = useState("");
     const [formz] = Form.useForm();
     const [car,setCar]=useState([]);
     const [type,setType]= useState("Type");
+    const [status,setStatus]= useState("All");
     const [slotID,setSlotID] =useState("")
     const [carID,setCarID]=useState("");
     const [page, setPage] = useState(1);
     const [authState] = useAuthState();
+    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
     const [pageSize, setPageSize] = useState(10);
     const carColumns = [
         {
@@ -113,7 +115,7 @@ const [searchCar, setSearchCar] = useState("");
           });});
     }, [])
     useEffect(() => {
-        api.get(`slots/${authState?.data.parking.id}`)
+        api.get(`slots/${parkingID}`)
           .then((response) =>{
             setSlotParking(response.data)})
             .catch((e)=>{notification.warning({
@@ -121,9 +123,10 @@ const [searchCar, setSearchCar] = useState("");
             description: "Tải dữ liệu bị lỗi",
             placement: "topLeft",
           });})
-    }, [authState?.data.parking.id])
+    }, [parkingID])
     const dataType =
         type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
+    const finalSlot = status === 'All' ? dataType : dataType.filter((u)=>u.status === status);
         const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -158,8 +161,21 @@ const [searchCar, setSearchCar] = useState("");
               return 'Tất cả'
           }
       };
+      const renderStatus = () => {
+        switch(status) {
+            case 'Available':
+              return 'Còn trống'
+            case 'NotAvailable':
+              return 'Đã có xe'
+           
+            default:
+              return 'Tất cả'
+          }
+      };
     return(
         <>
+        <Row>
+          <Col span={8} >
           <Form.Item label={'Loại'}>
             <Dropdown.Button
             placement="bottom"
@@ -201,8 +217,54 @@ const [searchCar, setSearchCar] = useState("");
             
           </Dropdown.Button>
             </Form.Item>
+          </Col>
+          <Col span={8}>
+          <Form.Item label={'Trạng thái'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setStatus('Available');
+                  }}
+                >
+                  {" "}
+                  Còn trống
+                </Menu.Item>
+               
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setStatus('NotAvailable');
+                  }}
+                >
+                  {" "}
+                 Đã có xe
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setStatus("All");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderStatus()}
+            
+          </Dropdown.Button>
+            </Form.Item>
+          </Col>
+        </Row>
+         
           <Collapse  >{
-            dataType.map((e,index)=>(
+            finalSlot.map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>

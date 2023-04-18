@@ -35,7 +35,7 @@ function HeaderContainer() {
       const [error, setError] = React.useState("");
       
     const location = useLocation();
-
+    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     const handleConfirmLogout = () => {
         Modal.confirm({
@@ -50,7 +50,9 @@ function HeaderContainer() {
             return new Promise((resolve, reject) => {
               setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
               localStorage.removeItem('token');
-              
+              if(profileState?.data?.role==='ParkingManager'){
+                localStorage.removeItem('parkingID')
+              }   
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -67,25 +69,27 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
-               
+            if(profileState?.data?.role==='ParkingManager'){
+              localStorage.setItem('parkingID',profileState?.data?.parking?.id)
+            }   
 
             });
-            if (profileState?.data?.role === 'Admin') {
-              api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
-              
-            } if(profileState?.data?.role === 'ParkingOwner') {
-              api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})} 
+            
           
         } else if (location.pathname !== '/login' && location.pathname !=='/register') {
             window.location.replace('/login')
         }
-    }, [location.pathname, token,countState]);
+    }, [location.pathname, token]);
     useEffect(() => {
-      
-      // } if(profileState?.data?.role === 'ParkingManager') {
-      //   api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
-      // }
-  }, [countState]);
+      if (profileState?.data?.role === 'Admin') {
+        api.get(`pending-parkings-number`).then((res)=>{setCountState({...countState,data:res.data})}) 
+        
+      }else if(profileState?.data?.role === 'ParkingOwner') {
+        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState({...countState,data:res.data})})
+      }else  if(profileState?.data?.role === 'ParkingManager') {
+        api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState(res.data)})
+      }
+  }, [profileState]);
 
     const navigate = useNavigate();
     const items = [

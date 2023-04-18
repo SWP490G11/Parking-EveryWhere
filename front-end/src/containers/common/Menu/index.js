@@ -23,7 +23,7 @@ const MenuContainer=()=> {
         getItem(routes.MANAGERPARKING, 'Quản lý bãi xe', <CarOutlined />),
         getItem(routes.MANAGE_PARKINGDETAIL, 'Quản lý đỗ xe', <CarOutlined />),
         getItem(routes.MANAGEPARKINGMANAGER, 'Quản lý nhân viên', <CarOutlined />),
-        getItem(routes.MANAGE_REQUEST, (<Badge count={countState}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />),
+        getItem(routes.MANAGE_REQUEST, (<Badge count={countState?.data}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />),
     ]
     const menuCustomer = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
@@ -32,7 +32,7 @@ const MenuContainer=()=> {
     ]
     const menuAdmin = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
-        getItem(routes.APPROVEPARKING, (<Badge count={countState}>Phê duyệt bãi đỗ</Badge>), <CarOutlined />),
+        getItem(routes.APPROVEPARKING, (<Badge count={countState?.data}>Phê duyệt bãi đỗ</Badge>), <CarOutlined />),
         getItem(routes.MANAGECARMODEL, 'Quản lý loại xe', <CarOutlined />),
     ]
     const menuPM = [
