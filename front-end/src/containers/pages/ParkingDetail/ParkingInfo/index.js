@@ -11,10 +11,10 @@ const ParkingInfo = (props) => {
     const [isUpdate, setUpdate] = useState(false)
     useEffect(() => {
         if(authState?.data?.role) { 
-            const _isUpdate = location.pathname.includes('/update') && authState?.data?.role == Role.ParkingOwner
+            const _isUpdate = location.pathname.includes('/update') && authState?.data?.role === Role.ParkingOwner
             setUpdate(_isUpdate)
         }
-    }, [authState])
+    }, [authState, location.pathname])
 
     const parkingImages = props.parking?.imageUrls;
 

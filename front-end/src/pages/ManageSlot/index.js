@@ -121,7 +121,7 @@ const [searchCar, setSearchCar] = useState("");
             description: "Tải dữ liệu bị lỗi",
             placement: "topLeft",
           });})
-    }, [])
+    }, [authState?.data.parking.id])
     const dataType =
         type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
         const finalCar =

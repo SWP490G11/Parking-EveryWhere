@@ -1,14 +1,14 @@
-import { Button, List, Tag,Image } from 'antd';
-import { Role, Status } from '../../../utils/constants';
+import {  List, Tag,Image } from 'antd';
+import {  Status } from '../../../utils/constants';
 import { calDistance, toRoute } from '../../../utils/helpers';
 import { routes } from '../../../utils/routes';
 import config from '../../../config';
 //import { ConfirmDelete } from './ConfirmDelete';
-import { useAuthState } from '../../../hooks/authState';
+//import { useAuthState } from '../../../hooks/authState';
 import { useNavigate } from "react-router-dom";
 import { useLocationState } from '../../../hooks/locationState';
 const ListParking = ({ search, filter, parkings, setLocation }) => {
-    const [authState] = useAuthState()
+    //const [authState] = useAuthState()
     const [locationState] = useLocationState()
     const navigateTo = useNavigate();
     const data = parkings.filter((item) => {
@@ -70,7 +70,8 @@ const ListParking = ({ search, filter, parkings, setLocation }) => {
                 >
                     <List.Item.Meta
                         avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls ? item.imageUrls : config.DEFAULT_IMG_URL} alt='' />}
-                        title={<a onClick={(e)=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
+                        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                        title={<a onClick={()=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>
                             <div style={{ marginBottom: '0.25rem' }}>
                                 {item.addressDetail}

@@ -249,7 +249,12 @@ const showPromiseDelete = (id) => {
         setOpen(false);
     };
   
-  const setUpData =(response)=>{
+ 
+
+  useEffect(() => {
+  
+  api.get(`parkings-of-owner`)
+  .then(function (response) {
     let respData = response.data;
       
     respData.forEach((element) => {
@@ -295,32 +300,13 @@ const showPromiseDelete = (id) => {
         return 0;
       })
     );
-  }
-
-  useEffect(() => {
-  authState?.data?.role === Role.Admin?(
-    api.get(`parkings`)
-    .then(function (response) {
-      setUpData(response)
-    },[])
-    .catch(() => {})
-   
- ):(
-  api.get(`parkings-of-owner`)
-  .then(function (response) {
-    setUpData(response)
   },[])
-  .catch(() => {})
+  .catch(() => {}
  
   
   )  
- 
-   
-      
-   
-   
-   
-  }, [data]);
+
+  }, [data, navigateTo]);
   useEffect(() => {
     api.get(`cars`)
     .then(function(response){
@@ -397,7 +383,7 @@ const [addSlot,setAddSlot]= useState(false)
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Tổng ${total} bãi đỗ`
+      showTotal: total => `Tổng ${total} bãi dỗ`
   }; 
   const pagination1 = {
     current: page,
@@ -824,7 +810,7 @@ const [addSlot,setAddSlot]= useState(false)
           </Dropdown.Button>
             </Form.Item>
           <Collapse  >{
-            slotParking.map((e,index)=>(
+            dataType.map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>

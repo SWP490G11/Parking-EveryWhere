@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { getProfile } from '../../../services/userProfileServices';
 import { useNavigate } from "react-router-dom";
 import { Avatar, Dropdown, Layout,Modal,Button,Input,Form,notification } from 'antd';
-import {LogoutOutlined, UserOutlined,CarOutlined,RedoOutlined, BellFilled} from "@ant-design/icons";
+import {LogoutOutlined, UserOutlined,RedoOutlined,} from "@ant-design/icons";
 import api from "../../../services/api";
 const { Header } = Layout;
 const formItemLayout = {
@@ -58,8 +58,7 @@ function HeaderContainer() {
           onCancel() {},
         });
       };
-      const ParkingID =localStorage.getItem("parkingID"); 
-      const role =localStorage.getItem("role"); 
+     
     useEffect(() => {
         if (token !== '') {
             getProfile().then((data) => {
