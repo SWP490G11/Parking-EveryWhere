@@ -19,6 +19,8 @@ namespace Back_end.Respository
         Task UpdateAsync(string idString, UpdatedSlotModel updateModel);
 
         Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID);
+         Task<ICollection<Slot>> GetSlotByParkingROOF(string parkingID);
+          Task<ICollection<Slot>> GetSlotByParkingNONROOF(string parkingID);
 
         ICollection<Slot> GetListSlotAvailable();
 
@@ -116,6 +118,28 @@ namespace Back_end.Respository
                 .Where(s=>s.Parking.ID.ToString()
                 .ToLower().Trim().Equals(parkingID
                 .ToLower().Trim())).ToListAsync();
+
+            return slots;
+        }
+        public async Task<ICollection<Slot>> GetSlotByParkingROOF(string parkingID)
+        {
+            var slots = await _dbContext.Slots
+                .Include(p => p.Parking)
+                .Include(p => p.ParkingDetail).ThenInclude(pd=>pd.Car)
+                .Where(s=>s.Parking.ID.ToString()
+                .ToLower().Trim().Equals(parkingID
+                .ToLower().Trim())).Where(x=>x.TypeOfSlot== TypeOfSlot.ROOFED).ToListAsync();
+
+            return slots;
+        }
+         public async Task<ICollection<Slot>> GetSlotByParkingNONROOF(string parkingID)
+        {
+            var slots = await _dbContext.Slots
+                .Include(p => p.Parking)
+                .Include(p => p.ParkingDetail).ThenInclude(pd=>pd.Car)
+                .Where(s=>s.Parking.ID.ToString()
+                .ToLower().Trim().Equals(parkingID
+                .ToLower().Trim())).Where(x=>x.TypeOfSlot== TypeOfSlot.NONROOF).ToListAsync();
 
             return slots;
         }

@@ -58,6 +58,33 @@ namespace Back_end.Controllers
      );
         }
 
+        [HttpGet("/cars-available")]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
+        public async Task<IActionResult> GetAllAvailable()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var cars = await _respository.GetAllAsync();
+
+            return Ok(cars.Select(c => new {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+                c.Status,
+                CarOwner = new
+                {
+                    c.CarOwner.ID,
+                    c.CarOwner.Email,
+                    c.CarOwner.PhoneNumber,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+
+                },
+                
+
+            }).Where(p=>p.Status == Status.Available)
+     );
+        }
+        
         [HttpGet("/cars/{carModelID}")]
         [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetCarbyCarModel(string carModelID)
