@@ -40,6 +40,7 @@ import api from "../../services/api";
                   });
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const showPromiseDelete = (id) => {
         Modal.confirm({
           title: 'Do you want to delete these items?',
@@ -228,7 +229,21 @@ searchText === ""
       };
     return (
         <>
+         <p
+        style={{
+          display: "block",
+          fontSize: "20px",
+          margin: "0 auto",
+          textAlign: "left",
+          color: " red",
+          fontWeight: "bold",
+          paddingBottom: "20px",
+        }}
+      >
+        Danh sách yêu cầu 
+      </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
+        
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
@@ -275,7 +290,7 @@ searchText === ""
           </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -363,7 +378,7 @@ searchText === ""
 
 
             <div>
-                <h1 style={{color: "red", float: "left"}}>My Request</h1>
+                
                 <Table
                     columns={columns}
                     pagination={pagination}

@@ -306,7 +306,7 @@ const [searchCar, setSearchCar] = useState("");
       >
           <Form
                             name="complex-form"
-                           
+                            layout="horizontal"
                             onFinish={handleAddCar}
                             labelAlign="left"
                             form={formz}

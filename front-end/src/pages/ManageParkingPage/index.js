@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col,Descriptions, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
 import {
   FilterOutlined,DeleteOutlined,
   EditFilled,
@@ -23,6 +23,9 @@ export default function ManageParking() {
   const [pageSize, setPageSize] = useState(10);
   const [status,setStatus]= useState("Status");
   const [type,setType]= useState("Type");
+  const [slotParking,setSlotParking] =useState([]);
+const [carModal, setCarModal] = useState(false);
+const [addSlot,setAddSlot]= useState(false)
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -308,7 +311,7 @@ const showPromiseDelete = (id) => {
 
   }, [data, navigateTo]);
   useEffect(() => {
-    api.get(`cars`)
+    api.get(`cars-available`)
     .then(function(response){
       let respData = response.data;
       respData.forEach((element) => {element.carmodel =element.carModel.model; element.description = element.carModel.discript})
@@ -333,9 +336,7 @@ const showPromiseDelete = (id) => {
       });});
 }, [])
 
-const [slotParking,setSlotParking] =useState([]);
-const [carModal, setCarModal] = useState(false);
-const [addSlot,setAddSlot]= useState(false)
+
   const dataBystatus =
   status === "Status" ? data : data.filter((u) => u.status === status);
   const finalData =
@@ -347,17 +348,7 @@ const [addSlot,setAddSlot]= useState(false)
               // || u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
-  const dataType =
-        type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
-  const finalCar =
-        searchCar === ""? car : (car.filter((u) =>
-        u.carNumber
-        .toLowerCase()
-        .replace(/\s+/g, "")
-        .includes(searchCar.toLowerCase().replace(/\s+/g, "")) 
-                  // || u.id.toLowerCase().includes(searchText.toLowerCase())
-            ) 
-            );
+  
             // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
  
  const loadSlotParking=(values)=>{
@@ -371,6 +362,17 @@ const [addSlot,setAddSlot]= useState(false)
     placement: "topLeft",
      });});
             }
+            const dataType =
+        type === 'Type' ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
+  const finalCar =
+        searchCar === ""? car : (car.filter((u) =>
+        u.carNumber
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .includes(searchCar.toLowerCase().replace(/\s+/g, "")) 
+                  // || u.id.toLowerCase().includes(searchText.toLowerCase())
+            ) 
+            );
   const pagination = {
     current: page,
     PageSize: pageSize,
@@ -522,77 +524,26 @@ const [addSlot,setAddSlot]= useState(false)
         {deleteModal.content}
       </Modal>
       <Modal
-                visible={modal.isOpen}
-                title='Thông tin bãi đỗ'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                // closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Tên Bãi Đỗ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Địa chỉ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.addressDetail}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Thông tin thêm</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.description}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.latitude} - {modal.data.longitude}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Trạng thái</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Hợp pháp</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{
-                        modal.data.isLegal ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
-                        }</td>
-                    </tr>
-                </table>
-
-
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin bãi đỗ" bordered>
+        <Descriptions.Item label="Tên Bãi Đỗ" span={3}>{modal.data.parkingName}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" >{modal.data.status}</Descriptions.Item>
+    <Descriptions.Item label="Tọa độ" span={2}>{modal.data.latitude} - {modal.data.longitude}</Descriptions.Item>
+    <Descriptions.Item label="Địa chỉ" span={3} >{modal.data.addressDetail}</Descriptions.Item>
+    <Descriptions.Item label="Thông tin thêm" span={3}>{modal.data.description}</Descriptions.Item>
+    <Descriptions.Item label="Nhhân viên" span={3}>{modal.data.parkingManagers.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
+    </Descriptions>
       </Modal>
 
       {finalData.length === 0 ? (
@@ -624,13 +575,11 @@ const [addSlot,setAddSlot]= useState(false)
                       image: record.imageUrls,
                       status: record.status,
                       isLegal: record.isLegal,
+                      parkingManagers: record.parkingManagers
                     },
                   });
                   
-                } else if (
-                  e.target.className ===
-                  "ant-table-cell ant-table-column-sort ant-table-cell-row-hover"
-                ) {
+                } else  {
                   setModal({
                     ...modal,
                     isOpen: true,
@@ -643,12 +592,11 @@ const [addSlot,setAddSlot]= useState(false)
                       image: record.imageUrls,
                       status: record.status,
                       isLegal: record.isLegal,
+                      parkingManagers: record.parkingManagers
                     },
                   });
                   console.log(modal.data);
-                } else {
-                  setModal({ ...modal, isOpen: false });
-                }
+                } 
               },
             };
           }}

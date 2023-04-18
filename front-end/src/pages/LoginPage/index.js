@@ -6,7 +6,7 @@ import {
     TwitterOutlined,LockOutlined
   } from "@ant-design/icons";
 import "./LoginPage.css";
-import { Form, Input, Spin } from 'antd';
+import { Form, Input, Spin,notification } from 'antd';
 import { login } from '../../services/authServices';
 import { Message } from '../../utils/helpers';
 import { TypeMessage } from '../../utils/constants';
@@ -22,7 +22,11 @@ const LoginPage = () => {
         setLoading(true);
         const data = await login(username, password);
         if (data) {
-            Message(TypeMessage.SUCCESS, 'Đăng nhập thành công')
+          notification.success({
+            message: `Đăng nhập thành công`,
+            description: "",
+            placement: "topLeft",
+          })
             setAuthState({
                 ...authState,
                 token: data.token
@@ -30,7 +34,12 @@ const LoginPage = () => {
             setLoading(false);
             window.location.replace('/')
         } else {
-            Message(TypeMessage.ERROR, 'Đăng nhập thất bại')
+          notification.error({
+            message: `Đăng nhập thất bại`,
+            description: "Tài khoản mật khẩu không chính xác. Vui lòng thử lại",
+            placement: "topLeft",
+          })
+         
             setLoading(false);
         }
     };
@@ -83,7 +92,7 @@ const LoginPage = () => {
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value={username} onChange={event => setUsername(event.target.value)} placeholder="Username" />
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value={username} onChange={event => setUsername(event.target.value)} placeholder="Tài khoản" />
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -96,9 +105,9 @@ const LoginPage = () => {
                     >
                         <Input.Password
                             prefix={<LockOutlined className="site-form-item-icon" />}
-                            type="password"
+                            //type="password"
                             value={password} onChange={event => setPassword(event.target.value)}
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                         />
                     </Form.Item>
                     <div className="input-form">
@@ -112,10 +121,10 @@ const LoginPage = () => {
                 </Form>
                 <div className="input-form">
               <p>
-                Do not have account ? <a href="/register">Register</a>
+                Bạn chưa có tài khoản? <a href="/register">Đăng ký</a>
               </p>
             </div>
-          <h3>Login by social account</h3>
+          <h3>Đăng nhập bằng tài khoản mạng xã hội</h3>
           <ul className="icon-dang-nhap">
             <li>
               <FacebookOutlined style={{ scale: "200%" }} />

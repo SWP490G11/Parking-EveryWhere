@@ -1,7 +1,7 @@
-import {AutoComplete,Button,Checkbox,Form,Input,Spin,DatePicker,notification,Radio} from "antd";
-import axios from "axios";
+import {Row,Col,Button,Form,Input,Spin,DatePicker,notification,Radio} from "antd";
+
 import { useNavigate } from "react-router-dom";
-import React,{ useEffect, useState } from "react";
+import React,{  useState } from "react";
 import api from '../../services/api'
 
 
@@ -66,39 +66,36 @@ const Register = () => {
         imageURL: "",
       })
       .then(() => {
-       
+        setLoading(false);
         notification.success({
-          message: `Register success`,
-          description: 'You can login now',
+          message: 'Bạn đã đăng ký thành công',
           placement: 'topLeft',
         });
-        navigate("/");
+        navigate("/login");
+        
+      }, (error) => {
+        if (error?.response.status === 400) {
+          setLoading(false);
+        notification.warning({
+          message: `Tài khoản của bạn đã tồn tại`,
+          placement: 'topLeft',
+         
+        })}
+        if (error?.response.status === 500) {
+          setLoading(false);
+        notification.warning({
+          message: `Vui lòng kiểm tra lại thông tin của bạn`,
+          placement: 'topLeft',
+        
+        })}
       })
       .catch((error) => {
-        notification.warning({
-          message: `Register fail`,
-          description: 'Please check input again',
-          placement: 'topLeft',
-        });
+        
+      
       });
     
   };
   
-
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const onEmailChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        ["@gmail.com", "@yahoo.com"].map((domain) => `${value}${domain}`)
-      );
-    }
-  };
-  const emailOptions = autoCompleteResult.map((email) => ({
-    label: email,
-    value: email,
-  }));
 
   
   
@@ -122,8 +119,9 @@ alt="Hình Ảnh Minh Họa"
         <Form
           
           form={form}
-          name="normal_login"
-          className="login-form"
+          layout="horizontal"
+          //name="normal_login"
+          //className="login-form"
           onFinish={onFinish}
           initialValues={{
             prefix: "86",
@@ -134,25 +132,23 @@ alt="Hình Ảnh Minh Họa"
         labelCol={{
             span: 8,
           }}
-          wrapperCol={{
-            span: 16,
-          }}
+          // wrapperCol={{
+          //   span: 16,
+          // }}
         >
-           <Form.Item name="role"
-            >
-        <Radio.Group  optionType="button"
-       >
-          <Radio value={1} >Vehicle Owner</Radio>
-          <Radio value={2}>Parking Owner</Radio>
-        </Radio.Group>
-      </Form.Item>
+         {/* <Row>
+          <Col span={12}>
+          </Col>
+          <Col span={12}>
+          </Col>
+         </Row> */}
           <Form.Item
             name="firstName"
-            label="FirstName"
+            label="Tên"
             rules={[
               {
                 required: true,
-                message: "Please input your FirstName!",
+                message: "Vui lòng nhập tên của bạn!",
                 whitespace: true,
               },
             ]}
@@ -161,11 +157,11 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
           <Form.Item
             name="lastName"
-            label="LastName"
+            label="Họ"
             rules={[
               {
                 required: true,
-                message: "Please input your LastName!",
+                message: "Vui lòng nhập họ của bạn!",
                 whitespace: true,
               },
             ]}
@@ -175,58 +171,58 @@ alt="Hình Ảnh Minh Họa"
 
           <Form.Item
             name="userName"
-            label="UserName"
+            label="Tài khoản"
             rules={[
               {
                 required: true,
-                message: "Please input your UserName!",
+                message: "Vui lòng nhập tài khoản!",
                 whitespace: true,
               },
             ]}
           >
-            <Input />
+            <Input  />
           </Form.Item>
           <Form.Item
             name="password"
-            label="Password"
-            tooltip="Cần ít nhất 1 chữ in hoa và 1 số "
+            label="Mật khẩu"
+            tooltip="Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !"
+            
             rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
               {
-                required: true,
-                pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                message: "Please input your password!",
+                
+                pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'),
+                message: "Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !",
               },
             ]}
-            hasFeedback
+           
           >
             <Input.Password />
           </Form.Item>
 
           <Form.Item
             name="cfpassword"
-            label="Confirm Password"
+            label="Xác thực mật khẩu"
             tooltip="Cần ít nhất 1 chữ in hoa và 1 số "
             dependencies={["password"]}
-            hasFeedback
+          
             rules={[
               {
                 required: true,
-                pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                message: "Please confirm your password!",
+                message: 'Vui lòng nhập mật khẩu xác thực!',
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
+                    
                   }
-                  return Promise.reject(
-                    new Error(
-                      "The two passwords that you entered do not match!"
-                    )
-                  );
+                  return Promise.reject(new Error('Mật khẩu và xác thực phải giống nhau!'));
                 },
-              }),
+              })
             ]}
+            
+            
           >
             <Input.Password />
           </Form.Item>
@@ -236,7 +232,7 @@ alt="Hình Ảnh Minh Họa"
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "Vui lòng nhập E-mail của bạn",
               },
               {
                 required: true,
@@ -245,22 +241,23 @@ alt="Hình Ảnh Minh Họa"
             ]}
             hasFeedback
           >
-            <AutoComplete
-              options={emailOptions}
-              onChange={onEmailChange}
-              placeholder="Email"
-            >
-              <Input />
-            </AutoComplete>
+            <Input
+              // type="email"
+               style={{
+                width: "100%",
+              }}
+             
+            />
+              
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            label="Phone Number"
+            label="Số điện thoại"
             rules={[
               {
                 required: true,
                 pattern: new RegExp("^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$"),
-                message: "Vio lòng nhập số điện thoại",
+                message: "Vui lòng nhập số điện thoại",
               },
             ]}
           >
@@ -273,24 +270,34 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
           <Form.Item
             name="dateOfBirth"
-            label="Date of birth"
+            label="Ngày sinh"
             rules={[
               {
                 type: "object",
                 required: true,
-                message: "Please select time!",
+                message: "Vui lòng nhập ngày sinh của bạn!",
               },
+              {
+                validator(_, value) {
+                    if ((new Date().getFullYear() - new Date(value).getFullYear()) < 15) {
+                        return Promise.reject("Người dùng phải trên 15 tuổi ")
+                    }
+                    return Promise.resolve();
+                }
+            }
             ]}
           >
-            <DatePicker style={{width: 200}} />
+            <DatePicker format={'DD/MM/YYYY'}  style={{
+                width: "100%",
+              }}/>
           </Form.Item>
           <Form.Item
             name="gender"
-            label="Gender"
+            label="Giới tính"
             rules={[
               {
                 required: true,
-                message: "Please select gender!",
+                message: "Vui lòng chọn giới tính",
               },
             ]}
           >
@@ -300,28 +307,26 @@ alt="Hình Ảnh Minh Họa"
               <Radio value={2}>Other</Radio>
             </Radio.Group>
           </Form.Item>
-
-          <Form.Item
-            name="agreement"
-            valuePropName="checked"
-            rules={[
-              {
-                validator: (_, value) =>
-                  value
-                    ? Promise.resolve()
-                    : Promise.reject(new Error("Should accept agreement")),
-              },
-            ]}
-            {...tailFormItemLayout}
-          >
-            <Checkbox>
-              I have read the agreement
-            </Checkbox>
-          </Form.Item>
+          <Form.Item name="role"
+           label="Vai trò"
+           rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn giới tính",
+            },
+          ]}
+            >
+        <Radio.Group  
+       >
+          <Radio value={1} >Người dùng</Radio>
+          <Radio value={2}>Chủ bãi đỗ</Radio>
+        </Radio.Group>
+      </Form.Item>
+         
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary"  htmlType="submit">
            
-                  Register
+                  Đăng ký
                 
             </Button>
             <Button type="second" onClick={() => navigate(-1)}>
