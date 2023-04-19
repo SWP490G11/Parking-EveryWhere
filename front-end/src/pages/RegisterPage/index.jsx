@@ -330,7 +330,7 @@ alt="Hình Ảnh Minh Họa"
                 
             </Button>
             <Button type="second" onClick={() => navigate(-1)}>
-              Back
+              Quay lại
             </Button>
           </Form.Item>
         </Form>

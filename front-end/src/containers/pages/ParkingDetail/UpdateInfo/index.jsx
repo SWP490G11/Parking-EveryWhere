@@ -94,7 +94,7 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                             }}
                         />
                         Address Detail
-                        <AutocompleteMap setLocation={setLocation} defaultValue={parking?.addressDetail}/>
+                        <AutocompleteMap setLocation={setLocation} defaultValue={parking?.addressDetail} disabled={true}/>
                         <Row>
                             <Col span={10} >
                                 Longitude
@@ -122,13 +122,13 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                                 _updateParking.isLegal = true
                                 _updateParking.status = Status.Available
                                 _updateParking.lastModifyAt = new Date()
-                                _updateParking.imagesURLs = images
+                                _updateParking.imagesURLs = images.length>0 ? images : ['https://thumbsnap.com/i/nJ5ET935.jpg']
                                 console.log(_updateParking)
                                 updateParkingByID(parking.parkingID, _updateParking, setLoading)
                             }}
                             style={{margin: "20px 0"}}
                         >
-                            Submit
+                            Lưu
                         </Button>
                     </div>
                 </Col>

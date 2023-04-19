@@ -542,7 +542,7 @@ const showPromiseDelete = (id) => {
     <Descriptions.Item label="Tọa độ" span={2}>{modal.data.latitude} - {modal.data.longitude}</Descriptions.Item>
     <Descriptions.Item label="Địa chỉ" span={3} >{modal.data.addressDetail}</Descriptions.Item>
     <Descriptions.Item label="Thông tin thêm" span={3}>{modal.data.description}</Descriptions.Item>
-    <Descriptions.Item label="Nhhân viên" span={3}>{modal.data.parkingManagers.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
+    <Descriptions.Item label="Nhhân viên" span={3}>{modal.data.parkingManagers && modal.data.parkingManagers.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
     </Descriptions>
       </Modal>
 
@@ -579,23 +579,6 @@ const showPromiseDelete = (id) => {
                     },
                   });
                   
-                } else  {
-                  setModal({
-                    ...modal,
-                    isOpen: true,
-                    data: {
-                      parkingName: record.parkingName,
-                      addressDetail: record.addressDetail,
-                      description: record.discription,
-                      latitude: record.lat,
-                      longitude: record.lon,
-                      image: record.imageUrls,
-                      status: record.status,
-                      isLegal: record.isLegal,
-                      parkingManagers: record.parkingManagers
-                    },
-                  });
-                  console.log(modal.data);
                 } 
               },
             };
@@ -757,8 +740,8 @@ const showPromiseDelete = (id) => {
             
           </Dropdown.Button>
             </Form.Item>
-          <Collapse  >{
-            dataType.map((e,index)=>(
+          <Collapse  >{ dataType &&
+            Object.values(dataType).map((e,index)=>(
               <Panel icon={e.status}  
               header={ <>
               <Row>
@@ -776,7 +759,7 @@ const showPromiseDelete = (id) => {
         <p>
           {e.status !== 'Available' ?  
         // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
-        <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
+        <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
         :
         <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
         </p>

@@ -78,7 +78,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
         </ScriptLoaded>
     );
 }
-export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
+export const AutocompleteMap = ({ setLocation,disabled, defaultValue = "" }) => {
     const [place, setPlace] = useState()
     return (
         <ScriptLoaded>
@@ -110,6 +110,7 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                     type="text"
                     placeholder={' Tìm vị trí'}
                     defaultValue={defaultValue}
+                    disabled={disabled}
                     style={{
                         minHeight: 36,
                        
