@@ -111,6 +111,7 @@ namespace Back_end.Controllers
                 p.Status,
                 p.Discription,
                 p.AddressDetail,
+
           
                 ImageUrls = p.Images.Select(i => i.URL).FirstOrDefault(),
                 
