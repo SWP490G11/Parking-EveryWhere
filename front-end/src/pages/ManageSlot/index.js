@@ -90,7 +90,7 @@ const [searchCar, setSearchCar] = useState("");
             });
     };
     useEffect(() => {
-        api.get(`cars`)
+        api.get(`cars-available`)
         .then(function(response){
           let respData = response.data;
           respData.forEach((element) => {element.carmodel =element.carModel.model; element.description = element.carModel.discript})

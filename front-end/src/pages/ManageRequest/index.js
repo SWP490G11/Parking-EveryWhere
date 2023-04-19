@@ -285,7 +285,7 @@ import api from "../../services/api";
         Quản lý yêu cầu khách hàng
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -329,7 +329,7 @@ import api from "../../services/api";
             </Form.Item>
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}

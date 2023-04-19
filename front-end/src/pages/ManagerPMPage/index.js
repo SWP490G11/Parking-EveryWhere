@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,notification,Form } from "antd";
+import { Table, Input, Button, Menu, Dropdown,Descriptions, Row, Col, Modal,Empty,notification,Form } from "antd";
 import {
   FilterOutlined,
   RedoOutlined,ExclamationCircleFilled
@@ -12,7 +12,8 @@ export default function ManageParkingManager() {
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [type, setType] = useState("Gender");
+  const [type, setType] = useState("Tất cả");
+  const [disable,setDisable] = useState("Tất cả");
   const [open, setOpen] = useState(false);
   const [infor,setInfor]=useState({
     fullname: "",
@@ -28,12 +29,7 @@ export default function ManageParkingManager() {
     data: {},
   });
   const columns = [
-    {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: "15%",
-      },
+    
       {
         title: "Họ tên",
         dataIndex: "fullName",
@@ -89,13 +85,13 @@ export default function ManageParkingManager() {
       },
       {
         title: "Trạng thái",
-        dataIndex: "trangthai",
-        key: "trangthai",
+        dataIndex: "isDisable",
+        key: "isDisable",
         sorter: (a, b) => {
-          if (a.trangthai > b.trangthai) {
+          if (a.isDisable > b.isDisable) {
             return -1;
           }
-          if (b.trangthai > a.trangthai) {
+          if (b.isDisable > a.isDisable) {
             return 1;
           }
           return 0;
@@ -144,8 +140,9 @@ export default function ManageParkingManager() {
         respData.forEach((element) => {
             element.fullName = element.lastName + " " + element.firstName;
             element.role = element.role=== 'ParkingManager' ? 'Nhân viên' : " ";
+            element.gender = element.gender === 'Male' ? 'Nam' : (element.gender === 'Female'? 'Nũ' : 'Khác');
             element.parkingName = element?.parking?.parkingName;
-            element.trangthai = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
+            element.isDisable = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
           element.dateOfBirth = moment(
             new Date(element.dateOfBirth).toLocaleDateString("en-US")
           ).format("DD/MM/YYYY");
@@ -185,11 +182,12 @@ export default function ManageParkingManager() {
       .catch(() => {});
   }, [data]);
 
-  const dataBytype = type === "Gender" ? data : data.filter((u) => u.gender === type);
+  const dataBytype = type === "Tất cả" ? data : data.filter((u) => u.gender === type);
+  const dataDisable = disable === "Tất cả" ? dataBytype : dataBytype.filter((u) => u.isDisable === disable);
   const finalData =
     searchText === ""
-      ? dataBytype
-      : (dataBytype.filter(
+      ? dataDisable
+      : (dataDisable.filter(
           (u) =>
             u.userName
               .toLowerCase()
@@ -213,6 +211,20 @@ export default function ManageParkingManager() {
       showTotal: total => `Tổng ${total} nhân viên`
   };
 
+  // const renderContent = () => {
+  //   switch(type) {
+  //       case 'Gender':
+  //         return 'Tất cả'
+  //       case 'Male':
+  //         return 'Nam'
+  //       case 'FeMale':
+  //         return 'Nữ'
+  //       case 'Other':
+  //           return 'Khác'
+  //       default:
+  //         return 'Tất cả'
+  //     }
+  // };
   return (
     <>
       <p
@@ -229,8 +241,10 @@ export default function ManageParkingManager() {
         Danh sách nhân viên
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
-            {/*Filter Gender */}
+        <Col span={8}>
+          <Row>
+            <Col span={12}>
+            <Form.Item label={'Giới tính'}>
         <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
@@ -239,47 +253,93 @@ export default function ManageParkingManager() {
                 <Menu.Item
                   value="Male"
                   onClick={() => {
-                    setType("Male");
+                    setType("Nam");
                   }}
                 >
                   {" "}
-                  Male
+                  Nam
                 </Menu.Item>
                 <Menu.Item
                   value="Female"
                   onClick={() => {
-                    setType("Female");
+                    setType("Nữ");
                   }}
                 >
                   {" "}
-                  Female
+                  Nữ
                 </Menu.Item>
                 <Menu.Item
                   value="Other"
                   onClick={() => {
-                    setType("Other");
+                    setType("Khác");
                   }}
                 >
                   {" "}
-                  Other
+                  Khác
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
-                    setType("Gender");
+                    setType("Tất cả");
                   }}
                 >
                   {" "}
-                  All
+                  Tất cả
                 </Menu.Item>
               </Menu>
             }
           >
             {type}
           </Dropdown.Button>
-        
+          </Form.Item>
+            </Col>
+            <Col span={12}>
+            <Form.Item label={'Trạng thái'}>
+        <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  value="Male"
+                  onClick={() => {
+                    setDisable("Đang hoạt động");
+                  }}
+                >
+                  {" "}
+                  Đang hoạt động
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setDisable("Dừng hoạt động");
+                  }}
+                >
+                  {" "}
+                  Dừng hoạt động
+                </Menu.Item>
+                
+                <Menu.Item
+                  onClick={() => {
+                    setDisable("Tất cả");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            {disable}
+          </Dropdown.Button>
+          </Form.Item>
       
+            </Col>
+          </Row>
+            {/*Filter Gender */}
+            
+         
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -290,7 +350,7 @@ export default function ManageParkingManager() {
             }}
           />
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={9} xxl={9}>
+        <Col  span={8}>
           <Button style={{ background: "#33CCFF", color: "white" }} onClick={e => setOpen(true)} >
           Thêm nhân viên 
           </Button>
@@ -299,119 +359,30 @@ export default function ManageParkingManager() {
       
       <Modal
         open={modal.isOpen}
-        title="Detail Student"
+        
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
-        style={{width:400}}
-        footer={[
-          <Button
-            style={{ background: "#e30c18", color: "white" }}
-            key="back"
-            onClick={() => {
-              setModal({ ...modal, isOpen: false });
-            }}
-          >
-            Close
-          </Button>,
-        ]}
-        closable={false}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
       >
-        <table>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.id}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>User Name</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.userName}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Full Name</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.fullName}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Phone Number</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.phoneNumber}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Email </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.email}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Gender</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.gender}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>
-              Date of Birth
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.dateOfBirth}
-            </td>
-          </tr>
-        </table>
+        <Descriptions title="Thông tin nhân viên" bordered>
+        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Tài khoản" span={1.5}>{modal.data.userName}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" span={1.5}>{modal.data.isDisable}</Descriptions.Item>
+    <Descriptions.Item label="Họ tên"span={1.5} > {modal.data.fullName}</Descriptions.Item>
+    <Descriptions.Item label="Số điện thoại" span={1.5}>{modal.data.phoneNumber}</Descriptions.Item>
+    <Descriptions.Item label="E-mail" span={1.5}>{modal.data.email}</Descriptions.Item>
+    <Descriptions.Item label="Giới tính" span={1.5}>{modal.data.gender}</Descriptions.Item>
+    <Descriptions.Item label="Ngày sinh" span={1.5}>{modal.data.dateOfBirth}</Descriptions.Item>
+    <Descriptions.Item label="Nhân viên bãi đỗ" span={1.5}>{modal.data.parkingName}</Descriptions.Item>
+   
+    </Descriptions>
+        
       </Modal>
 
       {data.length === 0 ? (
@@ -438,12 +409,13 @@ export default function ManageParkingManager() {
                     data: {
                         id: record.id,
                         userName: record.userName,
+                        isDisable : record.isDisable,
                       fullName: record.lastName+" "+record.firstName,
                       phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
                       gender: record.gender,
                       email: record.email,
-
+                      parkingName: record.parkingName
                     },
                   });
                   console.log(modal.data);
@@ -457,10 +429,12 @@ export default function ManageParkingManager() {
                     data: {
                         id: record.id,
                         userName: record.userName,
+                        isDisable : record.isDisable,
                         fullName: record.lastName+" "+record.firstName,
                         phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
                       gender: record.gender,
+                      parkingName: record.parkingName,
                       email: record.email,
                     },
                   });

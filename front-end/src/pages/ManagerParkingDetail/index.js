@@ -1,7 +1,7 @@
-import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form,Empty} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,notification,Descriptions,Form,Empty} from 'antd';
 
 import React, {useEffect, useState} from 'react';
-import {ExclamationCircleFilled,MoneyCollectFilled, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
+import {ExclamationCircleFilled,MoneyCollectFilled, } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
  const ManageParkingDetail=()=> {
@@ -14,7 +14,7 @@ import api from "../../services/api";
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
-    const [status,setStatus] = useState("Status");
+    //const [status,setStatus] = useState("Tất cả");
     const [open, setOpen] =useState(false);
     const [infor,setInfor]= useState({
       id:"",
@@ -219,12 +219,13 @@ import api from "../../services/api";
             key: "action",
         },
     ];
-    const dataByStatus =
-        status === "Status" ? data : data.filter((u) => u.status === status);
+    // const dataByStatus =
+    //     status === "Tất cả" ? data : (status=== 'Xe đã lấy' ? (data.filter((u) => u.pickUpDate !== 'null') ): 
+    //     (data.filter((u) => u.pickUpDate === 'null') ));
     const finalData =
     searchText === ""
-      ? dataByStatus
-      : dataByStatus.filter(
+      ? data
+      : data.filter(
           (u) =>
             u.parkingId.parkingName
             .toLowerCase()
@@ -245,18 +246,7 @@ import api from "../../services/api";
        showSizeChanger:true, 
           showTotal: total => `Tổng ${total} thông tin đỗ xe`
       };
-      const renderContent = () => {
-        switch(status) {
-            case 'Status':
-              return 'Tất cả'
-            case 'Pending':
-              return 'Chờ duyệt'
-            case 'Cancel':
-              return 'Từ chối'
-            default:
-              return 'Tất cả'
-          }
-      };
+     
     return (
         <>
              <p
@@ -273,9 +263,9 @@ import api from "../../services/api";
         Quản lý chỗ đỗ xe
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
             {/*Filter Gender */}
-            <Form.Item label={'Trạng thái'}>
+            {/* <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
@@ -284,25 +274,25 @@ import api from "../../services/api";
                 <Menu.Item
                   value="Male"
                   onClick={() => {
-                    setStatus("Chờ duyệt");
+                    setStatus('Xe đã lấy');
                   }}
                 >
                   {" "}
-                  Chờ duyệt
+                  Xe đã lấy
                 </Menu.Item>
                 <Menu.Item
                   value="Female"
                   onClick={() => {
-                    setStatus("Từ chối");
+                    setStatus('Xe đang đỗ');
                   }}
                 >
                   {" "}
-                  Từ chối
+                 Xe đang đỗ
                 </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Status");
+                    setStatus("Tất cả");
                   }}
                 >
                   {" "}
@@ -311,13 +301,13 @@ import api from "../../services/api";
               </Menu>
             }
           > 
-          {renderContent()}
+          {status}
             
           </Dropdown.Button>
-            </Form.Item>
+            </Form.Item> */}
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -329,76 +319,33 @@ import api from "../../services/api";
           />
         </Col>
         </Row>
-            <Modal
-                visible={modal.isOpen}
-                title='Detail Assignment Information'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>ID</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.id}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Parking Name</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request By</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestdBy}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request At</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestAt}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Status</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Note</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.note}</td>
-                    </tr>
-                </table>
-
+        <Modal
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin yêu cầu" bordered>
+        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
+   
+    {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
+     */}
+      <Descriptions.Item label="Biển số xe" span={1.5}>{modal.data.carNumber}</Descriptions.Item>
+    <Descriptions.Item label="Loãi chỗ đỗ" span={1.5}>{modal.data.typeOfSlot==='ROOFED'? 'Có mái che': 'Không có mái che'}</Descriptions.Item>
+    <Descriptions.Item label="Ngày gửi" span={1.5}>{modal.data.parkingDate}</Descriptions.Item>
+    <Descriptions.Item label="Ngày trả" span={1.5}>{modal.data.pickUpDate}</Descriptions.Item>
+    <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>
+   
+    </Descriptions>
+               
 
             </Modal>
            
@@ -425,11 +372,12 @@ import api from "../../services/api";
                                         ...modal, isOpen: true
                                         , data: {
                                             id: record.id,
-                                            parkingName: record.parkingName,
-                                            requestBy: record.requestBy,
-                                            requestAt: record.requestAt,
-                                            status: record.status,
-                                            note: record.note
+                                            carNumber: record.carNumber,
+                                            parkingDate: record.parkingDate,
+                                            pickUpDate: record.pickUpDate,
+                                            parkingName: record?.slot?.parking?.parkingName,
+                                            note: record.note,
+                                            typeOfSlot: record?.slot?.typeOfSlot
                                         }
 
                                     });

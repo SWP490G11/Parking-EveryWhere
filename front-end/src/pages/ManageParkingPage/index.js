@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col,Descriptions, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col,Descriptions,List,Divider, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
 import {
   FilterOutlined,DeleteOutlined,
   EditFilled,
@@ -21,9 +21,15 @@ export default function ManageParking() {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
-  const [status,setStatus]= useState("Status");
-  const [type,setType]= useState("Type");
+  const [page1, setPage1] = useState(1);
+  const [pageSize1, setPageSize1] = useState(5);
+  const [page2, setPage2] = useState(1);
+  const [pageSize2, setPageSize2] = useState(5);
+  const [status,setStatus]= useState("Tất cả");
+  const [type,setType]= useState("Tất cả");
+  const [type1,setType1]= useState("Tất cả");
   const [slotParking,setSlotParking] =useState([]);
+  const [slotParking1,setSlotParking1] =useState([]);
 const [carModal, setCarModal] = useState(false);
 const [addSlot,setAddSlot]= useState(false)
   const [modal, setModal] = useState({
@@ -272,8 +278,9 @@ const showPromiseDelete = (id) => {
             <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
             
             }}><PlusOutlined /></Button>,
-            <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
-            
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} 
+            onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+              loadSlotParking1(element.parkingID);
             }}><UnorderedListOutlined /></Button>,
             
            
@@ -338,7 +345,7 @@ const showPromiseDelete = (id) => {
 
 
   const dataBystatus =
-  status === "Status" ? data : data.filter((u) => u.status === status);
+  status === "Tất cả" ? data : data.filter((u) => u.status === status);
   const finalData =
     searchText === ""? dataBystatus : (dataBystatus.filter((u) =>
     u.parkingName
@@ -353,9 +360,23 @@ const showPromiseDelete = (id) => {
  
  const loadSlotParking=(values)=>{
     console.log(values);
-      api.get(`slots/${values}`)
+      api.get(`slots-Roof/${values}`)
       .then((response) =>{
-        setSlotParking(response.data)})
+        setSlotParking(response.data.sort((a, b) => {
+          if (
+            a.status.trim().toLowerCase() >
+            b.status.trim().toLowerCase() && a.price > b.price
+          ) {
+            return 1;
+          }
+          if (
+            b.status.trim().toLowerCase() >
+            a.status.trim().toLowerCase() && b.price > a.price
+          ) {
+            return -1;
+          }
+          return 0;
+        }))})
       .catch((e)=>{notification.warning({
         message: `Lỗi dữ liệu`,
       description: "Tải dữ liệu bị lỗi",
@@ -363,7 +384,7 @@ const showPromiseDelete = (id) => {
      });});
             }
             const dataType =
-        type === 'Type' ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
+        type === 'Tất cả' ? slotParking : slotParking.filter((u) => u.status === type);    
   const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -373,9 +394,36 @@ const showPromiseDelete = (id) => {
                   // || u.id.toLowerCase().includes(searchText.toLowerCase())
             ) 
             );
+            const loadSlotParking1=(values)=>{
+              console.log(values);
+                api.get(`slots-nonRoof/${values}`)
+                .then((response) =>{
+                  setSlotParking1(response.data.sort((a, b) => {
+                    if (
+                      a.status.trim().toLowerCase() >
+                      b.status.trim().toLowerCase() && a.price > b.price
+                    ) {
+                      return 1;
+                    }
+                    if (
+                      b.status.trim().toLowerCase() >
+                      a.status.trim().toLowerCase() && b.price > a.price
+                    ) {
+                      return -1;
+                    }
+                    return 0;
+                  }))})
+                .catch((e)=>{notification.warning({
+                  message: `Lỗi dữ liệu`,
+                description: "Tải dữ liệu bị lỗi",
+              placement: "topLeft",
+               });});
+                      }
+                      const dataType1 =
+        type1 === 'Tất cả' ? slotParking1 : slotParking1.filter((u) => u.status === type1);    
   const pagination = {
     current: page,
-    PageSize: pageSize,
+    pageSize: pageSize,
     total: finalData.length,
     pageSizeOptions: [5, 10, 15, 20],
     className: "ant-btn-dangerous",
@@ -386,6 +434,34 @@ const showPromiseDelete = (id) => {
     },
    showSizeChanger:true, 
       showTotal: total => `Tổng ${total} bãi dỗ`
+  }; 
+  const paginationSlot = {
+    current: page1,
+    pageSize: pageSize1,
+    total: dataType.length,
+    pageSizeOptions: [5, 10, 15],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page1, pageSize1) => {
+      setPage1(page1);
+      setPageSize1(pageSize1);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Tổng ${total} chỗ dỗ`
+  }; 
+  const paginationSlot1 = {
+    current: page2,
+    pageSize: pageSize2,
+    total: dataType1.length,
+    pageSizeOptions: [5, 10, 15],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page2, pageSize2) => {
+      setPage2(page2);
+      setPageSize2(pageSize2);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Tổng ${total} chỗ dỗ`
   }; 
   const pagination1 = {
     current: page,
@@ -403,11 +479,20 @@ const showPromiseDelete = (id) => {
   };
   const renderType = () => {
     switch(type) {
-        case 'NONROOF':
-          return 'Không có mái che'
-        case 'ROOFED':
-          return 'Có mái che'
-       
+        case 'Available':
+          return 'Còn chỗ'
+        case 'NotAvailable':
+          return 'Đã có xe'
+        default:
+          return 'Tất cả'
+      }
+  };
+  const renderType1 = () => {
+    switch(type1) {
+        case 'Available':
+          return 'Còn chỗ'
+        case 'NotAvailable':
+          return 'Đã có xe'
         default:
           return 'Tất cả'
       }
@@ -442,7 +527,7 @@ const showPromiseDelete = (id) => {
         Quản lí bãi đỗ
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-      <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+      <Col span={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -480,7 +565,7 @@ const showPromiseDelete = (id) => {
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Status");
+                    setStatus("Tất cả");
                   }}
                 >
                   {" "}
@@ -489,13 +574,13 @@ const showPromiseDelete = (id) => {
               </Menu>
             }
           > 
-          {renderContent()}
+          {status}
             
           </Dropdown.Button>
             </Form.Item>
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -699,7 +784,9 @@ const showPromiseDelete = (id) => {
         open={open1}
         closable={true}
       >
-          <Form.Item label={'Loại'}>
+        <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Có mái che</p></Divider>
+        
+          <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
@@ -708,26 +795,26 @@ const showPromiseDelete = (id) => {
                 <Menu.Item
                  
                   onClick={() => {
-                    setType('ROOFED');
+                    setType('Available');
                   }}
                 >
                   {" "}
-                  Có mái che
+                  Còn trống
                 </Menu.Item>
                
                 <Menu.Item
                   value="Female"
                   onClick={() => {
-                    setType('NONROOF');
+                    setType('NotAvailable');
                   }}
                 >
                   {" "}
-                  Không mái che
+                  Đã có xe
                 </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setType("Type");
+                    setType("Tất cả");
                   }}
                 >
                   {" "}
@@ -740,34 +827,109 @@ const showPromiseDelete = (id) => {
             
           </Dropdown.Button>
             </Form.Item>
-          <Collapse  >{ dataType &&
-            Object.values(dataType).map((e,index)=>(
-              <Panel icon={e.status}  
-              header={ <>
-              <Row>
-                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí {index+1}  </Col>
-               
-                <Col span={8}>
-              {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
-            </Col>
-            <Col span={8}><Tag color={'geekblue'} >
-              Giá {e.price}
-            </Tag></Col>
-              </Row>
+            <List dataSource={dataType} pagination={paginationSlot}
+            renderItem={(e) => (
+              <Collapse  >
+                  <Panel icon={e.status}  
+                  header={ <>
+                  <Row>
+                    <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                   
+                    <Col span={8}>
+                  {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+                </Col>
+                <Col span={8}><Tag color={'geekblue'} >
+                  Giá {e.price}
+                </Tag></Col>
+                  </Row>
+                 
+                  </>}>
+            <p>
+              {e.status !== 'Available' ?  
+            // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+            <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+            :
+            <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+            </p>
+          </Panel>
              
-              </>}>
-        <p>
-          {e.status !== 'Available' ?  
-        // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
-        <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
-        :
-        <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
-        </p>
-      </Panel>
-          ))
-          }
-     
-    </Collapse>   
+         
+        </Collapse> 
+            )}/>
+         
+         <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Không có mái che</p></Divider>
+       
+          <Form.Item label={'Trạng thái'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setType1('Available');
+                  }}
+                >
+                  {" "}
+                  Còn trống
+                </Menu.Item>
+               
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setType1('NotAvailable');
+                  }}
+                >
+                  {" "}
+                  Đã có xe
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setType1("Tất cả");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderType1()}
+            
+          </Dropdown.Button>
+            </Form.Item>
+            <List dataSource={dataType1} pagination={paginationSlot1}
+            renderItem={(e) => (
+              <Collapse  >
+                  <Panel icon={e.status}  
+                  header={ <>
+                  <Row>
+                    <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                   
+                    <Col span={8}>
+                  {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+                </Col>
+                <Col span={8}><Tag color={'geekblue'} >
+                  Giá {e.price}
+                </Tag></Col>
+                  </Row>
+                 
+                  </>}>
+            <p>
+              {e.status !== 'Available' ?  
+            // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+            <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+            :
+            <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+            </p>
+          </Panel>
+             
+         
+        </Collapse> 
+            )}/>
+    
       </Drawer>
       {/*Thêm xe*/}
       <Modal
