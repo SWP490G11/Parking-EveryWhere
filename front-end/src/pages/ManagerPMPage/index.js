@@ -83,9 +83,9 @@ export default function ManageParkingManager() {
     },
     
     {
-        title: "Vị trí",
-        dataIndex: "role",
-        key: "role",
+        title: "Nhân viên của bãi",
+        dataIndex: "parkingName",
+        key: "parkingName",
       },
       {
         title: "Trạng thái",
@@ -143,7 +143,8 @@ export default function ManageParkingManager() {
 
         respData.forEach((element) => {
             element.fullName = element.lastName + " " + element.firstName;
-            element.role = element.role=== 'ParkingManager' ? 'Nhân viên' : " "
+            element.role = element.role=== 'ParkingManager' ? 'Nhân viên' : " ";
+            element.parkingName = element?.parking?.parkingName;
             element.trangthai = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
           element.dateOfBirth = moment(
             new Date(element.dateOfBirth).toLocaleDateString("en-US")

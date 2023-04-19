@@ -180,8 +180,9 @@ code {
   
 }
 .avatar-avatar{
+  display: flex;
   width: 15vw;
-  height: 15vh;
+  height: 22vh;
   font-size: 18px;
   margin: 30px;
 }

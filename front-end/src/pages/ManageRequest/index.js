@@ -74,7 +74,7 @@ import api from "../../services/api";
                     placement: "topLeft",
                   });
                 //window.location.reload();
-            }).catch((error) => {
+            }).catch(() => {
                 notification.warning({
                     message: `Thât bại`,
                     description: "Vui lòng thử lại",
@@ -89,9 +89,6 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-const setUpData =(response)=>{
- 
-}
 
 // const role =localStorage.getItem("role"); 
     useEffect(() => {
@@ -258,7 +255,7 @@ const setUpData =(response)=>{
           setPageSize(pageSize);
         },
        showSizeChanger:true, 
-          showTotal: total => `Total ${total} Request`
+          showTotal: total => `Tổng ${total} yêu cầu`
       };
       const renderContent = () => {
         switch(status) {

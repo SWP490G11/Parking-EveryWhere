@@ -197,9 +197,7 @@ const UserProfile=()=> {
             >
             Chỉnh sửa thông tin
             </Button>
-            <Button type="second" onClick={() => navigate(-1)}>
-              Quay lại
-            </Button>
+            
           </Form.Item>
         </Form>
       </Card>
