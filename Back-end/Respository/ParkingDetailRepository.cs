@@ -33,15 +33,16 @@ namespace Back_end.Respository
         private readonly ISlotRepository _slotRepository;
 
         private readonly ParkingDbContext _dbContext;
+        private readonly IParkingRespository _parkingRespository;
 
         public ParkingDetailRepository(ICarRepository carRepository,
-            ISlotRepository slotRepository,
+            ISlotRepository slotRepository,IParkingRespository parkingRespository,
 
             ParkingDbContext dbContext)
         {
             _carRepository = carRepository;
             _slotRepository = slotRepository;
-
+            _parkingRespository = parkingRespository;
             _dbContext = dbContext;
         }
 
@@ -112,7 +113,7 @@ namespace Back_end.Respository
 
         public ICollection<ParkingDetail> GetAllParkingDetailsOfParking(string parkingID)
         {
-            var parking = _dbContext.Parkings.FirstOrDefault(p=>p.ID.ToString().ToLower().Trim().Equals(parkingID.ToLower().Trim()));
+            var parking = _parkingRespository.GetAsync(parkingID);
             return parking.Slots.SelectMany(s=>s.ParkingDetail).ToList();
         }
 
