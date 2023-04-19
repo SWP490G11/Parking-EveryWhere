@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Col, Row, Spin,Button,Modal,Input } from 'antd';
+import { Card, Col, Row, Spin,Button,Modal,Input,notification } from 'antd';
 import ParkingInfo from '../../containers/pages/ParkingDetail/ParkingInfo';
 import ContactInfo from '../../containers/pages/ParkingDetail/ContactInfo';
 import MapInfo from '../../containers/pages/ParkingDetail/MapInfo';
 import { useParams } from 'react-router-dom';
-import { getParkingByID,getFeedbackByParkingID } from '../../services/parkingDetailServices';
+import { getParkingByID } from '../../services/parkingDetailServices';
 import { Feedback } from '../../containers/pages/ParkingDetail/Feedback';
 import {FormOutlined} from '@ant-design/icons';
 import config from '../../config';
@@ -38,12 +38,24 @@ function ParkingDetail() {
         setOpen(true);
       };
       const handleOk = async () => {
-       await api.post('request', { note, parkingID:id });
         setConfirmLoading(true);
         setTimeout(() => {
-          setOpen(false);
-          setConfirmLoading(false);
-        }, 2000);
+            setOpen(false);
+  
+            setConfirmLoading(false);
+          }, 2000);
+       await api.post('request', { note, parkingID:id }).then(()=>{
+        notification.success({
+            message: 'Bạn đã gửi yêu cầu thành công',
+            placement: 'topLeft',
+          });
+       }).catch(()=>{
+        notification.warning({
+            message: 'Vui lòng thử lại',
+            placement: 'topLeft',
+       });
+    })
+        
       };
       const handleCancel = () => {
         setOpen(false);

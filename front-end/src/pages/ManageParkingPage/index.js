@@ -172,7 +172,7 @@ const carColumns = [
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
-          description: "Thêm nhân viên quản lý thành công",
+          description: "Thêm nhân chỗ đỗ thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -439,7 +439,7 @@ const showPromiseDelete = (id) => {
           paddingBottom: "20px",
         }}
       >
-        Manage Parking
+        Quản lí bãi đỗ
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
       <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
@@ -497,7 +497,7 @@ const showPromiseDelete = (id) => {
           </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {

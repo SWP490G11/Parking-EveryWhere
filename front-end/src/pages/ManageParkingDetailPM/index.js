@@ -79,9 +79,9 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-
+const parkingID = localStorage.getItem('parkingID');
     useEffect(() => {
-        api.get(`parkingdetails/all-parking-of-owner`, {})
+        api.get(`parkingdetails/${parkingID}/GetParkingDetailsByParking`, {})
         .then(function(response)  {
             let respData = response.data
             respData.forEach((element) => {
@@ -243,7 +243,7 @@ import api from "../../services/api";
           setPageSize(pageSize);
         },
        showSizeChanger:true, 
-          showTotal: total => `Tổng ${total} thông tin đỗ xe`
+          showTotal: total => `Total ${total} Request`
       };
       const renderContent = () => {
         switch(status) {

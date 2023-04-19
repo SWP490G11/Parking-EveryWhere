@@ -12,6 +12,7 @@ import HeaderContainer from './containers/common/Header';
 import ManageParking from './pages/ManageParkingPage';
 import MyCar from './pages/MyCarPage';
 import ManageParkingDetail from './pages/ManagerParkingDetail';
+import ManageParkingDetailPM from './pages/ManageParkingDetailPM';
 import ApproveParking from './pages/ApproveParkingPage';
 import ManageParkingManager from './pages/ManagerPMPage';
 import MyRequest from './pages/MyRequestPage';
@@ -19,6 +20,7 @@ import FooterContainer from './containers/common/Footer';
 import MenuContainer from './containers/common/Menu';
 import ManageSlot from './pages/ManageSlot';
 import ManageRequest from './pages/ManageRequest';
+import ManageRequestPM from './pages/ManageRequestPM';
 import { useLocationState } from './hooks/locationState';
 import { Layout } from 'antd';
 import { routes } from './utils/routes';
@@ -82,8 +84,10 @@ function App() {
               <Route path={routes.MY_CAR} element={<MyCar />} />
               <Route path={routes.MANAGE_SLOT} element={<ManageSlot />} />
               <Route path={routes.MANAGE_PARKINGDETAIL} element={<ManageParkingDetail />} />
+              <Route path={routes.MANAGE_PARKINGDETAIL_PM} element={<ManageParkingDetailPM />} />
               <Route path={routes.MY_REQUEST} element={<MyRequest />} />
               <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
+              <Route path={routes.MANAGE_REQUEST_PM} element={<ManageRequestPM />} />
               <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
               <Route path={routes.USERPROFILE} element={<UserProfile />} />
               <Route path={routes.USER_PROFILE_UPDATE} element={<UserProfile />} />

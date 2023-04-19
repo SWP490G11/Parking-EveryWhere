@@ -15,6 +15,8 @@ export const routes = {
     MY_REQUEST: "/my-request",
     MY_CAR: "/my-car",
     MANAGE_REQUEST: "/manager-request",
+    MANAGE_REQUEST_PM: "/manager-request-of-pm",
     MANAGE_PARKINGDETAIL: "/manager-parking-detail",
+    MANAGE_PARKINGDETAIL_PM: "/manager-parking-detail-PM",
     MANAGE_SLOT: "/manage-slot"
 }

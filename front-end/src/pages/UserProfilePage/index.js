@@ -195,10 +195,10 @@ const UserProfile=()=> {
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary"  onClick={e => navigate(toRoute(routes.USER_PROFILE_UPDATE, { id: profile }))}
             >
-            Edit
+            Chỉnh sửa thông tin
             </Button>
             <Button type="second" onClick={() => navigate(-1)}>
-              Back
+              Quay lại
             </Button>
           </Form.Item>
         </Form>

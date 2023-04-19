@@ -5,7 +5,7 @@ import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutline
 import moment from "moment";
 import { Role } from '../../utils/constants';
 import api from "../../services/api";
- const ManageRequest=()=> {
+ const ManageRequestPM=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
@@ -89,14 +89,12 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-const setUpData =(response)=>{
- 
-}
 
-// const role =localStorage.getItem("role"); 
+const ParkingID =localStorage.getItem("parkingID"); 
+
     useEffect(() => {
     //  authState?.data?.role ===Role.ParkingOwner
-        api.get(`pending-request-of-all-parkings-of-owner`,)
+    api.get(`pending-request/${ParkingID}`)
         .then(function(response)  {
           let respData = response.data
   respData.forEach((element) => {
@@ -420,4 +418,4 @@ const setUpData =(response)=>{
         </>
     )
 }
-export default ManageRequest;
+export default ManageRequestPM;

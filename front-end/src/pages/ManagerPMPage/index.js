@@ -35,7 +35,7 @@ export default function ManageParkingManager() {
         width: "15%",
       },
       {
-        title: "FullName",
+        title: "Họ tên",
         dataIndex: "fullName",
         key: "fullName",
         sorter: (a, b) => {
@@ -49,7 +49,7 @@ export default function ManageParkingManager() {
         },
       },
     {
-      title: "User Name",
+      title: "Tài khoản",
       dataIndex: "userName",
       key: "userName",
 
@@ -65,25 +65,25 @@ export default function ManageParkingManager() {
       width: "10%",
     },
     {
-      title: "Gender",
+      title: "Giới tính",
       dataIndex: "gender",
       key: "gender",
      
     },
    
     {
-      title: "Date of Birth",
+      title: "Ngày sinh",
       dataIndex: "dateOfBirth",
       key: "dateOfBirth",
     },  
     {
-      title: "Phone Number",
+      title: "Số điện thoại",
       dataIndex: "phoneNumber",
       key: "phoneNumber",
     },
     
     {
-        title: "Role",
+        title: "Vị trí",
         dataIndex: "role",
         key: "role",
       },
@@ -104,7 +104,7 @@ export default function ManageParkingManager() {
       },
       
     {
-      title: "Action",
+      title: " ",
       dataIndex: "action",
       key: "action",
       
@@ -143,6 +143,7 @@ export default function ManageParkingManager() {
 
         respData.forEach((element) => {
             element.fullName = element.lastName + " " + element.firstName;
+            element.role = element.role=== 'ParkingManager' ? 'Nhân viên' : " "
             element.trangthai = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
           element.dateOfBirth = moment(
             new Date(element.dateOfBirth).toLocaleDateString("en-US")
@@ -208,7 +209,7 @@ export default function ManageParkingManager() {
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+      showTotal: total => `Tổng ${total} nhân viên`
   };
 
   return (
@@ -279,7 +280,7 @@ export default function ManageParkingManager() {
         </Col>
         <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -475,7 +476,7 @@ export default function ManageParkingManager() {
       <AddPM setOpen={setOpen} open={open} setInfor={setInfor} setOpenInfor={setOpenInfor} infor={infor} />
       }
         <Modal
-        title="Hóa đơn"
+        title="Thông tin"
         open={openInfo}
         footer={null}
         onCancel={()=>setOpenInfor(false)}

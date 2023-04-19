@@ -38,7 +38,8 @@ const MenuContainer=()=> {
     const menuPM = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
         getItem(routes.MANAGE_SLOT, 'Quán lý chỗ đỗ', <HomeOutlined />),
-        getItem(routes.MANAGE_REQUEST, (<Badge count={countState?.data}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />)
+        getItem(routes.MANAGE_PARKINGDETAIL_PM, 'Quản lý đỗ xe', <CarOutlined />),
+        getItem(routes.MANAGE_REQUEST_PM, (<Badge count={countState?.data}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />)
     ]
     const onClickMenu = (e) => {
         const route = e.key;

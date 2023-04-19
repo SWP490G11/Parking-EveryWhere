@@ -39,11 +39,11 @@ function HeaderContainer() {
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     const handleConfirmLogout = () => {
         Modal.confirm({
-          title: "Are you sure?",
+          title: "Đăng xuất?",
           icon: <LogoutOutlined style={{ color: "red" }} />,
-          content: "Do you want to log out?",
-          okText: "Logout",
-          cancelText: "Cancel",
+          content: "Bạn muốn đăng xuất ra khỏi hệ thống?",
+          okText: "Đăng xuất",
+          cancelText: "Hủy",
           okButtonProps: { style: { background: "#e30c18", color: "white" } },
     
           onOk() {
@@ -87,14 +87,14 @@ function HeaderContainer() {
       }else if(profileState?.data?.role === 'ParkingOwner') {
         api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState({...countState,data:res.data})})
       }else  if(profileState?.data?.role === 'ParkingManager') {
-        api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState(res.data)})
+        api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState({...countState,data:res.data})})
       }
   }, [profileState]);
 
     const navigate = useNavigate();
     const items = [
         {
-          label: 'My Profile',
+          label: 'Thông tin cá nhân',
           key: '1',
           onClick: ()=>navigate(`/user-profile`),
           icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
@@ -102,14 +102,14 @@ function HeaderContainer() {
        
         {
           
-        label: 'Change Password',
+        label: 'Đổi mật khẩu',
         key: '3',
         onClick:() => setModal({ ...isModal, isOpen: true }),
         icon: <RedoOutlined  style={{ color: "red", fontWeight: "bold" }} />,
       },
         {
           
-        label: 'Logout',
+        label: 'Đăng xuất',
         key: '4',
         onClick: () => handleConfirmLogout(),
         icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
@@ -200,7 +200,7 @@ function HeaderContainer() {
         //   setError("");
         // }}
         destroyOnClose={true}
-        title="Change Password"
+        title="Đổi mật khẩu"
         // {...Footer}
       >
        
@@ -230,14 +230,16 @@ function HeaderContainer() {
               name="newPassword"
               label="Mật khẩu mới"
               rules={[
-                { required: true, max: 50, min:7,  message: `Vui lòng nhập mật khẩu`},
+                { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
                 {
-                  pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                  message: `Mật khẩu không được chứa khoảng trắng hoặc kí tự mật khẩu`,
+                  
+                  pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'),
+                  message: "Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !",
                 },
+              
                 
               ]}
-              hasFeedback
+              
             >
               <Input.Password
                 disabled={isModal.isLoading === true}
@@ -250,21 +252,22 @@ function HeaderContainer() {
             <Form.Item
               name="confirmNewPassword"
               label="Xác nhận mật khẩu mới"
-              rules={[
-                { required: true, max: 50,min:8,  message: `Vui lòng nhập xác thực mật khẩu `},
-                {
-                  pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                  message: `Xác nhận mật khâu không khớp với mật khẩu mới`,
+             
+            rules={[
+              {
+                required: true,
+                message: 'Vui lòng nhập mật khẩu xác thực!',
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                    
+                  }
+                  return Promise.reject(new Error('Mật khẩu và xác thực phải giống nhau!'));
                 },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('newPassword') === value) {
-                      return Promise.resolve();
-                    }
-                    // return Promise.reject(new Error('Mật khẩu chưa đồng bộ'));
-                  },
-                }),
-              ]}
+              })
+            ]}
                hasFeedback
             >
               <Input.Password
