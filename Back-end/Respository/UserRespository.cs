@@ -226,10 +226,15 @@ namespace Back_end.Respository
 
         public void Register(UserModel userModel)
         {
-
-
-            var user = new User()
+            try
             {
+            if(DateTime.Now.Year- userModel.DateOfBirth.Year <15){
+                throw new AppException("User is under 15. Please select a different date");
+           
+            }else{
+                     var user = new User()
+            {
+                
                 UserName = userModel.UserName,
                 HashPassword = BCryptNet.HashPassword(userModel.Password),
                 Gender = userModel.Gender,
@@ -242,14 +247,13 @@ namespace Back_end.Respository
                 Role = userModel.Role,
                 Parkings = new List<Parking>(),
                 IsDisable = false,
+               
+                
 
 
             };
-
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
-
-
             var image = new Image()
             {
                 URL = userModel.imageURL,
@@ -261,6 +265,14 @@ namespace Back_end.Respository
 
 
             _imageRepository.AddAsync(image);
+            }}catch(Exception e){
+                 throw e;
+            }
+
+            
+
+
+            
 
 
 
@@ -277,6 +289,12 @@ namespace Back_end.Respository
 
         public async Task Update(string id, UpdateModel userModel)
         {
+             try
+            {
+            if(DateTime.Now.Year- userModel.DateOfBirth.Year <15){
+                throw new AppException("User is under 15. Please select a different date");
+           
+            }else{
 
             var updateUser = await GetUser(id);
             updateUser.Gender = userModel.Gender;
@@ -306,6 +324,9 @@ namespace Back_end.Respository
             }
             _dbContext.Users.Update(updateUser);
             _dbContext.SaveChanges(true);
+            }}catch (Exception e){
+                throw e;
+            }
         }
 
         public bool UsernameExisted(string username)
@@ -327,7 +348,12 @@ namespace Back_end.Respository
             if (parking.ParkingManagers == null) parking.ParkingManagers = new List<User>();
 
             var username = GenerateUsername(userModel.FirstName, userModel.LastName);
-
+            try
+            {
+            if(DateTime.Now.Year- userModel.DateOfBirth.Year <15){
+                throw new AppException("User is under 15. Please select a different date");
+           
+            }else{
             var user = new User()
             {
                 UserName = username,
@@ -365,8 +391,13 @@ namespace Back_end.Respository
 
             parking.ParkingManagers.Add(user);
             _imageRepository.AddAsync(image);
+             return user;
+             }
+            }catch(Exception e){
+                  throw e;
+            }
 
-            return user;
+           
         }
 
         private string GenerateUsername(string firstName, string lastName)
