@@ -202,7 +202,7 @@ namespace Back_end.Controllers
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _repository.CancelRequestAsync(id);
+            await _repository.AproveRequest(id);
             return Ok("Update Success");
         }
 
