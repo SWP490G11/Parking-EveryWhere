@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Form,notification,Collapse,Tag,Space } from "antd";
+import { Table, Input, Button, Menu,List,Divider, Dropdown, Row, Col, Modal,Form,notification,Collapse,Tag,Space } from "antd";
 import {
-  FilterOutlined,SearchOutlined
+  FilterOutlined,SearchOutlined,
 } from "@ant-design/icons";
 
 import api from "../../services/api";
@@ -13,12 +13,18 @@ const { Panel } = Collapse;
 const [addSlot,setAddSlot]= useState(false)
 const [searchCar, setSearchCar] = useState("");
     const [slotParking,setSlotParking] =useState([]);
+    const [slotParking1,setSlotParking1] =useState([]);
     const [form] = Form.useForm();
     const [formz] = Form.useForm();
     const [car,setCar]=useState([]);
-    const [type,setType]= useState("Type");
+    const [page1, setPage1] = useState(1);
+    const [pageSize1, setPageSize1] = useState(5);
+    const [page2, setPage2] = useState(1);
+    const [pageSize2, setPageSize2] = useState(5);
+    const [type,setType]= useState("Tất cả");
+  const [type1,setType1]= useState("Tất cả");
     const [status,setStatus]= useState("All");
-    const [slotID,setSlotID] =useState("")
+    const [slotID,setSlotID] =useState("");
     const [carID,setCarID]=useState("");
     const [page, setPage] = useState(1);
     const [authState] = useAuthState();
@@ -115,18 +121,54 @@ const [searchCar, setSearchCar] = useState("");
           });});
     }, [])
     useEffect(() => {
-        api.get(`slots/${parkingID}`)
-          .then((response) =>{
-            setSlotParking(response.data)})
-            .catch((e)=>{notification.warning({
-            message: `Lỗi dữ liệu`,
-            description: "Tải dữ liệu bị lỗi",
-            placement: "topLeft",
-          });})
+      api.get(`slots-Roof/${parkingID}`)
+      .then((response) =>{
+        setSlotParking(response.data.sort((a, b) => {
+          if (
+            a.status.trim().toLowerCase() >
+            b.status.trim().toLowerCase() && a.price > b.price
+          ) {
+            return 1;
+          }
+          if (
+            b.status.trim().toLowerCase() >
+            a.status.trim().toLowerCase() && b.price > a.price
+          ) {
+            return -1;
+          }
+          return 0;
+        }))})
+      .catch((e)=>{notification.warning({
+        message: `Lỗi dữ liệu`,
+      description: "Tải dữ liệu bị lỗi",
+    placement: "topLeft",
+     });});
+     api.get(`slots-nonRoof/${parkingID}`)
+     .then((response) =>{
+       setSlotParking1(response.data.sort((a, b) => {
+         if (
+           a.status.trim().toLowerCase() >
+           b.status.trim().toLowerCase() && a.price > b.price
+         ) {
+           return 1;
+         }
+         if (
+           b.status.trim().toLowerCase() >
+           a.status.trim().toLowerCase() && b.price > a.price
+         ) {
+           return -1;
+         }
+         return 0;
+       }))})
+     .catch((e)=>{notification.warning({
+       message: `Lỗi dữ liệu`,
+     description: "Tải dữ liệu bị lỗi",
+   placement: "topLeft",
+    });});
     }, [parkingID])
     const dataType =
-        type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
-    const finalSlot = status === 'All' ? dataType : dataType.filter((u)=>u.status === status);
+    type === 'Tất cả' ? slotParking : slotParking.filter((u) => u.status === type);     
+    const finalSlot = status === 'All' ? slotParking : slotParking.filter((u)=>u.status === status);
         const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -136,6 +178,36 @@ const [searchCar, setSearchCar] = useState("");
                   // || u.id.toLowerCase().includes(searchText.toLowerCase())
             ) 
             );
+            const dataType1 =
+            type1 === 'Tất cả' ? slotParking1 : slotParking1.filter((u) => u.status === type1);
+            const paginationSlot = {
+              current: page1,
+              pageSize: pageSize1,
+              total: dataType.length,
+              pageSizeOptions: [5, 10, 15],
+              className: "ant-btn-dangerous",
+              dangerous: true,
+              onChange: (page1, pageSize1) => {
+                setPage1(page1);
+                setPageSize1(pageSize1);
+              },
+             showSizeChanger:true, 
+                showTotal: total => `Tổng ${total} chỗ dỗ`
+            }; 
+            const paginationSlot1 = {
+              current: page2,
+              pageSize: pageSize2,
+              total: dataType1.length,
+              pageSizeOptions: [5, 10, 15],
+              className: "ant-btn-dangerous",
+              dangerous: true,
+              onChange: (page2, pageSize2) => {
+                setPage2(page2);
+                setPageSize2(pageSize2);
+              },
+             showSizeChanger:true, 
+                showTotal: total => `Tổng ${total} chỗ dỗ`
+            }; 
             const pagination = {
                 current: page,
                 PageSize: pageSize,
@@ -150,147 +222,176 @@ const [searchCar, setSearchCar] = useState("");
                showSizeChanger:true, 
                   showTotal: total => `Total ${total} Student`
               };
-    const renderType = () => {
-        switch(type) {
-            case 'NONROOF':
-              return 'Không có mái che'
-            case 'ROOFED':
-              return 'Có mái che'
-           
-            default:
-              return 'Tất cả'
-          }
-      };
-      const renderStatus = () => {
-        switch(status) {
-            case 'Available':
-              return 'Còn trống'
-            case 'NotAvailable':
-              return 'Đã có xe'
-           
-            default:
-              return 'Tất cả'
-          }
-      };
+              const renderType = () => {
+                switch(type) {
+                    case 'Available':
+                      return 'Còn chỗ'
+                    case 'NotAvailable':
+                      return 'Đã có xe'
+                    default:
+                      return 'Tất cả'
+                  }
+              };
+              const renderType1 = () => {
+                switch(type1) {
+                    case 'Available':
+                      return 'Còn chỗ'
+                    case 'NotAvailable':
+                      return 'Đã có xe'
+                    default:
+                      return 'Tất cả'
+                  }
+              };
+      
     return(
         <>
-        <Row>
-          <Col span={8} >
-          <Form.Item label={'Loại'}>
-            <Dropdown.Button
-            placement="bottom"
-            icon={<FilterOutlined />}
-            overlay={
-              <Menu>
-                <Menu.Item
-                 
-                  onClick={() => {
-                    setType('ROOFED');
-                  }}
-                >
-                  {" "}
-                  Có mái che
-                </Menu.Item>
-               
-                <Menu.Item
-                  value="Female"
-                  onClick={() => {
-                    setType('NONROOF');
-                  }}
-                >
-                  {" "}
-                  Không mái che
-                </Menu.Item>
-               
-                <Menu.Item
-                  onClick={() => {
-                    setType("Type");
-                  }}
-                >
-                  {" "}
-                  Tất cả
-                </Menu.Item>
-              </Menu>
-            }
-          > 
-          {renderType()}
-            
-          </Dropdown.Button>
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-          <Form.Item label={'Trạng thái'}>
-            <Dropdown.Button
-            placement="bottom"
-            icon={<FilterOutlined />}
-            overlay={
-              <Menu>
-                <Menu.Item
-                 
-                  onClick={() => {
-                    setStatus('Available');
-                  }}
-                >
-                  {" "}
-                  Còn trống
-                </Menu.Item>
-               
-                <Menu.Item
-                 
-                  onClick={() => {
-                    setStatus('NotAvailable');
-                  }}
-                >
-                  {" "}
-                 Đã có xe
-                </Menu.Item>
-               
-                <Menu.Item
-                  onClick={() => {
-                    setStatus("All");
-                  }}
-                >
-                  {" "}
-                  Tất cả
-                </Menu.Item>
-              </Menu>
-            }
-          > 
-          {renderStatus()}
-            
-          </Dropdown.Button>
-            </Form.Item>
-          </Col>
-        </Row>
+        
          
-          <Collapse  >{
-            finalSlot.map((e,index)=>(
-              <Panel icon={e.status}  
-              header={ <>
-              <Row>
-                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí {index+1}  </Col>
+        <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Có mái che</p></Divider>
+        
+        <Form.Item label={'Trạng thái'}>
+          <Dropdown.Button
+          placement="bottom"
+          icon={<FilterOutlined />}
+          overlay={
+            <Menu>
+              <Menu.Item
                
-                <Col span={8}>
-              {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
-            </Col>
-            <Col span={8}><Tag color={'geekblue'} >
-              Giá {e.price}
-            </Tag></Col>
-              </Row>
+                onClick={() => {
+                  setType('Available');
+                }}
+              >
+                {" "}
+                Còn trống
+              </Menu.Item>
              
-              </>}>
-        <p>
-          {e.status !== 'Available' ?  
-        // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
-        <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
-        :
-        <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
-        </p>
-      </Panel>
-          ))
+              <Menu.Item
+                value="Female"
+                onClick={() => {
+                  setType('NotAvailable');
+                }}
+              >
+                {" "}
+                Đã có xe
+              </Menu.Item>
+             
+              <Menu.Item
+                onClick={() => {
+                  setType("Tất cả");
+                }}
+              >
+                {" "}
+                Tất cả
+              </Menu.Item>
+            </Menu>
           }
+        > 
+        {renderType()}
+          
+        </Dropdown.Button>
+          </Form.Item>
+          <List dataSource={dataType} pagination={paginationSlot}
+          renderItem={(e) => (
+            <Collapse  >
+                <Panel icon={e.status}  
+                header={ <>
+                <Row>
+                  <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                 
+                  <Col span={8}>
+                {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+              </Col>
+              <Col span={8}><Tag color={'geekblue'} >
+                Giá {e.price}
+              </Tag></Col>
+                </Row>
+               
+                </>}>
+          <p>
+            {e.status !== 'Available' ?  
+          // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+          <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+          :
+          <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+          </p>
+        </Panel>
+           
+       
+      </Collapse> 
+          )}/>
+       
+       <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Không có mái che</p></Divider>
      
-    </Collapse>  
+        <Form.Item label={'Trạng thái'}>
+          <Dropdown.Button
+          placement="bottom"
+          icon={<FilterOutlined />}
+          overlay={
+            <Menu>
+              <Menu.Item
+               
+                onClick={() => {
+                  setType1('Available');
+                }}
+              >
+                {" "}
+                Còn trống
+              </Menu.Item>
+             
+              <Menu.Item
+                value="Female"
+                onClick={() => {
+                  setType1('NotAvailable');
+                }}
+              >
+                {" "}
+                Đã có xe
+              </Menu.Item>
+             
+              <Menu.Item
+                onClick={() => {
+                  setType1("Tất cả");
+                }}
+              >
+                {" "}
+                Tất cả
+              </Menu.Item>
+            </Menu>
+          }
+        > 
+        {renderType1()}
+          
+        </Dropdown.Button>
+          </Form.Item>
+          <List dataSource={dataType1} pagination={paginationSlot1}
+          renderItem={(e) => (
+            <Collapse  >
+                <Panel icon={e.status}  
+                header={ <>
+                <Row>
+                  <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                 
+                  <Col span={8}>
+                {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+              </Col>
+              <Col span={8}><Tag color={'geekblue'} >
+                Giá {e.price}
+              </Tag></Col>
+                </Row>
+               
+                </>}>
+          <p>
+            {e.status !== 'Available' ?  
+          // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+          <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+          :
+          <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+          </p>
+        </Panel>
+           
+       
+      </Collapse> 
+          )}/>
      {/*Thêm xe*/}
      <Modal
         title="Thêm xe vào bãi đỗ"

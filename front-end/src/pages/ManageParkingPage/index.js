@@ -237,17 +237,17 @@ const showPromiseDelete = (id) => {
     onCancel() {},
   });
 };
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    title: "Notice",
-    content: <p>Do you want to disable student?</p>,
-    footer: (
-      <div style={{ textAlign: "left" }}>
-        <Button className="buttonSave">Disable</Button>
+  // const [deleteModal, setDeleteModal] = useState({
+  //   isOpen: false,
+  //   title: "Notice",
+  //   content: <p>Do you want to disable student?</p>,
+  //   footer: (
+  //     <div style={{ textAlign: "left" }}>
+  //       <Button className="buttonSave">Disable</Button>
        
-      </div>
-    ),
-  });
+  //     </div>
+  //   ),
+  // });
   const [searchCar, setSearchCar] = useState("");
   const[open1,setOpen1]=useState(false)
  
@@ -594,7 +594,7 @@ const showPromiseDelete = (id) => {
        
       </Row>
       {/* Delete Modal */}
-      <Modal
+      {/* <Modal
         open={deleteModal.isOpen}
         title={deleteModal.title}
         footer={deleteModal.footer}
@@ -607,7 +607,7 @@ const showPromiseDelete = (id) => {
         }
       >
         {deleteModal.content}
-      </Modal>
+      </Modal> */}
       <Modal
         open={modal.isOpen}
         

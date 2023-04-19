@@ -1,4 +1,4 @@
-import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Descriptions,Form} from 'antd';
 
 import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled, CloseOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
@@ -72,14 +72,14 @@ import api from "../../services/api";
                 respData.forEach((element) => {
                     //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
                     element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Từ chối'? 'Từ chối':'Chấp thuận');
                     element.parkingName = element.parkingId.parkingName;
                     
 
 
                     element.action = [
                         
-                        <Button disabled={element.status==="Từ chối"? true : false}
+                        <Button disabled={element.status==="Từ chối" ||element.status==="Chấp thuận"  ? true : false}
                             className="buttonState"
                            
                             onClick={() => {
@@ -244,7 +244,7 @@ searchText === ""
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
         
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -288,7 +288,7 @@ searchText === ""
             </Form.Item>
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -300,76 +300,30 @@ searchText === ""
           />
         </Col>
         </Row>
-            <Modal
-                visible={modal.isOpen}
-                title='Detail Assignment Information'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>ID</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.id}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Parking Name</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request By</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestdBy}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request At</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestAt}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Status</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Note</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.note}</td>
-                    </tr>
-                </table>
-
+        <Modal
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin yêu cầu" bordered>
+        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
+   
+    {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
+     */}
+    <Descriptions.Item label="Ngày gửi" span={2}>{modal.data.requestAt}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" span={1}>{modal.data.status}</Descriptions.Item>
+    <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>
+   
+    </Descriptions>
 
             </Modal>
            
@@ -395,7 +349,7 @@ searchText === ""
                                     setModal({
                                         ...modal, isOpen: true
                                         , data: {
-                                            id: record.stt,
+                                            id: record.id,
                                             parkingName: record.parkingName,
                                             requestBy: record.requestBy,
                                             requestAt: record.requestAt,
