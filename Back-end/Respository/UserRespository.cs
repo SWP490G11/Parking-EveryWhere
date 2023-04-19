@@ -172,9 +172,21 @@ namespace Back_end.Respository
 
         public async Task<ICollection<User>> GetUserByUserNames(string username)
         {
-            return await _dbContext.Users.Include(u => u.Parkings).Include(u => u.Parking).Include(u => u.MembershipPackage)
+            return await _dbContext.Users.Include(u => u.Parkings)
+                .ThenInclude(p => p.Slots).Include(u => u.Parkings)
+                .Include(p => p.Parking)
+                .ThenInclude(p => p.ParkingManagers).
+                 Include(u => u.Parking).ThenInclude(p => p.ParkingManagers)
+                 .Include(u => u.Parking).ThenInclude(p => p.Feedbacks)
+                .Include(u => u.MembershipPackage)
+                .Include(u => u.Cars).ThenInclude(c => c.CarModel)
+                .Include(u => u.Requests).
+                Include(u => u.Feedbacks)
+                .Include(u => u.Image).
+                Include(u => u.Parkings).ThenInclude(p => p.Requests)
+                .Include(u => u.Parkings).ThenInclude(p => p.Images)
                 .Where(u => u.UserName.ToLower()
-                .Contains(username.ToLower())).ToListAsync();
+                .Contains(username.ToLower().Trim())).ToListAsync();
         }
 
         public async Task<ICollection<User>> GetUsers()

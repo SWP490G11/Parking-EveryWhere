@@ -8,7 +8,6 @@
 
         public DateTime ParkingDate { get; set; }
 
-        public DateTime? PickUpDate { get; set; }
         public string? Note { get; set; }
 
         public DateTime LastModifyAt { get; set; }

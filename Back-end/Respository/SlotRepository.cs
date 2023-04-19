@@ -4,6 +4,7 @@ using Back_end.Entities;
 using Back_end.Helper;
 using Back_end.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Back_end.Respository
 {
@@ -15,10 +16,32 @@ namespace Back_end.Respository
         Task<Slot> GetAsync(string idString);
         ICollection<Slot> PaginateAsync(ICollection<Slot> source, int pageNo, int pageSize);
         ICollection<Slot> SortAsync(DirectionOfSort direction, string factor);
-        Task UpdateAsync(string idString, SlotModel updateModel);
+        Task UpdateAsync(string idString, UpdatedSlotModel updateModel);
 
         Task<ICollection<Slot>> GetSlotByParkingAsync(string parkingID);
+
+        ICollection<Slot> GetListSlotAvailable();
+
+        ICollection<Slot> GetListSlotParking();
+
+
+        void UpdatePriceOfSlot(double price);
+
+        void DeleteRangeAsync(double price);
+
+
     }
+
+    public class GroupOfSlot {
+
+        public string carModelID { get; set; }
+        public TypeOfSlot TypeOfSlot { get; set; }
+
+        public double Price { get; set; }
+    }
+    
+
+    
 
     public class SlotRepository : ISlotRepository
     {
@@ -122,9 +145,72 @@ namespace Back_end.Respository
 
 
 
-        public Task UpdateAsync(string idString, SlotModel updateModel)
+        public async Task UpdateAsync(string idString, UpdatedSlotModel updateModel)
         {
-            throw new NotImplementedException();
+            var updated = await GetAsync(idString);
+            updated.TypeOfSlot = updateModel.TypeOfSlot;
+            updated.Status = updated.Status;
+            updated.Price = updateModel.Price;
+            updated.Discription = updated.Discription;
+
+            var carModel = _dbContext.CarModels.First(cm=>cm.ID.ToString().ToLower().Equals(updateModel.CarModelID.ToLower()));
+            if (carModel != null) updated.CarModel = carModel;
+
+            _dbContext.Slots.Update(updated);
+            _dbContext.SaveChanges();
+
+
         }
+
+        public ICollection<Slot> GetListSlotAvailable()
+        {
+            var slots =  _dbContext.Slots
+               .Include(p => p.Parking)
+               .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+               .Where(s => s.Status==Status.Available).ToList();
+
+            return slots;
+        }
+
+        public ICollection<Slot> GetListSlotParking()
+        {
+            var slots = _dbContext.Slots
+               .Include(p => p.Parking)
+               .Include(s => s.CarModel).Include(p => p.ParkingDetail)
+               .Where(s => s.Status == Status.Parking).ToList();
+
+            return slots;
+        }
+
+        public void UpdatePriceOfSlot(double price)
+        {
+            var updated = _dbContext.Slots.Where(s=>s.Price == price).ToList();
+            _dbContext.Slots.UpdateRange(updated);
+            _dbContext.SaveChanges();
+
+        }
+
+        public void DeleteRangeAsync(double price)
+        {
+            var deleted = _dbContext.Slots.Where(s => s.Price == price).ToList();
+            _dbContext.Slots.RemoveRange(deleted);
+            _dbContext.SaveChanges();
+        }
+    }
+
+    public class UpdatedSlotModel
+    {
+        public Status Status { get; set; }
+
+        public TypeOfSlot TypeOfSlot { get; set; }
+
+        public string Discription { get; set; }
+
+
+        public double Price { get; set; }
+
+        public string? CarModelID { get; set; }
+
+        public string? LastModifyByID { get; set; }
     }
 }

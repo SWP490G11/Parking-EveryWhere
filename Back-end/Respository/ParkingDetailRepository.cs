@@ -20,6 +20,8 @@ namespace Back_end.Respository
         ICollection<ParkingDetail> PaginateAsync(ICollection<ParkingDetail> source, int pageNo, int pageSize);
         ICollection<ParkingDetail> SortAsync(DirectionOfSort direction, string factor);
         Task UpdateAsync(string idString, ParkingDetailModel updateModel);
+
+        Task CarOut(string id);
     }
 
     public class ParkingDetailRepository : IParkingDetailRepository
@@ -27,12 +29,12 @@ namespace Back_end.Respository
 
         private readonly ICarRepository _carRepository;
         private readonly ISlotRepository _slotRepository;
-     
+
         private readonly ParkingDbContext _dbContext;
 
         public ParkingDetailRepository(ICarRepository carRepository,
             ISlotRepository slotRepository,
-          
+
             ParkingDbContext dbContext)
         {
             _carRepository = carRepository;
@@ -45,35 +47,44 @@ namespace Back_end.Respository
         {
             var car = await _carRepository.GetAsync(model.CarID);
             var slot = await _slotRepository.GetAsync(model.SlotID);
-            TimeSpan duration;
-            double dayofparking =1;
 
-            if (model.PickUpDate.HasValue)
-            {
-                duration = (TimeSpan)(model.PickUpDate.Value - model.PickUpDate);
-                dayofparking = duration.TotalDays;
-            }
-            else
-            {
-                duration = TimeSpan.FromDays(1);
-                dayofparking = duration.TotalDays;
-            }
+            if (slot.Status == Status.Parking) throw new AppException("Slot still have a car is parking") ;
+
+
+            slot.Status = Status.Parking;
+
+
+           
 
             var parkingDetail = new ParkingDetail()
             {
                 Car = car,
-                Slot = slot,     
+                Slot = slot,
                 ParkingDate = model.ParkingDate,
-                PickUpDate = model.PickUpDate,
                 LastModifyAt = DateTime.Now,
                 Note = model.Note,
-                TotalPrice = dayofparking * slot.Price
+                TotalPrice = slot.Price,
 
             };
-            await _dbContext.ParkingDetails.AddAsync(parkingDetail);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.ParkingDetails.Add(parkingDetail);
+            _dbContext.SaveChanges(true);
         }
 
+        public async Task CarOut(string id)
+        {
+            var pd = await GetAsync(id);
+            pd.PickUpDate = DateTime.Now;
+            pd.Slot.Status = Status.Available;
+            
+            var totaldays = Math.Ceiling((DateTime.Now - pd.ParkingDate).TotalDays);
+            if (totaldays < 1) totaldays = 1;
+
+            pd.TotalPrice = totaldays * pd.Slot.Price;
+
+            _dbContext.ParkingDetails.Update(pd);
+            _dbContext.SaveChanges();
+
+        }
 
         public async Task DeleteAsync(string idString)
         {
@@ -88,8 +99,8 @@ namespace Back_end.Respository
         {
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
-                .Include(pd => pd.Slot).
-        
+                .Include(pd => pd.Slot)
+        .ThenInclude(s => s.CarModel).
                 ToListAsync();
         }
 
@@ -98,8 +109,8 @@ namespace Back_end.Respository
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
             return await _dbContext.ParkingDetails.Include(pd => pd.Car)
-                .Include(pd => pd.Slot)
-             
+                .Include(pd => pd.Slot).ThenInclude(s => s.CarModel)
+
                 .FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
@@ -110,8 +121,8 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                 .Include(pd => pd.Car)
                 .Include(pd => pd.Slot)
-           
-                .Where(pd=>pd.Car.ID.ToString().ToUpper().Trim().Equals(carID.ToUpper().Trim())).
+           .ThenInclude(s => s.CarModel)
+                .Where(pd => pd.Car.ID.ToString().ToUpper().Trim().Equals(carID.ToUpper().Trim())).
                 ToListAsync();
         }
 
@@ -120,11 +131,11 @@ namespace Back_end.Respository
             return await _dbContext.ParkingDetails
                   .Include(pd => pd.Car)
                   .Include(pd => pd.Slot)
-                 
+                 .ThenInclude(s => s.CarModel)
                   .Where(pd => pd.Slot.ID.ToString().ToUpper().Trim().Equals(SlotID.ToUpper().Trim())).
                   ToListAsync();
         }
-   
+
 
         public ICollection<ParkingDetail> PaginateAsync(ICollection<ParkingDetail> source, int pageNo, int pageSize)
         {

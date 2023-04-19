@@ -1,0 +1,189 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+}
+
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+}
+
+.text-upper {
+  text-transform: uppercase;
+}
+
+.text-logo {
+  font-weight: 900;
+  font-size: 2rem;
+  color: #FFF;
+  cursor: pointer;
+}
+
+.parking-content {
+  display: flex;
+  align-items: center;
+}
+
+.parking-list-item {
+  box-sizing: content-box;
+  padding: 0.5rem !important;
+  margin: 0.5rem;
+  border: solid 2px bisque;
+  border-radius: 15px;
+  border-block-end: solid 2px bisque !important;
+}
+
+.parking-list .ant-list-items {
+  max-height: 70vh;
+  overflow: scroll;
+}
+
+.parking-status {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.5rem;
+  border: solid 1px lightgrey;
+  border-radius: 15px;
+  margin: 0.5rem;
+  width: 100px;
+}
+
+.ant-tag {
+  margin-inline-end: 0;
+}
+
+.parking-button-wapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-wapper {
+  display: flex;
+  justify-content: center;
+}
+
+.ant-select-selector,
+/* .ant-input {
+  border-color: rgb(30, 129, 210) !important;
+} */
+
+.parking-detail-info {
+  display: flex;
+}
+
+.info-left {
+  width: 40%;
+}
+
+.info-right {
+  padding: 0 2rem;
+}
+
+.right-parking-name,
+.right-parking-desc,
+.right-parking-address,
+.right-parking-price {
+  display: flex;
+}
+
+.right-parking-name {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.btn-booking{
+  border-radius:solid 1px;
+}
+/*Profile*/
+#profile {
+  display: flex;
+  position: relative;
+}
+
+.avatar {
+  
+  display: block;
+  background-color: whitesmoke;
+  text-align: center;
+}
+.imgz {
+  width: 35%;
+  border-radius: 100%;
+  border: 1px black solid;
+ 
+  background-color: rgb(0, 0, 0);
+}
+.formz{
+  margin:auto;
+  text-align: center;
+}
+.user-name {
+
+  text-align: center;
+  font-weight: bold;
+  font-size: large;
+}
+
+.user-information {
+  list-style: none;
+  width: 40vw;
+  font-size: 15px;
+}
+.user-information li{
+
+}
+.user-information li:nth-child(n) {
+  margin-left: 15%;
+  
+  margin: 30px;
+}
+
+#account-information{
+  list-style: none;
+  border-left: 1px solid;
+}
+#account-information li{
+  margin-left: 30px;
+  
+}
+.avatar-avatar{
+  width: 15vw;
+  height: 15vh;
+  font-size: 18px;
+  margin: 30px;
+}
+
+

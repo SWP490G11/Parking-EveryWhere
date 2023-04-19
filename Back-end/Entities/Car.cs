@@ -17,5 +17,7 @@ namespace Back_end.Entities
 
         [InverseProperty("Cars")]
         public User CarOwner { get; set; }
+
+        public ICollection<ParkingDetail>? ParkingDetails { get; set; } = new List<ParkingDetail>();
     }
 }

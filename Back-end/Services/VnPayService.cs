@@ -27,8 +27,7 @@ namespace Back_end.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"Name:{model.Name}, Months:{model.Months} Price:{model.Price}  Discription{model.Discription}" +
-                $"Subcribeby: {transacter.ID}");
+            pay.AddRequestData("vnp_OrderInfo", $"{transacter.ID}");
             pay.AddRequestData("vnp_OrderType", model.Name);       
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);

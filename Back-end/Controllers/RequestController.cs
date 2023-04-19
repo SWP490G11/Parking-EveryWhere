@@ -25,7 +25,14 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var requests = await _repository.GetAllAsync();
 
-            return Ok(requests);
+            return Ok(requests.Select(r =>
+          new {
+              r.ID,
+              r.Status,
+              RequestbyID = r.Requestby.ID.ToString(),
+              r.RequestAt
+          }
+            ));
         }
 
 
@@ -36,9 +43,15 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var request = await _repository.GetAsync(id);
+            var r = await _repository.GetAsync(id);
 
-            return Ok(request);
+            return Ok(new
+            {
+                r.ID,
+                r.Status,
+                RequestbyID = r.Requestby.ID.ToString(),
+                r.RequestAt
+            });
         }
 
         [HttpGet("/request/{parkingid}")]
@@ -118,7 +131,10 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             
 
-            return Ok(mwi.User.Requests);
+            return Ok(mwi.User.Requests.Select(r=> new
+            {
+                r.ID,r.Note,r.Status,ParkingId =r.Parking,r.RequestAt,
+            }));
         }
 
         [HttpPost("/request")]

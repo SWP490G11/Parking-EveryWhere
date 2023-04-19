@@ -37,7 +37,12 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var cars = await _respository.GetCarByCarModel(carModelID);
 
-            return Ok(cars);
+            return Ok(cars.Select(c => new {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+
+            }));
         }
 
 
@@ -65,9 +70,15 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var car = await _respository.GetAsync(id);
+            var c = await _respository.GetAsync(id);
 
-            return Ok(car);
+            return Ok(new
+            {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+
+            });
         }
 
         [HttpPost("/car")]
