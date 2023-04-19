@@ -257,7 +257,7 @@ namespace Back_end.Controllers
               p.Feedbacks,
               Owner = new {
                   p.Owner.ID,
-              FullName = p.Owner.FirstName + " " + p.Owner.LastName,
+              FullName = p.Owner.LastName + " " + p.Owner.FirstName,
               PhoneNumber = p.Owner.PhoneNumber,
               Email = p.Owner.Email,
               p.Owner.Gender,
