@@ -14,6 +14,7 @@ namespace Back_end.Respository
         Task<ICollection<Car>> GetCarByCarModel(string CarModelID);
         Task DeleteAsync(string idString);
         Task<ICollection<Car>> GetAllAsync();
+        Task<ICollection<Car>> GetAllAvailable();
         Task<Car> GetAsync(string idString);
         ICollection<Car> PaginateAsync(ICollection<Car> source, int pageNo, int pageSize);
         ICollection<Car> SortAsync(DirectionOfSort direction, string factor);
@@ -73,9 +74,13 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Car>> GetAllAsync()
         {
-            return await _dbContext.Cars.Include(c=>c.CarModel).Include(c=>c.ParkingDetails)
+            return await _dbContext.Cars.Include(c=>c.CarModel).Include(o=>o.CarOwner).Include(c=>c.ParkingDetails)
                 .ThenInclude(pd=>pd.Slot)
                 .ToListAsync();
+        }
+         public async Task<ICollection<Car>> GetAllAvailable()
+        {
+            return await _dbContext.Cars.Include(c=>c.CarModel).Include(o=>o.CarOwner).Where(p=>p.Status==Status.Available).ToListAsync();
         }
 
  

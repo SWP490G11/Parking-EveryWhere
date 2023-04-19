@@ -37,7 +37,7 @@ namespace Back_end.Controllers
                     c.CarOwner.ID,
                     c.CarOwner.Email,
                     c.CarOwner.PhoneNumber,
-                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
 
                 },
                 ParkingDetail = c.ParkingDetails.Select(p => new {
@@ -58,6 +58,31 @@ namespace Back_end.Controllers
      );
         }
 
+        [HttpGet("/cars-available")]
+        [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
+        public async Task<IActionResult> GetAllAvailable()
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var cars = await _respository.GetAllAvailable();
+
+            return Ok(cars.Select(c => new {
+                c.ID,
+                c.CarNumber,
+                c.CarModel,
+                c.Status,                
+                CarOwner = new
+                {
+                    c.CarOwner.ID,
+                    c.CarOwner.Email,
+                    c.CarOwner.PhoneNumber,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
+
+                },
+            })
+     );
+        }
+        
         [HttpGet("/cars/{carModelID}")]
         [Authorization.Authorize(Role.Admin,Role.Customer,Role.ParkingManager,Role.ParkingOwner)]
         public async Task<IActionResult> GetCarbyCarModel(string carModelID)
@@ -76,7 +101,7 @@ namespace Back_end.Controllers
                     c.CarOwner.ID,
                     c.CarOwner.Email,
                     c.CarOwner.PhoneNumber,
-                    FullName = c.CarOwner.LastName + " " + c.CarOwner.LastName,
+                    FullName = c.CarOwner.LastName + " " + c.CarOwner.FirstName,
 
                 },
                 ParkingDetail = c.ParkingDetails.Select(p => new {

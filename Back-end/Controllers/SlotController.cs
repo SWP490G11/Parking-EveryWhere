@@ -112,6 +112,26 @@ namespace Back_end.Controllers
 
             return Ok(slots);
         }
+         [HttpGet("/slots-Roof/{parkingID}")]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner,Role.ParkingManager)]
+        public async Task<IActionResult> GetSlotOfParkingROOF(string parkingID)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var slots = await _respository.GetSlotByParkingROOF(parkingID);
+
+            return Ok(slots);
+        }
+         [HttpGet("/slots-nonRoof/{parkingID}")]
+        [Authorization.Authorize(Role.Admin,Role.ParkingOwner,Role.ParkingManager)]
+        public async Task<IActionResult> GetSlotOfParkingNONROOF(string parkingID)
+        {
+            MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
+            if (mwi == null) return Unauthorized("You must login to see this information");
+            var slots = await _respository.GetSlotByParkingNONROOF(parkingID);
+
+            return Ok(slots);
+        }
 
 
         [HttpGet("/group-of-slots/{parkingID}")]
