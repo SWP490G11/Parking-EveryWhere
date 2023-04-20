@@ -81,7 +81,37 @@ namespace Back_end.Controllers
             if (mwi == null) return Unauthorized("You must login to see this information");
             var parkingdetails = _repository.GetAllParkingDetailsOfParking(parkingID);
 
-            return Ok(parkingdetails);
+            return Ok(parkingdetails.Select(p=>
+            new
+            {
+                p.ID,
+                p.ParkingDate,
+                p.PickUpDate,
+                p.TotalPrice,
+                Car = new
+                {
+                    p.Car.ID,p.Car.CarModel,
+                    p.Car.CarNumber,p.Car.Status,
+                    Owner = new
+                    {
+                        p.Car.CarOwner.ID,FullName = p.Car.CarOwner.LastName+" "+p.Car.CarOwner.FirstName,p.Car.CarOwner.PhoneNumber,p.Car.CarOwner.Email,p.Car.CarOwner.DateOfBirth,p.Car.CarOwner.Gender,
+                    }
+                }
+                ,
+                Slot =new
+                {
+                    p.Slot.ID,
+                    p.Slot.Price,
+                    p.Slot.Status,
+                    p.Slot.Discription,
+                    p.Slot.TypeOfSlot,
+                    
+                }
+               
+
+            }
+              
+            ));
         }
 
 

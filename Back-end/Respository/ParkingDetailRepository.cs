@@ -106,8 +106,10 @@ namespace Back_end.Respository
         public async Task<ICollection<ParkingDetail>> GetAllAsync()
         {
             return await _dbContext.ParkingDetails
-                .Include(pd => pd.Car)
-                .Include(pd => pd.Slot)
+                .Include(pd => pd.Car).ThenInclude(c=>c.CarModel)
+                 .Include(pd => pd.Car).ThenInclude(c => c.CarOwner)
+                .Include(pd => pd.Slot).ThenInclude(s=>s.Parking)
+                
         .ToListAsync();
         }
 
@@ -120,8 +122,9 @@ namespace Back_end.Respository
         public async Task<ParkingDetail> GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.ParkingDetails.Include(pd => pd.Car)
-                .Include(pd => pd.Slot)
+            return await _dbContext.ParkingDetails.Include(pd => pd.Car).ThenInclude(c => c.CarModel)
+                 .Include(pd => pd.Car).ThenInclude(c => c.CarOwner)
+                .Include(pd => pd.Slot).ThenInclude(s => s.Parking)
                 .FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
