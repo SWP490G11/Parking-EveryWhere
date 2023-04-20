@@ -53,6 +53,7 @@ function HeaderContainer() {
               if(profileState?.data?.role==='ParkingManager'){
                 localStorage.removeItem('parkingID')
               }   
+              localStorage.removeItem('userID')
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -69,10 +70,11 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
+                localStorage.setItem('userID',profileState.data.id)
             if(profileState?.data?.role==='ParkingManager'){
               localStorage.setItem('parkingID',profileState?.data?.parking?.id)
             }   
-
+            
             });
             
           
@@ -150,7 +152,7 @@ function HeaderContainer() {
        
         footer={[
           <Button
-            className="buttonSave"
+          type="primary"
             loading={isModal.isLoading}
             key="save"
             onClick={() => {
@@ -204,7 +206,10 @@ function HeaderContainer() {
         // {...Footer}
       >
        
-          <Form {...formItemLayout}>
+          <Form {...formItemLayout} style={{
+            textAlignLast:"left",
+            minWidth: 400,
+        }}>
             <Form.Item
               name="oldPassword"
               style={{ marginTop: "20px" }}
@@ -215,7 +220,7 @@ function HeaderContainer() {
                     message: 'Vui lòng nhập mật khẩu cũ của bạn',
                 },
             ]}
-              hasFeedback
+             
             >
               <Input.Password
                 disabled={isModal.isLoading === true}
@@ -229,6 +234,7 @@ function HeaderContainer() {
             <Form.Item
               name="newPassword"
               label="Mật khẩu mới"
+              
               rules={[
                 { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
                 {
@@ -236,8 +242,6 @@ function HeaderContainer() {
                   pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'),
                   message: "Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !",
                 },
-              
-                
               ]}
               
             >
@@ -251,24 +255,24 @@ function HeaderContainer() {
             </Form.Item>
             <Form.Item
               name="confirmNewPassword"
-              label="Xác nhận mật khẩu mới"
+              label="Xác nhận "
              
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập mật khẩu xác thực!',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                    
-                  }
-                  return Promise.reject(new Error('Mật khẩu và xác thực phải giống nhau!'));
+              rules={[
+                {
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu xác thực!',
                 },
-              })
-            ]}
-               hasFeedback
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('newPassword') === value) {
+                      return Promise.resolve();
+                      
+                    }
+                    return Promise.reject(new Error('Mật khẩu mới và xác thực phải giống nhau!'));
+                  },
+                })
+              ]}
+               
             >
               <Input.Password
                 disabled={isModal.isLoading === true}

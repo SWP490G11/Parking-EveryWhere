@@ -81,7 +81,7 @@ const ParkingInfo = (props) => {
                             
                            
                          </Col>
-                         <Col span={1}>-</Col>
+                         <Col span={2}> </Col>
                          <Col span={5}><Tag color={'geekblue'} >
                             {e.price} Đ
                          </Tag></Col>

@@ -131,8 +131,8 @@ const UserProfile=()=> {
             prefix: "86",
           }}
           style={{
-         
-            maxWidth: 400,
+            textAlignLast:"left",
+            minWidth: 400,
           }}
           scrollToFirstError
         >
@@ -168,7 +168,7 @@ const UserProfile=()=> {
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            label="Phone Number"
+            label="Số điện thoại"
            
           >
             {infor.phoneNumber}

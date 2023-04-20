@@ -995,15 +995,20 @@ const showPromiseDelete = (id) => {
             <Input.TextArea  />
           </Form.Item>
            
-          <Space>
+            <Row>
+              <Col span={16}></Col>
+              <Col span={8}>
               <Button onClick={()=>{setAddSlot(false); form.setFieldsValue({
                     carID: "",
                  carNumber: "",
                 note: "",})} }>Hủy</Button>
-              <Button htmlType="submit" type="primary">
+              <Button htmlType="submit" type="primary" style={{marginLeft:"10px"}}>
                 Lưu
               </Button>
-              </Space>
+              </Col>
+            
+              
+              </Row>
         
           
         </Form>

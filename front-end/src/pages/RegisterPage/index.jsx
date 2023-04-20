@@ -112,7 +112,7 @@ alt="Hình Ảnh Minh Họa"
 </div>
 
       <div className="noi-dung">
-        <div >
+      <div className="form">
      
         <h2>Đăng ký tài khoản mới</h2>
 
@@ -127,6 +127,7 @@ alt="Hình Ảnh Minh Họa"
             prefix: "86",
           }}
           style={{
+            textAlignLast:"left",
             minWidth: 400,
         }}
         labelCol={{
@@ -201,9 +202,10 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
 
           <Form.Item
+            
             name="cfpassword"
             label="Xác thực mật khẩu"
-            tooltip="Cần ít nhất 1 chữ in hoa và 1 số "
+            
             dependencies={["password"]}
           
             rules={[

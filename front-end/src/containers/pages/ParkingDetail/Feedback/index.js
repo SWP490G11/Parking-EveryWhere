@@ -3,9 +3,8 @@ import { Button, Avatar, Input, List,Form,Rate,notification,Space,Row,Col,Divide
 import api from '../../../../services/api';
 import { useAuthState } from '../../../../hooks/authState';
 import {
-    StarOutlined,
-    LikeOutlined,
-    MessageOutlined,
+  EditOutlined,
+  DeleteOutlined,
   } from "@ant-design/icons";
   import UploadImage from '../../../../components/UploadImage'
 import { useParams } from 'react-router-dom';
@@ -25,7 +24,7 @@ export const Feedback = () => {
     const param = useParams();
     const id = param.parkingID;
     const [value, setValue] = useState(2.5);
-   
+   const userID = localStorage.getItem('userID');
     useEffect(() => {
         api.get(`feedbacks-of-parking/${id}`)
           .then((response) =>{console.log(response.data); setFeedbacks(response.data)}).catch((e)=>{notification.warning({
@@ -36,11 +35,12 @@ export const Feedback = () => {
     }, [id])
     const data=feedbacks.map((e)=>({
         title: e.feedbackby.userName,
+        id: e.id,
         avatar: 'https://thumbsnap.com/i/SR3LQucs.jpg',
         content: e.content,
         rating: e.rating,
-        images :e.images[0],
-        userID: "e.feedbackby.id",
+        images :e.images,
+        userID: e.feedbackby.id,
 
     }),[])
     const onFinish = (values) => {
@@ -135,14 +135,18 @@ export const Feedback = () => {
       <List.Item
         key={item.title}
         actions={[
+            item.userID === userID ? (<>
+            <Button type="text" onClick={console.log(item.id)} text="Chỉnh sửa" ><EditOutlined/> Chỉnh sửa</Button>
+            <Button type="text" onClick={console.log(item.id)} text="Chỉnh sửa" ><DeleteOutlined/> Xóa</Button>
             
-           <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-            <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-            <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />
+            </>): <></>
+           
         ]}
         extra={
+          
           <Image
             width={272}
+            height={150}
             alt="logo"
             src={item.images}
           />
