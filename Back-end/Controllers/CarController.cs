@@ -141,12 +141,22 @@ namespace Back_end.Controllers
                     p.PickUpDate,
                     p.TotalPrice,
                     p.Note,
+                    Parking = new
+                    {
+                        p.Slot.Parking.ID,
+                        p.Slot.Parking.ParkingName,
+                        p.Slot.Parking.AddressDetail,
+                        p.Slot.Parking.Status,
+                    },
                     Slot = new
                     {
                         p.Slot.ID,
                         p.Slot.TypeOfSlot,
                         p.Slot.Discription,
+                       
                     }
+
+
                 })
 
             })
