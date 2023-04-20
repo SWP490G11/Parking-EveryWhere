@@ -87,6 +87,7 @@ namespace Back_end.Controllers
                 p.ID,
                 p.ParkingDate,
                 p.PickUpDate,
+                p.Note,
                 p.TotalPrice,
                 Car = new
                 {

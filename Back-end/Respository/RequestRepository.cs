@@ -101,7 +101,7 @@ namespace Back_end.Respository
         public async Task<ICollection<Request>> GetRequestToParking(string parkingID)
         {
             var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
-            .Equals(parkingID.Trim().ToLower())).ToListAsync();
+            .Equals(parkingID.Trim().ToLower())).Where(p=>p.Status == Status.Pending).ToListAsync();
             return requests;
         }
 
