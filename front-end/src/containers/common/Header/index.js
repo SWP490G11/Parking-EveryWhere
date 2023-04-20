@@ -81,7 +81,7 @@ function HeaderContainer() {
         } else if (location.pathname !== '/login' && location.pathname !=='/register') {
             window.location.replace('/login')
         }
-    }, [location.pathname, token]);
+    }, [location.pathname, token,profileState]);
     useEffect(() => {
       if (profileState?.data?.role === 'Admin') {
         api.get(`pending-parkings-number`).then((res)=>{setCountState({...countState,data:res.data})}) 

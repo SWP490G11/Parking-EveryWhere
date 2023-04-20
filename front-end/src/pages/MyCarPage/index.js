@@ -133,7 +133,7 @@ const MyCar = () => {
             <EditFilled/>
             </Button>
             ,
-            <Button disabled={element.status==="Từ chối"? true : false}
+            <Button disabled={element.status==='Xe đang đỗ'? true : false}
             className="buttonState"
            
             onClick={() => {
@@ -157,14 +157,14 @@ const MyCar = () => {
                       .then(() => {
                         notification.success({
                           message: `Xóa thành công`,
-                          description: "Delete a new car model successfully",
+                          description: "Xóa xe thành công",
                           placement: "topLeft",
                         });
                       })
                       .catch(() => {
                         notification.error({
                           message: `Xóa không thành công`,
-                          description: "Delete a user fail",
+                          description: "Không thể xóa xe này",
                           placement: "topLeft",
                         });
                       });
@@ -283,7 +283,7 @@ const MyCar = () => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
-          description: "Edit this car successfully",
+          description: "Chỉnh sửa thông tin xe thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -296,8 +296,8 @@ const MyCar = () => {
       })
       .catch((error) => {
         notification.warning({
-          message: `Fail`,
-          description: "Please check input again",
+          message: `Thất bại`,
+          description: "Vui lòng kiểm tra lại thông tin",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -465,7 +465,7 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car model id",
+                    message: "Vui lòng chọn loại xe",
                   },
                 ]}
               >
@@ -494,7 +494,7 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter car number ",
+                    message: "Vui lòng nhập biển số xe  ",
                   },
                 ]}
               >
@@ -502,7 +502,7 @@ const MyCar = () => {
                   style={{
                     width: "100%",
                   }}
-                  placeholder="Please enter car number "
+                  placeholder="Nhập biển số xe "
                 />
               </Form.Item>
             </Col>
@@ -521,10 +521,10 @@ const MyCar = () => {
                     });
                   }}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button htmlType="submit" type="primary">
-                  Submit
+                  Lưu
                 </Button>
               </Space>
             </Col>
@@ -556,7 +556,7 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car model id",
+                    message: "Vui lòng chọn loại xe",
                   },
                 ]}
               >
@@ -579,15 +579,15 @@ const MyCar = () => {
             <Col span={24}>
               <Form.Item
                 name="carNumber"
-                label="Car Number"
+                label="Biển số xe"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car Number",
+                    message: "Vui lòng nhập biển số xe",
                   },
                 ]}
               >
-                <Input placeholder="Please enter Car Number" />
+                <Input placeholder="Nhập biển số xe" />
               </Form.Item>
             </Col>
           </Row>
@@ -600,10 +600,10 @@ const MyCar = () => {
                     onClose1();
                   }}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button onClick={onClose1} htmlType="submit" type="primary">
-                  Submit
+                  Lưu
                 </Button>
               </Space>
             </Col>

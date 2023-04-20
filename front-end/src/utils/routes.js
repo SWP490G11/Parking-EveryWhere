@@ -18,5 +18,6 @@ export const routes = {
     MANAGE_REQUEST_PM: "/manager-request-of-pm",
     MANAGE_PARKINGDETAIL: "/manager-parking-detail",
     MANAGE_PARKINGDETAIL_PM: "/manager-parking-detail-PM",
-    MANAGE_SLOT: "/manage-slot"
+    MANAGE_SLOT: "/manage-slot",
+    MANAGE_USER : "/manage-user",
 }

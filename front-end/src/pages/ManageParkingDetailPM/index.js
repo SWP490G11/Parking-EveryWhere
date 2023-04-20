@@ -88,7 +88,8 @@ import api from "../../services/api";
                 //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
              element.parkingDate = moment(new Date(element.parkingDate).toLocaleDateString("en-US")).format('DD/MM/YYYY');
              element.pickUpDate = element.pickUpDate !==null ?   moment(new Date(element.pickUpDate).toLocaleDateString("en-US")).format('DD/MM/YYYY') :'Xe đang đỗ';
-              //element.carNumber = element.car.carNumber
+              element.carNumber = element.car.carNumber;
+              
                 
 
 

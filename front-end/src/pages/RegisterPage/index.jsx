@@ -320,8 +320,8 @@ alt="Hình Ảnh Minh Họa"
             >
         <Radio.Group  
        >
-          <Radio value={1} >Người dùng</Radio>
-          <Radio value={2}>Chủ bãi đỗ</Radio>
+          <Radio value={'Customer'} >Người dùng</Radio>
+          <Radio value={'ParkingOwner'}>Chủ bãi đỗ</Radio>
         </Radio.Group>
       </Form.Item>
          

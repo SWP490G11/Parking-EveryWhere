@@ -22,6 +22,7 @@ const LoginPage = () => {
         setLoading(true);
         const data = await login(username, password);
         if (data) {
+          
           notification.success({
             message: `Đăng nhập thành công`,
             description: "",
@@ -33,12 +34,9 @@ const LoginPage = () => {
             })
             setLoading(false);
             window.location.replace('/')
-        } else {
-          notification.error({
-            message: `Đăng nhập thất bại`,
-            description: "Tài khoản mật khẩu không chính xác. Vui lòng thử lại",
-            placement: "topLeft",
-          })
+        }
+         else {
+         
          
             setLoading(false);
         }

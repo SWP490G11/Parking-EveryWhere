@@ -15,6 +15,7 @@ import ManageParkingDetail from './pages/ManagerParkingDetail';
 import ManageParkingDetailPM from './pages/ManageParkingDetailPM';
 import ApproveParking from './pages/ApproveParkingPage';
 import ManageParkingManager from './pages/ManagerPMPage';
+import ManageUser from './pages/ManageUserPage';
 import MyRequest from './pages/MyRequestPage';
 import FooterContainer from './containers/common/Footer';
 import MenuContainer from './containers/common/Menu';
@@ -89,6 +90,7 @@ function App() {
               <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
               <Route path={routes.MANAGE_REQUEST_PM} element={<ManageRequestPM />} />
               <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
+              <Route path={routes.MANAGE_USER} element={<ManageUser />} />
               <Route path={routes.USERPROFILE} element={<UserProfile />} />
               <Route path={routes.USER_PROFILE_UPDATE} element={<UserProfile />} />
               <Route path={routes.PARKING_DETAIL} element={<PackingDetail />} />

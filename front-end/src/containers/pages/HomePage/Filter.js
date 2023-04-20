@@ -24,7 +24,7 @@ export const Filter = ({filter, setFilter }) => {
                             open: true,
                             placement:"bottom"
                           }}
-                        defaultValue={30} 
+                        
                         min={0} 
                         max={100} 
                         step={1} 

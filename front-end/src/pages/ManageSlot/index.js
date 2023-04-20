@@ -114,11 +114,7 @@ const [searchCar, setSearchCar] = useState("");
               return -1;
             }
             return 0;
-          }));},[]).catch((e)=>{notification.warning({
-            message: `Lỗi dữ liệu`,
-            description: "Tải dữ liệu bị lỗi",
-            placement: "topLeft",
-          });});
+          }));},[]).catch((e)=>{});
     }, [])
     useEffect(() => {
       api.get(`slots-Roof/${parkingID}`)
@@ -160,11 +156,7 @@ const [searchCar, setSearchCar] = useState("");
          }
          return 0;
        }))})
-     .catch((e)=>{notification.warning({
-       message: `Lỗi dữ liệu`,
-     description: "Tải dữ liệu bị lỗi",
-   placement: "topLeft",
-    });});
+     .catch((e)=>{});
     }, [parkingID])
     const dataType =
     type === 'Tất cả' ? slotParking : slotParking.filter((u) => u.status === type);     
@@ -396,7 +388,7 @@ const [searchCar, setSearchCar] = useState("");
      <Modal
         title="Thêm xe vào bãi đỗ"
         open={addSlot}
-        onCancel={()=>{setAddSlot(false); form.setFieldsValue({
+        onCancel={()=>{setAddSlot(false); formz.setFieldsValue({
           carID: "",
   carNumber: "",
   note: "",
@@ -459,7 +451,7 @@ const [searchCar, setSearchCar] = useState("");
           <Row>
               <Col span={16}></Col>
               <Col span={8}>
-              <Button onClick={()=>{setAddSlot(false); form.setFieldsValue({
+              <Button onClick={()=>{setAddSlot(false); formz.setFieldsValue({
                     carID: "",
                  carNumber: "",
                 note: "",})} }>Hủy</Button>

@@ -1,5 +1,5 @@
 
-import { Button, Avatar, Input, List,Form,Rate,notification,Space,Row,Col,Divider,Image } from 'antd';
+import { Button, Avatar, Input, List,Form,Rate,notification,Space,Row,Col,Divider,Image,Modal } from 'antd';
 import api from '../../../../services/api';
 import { useAuthState } from '../../../../hooks/authState';
 import {
@@ -19,20 +19,25 @@ const IconText = ({ icon, text }) => (
 export const Feedback = () => {
     const [authState] = useAuthState();
     const [form] = Form.useForm();
+    const [formz] = Form.useForm();
+    const [open,setOpen] =useState(false);
     const [image,setImage]=useState([]);
+    const [oldImage,setOldImage]=useState("");
+    const [newImage,setNewImage]=useState([]);
     const [feedbacks,setFeedbacks]=useState([])
     const param = useParams();
     const id = param.parkingID;
+    const [feedbackID,setFeedbackID] =useState();
     const [value, setValue] = useState(2.5);
    const userID = localStorage.getItem('userID');
     useEffect(() => {
         api.get(`feedbacks-of-parking/${id}`)
-          .then((response) =>{console.log(response.data); setFeedbacks(response.data)}).catch((e)=>{notification.warning({
+          .then((response) =>{ setFeedbacks(response.data)}).catch((e)=>{notification.warning({
             message: `Lỗi dữ liệu`,
             description: "Tải dữ liệu bị lỗi",
             placement: "topLeft",
           });});
-    }, [id])
+    }, [feedbacks,id])
     const data=feedbacks.map((e)=>({
         title: e.feedbackby.userName,
         id: e.id,
@@ -43,6 +48,92 @@ export const Feedback = () => {
         userID: e.feedbackby.id,
 
     }),[])
+    const InfoFeedback =(id)=>{
+      api
+          .get(`feedback/${id}`)
+          .then((res) => {
+              
+            setOpen(true);
+            setFeedbackID(id);
+            formz.setFieldsValue({
+              rating: res.data.rating,
+              content: res.data.content,
+            })
+            setOldImage(res.data.images[0].url);
+              //window.location.reload();
+          }).catch((error) => {
+              notification.warning({
+                  message: `Thât bại`,
+                  description: "Vui lòng thử lại",
+                  placement: "topLeft",
+                });
+      })
+    }
+    const handleDeleteOk = (id) => {
+       
+      api
+          .delete(`feedback/${id}`)
+          .then((res) => {
+              
+              notification.success({
+                  message: `Thành công`,
+                  description: "Bạn đã xóa phản hồi",
+                  placement: "topLeft",
+                });
+              //window.location.reload();
+          }).catch((error) => {
+              notification.warning({
+                  message: `Thât bại`,
+                  description: "Vui lòng thử lại",
+                  placement: "topLeft",
+                });
+      })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const showPromiseDelete = (id) => {
+      Modal.confirm({
+        title: 'Bạn có muốn xóa phản hồi này?',
+        
+        okText: 'Đồng ý',
+  okType: 'danger',
+  cancelText: 'Hủy',
+        content: 'Phản hồi sẽ bị xóa khi bạn đồng ý',
+        onOk() {
+          return new Promise((resolve, reject) => {
+              handleDeleteOk(id);
+            setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          }).catch(() => console.log('Oops errors!'));
+        },
+        onCancel() {},
+      });
+    };
+    const handleUpdateOk = (values) => {
+       
+      api
+          .put(`feedback/${feedbackID}`,{
+            content: values.content,
+            rating: value,
+            imageURLs: [newImage.length >0 ? newImage[0] : oldImage],
+            parkingID: id,
+          })
+          .then((res) => {
+                setOpen(false);
+                window.location.reload();
+              notification.success({
+                  message: `Thành công`,
+                  description: "Bạn đã xóa phản hồi",
+                  placement: "topLeft",
+                });
+              //window.location.reload();
+          }).catch((error) => {
+              notification.warning({
+                  message: `Thât bại`,
+                  description: "Vui lòng thử lại",
+                  placement: "topLeft",
+                });
+      })
+  }
+   
     const onFinish = (values) => {
     
         api
@@ -61,8 +152,9 @@ export const Feedback = () => {
             });
             form.setFieldsValue({
                 content: "",
-                imageURLs: [],
+                rating :"",
               })
+              setImage("")
             
           })
           .catch((error) => {
@@ -71,22 +163,18 @@ export const Feedback = () => {
               description: "Vui lòng thử lại",
               placement: "topLeft",
             });
-            form.setFieldsValue({
-                content: "",
-                
-                imageURLs: [],
-               
-              })
+            
           });
       };
       console.log(value)
     return (
         <div title="Feedback">
-            {authState?.data?.role === 'ParkingOwner'? <></>: <Form form={form} onFinish={onFinish} style={{width:"100%"}} layout="vertical" hideRequiredMark>
+            {authState?.data?.role === 'ParkingOwner'? <></>: 
+            <Form form={form} onFinish={onFinish} style={{width:"100%"}} layout="vertical" hideRequiredMark>
             <Form.Item
             name="rating"
             label="Đánh giá"
-            
+            required={true}
           >
             <Rate allowHalf onChange={setValue} value={value} />
            
@@ -108,6 +196,7 @@ export const Feedback = () => {
      
             <Col span={12}> {image.length > 0 ? <Image
     width={200}
+    height={125}
     src={image[0]}
   />: <></> }</Col>
       <Col span={4} >
@@ -117,7 +206,7 @@ export const Feedback = () => {
       </Col>
     </Row>
           <br/>
-    <Divider orientation="left">Danh sách phản hồi từ khách hàng</Divider>
+    <Divider orientation="left"><p style={{color:'red',fontWeight: "bold"}}>Danh sách phản hồi từ khách hàng</p></Divider>
          
             </Form>}
             
@@ -136,8 +225,8 @@ export const Feedback = () => {
         key={item.title}
         actions={[
             item.userID === userID ? (<>
-            <Button type="text" onClick={console.log(item.id)} text="Chỉnh sửa" ><EditOutlined/> Chỉnh sửa</Button>
-            <Button type="text" onClick={console.log(item.id)} text="Chỉnh sửa" ><DeleteOutlined/> Xóa</Button>
+            <Button type="text" onClick={()=>{InfoFeedback(item.id)}}  ><EditOutlined/> Chỉnh sửa</Button>
+            <Button type="text" onClick={()=>{showPromiseDelete(item.id)}}  ><DeleteOutlined/> Xóa</Button>
             
             </>): <></>
            
@@ -145,8 +234,8 @@ export const Feedback = () => {
         extra={
           
           <Image
-            width={272}
-            height={150}
+            width={200}
+            height={125}
             alt="logo"
             src={item.images}
           />
@@ -162,7 +251,69 @@ export const Feedback = () => {
       </List.Item>
     )}
   />
+            <Modal
+        title="Chỉnh sửa phản hồi"
+        open={open}
+        onCancel={()=>{
+          window.location.reload();
+          setOpen(false);
+           formz.setFieldsValue({
+          rating: "",
+          content: "",
+ });
+          setNewImage("");
+}}
+       
+        footer={null}
+        width={1000}
+      >
+         <Form form={formz} onFinish={handleUpdateOk} style={{width:"100%"}} layout="vertical" hideRequiredMark>
+            <Form.Item
+            name="rating"
+            label="Đánh giá"
+            required={true}
+          >
+            <Rate allowHalf onChange={setValue} value={value} />
            
+          </Form.Item>
+          
+            <Form.Item
+            name="content"
+            label="Nội dung"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập nội dung đánh giá",
+              },
+            ]}
+          >
+            <TextArea  style={{marginBottom: 20}} rows={6}/>
+          </Form.Item>
+           
+          <Row>
+      <Col span={8}><UploadImage setImages={setNewImage} images={newImage} count={1}/></Col>
+      <Col span={4} >
+     
+      </Col>
+            <Col span={8}> {newImage.length > 0 ? <Image
+    width={200}
+    height={125}
+    src={newImage[0]}
+  />: <Image
+  width={200}
+            height={125}
+  src={oldImage}
+/> }</Col>
+<Col span={4} >
+<Button htmlType="submit" type="primary">
+                Lưu
+              </Button>
+     </Col>
+    </Row>
+         
+  
+            </Form>
+      </Modal>
             
             
       </div>

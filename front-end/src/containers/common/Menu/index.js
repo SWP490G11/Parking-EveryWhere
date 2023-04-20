@@ -32,8 +32,9 @@ const MenuContainer=()=> {
     ]
     const menuAdmin = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
-        getItem(routes.APPROVEPARKING, (<Badge count={countState?.data}>Phê duyệt bãi đỗ</Badge>), <CarOutlined />),
+        getItem(routes.MANAGE_USER, 'Quản lí người dùng',<HomeOutlined/>),
         getItem(routes.MANAGECARMODEL, 'Quản lý loại xe', <CarOutlined />),
+        getItem(routes.APPROVEPARKING, (<Badge count={countState?.data}>Phê duyệt bãi đỗ</Badge>), <CarOutlined />),
     ]
     const menuPM = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),

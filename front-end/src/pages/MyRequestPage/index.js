@@ -15,7 +15,7 @@ import api from "../../services/api";
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
-    const [status,setStatus] = useState("Status");
+    const [status,setStatus] = useState("Tất cả");
 
  
 
@@ -23,7 +23,7 @@ import api from "../../services/api";
     const handleDeleteOk = (id) => {
        
         api
-            .patch(`request/cancel-request/${id}`)
+            .delete(`request/${id}`)
             .then((res) => {
                 
                 notification.success({
@@ -43,12 +43,12 @@ import api from "../../services/api";
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const showPromiseDelete = (id) => {
         Modal.confirm({
-          title: 'Do you want to delete these items?',
+          title: 'Bạn có muốn xóa yêu cầu này?',
           icon: <ExclamationCircleFilled />,
           okText: 'Đồng ý',
     okType: 'danger',
     cancelText: 'Hủy',
-          content: 'When clicked the OK button, this dialog will be closed after 1 second',
+          content: 'Yêu cầu sẽ bị xóa khi bạn đồng ý',
           onOk() {
             return new Promise((resolve, reject) => {
                 handleDeleteOk(id);
@@ -72,7 +72,7 @@ import api from "../../services/api";
                 respData.forEach((element) => {
                     //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
                     element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Từ chối'? 'Từ chối':'Chấp thuận');
+                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Cancel'? 'Từ chối':'Chấp thuận');
                     element.parkingName = element.parkingId.parkingName;
                     
 
@@ -190,7 +190,7 @@ import api from "../../services/api";
         },
     ];
     const dataByStatus =
-    status === "Status" ? data : data.filter((u) => u.status === status);
+    status === "Tất cả" ? data : data.filter((u) => u.status === status);
 const finalData =
 searchText === ""
   ? dataByStatus
@@ -270,10 +270,19 @@ searchText === ""
                   {" "}
                   Từ chối
                 </Menu.Item>
+                 <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setStatus("Chấp thuận");
+                  }}
+                >
+                  {" "}
+                  Chấp thuận
+                </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Status");
+                    setStatus("Tất cả");
                   }}
                 >
                   {" "}
@@ -282,7 +291,7 @@ searchText === ""
               </Menu>
             }
           > 
-          {renderContent()}
+          {status}
             
           </Dropdown.Button>
             </Form.Item>
