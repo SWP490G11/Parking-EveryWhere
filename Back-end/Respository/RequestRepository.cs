@@ -23,6 +23,7 @@ namespace Back_end.Respository
         Task AproveRequest(string idString);
 
         Task<ICollection<Request>> GetRequestToParking(string parkingID);
+         Task<ICollection<Request>> GetRequestPendingToParkingNumer(string parkingID);
     }
 
     public class RequestRepository : IRequestRepository
@@ -101,7 +102,7 @@ namespace Back_end.Respository
         public async Task<ICollection<Request>> GetRequestToParking(string parkingID)
         {
             var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
-            .Equals(parkingID.Trim().ToLower())).Where(p=>p.Status == Status.Pending).ToListAsync();
+            .Equals(parkingID.Trim().ToLower())).ToListAsync();
             return requests;
         }
 
@@ -111,7 +112,12 @@ namespace Back_end.Respository
             var requests = await _dbContext.Requests.Include(x => x.Requestby).Include(r => r.Parking).ToListAsync();
             return requests;
         }
-
+         public async Task<ICollection<Request>> GetRequestPendingToParkingNumer(string parkingID)
+        {
+            var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
+            .Equals(parkingID.Trim().ToLower())).Where(p=>p.Status == Status.Pending).ToListAsync();
+            return requests;
+        }
         public ICollection<Request> PaginateAsync(ICollection<Request> source, int pageNo, int pageSize)
         {
             throw new NotImplementedException();
