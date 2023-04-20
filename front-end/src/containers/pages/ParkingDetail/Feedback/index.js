@@ -169,7 +169,7 @@ export const Feedback = () => {
       console.log(value)
     return (
         <div title="Feedback">
-            {authState?.data?.role === 'ParkingOwner'? <></>: 
+            {authState?.data?.role === 'Customer'?  
             <Form form={form} onFinish={onFinish} style={{width:"100%"}} layout="vertical" hideRequiredMark>
             <Form.Item
             name="rating"
@@ -208,7 +208,7 @@ export const Feedback = () => {
           <br/>
     <Divider orientation="left"><p style={{color:'red',fontWeight: "bold"}}>Danh sách phản hồi từ khách hàng</p></Divider>
          
-            </Form>}
+            </Form>: <></>}
             
             <List
     itemLayout="vertical"

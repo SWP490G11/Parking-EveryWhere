@@ -11,6 +11,7 @@ import {
   notification,
   Drawer,Empty,Descriptions
 } from "antd";
+import dayjs from 'dayjs';
 import {
   EditFilled,
   CloseCircleOutlined,
@@ -265,7 +266,9 @@ const MyCar = () => {
           placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carModelID:"",
+          carNumber:"",
+         
         });
       });
 
@@ -376,11 +379,15 @@ const MyCar = () => {
     <Descriptions.Item label="Mô tả" span={2}>{modal.data.discript}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" >{modal.data.status}</Descriptions.Item>
    
-    {/* <Descriptions.Item label="Lịch sử gửi xe" span={3}>
-    {modal.data.parkingDetail.map((e)=>(
-         e.id
+     <Descriptions.Item label="Lịch sử gửi xe" span={3}>
+    {modal &&modal?.data?.parkingDetail?.map((e,index)=>(
+       <><h4  style={{ color: " red"}}>{index+1}. Bãi đỗ: {e?.parking?.parkingName}</h4>
+       Ngày đỗ xe: {dayjs(e?.parkingDate).format('DD/MM/YYYY')} <br/> 
+       {e.pickUpDate ? <>Ngày lấy xe: {dayjs(e?.pickUpDate).format('DD/MM/YYYY')}  </>: 'Xe đang đỗ'}
+       <p></p>
+       </>
     ))}
-   </Descriptions.Item> */}
+   </Descriptions.Item> 
           </Descriptions>
     
       </Modal>
@@ -428,7 +435,7 @@ const MyCar = () => {
                       carNumber: record.carNumber,
                       model: record.model,
                       discript: record.discript,
-                      parkingDetail : record.parkingDetail
+                      parkingDetail : record?.parkingDetail? record?.parkingDetail :"Không có lịch sử đỗ xe",
                      
                     },
                   });
@@ -470,12 +477,12 @@ const MyCar = () => {
                 ]}
               >
             <Select
-          placeholder="Chọn bãi đỗ"
+          placeholder="Chọn loại xe"
            
           virtual={false}
           >
             
-            {carModel.map((u)=> (
+            {carModel &&carModel?.map((u)=> (
                       <option value={u.id}>
                         {u.model}
                       </option>
@@ -515,8 +522,8 @@ const MyCar = () => {
                   onClick={() => {
                     onClose();
                     form.setFieldsValue({
-                      model: "",
-                      discript: "",
+                      carModelID:"",
+                      carNumber:"",
                      
                     });
                   }}

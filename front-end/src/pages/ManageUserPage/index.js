@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
-import AddPM from "../../containers/pages/ManageParking/AddPM";
+
 export default function ManageUser() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -108,7 +108,7 @@ export default function ManageUser() {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
           api.patch(`api/User/DisableOrActive?id=${ID}`).then(()=>{notification.success({
             message: `Thành công`,
-            description: 'Thay đổi trạng thái thành cong',
+            description: 'Thay đổi trạng thái thành công',
             placement: 'topLeft',
           });}).catch(()=>{
             notification.error({
@@ -414,13 +414,13 @@ export default function ManageUser() {
     <Descriptions.Item label="Tài khoản" span={1.5}>{modal.data.userName}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" span={1.5}>{modal.data.isDisable}</Descriptions.Item>
     <Descriptions.Item label="Họ tên"span={1.5} > {modal.data.fullName}</Descriptions.Item>
-    <Descriptions.Item label="Số điện thoại" span={1.5}>{modal.data.phoneNumber}</Descriptions.Item>
-    <Descriptions.Item label="E-mail" span={1.5}>{modal.data.email}</Descriptions.Item>
-    <Descriptions.Item label="Giới tính" span={1.5}>{modal.data.gender}</Descriptions.Item>
-    <Descriptions.Item label="Ngày sinh" span={1.5}>{modal.data.dateOfBirth}</Descriptions.Item>
-    <Descriptions.Item label="Vai trò" span={1.5}>{modal.data.role}</Descriptions.Item>
-    {modal?.data?.parking ?   <Descriptions.Item label="Nhân viên bãi đõ" span={3}>{modal.data.parking}</Descriptions.Item>: ""}
-    {modal?.data?.parkings ?   <Descriptions.Item label="Chủ bãi đỗ" span={3}>{modal.data.parkings.filter(u=>u.status==='Available').map((e,index)=>(
+    <Descriptions.Item label="Số điện thoại" span={1.5}>{modal?.data.phoneNumber}</Descriptions.Item>
+    <Descriptions.Item label="E-mail" span={1.5}>{modal?.data.email}</Descriptions.Item>
+    <Descriptions.Item label="Giới tính" span={1.5}>{modal?.data.gender}</Descriptions.Item>
+    <Descriptions.Item label="Ngày sinh" span={1.5}>{modal?.data.dateOfBirth}</Descriptions.Item>
+    <Descriptions.Item label="Vai trò" span={1.5}>{modal?.data?.role}</Descriptions.Item>
+    {modal?.data?.parking ?   <Descriptions.Item label="Nhân viên bãi đõ" span={3}>{modal?.data?.parking}</Descriptions.Item>: ""}
+    {modal?.data?.parkings ?   <Descriptions.Item label="Chủ bãi đỗ" span={3}>{modal && modal?.data?.parkings.filter(u=>u.status==='Available').map((e,index)=>(
     <>{index+1}. Bãi đỗ {e.parkingName} - Địa chỉ: {e.addressDetail}  <br/></>)) }</Descriptions.Item>: ""}
    
     </Descriptions>

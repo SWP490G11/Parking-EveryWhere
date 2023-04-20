@@ -25,7 +25,7 @@ import api from "../../services/api";
                 
                 notification.success({
                     message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
+                    description: "Bạn đã từ chối yêu cầu",
                     placement: "topLeft",
                   });
                 //window.location.reload();
@@ -70,7 +70,7 @@ import api from "../../services/api";
                 
                 notification.success({
                     message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
+                    description: "Yêu cầu đã được bạn chấp thuận",
                     placement: "topLeft",
                   });
                 //window.location.reload();

@@ -117,7 +117,7 @@ export default function ManageParkingManager() {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
           api.patch(`api/User/DisableOrActive?id=${ID}`).then(()=>{notification.success({
             message: `Thành công`,
-            description: 'Thay đổi trạng thái thành cong',
+            description: 'Thay đổi trạng thái thành công',
             placement: 'topLeft',
           });}).catch(()=>{
             notification.error({
@@ -211,20 +211,6 @@ export default function ManageParkingManager() {
       showTotal: total => `Tổng ${total} nhân viên`
   };
 
-  // const renderContent = () => {
-  //   switch(type) {
-  //       case 'Gender':
-  //         return 'Tất cả'
-  //       case 'Male':
-  //         return 'Nam'
-  //       case 'FeMale':
-  //         return 'Nữ'
-  //       case 'Other':
-  //           return 'Khác'
-  //       default:
-  //         return 'Tất cả'
-  //     }
-  // };
   return (
     <>
       <p
