@@ -136,7 +136,7 @@ namespace Back_end.Controllers
         {
             MiddlewareInfo? mwi = HttpContext.Items["UserTokenInfo"] as MiddlewareInfo;
             if (mwi == null) return Unauthorized("You must login to see this information");
-            var requests = await _repository.GetRequestToParking(parkingid);
+            var requests = await _repository.GetRequestPendingToParkingNumer(parkingid);
 
             return Ok(requests.Count);
         }
