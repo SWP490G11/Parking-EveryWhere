@@ -455,7 +455,7 @@ namespace Back_end.Respository
             var user = await GetUserByUserNames(userName);
             if (user == null) throw new AppException("Not found this user");
 
-            var length = random.Next(6, 25);
+            var length = random.Next(8, 13);
             var password = "";
             for (int i = 0; i < length; i++)
             {
