@@ -76,11 +76,14 @@ namespace Back_end.Controllers
                     }
                     )*/,
 
-                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
-                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
-                NumberOfRoofAvailableSlot = p.Slots.Count(x => { return x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.ROOFED; }),
-                NumberOfNonRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.NONROOF),
-
+                PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
+                   group => new
+                   {
+                       Price = group.Key,
+                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                       NumberOfSlots = group.Count()
+                   }
+                    ),
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
                 
             }));
@@ -192,10 +195,14 @@ namespace Back_end.Controllers
                     }
                     )*/,
 
-                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
-                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
-                NumberOfRoofAvailableSlot = p.Slots.Count(x => { return x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.ROOFED; }),
-                NumberOfNonRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.NONROOF),
+                PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
+                   group => new
+                   {
+                       Price = group.Key,
+                       SlotType = group.FirstOrDefault().TypeOfSlot,
+                       NumberOfSlots = group.Count()
+                   }
+                    ),
 
                 ImageUrls = p.Images.Select(i => i.URL).ToList(),
 
@@ -264,10 +271,7 @@ namespace Back_end.Controllers
               
               },
 
-                NumberOfRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.ROOFED),
-                NumberOfNonRoofSlot = p.Slots.Count(x => x.TypeOfSlot == TypeOfSlot.NONROOF),
-                NumberOfRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.ROOFED),
-                NumberOfNonRoofAvailableSlot = p.Slots.Count(x => x.Status == Status.Available && x.TypeOfSlot == TypeOfSlot.NONROOF),
+               
 
                   ImageUrls = p.Images.Select(i => i.URL).ToList(),
                  PriceDetails = p.Slots.GroupBy(s => s.Price).Select(
@@ -275,11 +279,12 @@ namespace Back_end.Controllers
                    {
                        Price = group.Key,   
                        SlotType = group.FirstOrDefault().TypeOfSlot,
+                       NumberOfSlots = group.Count()
                    }
                     )
 
           
-            });;
+            });
         }
 
 

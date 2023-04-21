@@ -90,28 +90,35 @@ namespace Back_end.Controllers
                 p.TotalPrice,
                 Car = new
                 {
-                    p.Car.ID,p.Car.CarModel,
-                    p.Car.CarNumber,p.Car.Status,
+                    p.Car.ID, p.Car.CarModel,
+                    p.Car.CarNumber, p.Car.Status,
                     Owner = new
                     {
-                        p.Car.CarOwner.ID,FullName = p.Car.CarOwner.LastName+" "+p.Car.CarOwner.FirstName,p.Car.CarOwner.PhoneNumber,p.Car.CarOwner.Email,p.Car.CarOwner.DateOfBirth,p.Car.CarOwner.Gender,
+                        p.Car.CarOwner.ID, FullName = p.Car.CarOwner.LastName + " " + p.Car.CarOwner.FirstName, p.Car.CarOwner.PhoneNumber, p.Car.CarOwner.Email, p.Car.CarOwner.DateOfBirth, p.Car.CarOwner.Gender,
                     }
                 }
                 ,
-                Slot =new
+                Slot = new
                 {
                     p.Slot.ID,
                     p.Slot.Price,
                     p.Slot.Status,
                     p.Slot.Discription,
                     p.Slot.TypeOfSlot,
-                    
+
                 }
+
+                , Parking = new
+                {
+                    p.Slot.Parking.ID,p.Slot.Parking.ParkingName,p.Slot.Parking.Discription,p.Slot.Parking.IsLegal,p.Slot.Parking.Status, 
+                }
+
+               
                
 
             }
               
-            ));
+            ));;
         }
 
 
