@@ -4,9 +4,10 @@ const { Footer } = Layout;
 
 const FooterContainer = () => {
     return (
-        <Footer
+        <Footer className='footer'
             style={{
                 textAlign: 'center',
+                
             }}
         >
             PARKING EVERY WHERE - SWP490
