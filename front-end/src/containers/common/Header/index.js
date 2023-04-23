@@ -121,7 +121,7 @@ function HeaderContainer() {
     return (
         <Header style={{ background: '#1E81D2' }} className='header'>
             <div className='text-logo'>
-            <a ><img style={{height: '70px'}} src={Logo}/></a>
+            <a href='/'><img style={{height: '70px'}} src={Logo}/></a>
             </div>
             
             <div className='header-user'>
