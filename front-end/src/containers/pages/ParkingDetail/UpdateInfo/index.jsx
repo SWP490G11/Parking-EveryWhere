@@ -8,12 +8,15 @@ import { updateParkingByID } from '../../../../services/parkingDetailServices';
 const { TextArea } = Input;
 const contentStyle = {
     height: '100px',
-    width: '100%',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#1e81d2',
+    width: '150px',
+    objectfit: 'contain',
+   borderRadius: '15px',
+   border: '1px solid #ddd',
+   lineHeight: '160px',
+   textAlign: 'center',
+   background: '#1e81d2',
 };
+
 export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
     const [updateParking, setupdateParking] = useState({})
     const [location, setLocation] = useState(null)

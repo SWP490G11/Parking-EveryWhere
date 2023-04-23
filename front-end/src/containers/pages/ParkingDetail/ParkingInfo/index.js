@@ -37,59 +37,70 @@ const ParkingInfo = (props) => {
                     <div className="info-right">
                         
                         <div className="right-parking-name">
+                            
                             <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Tên bãi đỗ: </div>
                             {props.parking?.parkingName}
                         </div>
-                       
-                        <div className="right-parking-price">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Trạng thái: </div>
-                            <Tag color={'green'} >
+                        <Row>
+                                <Col span={5}>
+                                <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Trạng thái: </div>
+                                </Col>
+                                <Col span={19}>
+                                <Tag color={'green'} >
                                 {props.parking?.status}
-                             </Tag>
+                                  </Tag>
                            
-                        </div>
-                        
-                        <div className="right-parking-desc">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Địa chỉ: </div>
-                            
-                        </div>
-                        {props.parking?.addressDetail}
-                        <div className="right-parking-desc">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Mô tả: </div>
-                            
-                        </div>
-                        <div>{props.parking?.discription}</div>
-                         
-                          <div className="right-parking-desc">
-                            <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div>
-                            
-                        </div>
-                        <div>{props.parking?.priceDetails?.map((e,)=>(
+                                </Col>
+                            </Row>
+                           
+                       
+                        {/* <div className="right-parking-price"> */}
+                        <Row>
+                                <Col span={5}>
+                                <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Địa chỉ: </div>
+                                </Col>
+                                <Col span={19}>
+                                {props.parking?.addressDetail}
+                                </Col>
+                            </Row>
+                           
+                           
+                        {/* </div> */}
+                        <Row>
+                                <Col span={5}>
+                                <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Mô tả: </div></Col>
+                                <Col span={19}>
+                                {props.parking?.discription}
+                                </Col>
+                            </Row>
+                       
+                            <Row>
+                            <Col span={5}>  <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div> </Col>
+                                <Col span={19}>
+                            { props.parking?.priceDetails?.map((e,)=>(
                              <Row>
-                             <Col span={12}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
+                               
+                             <Col span={8}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
                              
-                             <Col span={5}>
-                                {e.slotType==='ROOFED' ?
-                                (props.parking?.numberOfRoofAvailableSlot >0 ?
-                                     <><Tag color= {'green'} >{props.parking?.numberOfRoofAvailableSlot+"/"+props.parking?.numberOfRoofSlot}</Tag></> 
+                             <Col span={8}>
+                                {e.numberOfSlots >0 ?
+                                     <><Tag color= {'green'} >{e.numberOfSlots+"/"+e.numberOfSlots}</Tag></> 
                                 :
-                                <> <Tag color= {'red'} >{props.parking?.numberOfRoofAvailableSlot+"/"+props.parking?.numberOfRoofSlot}</Tag></>) 
-                                :(props.parking?.numberOfNonRoofAvailableSlot >0 ?
-                                    <><Tag color= {'green'} >{ props.parking?.numberOfNonRoofAvailableSlot+"/"+props.parking?.numberOfNonRoofSlot}</Tag></> 
-                               :
-                               <> <Tag color= {'red'} >{ props.parking?.numberOfNonRoofAvailableSlot+"/"+props.parking?.numberOfNonRoofSlot}</Tag></>)   }
-                            
-                           
+                                <> <Tag color= {'red'} >{e.numberOfSlots+"/"+e.numberOfSlots}</Tag></>
+                                 }
+                              
                          </Col>
-                         <Col span={2}> </Col>
-                         <Col span={5}><Tag color={'geekblue'} >
+                         
+                         <Col span={8}><Tag color={'geekblue'} >
                             {e.price} Đ
                          </Tag></Col>
                            </Row>
                             
                         )
                         )
-                        }</div>
+                        }
+                        </Col>
+                            </Row>
                         </div>
                 }
             </div>

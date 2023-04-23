@@ -14,7 +14,6 @@ code {
 }
 
 .site-layout-content {
-  min-height: 280px;
   padding: 24px;
 }
 
@@ -42,7 +41,7 @@ code {
   align-items: center;
 }
 .footer {
-  position: absolute;
+  
   bottom: 0;
   width: 100%;
   height: 2.5rem
@@ -191,6 +190,7 @@ code {
   height: 22vh;
   font-size: 18px;
   margin: 30px;
+  object-fit: contain;
 }
 
 

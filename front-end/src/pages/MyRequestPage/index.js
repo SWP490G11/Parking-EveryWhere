@@ -213,7 +213,7 @@ searchText === ""
           setPageSize(pageSize);
         },
        showSizeChanger:true, 
-          showTotal: total => `Total ${total} Request`
+          showTotal: total => `Tổng ${total} yêu cầu`
       };
       const renderContent = () => {
         switch(status) {

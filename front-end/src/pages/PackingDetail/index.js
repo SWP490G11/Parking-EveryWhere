@@ -22,10 +22,10 @@ function ParkingDetail() {
     const [open, setOpen] = useState(false);
     const [note,setNote] = useState('');
   
-    
    
     useEffect(() => {
         getParkingByID(id, setParkingDetail, setLoading);
+    //    console.log(parkingDetail)
     }, [id]);
     useEffect(()=> {
         if(parkingDetail) {
@@ -34,6 +34,7 @@ function ParkingDetail() {
             )
         }
     }, [parkingDetail])
+    
     const showModal = () => {
         setOpen(true);
       };

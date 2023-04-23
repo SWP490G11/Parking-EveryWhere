@@ -180,7 +180,7 @@ export default function ManageUser() {
   const dataBytype = type === "Tất cả" ? data : data.filter((u) => u.gender === type);
   
   const dataDisable = disable === "Tất cả" ? dataBytype : dataBytype.filter((u) => u.isDisable === disable);
-  const dataByRole = role === "Tất cả" ? dataDisable : dataDisable.filter((u) => u.gender === type);
+  const dataByRole = role === "Tất cả" ? dataDisable : dataDisable.filter((u) => u.role === role);
   const finalData =
     searchText === ""
       ? dataByRole
@@ -225,9 +225,9 @@ export default function ManageUser() {
         Danh sách người dùng
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col span={15}>
+        <Col span={12}>
           <Row>
-            <Col span={8}>
+            <Col span={6}>
             <Form.Item label={'Giới tính'}>
         <Dropdown.Button
             placement="bottom"

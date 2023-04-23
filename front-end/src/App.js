@@ -75,8 +75,7 @@ function App() {
             className="site-layout-content"
             style={{
               background: '#FFF',
-              position: 'relative',
-            minHeight: '100vh',
+            minHeight: '80vh',
             }}
           >
             <Routes>

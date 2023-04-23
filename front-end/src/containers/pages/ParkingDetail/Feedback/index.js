@@ -1,5 +1,5 @@
 
-import { Button, Avatar, Input, List,Form,Rate,notification,Space,Row,Col,Divider,Image,Modal } from 'antd';
+import { Button, Avatar, Input, List,Form,Rate,notification,Empty,Space,Row,Col,Divider,Image,Modal } from 'antd';
 import api from '../../../../services/api';
 import { useAuthState } from '../../../../hooks/authState';
 import {
@@ -209,8 +209,7 @@ export const Feedback = () => {
     <Divider orientation="left"><p style={{color:'red',fontWeight: "bold"}}>Danh sách phản hồi từ khách hàng</p></Divider>
          
             </Form>: <></>}
-            
-            <List
+            {data?.length >0 ?  <List
     itemLayout="vertical"
     size="large"
     pagination={{
@@ -250,7 +249,11 @@ export const Feedback = () => {
         
       </List.Item>
     )}
-  />
+  /> : <>
+  <Empty description={'Chưa có phản hồi'} />
+  </>
+  }
+           
             <Modal
         title="Chỉnh sửa phản hồi"
         open={open}

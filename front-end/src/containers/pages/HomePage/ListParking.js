@@ -65,11 +65,11 @@ const ListParking = ({ search, filter, parkings, setLocation }) => {
                             }
                         }
                         setLocation(_loation)
-                    }}
+                    }}  
                     style={{ cursor: 'pointer' }}
                 >
                     <List.Item.Meta
-                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls ? item.imageUrls : config.DEFAULT_IMG_URL} alt='' />}
+                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }} src={item?.imageUrls ? item.imageUrls : config.DEFAULT_IMG_URL} alt='' />}
                         // eslint-disable-next-line jsx-a11y/anchor-is-valid
                         title={<a onClick={()=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>

@@ -102,7 +102,7 @@ const UserProfile=()=> {
           <div className="user-avatar">
            <Space>
               {image.length >0 ? 
-              <Avatar className="avatar-avatar"
+              <Avatar  className="avatar-avatar"
               src={image}
             /> 
               :
