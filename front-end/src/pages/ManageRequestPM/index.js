@@ -227,7 +227,7 @@ const ParkingID =localStorage.getItem("parkingID");
             },
         },
         {
-            title: "Action",
+            title: "Phê duyệt",
             dataIndex: "action",
             key: "action",
         },

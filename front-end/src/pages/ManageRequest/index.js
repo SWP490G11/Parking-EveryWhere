@@ -226,7 +226,7 @@ import api from "../../services/api";
             },
         },
         {
-            title: "Action",
+            title: "Phê duyệt",
             dataIndex: "action",
             key: "action",
         },

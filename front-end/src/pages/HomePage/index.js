@@ -19,11 +19,11 @@ function HomePage() {
     const [parkings, setParking] = useState([]);
    
     useEffect(() => {
-        if (authState?.data?.role === Role.ParkingOwner) {
-            ParkingService.getAllParkingOwnerAvailable(setParking,setLoading)
-        } else {
-            ParkingService.getAllParkingAvailable(setParking, setLoading)
-        }
+        // if (authState?.data?.role === Role.ParkingOwner) {
+           // ParkingService.getAllParkingOwnerAvailable(setParking,setLoading)
+        // } else {
+             ParkingService.getAllParkingAvailable(setParking, setLoading)
+        // }
     }, [authState])
     // const finalData =
     // search === ""? parkings : (parkings.filter((u) =>

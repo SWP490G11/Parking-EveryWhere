@@ -100,7 +100,7 @@ export default function ManageParkingManager() {
       },
       
     {
-      title: " ",
+      title: "Đổi trạng thái",
       dataIndex: "action",
       key: "action",
       

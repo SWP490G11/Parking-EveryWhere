@@ -304,9 +304,9 @@ alt="Hình Ảnh Minh Họa"
             ]}
           >
             <Radio.Group>
-              <Radio value={0}>Male</Radio>
-              <Radio value={1}>FeMale</Radio>
-              <Radio value={2}>Other</Radio>
+              <Radio value={0}>Nam</Radio>
+              <Radio value={1}>Nữ</Radio>
+              <Radio value={2}>Khác</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item name="role"

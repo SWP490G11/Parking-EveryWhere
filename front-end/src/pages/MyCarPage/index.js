@@ -96,7 +96,7 @@ const MyCar = () => {
       key: "status",
     },
     {
-      title: " ",
+      title: "Hành động",
       dataIndex: "action",
       key: "action",
     },

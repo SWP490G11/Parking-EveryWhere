@@ -1,7 +1,7 @@
 import {Table, Modal, Button,Row,Col,Input,notification,Descriptions,Form,Empty} from 'antd';
 
 import React, {useEffect, useState} from 'react';
-import {ExclamationCircleFilled,MoneyCollectFilled, } from "@ant-design/icons";
+import {ExclamationCircleFilled,DollarOutlined, } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
  const ManageParkingDetail=()=> {
@@ -101,7 +101,7 @@ import api from "../../services/api";
                         
                     }}
                 >
-                   <MoneyCollectFilled  style={{color:"green"}} />
+                   <DollarOutlined  style={{color:"green"}} />
                 </Button>,
                     
                   
@@ -214,7 +214,7 @@ import api from "../../services/api";
             },
         },
         {
-            title: "",
+            title: "Thanh toán",
             dataIndex: "action",
             key: "action",
         },
@@ -260,7 +260,7 @@ import api from "../../services/api";
           paddingBottom: "20px",
         }}
       >
-        Quản lý chỗ đỗ xe
+        Thanh toán
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col span={8}>

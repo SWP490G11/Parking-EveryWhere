@@ -64,6 +64,7 @@ function App() {
         <Content
           style={{
             padding: '0 50px',
+            
           }}
         >
           {token ? (<MenuContainer  />):(<></>)}
@@ -73,6 +74,7 @@ function App() {
             className="site-layout-content"
             style={{
               background: '#FFF',
+              
             }}
           >
             <Routes>
@@ -100,10 +102,13 @@ function App() {
           </div>
         </Content>
         
-        {token ? (<FooterContainer />):(<></>)}
+        {token ? (<FooterContainer  style={{
+             paddingBottom:0,
+              
+            }} />):(<></>)}
         
       </Layout>
-    </Router>
+    </Router >
   );
 }
 

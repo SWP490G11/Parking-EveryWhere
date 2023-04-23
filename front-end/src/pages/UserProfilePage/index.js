@@ -71,7 +71,7 @@ const UserProfile=()=> {
       
       setLoading(false);
       const resData = response.data;
-        setInfor({ ...resData, dateOfBirth:moment(new Date(resData.dateOfBirth).toLocaleDateString('en-CA')).format('DD-MM-YYYY') });
+        setInfor({ ...resData, dateOfBirth:moment(new Date(resData.dateOfBirth).toLocaleDateString('en-CA')).format('DD/MM/YYYY') });
       setFullName(response.data.lastName+" "+response.data.firstName);
      
       setImage(response.data.image.url);

@@ -91,7 +91,7 @@ export default function ManageUser() {
       },
       
     {
-      title: " ",
+      title: "Đổi trạng thái ",
       dataIndex: "action",
       key: "action",
       
@@ -222,10 +222,10 @@ export default function ManageUser() {
           paddingBottom: "20px",
         }}
       >
-        Danh sách nhân viên
+        Danh sách người dùng
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col span={13}>
+        <Col span={15}>
           <Row>
             <Col span={8}>
             <Form.Item label={'Giới tính'}>

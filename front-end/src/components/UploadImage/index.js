@@ -49,10 +49,10 @@ const UploadImage = ({ images, setImages,count }) => {
                     options.onSuccess(res.data.data, options.file)
                     setImages([...images, res.data.data.media])
                 } else {
-                    Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                    Message(TypeMessage.ERROR, 'Tải ảnh lên gặp lỗi. Vui lòng thử lại')
                 }
             }).catch((err) => {
-                Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                Message(TypeMessage.ERROR, 'Tải ảnh lên gặp lỗi. Vui lòng thử lại')
                 console.log(err)
             })
     }

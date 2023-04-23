@@ -184,7 +184,7 @@ import api from "../../services/api";
             },
         },
         {
-            title: "Action",
+            title: "Hành động",
             dataIndex: "action",
             key: "action",
         },

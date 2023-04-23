@@ -5,8 +5,9 @@ import { useCountState } from '../../../hooks/countState';
 import { useLocation } from 'react-router-dom';
 import { getProfile } from '../../../services/userProfileServices';
 import { useNavigate } from "react-router-dom";
+import Logo from '../../../assets/images/logo.png'
 import { Avatar, Dropdown, Layout,Modal,Button,Input,Form,notification } from 'antd';
-import {LogoutOutlined, UserOutlined,RedoOutlined,} from "@ant-design/icons";
+import {LogoutOutlined, IdcardOutlined,RedoOutlined,} from "@ant-design/icons";
 import api from "../../../services/api";
 const { Header } = Layout;
 const formItemLayout = {
@@ -99,7 +100,7 @@ function HeaderContainer() {
           label: 'Thông tin cá nhân',
           key: '1',
           onClick: ()=>navigate(`/user-profile`),
-          icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
+          icon: <IdcardOutlined   style={{  fontWeight: "bold" }} />,
         },
        
         {
@@ -107,19 +108,22 @@ function HeaderContainer() {
         label: 'Đổi mật khẩu',
         key: '3',
         onClick:() => setModal({ ...isModal, isOpen: true }),
-        icon: <RedoOutlined  style={{ color: "red", fontWeight: "bold" }} />,
+        icon: <RedoOutlined  style={{ fontWeight: "bold" }} />,
       },
         {
           
         label: 'Đăng xuất',
         key: '4',
         onClick: () => handleConfirmLogout(),
-        icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
+        icon: <LogoutOutlined style={{ fontWeight: "bold" }} />,
       }];
 
     return (
         <Header style={{ background: '#1E81D2' }} className='header'>
-            <div className='text-logo'>PARKING EVERY WHERE</div>
+            <div className='text-logo'>
+            <a ><img style={{height: '70px'}} src={Logo}/></a>
+            </div>
+            
             <div className='header-user'>
 
                 {profileState?.token ?
@@ -180,7 +184,7 @@ function HeaderContainer() {
                 });
             }}
           >
-            Save
+            Lưu
           </Button>,
           <Button
             className="buttonCancel"
@@ -191,7 +195,7 @@ function HeaderContainer() {
               setError("");
             }}
           >
-            Cancel
+            Hủy
           </Button>,
         ]}
         // onOk={() => {

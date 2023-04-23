@@ -62,7 +62,7 @@ function ParkingDetail() {
       };
       console.log(note);
     return (
-        <Spin spinning={loading} size="large" tip="Loading...">
+        <Spin spinning={loading} size="large" tip="Đang tải...">
             <Row gutter={10}>
                 <Col span={14}>
                     <Card title="Thông tin bãi đỗ xe" style={{ minHeight: '30vh' }} bordered={true}>
