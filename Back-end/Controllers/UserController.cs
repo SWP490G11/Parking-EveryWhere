@@ -21,23 +21,14 @@ namespace Back_end.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRespository _userRespository;
-        private readonly IJwtUtils _jwtUtils;
-        private readonly IMapper _mapper;
-        private readonly IImageService _imageService;
-        private readonly ParkingDbContext _dbContext;
-        private readonly IEmailSender _emailSender;
+ 
 
         public UserController(IUserRespository userRespository
- , IJwtUtils jwtUtils, IMapper mapper, IImageService imageService
-, ParkingDbContext dbContext, IEmailSender emailSender
+ 
             )
         {
             _userRespository = userRespository;
-            _jwtUtils = jwtUtils;
-            _mapper = mapper;
-            _imageService = imageService;
-            _dbContext = dbContext;
-            _emailSender = emailSender;
+    
         }
 
         [AllowAnonymous]

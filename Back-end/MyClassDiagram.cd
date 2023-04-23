@@ -1,13 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access">
   <Class Name="Back_end.Controllers.UserController">
-    <Position X="10.5" Y="2.25" Width="1.5" />
+    <Position X="10.5" Y="2.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAgAAQAAABAgKAAAABCAAAEgAAAAAACgA=</HashCode>
+      <HashCode>AAQAAAAAAAAAgAAQAAAAAgKAAAABAQAAEgEAAAAACgA=</HashCode>
       <FileName>Controllers\UserController.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_jwtUtils" />
       <Field Name="_userRespository" />
     </ShowAsAssociation>
   </Class>
@@ -47,7 +46,7 @@
   <Class Name="Back_end.Entities.User">
     <Position X="5.75" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEACAiAkkACAUAACQAAAAAAQABAAAQAAABAQAAk=</HashCode>
+      <HashCode>AACAAEACAiAkkACAUAACQAAgAQAQABAAAQAAABAQAAk=</HashCode>
       <FileName>Entities\User.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -55,9 +54,9 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Back_end.Respository.UserRespository">
-    <Position X="12" Y="7.75" Width="1.5" />
+    <Position X="14.5" Y="2" Width="2" />
     <TypeIdentifier>
-      <HashCode>KAQBAAAgAAAAgAAAAAAAAAIBIAABCAAAEAEAAAAACAA=</HashCode>
+      <HashCode>KAQBAQAkAAAAgAAAAAAAAAIBAACBCAAAEAEAACAACgA=</HashCode>
       <FileName>Respository\UserRespository.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -66,9 +65,9 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Back_end.Helper.ParkingDbContext">
-    <Position X="7" Y="10" Width="1.5" />
+    <Position X="14.75" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAACACAgAAAAAAAAACEAAAEAAAghAAAAAAABAQAAA=</HashCode>
+      <HashCode>AgCAACACAgAAAAAAAAACEAAAEAAAgBAAAAAAABAQAAE=</HashCode>
       <FileName>Helper\ParkingDbContext.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -80,9 +79,9 @@
     </TypeIdentifier>
   </Interface>
   <Interface Name="Back_end.Respository.IUserRespository">
-    <Position X="4.5" Y="9" Width="1.5" />
+    <Position X="10.5" Y="8.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>KAQAAAAgAAAAgAAAAAAAAAIBAAABAAAAEAEAAAAACAA=</HashCode>
+      <HashCode>KAQAAAAgAAAAgAAAAAAAAAIBAAABAAAAEAEAAAAACgA=</HashCode>
       <FileName>Respository\UserRespository.cs</FileName>
     </TypeIdentifier>
   </Interface>
