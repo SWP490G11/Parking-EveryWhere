@@ -7,6 +7,7 @@ const getParkingByID = async (id, setParking, setLoading) => {
         api.get(`/parking/${id}`)
             .then(res => {
                 setParking(res.data);
+                // console.log(res.data);
                 setLoading(false);
             })
             .catch(err => {

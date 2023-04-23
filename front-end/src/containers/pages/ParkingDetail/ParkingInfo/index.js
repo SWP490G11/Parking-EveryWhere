@@ -17,7 +17,7 @@ const ParkingInfo = (props) => {
     }, [authState, location.pathname])
 
     const parkingImages = props.parking?.imageUrls;
-
+   // console.log(props.parking?.priceDetails)
     return (
         <div className="parking-detail-info">
            
@@ -83,10 +83,10 @@ const ParkingInfo = (props) => {
                              <Col span={8}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
                              
                              <Col span={8}>
-                                {e.numberOfSlots >0 ?
-                                     <><Tag color= {'green'} >{e.numberOfSlots+"/"+e.numberOfSlots}</Tag></> 
+                                {e.numberOfSlotAvailable >0 ?
+                                     <><Tag color= {'green'} >{e.numberOfSlotAvailable+"/"+e.numberOfSlots}</Tag></> 
                                 :
-                                <> <Tag color= {'red'} >{e.numberOfSlots+"/"+e.numberOfSlots}</Tag></>
+                                <> <Tag color= {'red'} >{e.numberOfSlotAvailable+"/"+e.numberOfSlots}</Tag></>
                                  }
                               
                          </Col>

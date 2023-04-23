@@ -25,15 +25,16 @@ function ParkingDetail() {
    
     useEffect(() => {
         getParkingByID(id, setParkingDetail, setLoading);
-    //    console.log(parkingDetail)
-    }, [id]);
-    useEffect(()=> {
         if(parkingDetail) {
             setDestination(
                 { lat: parkingDetail.lat, lng: parkingDetail.lon }
             )
         }
-    }, [parkingDetail])
+    //   console.log(parkingDetail)
+    }, [id,parkingDetail]);
+    // useEffect(()=> {
+       
+    // }, [parkingDetail])
     
     const showModal = () => {
         setOpen(true);

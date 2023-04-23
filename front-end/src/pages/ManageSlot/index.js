@@ -122,13 +122,13 @@ const [searchCar, setSearchCar] = useState("");
         setSlotParking(response.data.sort((a, b) => {
           if (
             a.status.trim().toLowerCase() >
-            b.status.trim().toLowerCase() && a.price > b.price
+            b.status.trim().toLowerCase()
           ) {
             return 1;
           }
           if (
             b.status.trim().toLowerCase() >
-            a.status.trim().toLowerCase() && b.price > a.price
+            a.status.trim().toLowerCase() 
           ) {
             return -1;
           }
@@ -144,13 +144,13 @@ const [searchCar, setSearchCar] = useState("");
        setSlotParking1(response.data.sort((a, b) => {
          if (
            a.status.trim().toLowerCase() >
-           b.status.trim().toLowerCase() && a.price > b.price
+           b.status.trim().toLowerCase() 
          ) {
            return 1;
          }
          if (
            b.status.trim().toLowerCase() >
-           a.status.trim().toLowerCase() && b.price > a.price
+           a.status.trim().toLowerCase() 
          ) {
            return -1;
          }
