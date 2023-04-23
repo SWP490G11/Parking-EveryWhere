@@ -79,7 +79,7 @@ function HeaderContainer() {
             });
             
           
-        } else if (location.pathname !== '/login' && location.pathname !=='/register') {
+        } else if (location.pathname !== '/login' && location.pathname !=='/register' && location.pathname !=='/forgot-password') {
             window.location.replace('/login')
         }
     }, [location.pathname, token,profileState]);
@@ -120,9 +120,9 @@ function HeaderContainer() {
 
     return (
         <Header style={{ background: '#1E81D2' }} className='header'>
-            <div className='text-logo'>
+            {/* <div className='text-logo'> */}
             <a href='/'><img style={{height: '70px'}} src={Logo}/></a>
-            </div>
+            {/* </div> */}
             
             <div className='header-user'>
 

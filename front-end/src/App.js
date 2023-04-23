@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/HomePage';
 import Login from './pages/LoginPage';
+import ForgotPassword from './pages/ForgotPassword';
 import PackingDetail from './pages/PackingDetail';
 import NotFound from './pages/NotFoundPage';
 import UserProfile from './pages/UserProfilePage';
@@ -81,6 +82,7 @@ function App() {
             <Routes>
               <Route exact path={routes.HOME} element={<Home />} />
               <Route path={routes.LOGIN} element={<Login />} />
+              <Route path={routes.FORGOT_PASSWORD} element={<ForgotPassword />} />
               <Route path={routes.REGISTER} element={<Register />} />
               <Route path={routes.MANAGERPARKING} element={<ManageParking />} />
               <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />

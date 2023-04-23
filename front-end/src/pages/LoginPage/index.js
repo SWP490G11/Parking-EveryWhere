@@ -107,17 +107,22 @@ const LoginPage = () => {
                             value={password} onChange={event => setPassword(event.target.value)}
                             placeholder="Mật khẩu"
                         />
+                        
+                        
                     </Form.Item>
+                    <div><a href="/forgot-password">Quên mật khẩu ?</a> <br/></div>
                     <div className="input-form">
+                      
                     <Form.Item>
+                   
                         <input type="submit" className="login-form-button" value=" Đăng nhập" style={{textAlign:"center"}} />
                            
-                        
                     </Form.Item>
                     </div>
                
                 </Form>
                 <div className="input-form">
+               
               <p>
                 Bạn chưa có tài khoản? <a href="/register">Đăng ký</a>
               </p>

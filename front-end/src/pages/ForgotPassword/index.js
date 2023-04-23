@@ -5,53 +5,43 @@ import {
     UserOutlined,
     TwitterOutlined,LockOutlined
   } from "@ant-design/icons";
-import "./LoginPage.css";
+
 import { Form, Input, Spin,notification } from 'antd';
-import { login } from '../../services/authServices';
-import { Message } from '../../utils/helpers';
-import { TypeMessage } from '../../utils/constants';
-import { useAuthState } from '../../hooks/authState';
-const LoginPage = () => {
-    const [authState, setAuthState] = useAuthState()
+import api from '../../services/api'
+const ForgotPassword = () => {
+   
     const [loading, setLoading] = useState(false);
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
+  
     const onFinish = async (values) => {
-        const { username, password } = values;
-        setLoading(true);
-        const data = await login(username, password);
-        if (data) {
-          
-          notification.success({
-            message: `Đăng nhập thành công`,
-            description: "",
-            placement: "topLeft",
-          })
-            setAuthState({
-                ...authState,
-                token: data.token
+          setLoading(true)
+          api.patch(`/api/User/ResetPassword?username=${values.username}`).then(()=>{
+            setLoading(false);
+            notification.success({
+              message: `Thành công`,
+              description: "Vui lòng kiểm tra mail của bạn",
+              placement: "topLeft",
             })
+            window.open('https://mail.google.com/mail/u/3/#inbox');
+            window.location.href ='/login'
+
+          }).catch(()=>{
             setLoading(false);
-            window.location.replace('/')
-        }
-         else {
-         
-         
-            setLoading(false);
-        }
+            notification.warning({
+              message: `Thất bại`,
+              description: "Không tìm tháy tài khoản của bạn. Vui lòng kiểm tra lại",
+              placement: "topLeft",
+            })
+          })
+          
+          
     };
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    //     if (token) {
-    //         window.location.replace('/')
-    //     }
-    // }, []);
+   
 
     return (
         <div id="login">
-              <Spin spinning={loading} tip="Đang đăng nhập...">
+              <Spin spinning={loading} tip="Đang tìm kiếm...">
             <section>
       
       <div className="img-bg">
@@ -63,10 +53,11 @@ const LoginPage = () => {
 
       <div className="noi-dung">
         <div className="form">
-          <h2>PARKING EVERYWHERE</h2>
+          <h2>Quên mật khẩu</h2>
           <Form
                     style={{
                         minWidth: 600,
+                       
                     }}
                     labelCol={{
                         span: 8,
@@ -103,22 +94,11 @@ const LoginPage = () => {
                
                 </Form>
                 <div className="input-form">
-              <p>
-                Bạn chưa có tài khoản? <a href="/register">Đăng ký</a>
+              <p style={{textAlign:"center"}}>
+                Bạn đã có tài khoản? <a href="/login">Đăng nhập</a>
               </p>
             </div>
-          <h3>Đăng nhập bằng tài khoản mạng xã hội</h3>
-          <ul className="icon-dang-nhap">
-            <li>
-              <FacebookOutlined style={{ scale: "200%" }} />
-            </li>
-            <li>
-              <GoogleOutlined style={{ scale: "200%" }} />
-            </li>
-            <li>
-              <TwitterOutlined style={{ scale: "200%" }} />
-            </li>
-          </ul>
+          
         </div>
       </div>
       
@@ -131,4 +111,4 @@ const LoginPage = () => {
 
     )
 };
-export default LoginPage;
+export default ForgotPassword;

@@ -20,4 +20,5 @@ export const routes = {
     MANAGE_PARKINGDETAIL_PM: "/manager-parking-detail-PM",
     MANAGE_SLOT: "/manage-slot",
     MANAGE_USER : "/manage-user",
+    FORGOT_PASSWORD: "/forgot-password",
 }

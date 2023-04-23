@@ -204,7 +204,21 @@ export const EditProfile=(profile)=> {
           <Form.Item
             name="dateOfBirth"
             label="Ngày sinh"
-            
+            rules={[
+              {
+                type: "object",
+                required: true,
+                message: "Vui lòng nhập ngày sinh của bạn!",
+              },
+              {
+                validator(_, value) {
+                    if ((new Date().getFullYear() - new Date(value).getFullYear()) < 15) {
+                        return Promise.reject("Người dùng phải trên 15 tuổi ")
+                    }
+                    return Promise.resolve();
+                }
+            }
+            ]}
           >
             <DatePicker  style={{width: 332}} format={'DD/MM/YYYY'} />
           </Form.Item>
