@@ -1,4 +1,4 @@
-import {Table, Modal, Button,Row,Col,Input,Empty,Descriptions} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,Empty,Descriptions,notification} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {CheckOutlined, CloseOutlined,FilterOutlined} from "@ant-design/icons";
 import api from "../../services/api";
@@ -23,6 +23,11 @@ import api from "../../services/api";
         api.patch(`aprrove-parking/${idCompleted}`,{})
             .then((res) => {
                 //window.location.reload();
+                notification.success({
+                    message: `Thành công`,
+                    description: 'Bạn đã chấp thuận bãi đỗ',
+                    placement: 'topLeft',
+                  })
                 setIdCompleted(null)
             }).catch(() => {
         })
@@ -47,6 +52,11 @@ import api from "../../services/api";
         setIsModalCancelVisible(false);
         api.patch(`cancel-parking/${idCompleted}`, {})
             .then((res) => {
+                notification.warning({
+                    message: `Thất bại`,
+                    description: 'Bạn đã từ chối phê duyệt bãi đỗ',
+                    placement: 'topLeft',
+                  })
                 setIdCompleted(null)
 
                 //window.location.reload();

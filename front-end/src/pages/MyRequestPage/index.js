@@ -244,7 +244,7 @@ searchText === ""
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
         
-        <Col span={8}>
+        <Col xs={24} xl={8} sm={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -297,7 +297,7 @@ searchText === ""
             </Form.Item>
         
           </Col>
-        <Col span={8}>
+        <Col xs={24} xl={8} sm={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -310,6 +310,7 @@ searchText === ""
         </Col>
         </Row>
         <Modal
+        className="ant-col ant-col-xs-12 ant-col-xl-24"
         open={modal.isOpen}
         
         onOk={() => {
@@ -323,7 +324,7 @@ searchText === ""
         closable={true}
       >
         <Descriptions title="Thông tin yêu cầu" bordered>
-        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
+        <Descriptions.Item label="ID" xs={3} xl={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
     {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
@@ -343,6 +344,7 @@ searchText === ""
             <div>
                 
                 <Table
+                className="ant-col ant-col-xs-24 ant-col-xl-24"
                     columns={columns}
                     pagination={pagination}
                     dataSource={finalData}

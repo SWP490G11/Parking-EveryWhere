@@ -4,10 +4,20 @@ import { useLocation } from 'react-router-dom';
 import { UpdateParkingInfo } from "../UpdateInfo";
 import { useAuthState } from '../../../../hooks/authState';
 import { Role } from "../../../../utils/constants";
-import {Tag,Row,Col} from 'antd';
+// import config from '../../config';
+import {FormOutlined} from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
+import api from "../../../../services/api";
+import {Tag,Row,Col,notification,Button,Modal,Input} from 'antd';
+const { TextArea } = Input;
 const ParkingInfo = (props) => {
     const location = useLocation();
     const [authState] = useAuthState()
+    const id = useParams().parkingID;
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    
+    const [open, setOpen] = useState(false);
+    const [note,setNote] = useState('');
     const [isUpdate, setUpdate] = useState(false)
     useEffect(() => {
         if(authState?.data?.role) { 
@@ -17,24 +27,52 @@ const ParkingInfo = (props) => {
     }, [authState, location.pathname])
 
     const parkingImages = props.parking?.imageUrls;
+    const showModal = () => {
+        setOpen(true);
+      };
+      const handleOk = async () => {
+        setConfirmLoading(true);
+        setTimeout(() => {
+            setOpen(false);
+  
+            setConfirmLoading(false);
+          }, 2000);
+       await api.post('request', { note, parkingID:id }).then(()=>{
+        notification.success({
+            message: 'Bạn đã gửi yêu cầu thành công',
+            placement: 'topLeft',
+          });
+       }).catch(()=>{
+        notification.warning({
+            message: 'Vui lòng thử lại',
+            placement: 'topLeft',
+       });
+    })
+        
+      };
+      const handleCancel = () => {
+        setOpen(false);
+      };
    // console.log(props.parking?.priceDetails)
     return (
         <div className="parking-detail-info">
-           
+           <Row>
+            <Col xs={24} sm={12} xl={10}>
             {
                 !isUpdate && 
-                <div className="info-left">
+                // <div className="info-left ant-col ant-col-xs-24 ant-col-xl-24">
                     <ImageCarousel listImage={parkingImages} />
-                </div>
+                // </div>
             }
-
+            </Col>
+            <Col xs={24} sm={12} xl={14}>
             <div >
                 {isUpdate ?
                     <>
                         <UpdateParkingInfo parkingImages={parkingImages} parking={props.parking} setLoading={props.setLoading}/>
                     </>
                     :
-                    <div className="info-right">
+                    <div className="info-right ant-col ant-col-xs-24 ant-col-xl-24">
                         
                         <div className="right-parking-name">
                             
@@ -101,10 +139,46 @@ const ParkingInfo = (props) => {
                         }
                         </Col>
                             </Row>
+                            <Row >
+                       
+                       <Col span={10}  style={{marginTop:'20px'}}>
+                        {authState?.data?.role === 'Customer' ? <><Button className="btn-booking" onClick={showModal} type="default"  icon={<FormOutlined />}>
+                       Gửi yêu cầu</Button> </> : <></>}
+                       
+                           </Col>
+                       </Row>
                         </div>
                 }
             </div>
+            </Col>
+           </Row>
+           
+
+           
+            <Modal
+        cancelText="Hủy"
+        okText="Gửi"
+        closable={true}
+        open={open}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        onOk={() => {
+            return new Promise((resolve, reject) => {
+                setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                handleOk();
+                setNote("");
+              }).catch(() => console.log('Oops errors!'));
+        }}
+        
+        title="Gửi yêu cầu"
+        
+      >
+       <TextArea rows={4}  value={note} onChange={event => setNote(event.target.value)}
+       placeholder="Gửi yêu cầu tới người quản lý bãi đỗ" />
+       
+      </Modal>
         </div>
+        
     )
 }
 

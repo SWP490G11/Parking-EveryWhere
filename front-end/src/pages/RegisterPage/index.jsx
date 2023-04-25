@@ -117,7 +117,7 @@ alt="Hình Ảnh Minh Họa"
         <h2>Đăng ký tài khoản mới</h2>
 
         <Form
-          
+          // {...tailFormItemLayout}
           form={form}
           layout="horizontal"
           //name="normal_login"
@@ -128,7 +128,7 @@ alt="Hình Ảnh Minh Họa"
           }}
           style={{
             textAlignLast:"left",
-            minWidth: 400,
+            minWidth: '40%',
         }}
         labelCol={{
             span: 8,
@@ -144,6 +144,7 @@ alt="Hình Ảnh Minh Họa"
           </Col>
          </Row> */}
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="firstName"
             label="Tên"
             rules={[
@@ -157,6 +158,7 @@ alt="Hình Ảnh Minh Họa"
             <Input />
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="lastName"
             label="Họ"
             rules={[
@@ -171,6 +173,7 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
 
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="userName"
             label="Tài khoản"
             rules={[
@@ -184,6 +187,7 @@ alt="Hình Ảnh Minh Họa"
             <Input  />
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="password"
             label="Mật khẩu"
             tooltip="Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !"
@@ -202,7 +206,7 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
 
           <Form.Item
-            
+            className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="cfpassword"
             label="Xác thực mật khẩu"
             
@@ -229,6 +233,7 @@ alt="Hình Ảnh Minh Họa"
             <Input.Password />
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="email"
             label="E-mail"
             rules={[
@@ -253,6 +258,7 @@ alt="Hình Ảnh Minh Họa"
               
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="phoneNumber"
             label="Số điện thoại"
             rules={[
@@ -271,6 +277,7 @@ alt="Hình Ảnh Minh Họa"
             />
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="dateOfBirth"
             label="Ngày sinh"
             rules={[
@@ -294,6 +301,7 @@ alt="Hình Ảnh Minh Họa"
               }}/>
           </Form.Item>
           <Form.Item
+          className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="gender"
             label="Giới tính"
             rules={[
@@ -311,6 +319,7 @@ alt="Hình Ảnh Minh Họa"
           </Form.Item>
           <Form.Item name="role"
            label="Vai trò"
+           className="ant-col ant-col-xs-24 ant-col-xl-24"
            rules={[
             {
               required: true,
@@ -325,7 +334,7 @@ alt="Hình Ảnh Minh Họa"
         </Radio.Group>
       </Form.Item>
          
-          <Form.Item {...tailFormItemLayout}>
+          <Form.Item  className="ant-col ant-col-xs-24 ant-col-xl-24">
             <Button type="primary"  htmlType="submit">
            
                   Đăng ký

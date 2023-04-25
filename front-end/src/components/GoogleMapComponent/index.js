@@ -43,7 +43,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
             <GoogleMap
                 id="map"
                 mapContainerStyle={mapContainerStyle}
-                zoom={14}
+                zoom={16}
                 center={
                     location ? location.location :
                         locationState?.hasYourLocation ?

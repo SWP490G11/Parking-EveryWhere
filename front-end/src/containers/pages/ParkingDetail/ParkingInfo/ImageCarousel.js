@@ -16,7 +16,7 @@ const ImageCarousel = (props) => {
     const listImage = props.listImage;
 
     return (
-        <Carousel autoplay>
+        <Carousel autoplay  className="ant-col ant-col-xs-24 ant-col-xl-24">
             {
                 listImage?.map((data, key) => (
                     <div key={key}>

@@ -171,7 +171,7 @@ export const Feedback = () => {
         <div title="Feedback">
             {authState?.data?.role === 'Customer'?  
             <Form form={form} onFinish={onFinish} style={{width:"100%"}} layout="vertical" hideRequiredMark>
-            <Form.Item
+            <Form.Item className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="rating"
             label="Đánh giá"
             required={true}
@@ -179,7 +179,7 @@ export const Feedback = () => {
             <Rate allowHalf onChange={setValue} value={value} />
            
           </Form.Item>
-          <Form.Item
+          <Form.Item className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="content"
             label="Nội dung"
             rules={[
@@ -192,24 +192,26 @@ export const Feedback = () => {
             <TextArea  style={{marginBottom: 20}} rows={6}/>
           </Form.Item>
           <Row>
-      <Col span={8}><UploadImage setImages={setImage} images={image} count={1}/></Col>
+      <Col xs={8} xl={8} sm={8} ><UploadImage setImages={setImage} images={image} count={1}/></Col>
      
-            <Col span={12}> {image.length > 0 ? <Image
+            <Col xs={16} xl={12} sm={12}> {image.length > 0 ? <Image
     width={200}
     height={125}
     src={image[0]}
   />: <></> }</Col>
-      <Col span={4} >
+      <Col xs={24} xl={4} sm={4}>
       <Button htmlType="submit" type="primary">
                 Gửi
               </Button>
       </Col>
     </Row>
           <br/>
-    <Divider orientation="left"><p style={{color:'red',fontWeight: "bold"}}>Danh sách phản hồi từ khách hàng</p></Divider>
+   
          
             </Form>: <></>}
+            <Divider orientation="left"   ><p style={{color:'red',fontWeight: "bold"}} className="ant-col ant-col-xs-12 ant-col-xl-24">Danh sách phản hồi</p></Divider>
             {data?.length >0 ?  <List
+            className="ant-col ant-col-xs-24 ant-col-xl-24"
     itemLayout="vertical"
     size="large"
     pagination={{
@@ -220,7 +222,7 @@ export const Feedback = () => {
     }}
     dataSource={data}
     renderItem={(item) => (
-      <List.Item
+      <List.Item  
         key={item.title}
         actions={[
             item.userID === userID ? (<>
@@ -230,23 +232,27 @@ export const Feedback = () => {
             </>): <></>
            
         ]}
-        extra={
-          
-          <Image
-            width={200}
-            height={125}
-            alt="logo"
-            src={item.images}
-          />
-        }
+        // extra={
+         
+        // }
       >
         <List.Item.Meta
+         className="ant-col ant-col-xs-12 ant-col-xl-24"
           avatar={<Avatar src={item.avatar} />}
           title={item.title}
           description={item.content}
         />
-        <Rate allowHalf  disabled value={item.rating} />
-        
+        <Row>
+          <Col xs={24} sm={8} xl={8}>  <Rate allowHalf  disabled value={item.rating} /></Col>
+          <Col xs={24} sm={8} xl={8}>  <Image  
+          style={{ width: 100, height: 200, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }}
+            alt="logo"
+            src={item.images}
+          /></Col>
+          <Col xs={24} sm={8} xl={8}></Col>
+        </Row>
+       
+       
       </List.Item>
     )}
   /> : <>
@@ -255,6 +261,8 @@ export const Feedback = () => {
   }
            
             <Modal
+          
+          className="ant-col ant-col-xs-14 ant-col-sm-14 ant-col-xl-24"
         title="Chỉnh sửa phản hồi"
         open={open}
         onCancel={()=>{
@@ -266,12 +274,12 @@ export const Feedback = () => {
  });
           setNewImage("");
 }}
-       
+       width={250}
         footer={null}
-        width={1000}
+       
       >
-         <Form form={formz} onFinish={handleUpdateOk} style={{width:"100%"}} layout="vertical" hideRequiredMark>
-            <Form.Item
+         <Form form={formz} onFinish={handleUpdateOk}   layout="vertical" hideRequiredMark>
+            <Form.Item className="ant-col ant-col-xs-24 ant-col-sm-24 ant-col-xl-24"
             name="rating"
             label="Đánh giá"
             required={true}
@@ -280,7 +288,7 @@ export const Feedback = () => {
            
           </Form.Item>
           
-            <Form.Item
+            <Form.Item className="ant-col ant-col-xs-24 ant-col-sm-24 ant-col-xl-24"
             name="content"
             label="Nội dung"
             rules={[
@@ -294,11 +302,11 @@ export const Feedback = () => {
           </Form.Item>
            
           <Row>
-      <Col span={8}><UploadImage setImages={setNewImage} images={newImage} count={1}/></Col>
+      <Col xs={24} xl={8} sm={8}><UploadImage setImages={setNewImage} images={newImage} count={1}/></Col>
       <Col span={4} >
      
       </Col>
-            <Col span={8}> {newImage.length > 0 ? <Image
+            <Col xs={24} xl={12} sm={12}> {newImage.length > 0 ? <Image
     width={200}
     height={125}
     src={newImage[0]}
@@ -307,7 +315,7 @@ export const Feedback = () => {
             height={125}
   src={oldImage}
 /> }</Col>
-<Col span={4} >
+<Col xs={24} xl={4} sm={4} >
 <Button htmlType="submit" type="primary">
                 Lưu
               </Button>

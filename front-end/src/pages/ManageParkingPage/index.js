@@ -178,7 +178,7 @@ const carColumns = [
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
-          description: "Thêm nhân chỗ đỗ thành công",
+          description: "Thêm chỗ đỗ thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -218,10 +218,19 @@ const carColumns = [
   lastModifyAt: new Date(),
     })
         .then(() => {
+          notification.success({
+            message: `Thành công`,
+            description: "Đã thêm xe vào chỗ đỗ",
+            placement: "topLeft",
+          });
             window.location.reload();
         })
         .catch((err) => {
-
+          notification.warning({
+            message: `Thất bại`,
+            description: "Thêm xe vào chỗ đỗ không thành công",
+            placement: "topLeft",
+          });
         });
 };
 const showPromiseDelete = (id) => {
@@ -341,7 +350,7 @@ const showPromiseDelete = (id) => {
         description: "Tải dữ liệu bị lỗi",
         placement: "topLeft",
       });});
-}, [])
+}, [car])
 
 
   const dataBystatus =
@@ -394,7 +403,7 @@ const showPromiseDelete = (id) => {
                   // || u.id.toLowerCase().includes(searchText.toLowerCase())
             ) 
             );
-            const loadSlotParking1=(values)=>{
+  const loadSlotParking1=(values)=>{
               console.log(values);
                 api.get(`slots-nonRoof/${values}`)
                 .then((response) =>{
@@ -419,7 +428,7 @@ const showPromiseDelete = (id) => {
               placement: "topLeft",
                });});
                       }
-                      const dataType1 =
+  const dataType1 =
         type1 === 'Tất cả' ? slotParking1 : slotParking1.filter((u) => u.status === type1);    
   const pagination = {
     current: page,

@@ -8,13 +8,13 @@ const ContactInfo = (props) => {
 
     return (
         <>
-            <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '1rem' }} className="ant-col ant-col-xs-24 ant-col-xl-24">
                 <div style={{ fontWeight: '700', fontSize: '1.3rem',color:'red' }}>Chủ sở hữu</div>
                 <div style={{ marginLeft: '1rem', fontSize: '1.1rem' }}>{`${parkingOwner?.fullName}`}</div>
                 <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>SDT: </span> {parkingOwner?.phoneNumber}</div>
                 <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>Email: </span> {parkingOwner?.email}</div>
             </div>
-            <div>
+            <div className="ant-col ant-col-xs-24 ant-col-xl-24">
                 
                   
                     <Collapse >

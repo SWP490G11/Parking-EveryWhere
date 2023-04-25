@@ -151,9 +151,9 @@ const MyCar = () => {
                 onOk() {
                   return new Promise((resolve, reject) => {
                     setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                    axios
+                    api
                       .delete(
-                        `${process.env.REACT_APP_Backend_URI}car/${element.id}`
+                        `car/${element.id}`
                       )
                       .then(() => {
                         notification.success({
