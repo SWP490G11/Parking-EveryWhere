@@ -80,10 +80,10 @@ const ParkingInfo = (props) => {
                             {props.parking?.parkingName}
                         </div>
                         <Row>
-                                <Col span={5}>
+                                <Col xs={24} xl={6}>
                                 <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Trạng thái: </div>
                                 </Col>
-                                <Col span={19}>
+                                <Col xs={24} xl={18}>
                                 <Tag color={'green'} >
                                 {props.parking?.status}
                                   </Tag>
@@ -94,10 +94,10 @@ const ParkingInfo = (props) => {
                        
                         {/* <div className="right-parking-price"> */}
                         <Row>
-                                <Col span={5}>
+                                <Col xs={24} xl={6}>
                                 <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Địa chỉ: </div>
                                 </Col>
-                                <Col span={19}>
+                                <Col xs={24} xl={18}>
                                 {props.parking?.addressDetail}
                                 </Col>
                             </Row>
@@ -105,31 +105,24 @@ const ParkingInfo = (props) => {
                            
                         {/* </div> */}
                         <Row>
-                                <Col span={5}>
+                                <Col xs={24} xl={6}>
                                 <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Mô tả: </div></Col>
-                                <Col span={19}>
+                                <Col xs={24} xl={18}>
                                 {props.parking?.discription}
                                 </Col>
                             </Row>
                        
                             <Row>
-                            <Col span={5}>  <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div> </Col>
-                                <Col span={19}>
+                            <Col xs={24} xl={6}>  <div style={{ fontWeight: 'bold', marginRight: '1rem' }}>Giá:  </div> </Col>
+                                <Col xs={24} xl={18}>
                             { props.parking?.priceDetails?.map((e,)=>(
                              <Row>
                                
-                             <Col span={8}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
+                             <Col xs={24} xl={8}> {e.slotType==='ROOFED' ? 'Có mái che': 'Không  mái che'} </Col>
                              
-                             <Col span={8}>
-                                {e.numberOfSlotAvailable >0 ?
-                                     <><Tag color= {'green'} >{e.numberOfSlotAvailable+"/"+e.numberOfSlots}</Tag></> 
-                                :
-                                <> <Tag color= {'red'} >{e.numberOfSlotAvailable+"/"+e.numberOfSlots}</Tag></>
-                                 }
-                              
-                         </Col>
+                            
                          
-                         <Col span={8}><Tag color={'geekblue'} >
+                         <Col xs={24} xl={8}><Tag color={'geekblue'} >
                             {e.price} Đ
                          </Tag></Col>
                            </Row>
@@ -141,7 +134,7 @@ const ParkingInfo = (props) => {
                             </Row>
                             <Row >
                        
-                       <Col span={10}  style={{marginTop:'20px'}}>
+                       <Col xl={10}  style={{marginTop:'20px'}}>
                         {authState?.data?.role === 'Customer' ? <><Button className="btn-booking" onClick={showModal} type="default"  icon={<FormOutlined />}>
                        Gửi yêu cầu</Button> </> : <></>}
                        

@@ -192,9 +192,9 @@ export const Feedback = () => {
             <TextArea  style={{marginBottom: 20}} rows={6}/>
           </Form.Item>
           <Row>
-      <Col xs={8} xl={8} sm={8} ><UploadImage setImages={setImage} images={image} count={1}/></Col>
+      <Col xs={24} xl={8} sm={8} ><UploadImage setImages={setImage} images={image} count={1}/></Col>
      
-            <Col xs={16} xl={12} sm={12}> {image.length > 0 ? <Image
+            <Col xs={24} xl={12} sm={12}> {image.length > 0 ? <Image
     width={200}
     height={125}
     src={image[0]}
@@ -211,7 +211,8 @@ export const Feedback = () => {
             </Form>: <></>}
             <Divider orientation="left"   ><p style={{color:'red',fontWeight: "bold"}} className="ant-col ant-col-xs-12 ant-col-xl-24">Danh sách phản hồi</p></Divider>
             {data?.length >0 ?  <List
-            className="ant-col ant-col-xs-24 ant-col-xl-24"
+            className="parking-list"
+            // className="ant-col ant-col-xs-24 ant-col-xl-24"
     itemLayout="vertical"
     size="large"
     pagination={{
@@ -222,7 +223,7 @@ export const Feedback = () => {
     }}
     dataSource={data}
     renderItem={(item) => (
-      <List.Item  
+      <List.Item   
         key={item.title}
         actions={[
             item.userID === userID ? (<>
@@ -232,25 +233,39 @@ export const Feedback = () => {
             </>): <></>
            
         ]}
-        // extra={
+        extra={
+          <Rate allowHalf  disabled value={item.rating} />
+          // <Row>
          
-        // }
+          // <Col xs={24} sm={24} xl={24}>  
+         
+        //   </Col>
+          
+          
+        // </Row>
+         
+        }
       >
         <List.Item.Meta
-         className="ant-col ant-col-xs-12 ant-col-xl-24"
+         
           avatar={<Avatar src={item.avatar} />}
           title={item.title}
           description={item.content}
         />
-        <Row>
-          <Col xs={24} sm={8} xl={8}>  <Rate allowHalf  disabled value={item.rating} /></Col>
-          <Col xs={24} sm={8} xl={8}>  <Image  
-          style={{ width: 100, height: 200, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }}
+        
+         <div className='parking-content'>
+                       
+                        <div className='parking-button-wapper'>
+                           
+                       
+                        <Image  
+          style={{ width: 150, height: 200, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }}
             alt="logo"
             src={item.images}
-          /></Col>
-          <Col xs={24} sm={8} xl={8}></Col>
-        </Row>
+          />
+                            
+                        </div>
+                    </div>
        
        
       </List.Item>
@@ -261,7 +276,7 @@ export const Feedback = () => {
   }
            
             <Modal
-          
+          style={{minHeight:'200'}}
           className="ant-col ant-col-xs-14 ant-col-sm-14 ant-col-xl-24"
         title="Chỉnh sửa phản hồi"
         open={open}

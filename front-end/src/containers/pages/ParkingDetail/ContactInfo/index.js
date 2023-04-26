@@ -8,13 +8,13 @@ const ContactInfo = (props) => {
 
     return (
         <>
-            <div style={{ marginBottom: '1rem' }} className="ant-col ant-col-xs-24 ant-col-xl-24">
+            <div style={{ marginBottom: '1rem' }}>
                 <div style={{ fontWeight: '700', fontSize: '1.3rem',color:'red' }}>Chủ sở hữu</div>
                 <div style={{ marginLeft: '1rem', fontSize: '1.1rem' }}>{`${parkingOwner?.fullName}`}</div>
-                <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>SDT: </span> {parkingOwner?.phoneNumber}</div>
-                <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>Email: </span> {parkingOwner?.email}</div>
+                <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>SDT: </span><br/> {parkingOwner?.phoneNumber}</div>
+                <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>Email: </span> <br/>{parkingOwner?.email}</div>
             </div>
-            <div className="ant-col ant-col-xs-24 ant-col-xl-24">
+            <div>
                 
                   
                     <Collapse >
@@ -22,8 +22,8 @@ const ContactInfo = (props) => {
                              {parkingManagers?.map((data, key) => (
                     <div key={key}>
                         <div style={{ marginLeft: '1rem', fontSize: '1.1rem' }}>{`${data?.fullName}`}</div>
-                        <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>SĐT: </span> {data?.phoneNumber}</div>
-                        <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>Email: </span> {data?.email}</div>
+                        <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>SĐT: </span><br/> {data?.phoneNumber}</div>
+                        <div style={{ marginLeft: '1rem' }}><span style={{ fontWeight: 'bolder' }}>Email: </span> <br/>{data?.email}</div>
                         <Divider dashed />
                     </div>
                 ))}

@@ -227,7 +227,7 @@ import api from "../../services/api";
       ? data
       : data.filter(
           (u) =>
-            u.parkingId.parkingName
+            u.car.carNumber
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(searchText.toLowerCase().replace(/\s+/g, ""))
