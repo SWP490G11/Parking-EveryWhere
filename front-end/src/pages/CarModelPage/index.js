@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Space,Form, Row, Col, Modal,notification,Drawer,Empty } from "antd";
+import { Table, Input, Button, Menu, Descriptions,Space,Form, Row, Col, Modal,notification,Drawer,Empty } from "antd";
 import {
   FilterOutlined,
   EditFilled,
-  CloseOutlined,
-  LoadingOutlined,
+  
 } from "@ant-design/icons";
 import api from "../../services/api";
  const ManageCarModel=()=> {
@@ -12,7 +11,6 @@ import api from "../../services/api";
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [type, setType] = useState("Model");
  
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
@@ -25,14 +23,14 @@ import api from "../../services/api";
 
   const columns = [
     {   
-        title: "ID",
+        title: "Mã số",
         dataIndex: "id",
         key: "id",
         width: "25%",
        
       },
       {
-        title: "Model",
+        title: "Loại xe",
         dataIndex: "model",
         key: "model",
         sorter: (a, b) => {
@@ -47,29 +45,19 @@ import api from "../../services/api";
         width: "7%",
       },
     {
-      title: "Discript",
+      title: "Thông tin",
       dataIndex: "discript",
       key: "discript",
       width: "50%",
     },
     {
-      title: "Action",
+      title: " ",
       dataIndex: "action",
       key: "action",
       width: "10%",
     },
   ];
-  // const [deleteModal, setDeleteModal] = useState({
-  //   isOpen: false,
-  //   title: "Notice",
-  //   content: <p>Do you want to delete car model?</p>,
-  //   // footer: (
-  //   //   <div style={{ textAlign: "left" }}>
-  //   //     <Button className="buttonSave">Delete</Button>
-       
-  //   //   </div>
-  //   // ),
-  // });
+  
   const showDrawer1 = () => {
     setOpen1(true);
   };
@@ -103,46 +91,46 @@ import api from "../../services/api";
                         <EditFilled/>
                 </Button>
              ,
-             <Button
-             className="buttonState"
-             // disabled={element.status === 'Pending' || element.isInProgress === false}
-             onClick={() => {
-              Modal.confirm({
-                  title: "Bạn muốn xóa",
-                  icon: <CloseOutlined style={{ color: "red" }} />,
-                  content: "Bạn có muốn xóa "+element.model+" ?",
-                  okText: "Xóa",
-                  cancelText: "Hủy",
-                  okButtonProps: { style: { background: "#e30c18", color: "white" } },
+        //      <Button
+        //      className="buttonState"
+        //      // disabled={element.status === 'Pending' || element.isInProgress === false}
+        //      onClick={() => {
+        //       Modal.confirm({
+        //           title: "Bạn muốn xóa",
+        //           icon: <CloseOutlined style={{ color: "red" }} />,
+        //           content: "Bạn có muốn xóa "+element.model+" ?",
+        //           okText: "Xóa",
+        //           cancelText: "Hủy",
+        //           okButtonProps: { style: { background: "#e30c18", color: "white" } },
             
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                      api.delete(`carmodel/${element.id}`)
-                          .then(() => {
+        //           onOk() {
+        //             return new Promise((resolve, reject) => {
+        //               setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        //               api.delete(`carmodel/${element.id}`)
+        //                   .then(() => {
                             
-                            notification.success({
-                              message: `Delete successfully`,
-                              description: 'Delete a new car model successfully',
-                              placement: 'topLeft',
-                            });
-                          })
-                          .catch(() => {
-                              notification.error({
-                                  message: `Delete fail`,
-                                  description: 'Delete a user fail',
-                                  placement: 'topLeft',
-                                });
-                          });
-                    });
-                  },
-                  onCancel() {},
-                });
+        //                     notification.success({
+        //                       message: `Thành công`,
+        //                       description: 'Bạn đã xóa thành công',
+        //                       placement: 'topLeft',
+        //                     });
+        //                   })
+        //                   .catch(() => {
+        //                       notification.error({
+        //                           message: `Xóa thất bại`,
+        //                           description: 'Vui lòng thử lại',
+        //                           placement: 'topLeft',
+        //                         });
+        //                   });
+        //             });
+        //           },
+        //           onCancel() {},
+        //         });
             
-            }}
-         >
-            <CloseOutlined  style={{color: 'red'}}/>
-         </Button>,
+        //     }}
+        //  >
+        //     <CloseOutlined  style={{color: 'red'}}/>
+        //  </Button>,
            
           ];
         });
@@ -168,12 +156,11 @@ import api from "../../services/api";
   }, [form1,data]);
  
  
-  const dataBytype =
-    type === "Model" ? data : data.filter((u) => u.model === type);
+  
   const finalData =
     searchText === ""
-      ? dataBytype
-      : (dataBytype.filter(
+      ? data
+      : (data.filter(
           (u) =>
             u.model
               .toLowerCase()
@@ -194,7 +181,7 @@ import api from "../../services/api";
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+      showTotal: total => `Tổng ${total} loại xe`
   };
   const showDrawer = () => {
     setOpen(true);
@@ -215,8 +202,8 @@ import api from "../../services/api";
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
-          description: "Create new parking successfully",
+          message: `Thành công`,
+          description: "Tạo loại xe mới thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -230,8 +217,8 @@ import api from "../../services/api";
       })
       .catch((error) => {
         notification.warning({
-          message: `Fail`,
-          description: "Please check input again",
+          message: `Thất bại`,
+          description: "Vui lòng kiểm tra lại thông tin",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -254,8 +241,8 @@ import api from "../../services/api";
       .then(() => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
-          message: `Successfully`,
-          description: "Edit this parking successfully",
+          message: `Thành công`,
+          description: "Chỉnh sửa loại xe thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -269,8 +256,8 @@ import api from "../../services/api";
       })
       .catch((error) => {
         notification.warning({
-          message: `Fail`,
-          description: "Please check input again",
+          message: `Thất bại`,
+          description: "Vui lòng kiểm tra lại thông tin ",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -298,65 +285,16 @@ import api from "../../services/api";
         Danh sách loại xe
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
          
       
            {/*Filter Role */}
-          <Dropdown.Button
-            placement="bottom"
-            icon={<FilterOutlined />}
-            overlay={
-                <Menu>
-                <Menu.Item
-               onClick={() => {
-                setType("ParkingManager");
-               }}
-             >
-               {" "}
-               ParkingManager
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("ParkingOwner");
-               }}
-             >
-               {" "}
-               ParkingOwner
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Customer");
-               }}
-             >
-               {" "}
-               Customer
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Admin");
-               }}
-             >
-               {" "}
-               Admin
-             </Menu.Item>
-             <Menu.Item
-               onClick={() => {
-                setType("Model");
-               }}
-             >
-               {" "}
-               All
-             </Menu.Item>
-              </Menu>
-            }
-          >
-            {type}
-          </Dropdown.Button>
+        
       
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -365,14 +303,14 @@ import api from "../../services/api";
             }}
           />
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={9} xxl={9}>
+        <Col span={8}>
           <Button style={{ background: "#33CCFF", color: "white"  } } 
           onClick={()=>{
             showDrawer();
             form.setFieldsValue({
             model: "",
             discript:"",
-            price: "",
+            
             
           });}}>
             Thêm loại xe mới
@@ -382,81 +320,24 @@ import api from "../../services/api";
      
       <Modal
         open={modal.isOpen}
-        title="Detail Car model"
+        
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
-        style={{width:400}}
-        footer={[
-          <Button
-            style={{ background: "#e30c18", color: "white" }}
-            key="back"
-            onClick={() => {
-              setModal({ ...modal, isOpen: false });
-            }}
-          >
-            Close
-          </Button>,
-        ]}
-        closable={false}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
       >
-        {/* <table>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>ID</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.id}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width:"50px",fontSize: "18px", color: "#838688" }}>Model</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.model}
-            </td>
-          </tr>
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Discript</td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.discript}
-            </td>
-          </tr>
-        
-          <tr>
-            <td style={{width:"50px", fontSize: "18px", color: "#838688" }}>Price </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.price}
-            </td>
-          </tr>
-          
-       
-        </table> */}
+        <Descriptions title="Thông tin loại xe" bordered>
+        <Descriptions.Item label="Mã số " span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Loại xe" span={3}>{modal.data.model}</Descriptions.Item>
+    <Descriptions.Item label="Thông tin" span={3}>{modal.data.discript}</Descriptions.Item>
+    
+   
+    </Descriptions>
       </Modal>
 
       {finalData.length === 0 ? (

@@ -49,10 +49,10 @@ const UploadImage = ({ images, setImages,count }) => {
                     options.onSuccess(res.data.data, options.file)
                     setImages([...images, res.data.data.media])
                 } else {
-                    Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                    Message(TypeMessage.ERROR, 'Tải ảnh lên gặp lỗi. Vui lòng thử lại')
                 }
             }).catch((err) => {
-                Message(TypeMessage.ERROR, 'Upload failed. Invalid image')
+                Message(TypeMessage.ERROR, 'Tải ảnh lên gặp lỗi. Vui lòng thử lại')
                 console.log(err)
             })
     }
@@ -68,7 +68,7 @@ const UploadImage = ({ images, setImages,count }) => {
             <Form.Item>
                 <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
                     <Upload name="files" maxCount={count} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}  >
-                    <Button icon={<UploadOutlined />}>Upload</Button>
+                    <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                     </Upload>
                 </Form.Item>
             </Form.Item>

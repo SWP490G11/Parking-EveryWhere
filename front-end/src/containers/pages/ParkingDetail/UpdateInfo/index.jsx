@@ -8,12 +8,15 @@ import { updateParkingByID } from '../../../../services/parkingDetailServices';
 const { TextArea } = Input;
 const contentStyle = {
     height: '100px',
-    width: '100%',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#1e81d2',
+    width: '150px',
+    objectfit: 'contain',
+   borderRadius: '15px',
+   border: '1px solid #ddd',
+   lineHeight: '160px',
+   textAlign: 'center',
+   background: '#1e81d2',
 };
+
 export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
     const [updateParking, setupdateParking] = useState({})
     const [location, setLocation] = useState(null)
@@ -94,7 +97,7 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                             }}
                         />
                         Address Detail
-                        <AutocompleteMap setLocation={setLocation} defaultValue={parking?.addressDetail}/>
+                        <AutocompleteMap setLocation={setLocation} defaultValue={parking?.addressDetail} disabled={true}/>
                         <Row>
                             <Col span={10} >
                                 Longitude
@@ -122,13 +125,13 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                                 _updateParking.isLegal = true
                                 _updateParking.status = Status.Available
                                 _updateParking.lastModifyAt = new Date()
-                                _updateParking.imagesURLs = images
+                                _updateParking.imagesURLs = images.length>0 ? images : ['https://thumbsnap.com/i/nJ5ET935.jpg']
                                 console.log(_updateParking)
                                 updateParkingByID(parking.parkingID, _updateParking, setLoading)
                             }}
                             style={{margin: "20px 0"}}
                         >
-                            Submit
+                            Lưu
                         </Button>
                     </div>
                 </Col>

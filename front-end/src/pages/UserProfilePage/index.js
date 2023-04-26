@@ -71,7 +71,7 @@ const UserProfile=()=> {
       
       setLoading(false);
       const resData = response.data;
-        setInfor({ ...resData, dateOfBirth:moment(new Date(resData.dateOfBirth).toLocaleDateString('en-CA')).format('DD-MM-YYYY') });
+        setInfor({ ...resData, dateOfBirth:moment(new Date(resData.dateOfBirth).toLocaleDateString('en-CA')).format('DD/MM/YYYY') });
       setFullName(response.data.lastName+" "+response.data.firstName);
      
       setImage(response.data.image.url);
@@ -102,7 +102,7 @@ const UserProfile=()=> {
           <div className="user-avatar">
            <Space>
               {image.length >0 ? 
-              <Avatar className="avatar-avatar"
+              <Avatar  className="avatar-avatar"
               src={image}
             /> 
               :
@@ -131,8 +131,8 @@ const UserProfile=()=> {
             prefix: "86",
           }}
           style={{
-         
-            maxWidth: 400,
+            textAlignLast:"left",
+            minWidth: 400,
           }}
           scrollToFirstError
         >
@@ -168,7 +168,7 @@ const UserProfile=()=> {
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            label="Phone Number"
+            label="Số điện thoại"
            
           >
             {infor.phoneNumber}
@@ -195,11 +195,9 @@ const UserProfile=()=> {
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary"  onClick={e => navigate(toRoute(routes.USER_PROFILE_UPDATE, { id: profile }))}
             >
-            Edit
+            Chỉnh sửa thông tin
             </Button>
-            <Button type="second" onClick={() => navigate(-1)}>
-              Back
-            </Button>
+            
           </Form.Item>
         </Form>
       </Card>

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled,DollarOutlined, } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
- const ManageParkingDetail=()=> {
+ const ManageParkingDetailPM=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
@@ -79,16 +79,17 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-
+      const parkingID = localStorage.getItem('parkingID');
     useEffect(() => {
-        api.get(`parkingdetails/all-parking-of-owner`, {})
+        api.get(`parkingdetails/${parkingID}/GetParkingDetailsByParking`, {})
         .then(function(response)  {
             let respData = response.data
             respData.forEach((element) => {
                 //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
              element.parkingDate = moment(new Date(element.parkingDate).toLocaleDateString("en-US")).format('DD/MM/YYYY');
              element.pickUpDate = element.pickUpDate !==null ?   moment(new Date(element.pickUpDate).toLocaleDateString("en-US")).format('DD/MM/YYYY') :'Xe đang đỗ';
-              element.carNumber = element.car.carNumber
+              element.carNumber = element.car.carNumber;
+              
                 
 
 
@@ -101,7 +102,7 @@ import api from "../../services/api";
                         
                     }}
                 >
-                   <DollarOutlined  style={{color:"green"}} />
+                   <DollarOutlined style={{color:"green"}} />
                 </Button>,
                     
                   
@@ -459,4 +460,4 @@ import api from "../../services/api";
         </>
     )
 }
-export default ManageParkingDetail;
+export default ManageParkingDetailPM;

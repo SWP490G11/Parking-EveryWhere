@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Home from './pages/Home';
-import Login from './pages/Login';
+import Home from './pages/HomePage';
+import Login from './pages/LoginPage';
+import ForgotPassword from './pages/ForgotPassword';
 import PackingDetail from './pages/PackingDetail';
 import NotFound from './pages/NotFoundPage';
 import UserProfile from './pages/UserProfilePage';
@@ -12,13 +13,16 @@ import HeaderContainer from './containers/common/Header';
 import ManageParking from './pages/ManageParkingPage';
 import MyCar from './pages/MyCarPage';
 import ManageParkingDetail from './pages/ManagerParkingDetail';
+import ManageParkingDetailPM from './pages/ManageParkingDetailPM';
 import ApproveParking from './pages/ApproveParkingPage';
 import ManageParkingManager from './pages/ManagerPMPage';
+import ManageUser from './pages/ManageUserPage';
 import MyRequest from './pages/MyRequestPage';
 import FooterContainer from './containers/common/Footer';
 import MenuContainer from './containers/common/Menu';
 import ManageSlot from './pages/ManageSlot';
 import ManageRequest from './pages/ManageRequest';
+import ManageRequestPM from './pages/ManageRequestPM';
 import { useLocationState } from './hooks/locationState';
 import { Layout } from 'antd';
 import { routes } from './utils/routes';
@@ -61,6 +65,7 @@ function App() {
         <Content
           style={{
             padding: '0 50px',
+            
           }}
         >
           {token ? (<MenuContainer  />):(<></>)}
@@ -70,11 +75,13 @@ function App() {
             className="site-layout-content"
             style={{
               background: '#FFF',
+            minHeight: '80vh',
             }}
           >
             <Routes>
               <Route exact path={routes.HOME} element={<Home />} />
               <Route path={routes.LOGIN} element={<Login />} />
+              <Route path={routes.FORGOT_PASSWORD} element={<ForgotPassword />} />
               <Route path={routes.REGISTER} element={<Register />} />
               <Route path={routes.MANAGERPARKING} element={<ManageParking />} />
               <Route path={routes.APPROVEPARKING} element={<ApproveParking />} />
@@ -82,9 +89,12 @@ function App() {
               <Route path={routes.MY_CAR} element={<MyCar />} />
               <Route path={routes.MANAGE_SLOT} element={<ManageSlot />} />
               <Route path={routes.MANAGE_PARKINGDETAIL} element={<ManageParkingDetail />} />
+              <Route path={routes.MANAGE_PARKINGDETAIL_PM} element={<ManageParkingDetailPM />} />
               <Route path={routes.MY_REQUEST} element={<MyRequest />} />
               <Route path={routes.MANAGE_REQUEST} element={<ManageRequest />} />
+              <Route path={routes.MANAGE_REQUEST_PM} element={<ManageRequestPM />} />
               <Route path={routes.MANAGEPARKINGMANAGER} element={<ManageParkingManager />} />
+              <Route path={routes.MANAGE_USER} element={<ManageUser />} />
               <Route path={routes.USERPROFILE} element={<UserProfile />} />
               <Route path={routes.USER_PROFILE_UPDATE} element={<UserProfile />} />
               <Route path={routes.PARKING_DETAIL} element={<PackingDetail />} />
@@ -94,10 +104,13 @@ function App() {
           </div>
         </Content>
         
-        {token ? (<FooterContainer />):(<></>)}
+        {token ? (<FooterContainer  style={{
+             paddingBottom:0,
+              
+            }} />):(<></>)}
         
       </Layout>
-    </Router>
+    </Router >
   );
 }
 

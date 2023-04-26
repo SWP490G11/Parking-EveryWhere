@@ -43,7 +43,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
             <GoogleMap
                 id="map"
                 mapContainerStyle={mapContainerStyle}
-                zoom={14}
+                zoom={16}
                 center={
                     location ? location.location :
                         locationState?.hasYourLocation ?
@@ -56,7 +56,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
                
                 onLoad={onMapLoad}
             >   
-                <PlaceInfo parkings={parkings} location={location} />
+                <PlaceInfo parkings={parkings.filter((u)=>u.status ==="Available")} location={location} />
                 {
                     children
                 }
@@ -78,7 +78,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
         </ScriptLoaded>
     );
 }
-export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
+export const AutocompleteMap = ({ setLocation,disabled, defaultValue = "" }) => {
     const [place, setPlace] = useState()
     return (
         <ScriptLoaded>
@@ -106,18 +106,19 @@ export const AutocompleteMap = ({ setLocation, defaultValue = "" }) => {
                 }}
             >
                 <input
-                    className="ant-input css-dev-only-do-not-override-1e3x2xa pac-target-input"
+                    //className="ant-input css-dev-only-do-not-override-1e3x2xa "
                     type="text"
-                    placeholder="Tìm tìm vị trí"
+                    placeholder={' Tìm vị trí'}
                     defaultValue={defaultValue}
-                    // style={{
-                    //     minHeight: 36,
-                    //     marginBottom: 20,
-                    //     borderRadius: 7,
-                    //     width: '100%',
-                    //     border: '1px solid rgb(30, 129, 210)',
-                    //     marginTop: 20
-                    // }}
+                    disabled={disabled}
+                    style={{
+                        minHeight: 36,
+                       
+                        borderRadius: 7,
+                        width: '100%',
+                        border: '1px solid gainsboro',
+                        
+                    }}
                 />
             </Autocomplete>
         </ScriptLoaded>

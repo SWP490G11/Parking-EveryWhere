@@ -1,4 +1,4 @@
-import {Table, Modal, Button,Row,Col,Input,Dropdown,Menu,Empty,Form} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,Empty,Descriptions,notification} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {CheckOutlined, CloseOutlined,FilterOutlined} from "@ant-design/icons";
 import api from "../../services/api";
@@ -10,7 +10,7 @@ import api from "../../services/api";
     });
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalCancelVisible, setIsModalCancelVisible] = useState(false);
-    const [status,setStatus] = useState("Status");
+    //const [status,setStatus] = useState("Tất cả");
     const [idCompleted, setIdCompleted] = useState();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -23,6 +23,11 @@ import api from "../../services/api";
         api.patch(`aprrove-parking/${idCompleted}`,{})
             .then((res) => {
                 //window.location.reload();
+                notification.success({
+                    message: `Thành công`,
+                    description: 'Bạn đã chấp thuận bãi đỗ',
+                    placement: 'topLeft',
+                  })
                 setIdCompleted(null)
             }).catch(() => {
         })
@@ -47,6 +52,11 @@ import api from "../../services/api";
         setIsModalCancelVisible(false);
         api.patch(`cancel-parking/${idCompleted}`, {})
             .then((res) => {
+                notification.warning({
+                    message: `Thất bại`,
+                    description: 'Bạn đã từ chối phê duyệt bãi đỗ',
+                    placement: 'topLeft',
+                  })
                 setIdCompleted(null)
 
                 //window.location.reload();
@@ -171,12 +181,12 @@ import api from "../../services/api";
             key: "action",
         },
     ];
-    const dataByStatus =
-        status === "Status" ? data : data.filter((u) => u.status === status);
+    // const dataByStatus =
+    //     status === "Status" ? data : data.filter((u) => u.status === status);
     const finalData =
     searchText === ""
-      ? dataByStatus
-      : (dataByStatus.filter(
+      ? data
+      : (data.filter(
           (u) =>
             u.parkingName
               .toLowerCase()
@@ -199,24 +209,37 @@ import api from "../../services/api";
        showSizeChanger:true, 
           showTotal: total => `Total ${total} Request`
       };
-      const renderContent = () => {
-        switch(status) {
-            case 'Status':
-              return 'Tất cả'
-            case 'Pending':
-              return 'Chờ duyệt'
-            case 'Cancel':
-              return 'Từ chối'
-            default:
-              return 'Tất cả'
-          }
-      };
+    //   const renderContent = () => {
+    //     switch(status) {
+    //         case 'Status':
+    //           return 'Tất cả'
+    //         case 'Pending':
+    //           return 'Chờ duyệt'
+    //         case 'Cancel':
+    //           return 'Từ chối'
+    //         default:
+    //           return 'Tất cả'
+    //       }
+    //   };
     return (
         <>
+         <p
+        style={{
+          display: "block",
+          fontSize: "20px",
+          margin: "0 auto",
+          textAlign: "left",
+          color: " red",
+          fontWeight: "bold",
+          paddingBottom: "20px",
+        }}
+      >
+        Danh sách yêu câu bãi đỗ cần phê duyệt
+      </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
             {/*Filter Gender */}
-            <Form.Item label={'Trạng thái'}>
+            {/* <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
@@ -243,7 +266,7 @@ import api from "../../services/api";
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Status");
+                    setStatus("Tất cả");
                   }}
                 >
                   {" "}
@@ -252,15 +275,15 @@ import api from "../../services/api";
               </Menu>
             }
           > 
-          {renderContent()}
+          {status}
             
           </Dropdown.Button>
-            </Form.Item>
+            </Form.Item> */}
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -269,80 +292,32 @@ import api from "../../services/api";
             }}
           />
         </Col>
+        <Col span={8}></Col>
         </Row>
-            <Modal
-                visible={modal.isOpen}
-                title='Thông tin bãi đỗ'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                // closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Tên Bãi Đỗ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Địa chỉ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.addressDetail}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Thông tin thêm</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.description}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.latitude} - {modal.data.longitude}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Trạng thái</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Hợp pháp</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{
-                        modal.data.isLegal ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
-                        }</td>
-                    </tr>
-                </table>
-
-
-            </Modal>
+        
+        {/*Infor parking*/} 
+        <Modal
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin bãi đỗ" bordered>
+        <Descriptions.Item label="Tên Bãi Đỗ" span={3}>{modal.data.parkingName}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" >{modal.data.status}</Descriptions.Item>
+    <Descriptions.Item label="Tọa độ" span={2}>{modal.data.latitude} - {modal.data.longitude}</Descriptions.Item>
+    <Descriptions.Item label="Địa chỉ" span={3} >{modal.data.addressDetail}</Descriptions.Item>
+    <Descriptions.Item label="Thông tin thêm" span={3}>{modal.data.description}</Descriptions.Item>
+   
+    </Descriptions>
+      </Modal>
             <Modal
                 
                 title="Phê duyệt" visible={isModalVisible} okText="Yes" cancelText="No" onOk={handleOk}
@@ -370,7 +345,7 @@ import api from "../../services/api";
 
 
             <div>
-                <h1 style={{color: "red", float: "left"}}>Manage Aprrove Request</h1>
+               
                 {finalData.length === 0 ? (
         <Empty description={"Không có dữ liệu"}/>
       ) : (

@@ -5,8 +5,9 @@ import { useCountState } from '../../../hooks/countState';
 import { useLocation } from 'react-router-dom';
 import { getProfile } from '../../../services/userProfileServices';
 import { useNavigate } from "react-router-dom";
+import Logo from '../../../assets/images/logo.png'
 import { Avatar, Dropdown, Layout,Modal,Button,Input,Form,notification } from 'antd';
-import {LogoutOutlined, UserOutlined,CarOutlined,RedoOutlined, BellFilled} from "@ant-design/icons";
+import {LogoutOutlined, IdcardOutlined,RedoOutlined,} from "@ant-design/icons";
 import api from "../../../services/api";
 const { Header } = Layout;
 const formItemLayout = {
@@ -35,22 +36,25 @@ function HeaderContainer() {
       const [error, setError] = React.useState("");
       
     const location = useLocation();
-
+    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     const handleConfirmLogout = () => {
         Modal.confirm({
-          title: "Are you sure?",
+          title: "Đăng xuất?",
           icon: <LogoutOutlined style={{ color: "red" }} />,
-          content: "Do you want to log out?",
-          okText: "Logout",
-          cancelText: "Cancel",
+          content: "Bạn muốn đăng xuất ra khỏi hệ thống?",
+          okText: "Đăng xuất",
+          cancelText: "Hủy",
           okButtonProps: { style: { background: "#e30c18", color: "white" } },
     
           onOk() {
             return new Promise((resolve, reject) => {
               setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
               localStorage.removeItem('token');
-              
+              if(profileState?.data?.role==='ParkingManager'){
+                localStorage.removeItem('parkingID')
+              }   
+              localStorage.removeItem('userID')
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -58,8 +62,7 @@ function HeaderContainer() {
           onCancel() {},
         });
       };
-      const ParkingID =localStorage.getItem("parkingID"); 
-      const role =localStorage.getItem("role"); 
+     
     useEffect(() => {
         if (token !== '') {
             getProfile().then((data) => {
@@ -68,54 +71,59 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
-                localStorage.setItem("parkingID",data.data.parking.id);
-                localStorage.setItem("role",data.data.role);
-
+                localStorage.setItem('userID',profileState.data.id)
+            if(profileState?.data?.role==='ParkingManager'){
+              localStorage.setItem('parkingID',profileState?.data?.parking?.id)
+            }   
+            
             });
             
           
-        } else if (location.pathname !== '/login' && location.pathname !=='/register') {
+        } else if (location.pathname !== '/login' && location.pathname !=='/register' && location.pathname !=='/forgot-password') {
             window.location.replace('/login')
         }
-    }, [location.pathname, token]);
+    }, [location.pathname, token,profileState]);
     useEffect(() => {
       if (profileState?.data?.role === 'Admin') {
-        api.get(`pending-parkings-number`).then((res)=>{setCountState(res.data)}) 
+        api.get(`pending-parkings-number`).then((res)=>{setCountState({...countState,data:res.data})}) 
         
-      } if(profileState?.data?.role === 'ParkingOwner') {
-        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState(res.data)})
-      } if(profileState?.data?.role === 'ParkingManager') {
-        api.get(`pending-request-number/${ParkingID}`).then((res)=>{setCountState(res.data)})
+      }else if(profileState?.data?.role === 'ParkingOwner') {
+        api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState({...countState,data:res.data})})
+      }else  if(profileState?.data?.role === 'ParkingManager') {
+        api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState({...countState,data:res.data})})
       }
-  }, [countState]);
+  }, [profileState]);
 
     const navigate = useNavigate();
     const items = [
         {
-          label: 'My Profile',
+          label: 'Thông tin cá nhân',
           key: '1',
           onClick: ()=>navigate(`/user-profile`),
-          icon: <UserOutlined style={{ color: "red", fontWeight: "bold" }} />,
+          icon: <IdcardOutlined   style={{  fontWeight: "bold" }} />,
         },
        
         {
           
-        label: 'Change Password',
+        label: 'Đổi mật khẩu',
         key: '3',
         onClick:() => setModal({ ...isModal, isOpen: true }),
-        icon: <RedoOutlined  style={{ color: "red", fontWeight: "bold" }} />,
+        icon: <RedoOutlined  style={{ fontWeight: "bold" }} />,
       },
         {
           
-        label: 'Logout',
+        label: 'Đăng xuất',
         key: '4',
         onClick: () => handleConfirmLogout(),
-        icon: <LogoutOutlined style={{ color: "red", fontWeight: "bold" }} />,
+        icon: <LogoutOutlined style={{ fontWeight: "bold" }} />,
       }];
 
     return (
         <Header style={{ background: '#1E81D2' }} className='header'>
-            <div className='text-logo'>PARKING EVERY WHERE</div>
+            {/* <div className='text-logo'> */}
+            <a href='/'><img style={{height: '70px'}} src={Logo}/></a>
+            {/* </div> */}
+            
             <div className='header-user'>
 
                 {profileState?.token ?
@@ -148,7 +156,7 @@ function HeaderContainer() {
        
         footer={[
           <Button
-            className="buttonSave"
+          type="primary"
             loading={isModal.isLoading}
             key="save"
             onClick={() => {
@@ -176,7 +184,7 @@ function HeaderContainer() {
                 });
             }}
           >
-            Save
+            Lưu
           </Button>,
           <Button
             className="buttonCancel"
@@ -187,7 +195,7 @@ function HeaderContainer() {
               setError("");
             }}
           >
-            Cancel
+            Hủy
           </Button>,
         ]}
         // onOk={() => {
@@ -198,11 +206,14 @@ function HeaderContainer() {
         //   setError("");
         // }}
         destroyOnClose={true}
-        title="Change Password"
+        title="Đổi mật khẩu"
         // {...Footer}
       >
        
-          <Form {...formItemLayout}>
+          <Form {...formItemLayout} style={{
+            textAlignLast:"left",
+            minWidth: 400,
+        }}>
             <Form.Item
               name="oldPassword"
               style={{ marginTop: "20px" }}
@@ -213,7 +224,7 @@ function HeaderContainer() {
                     message: 'Vui lòng nhập mật khẩu cũ của bạn',
                 },
             ]}
-              hasFeedback
+             
             >
               <Input.Password
                 disabled={isModal.isLoading === true}
@@ -227,15 +238,16 @@ function HeaderContainer() {
             <Form.Item
               name="newPassword"
               label="Mật khẩu mới"
+              
               rules={[
-                { required: true, max: 50, min:7,  message: `Vui lòng nhập mật khẩu`},
+                { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
                 {
-                  pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                  message: `Mật khẩu không được chứa khoảng trắng hoặc kí tự mật khẩu`,
+                  
+                  pattern: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})'),
+                  message: "Mật khẩu cần ít nhất 8 kí tự và có 1 chữ in hoa, 1 chữ thường, 1 sồ !",
                 },
-                
               ]}
-              hasFeedback
+              
             >
               <Input.Password
                 disabled={isModal.isLoading === true}
@@ -247,23 +259,24 @@ function HeaderContainer() {
             </Form.Item>
             <Form.Item
               name="confirmNewPassword"
-              label="Xác nhận mật khẩu mới"
+              label="Xác nhận "
+             
               rules={[
-                { required: true, max: 50,min:8,  message: `Vui lòng nhập xác thực mật khẩu `},
                 {
-                  pattern: new RegExp("^[a-zA-Z0-9]+$"),
-                  message: `Xác nhận mật khâu không khớp với mật khẩu mới`,
+                  required: true,
+                  message: 'Vui lòng nhập mật khẩu xác thực!',
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('newPassword') === value) {
                       return Promise.resolve();
+                      
                     }
-                    // return Promise.reject(new Error('Mật khẩu chưa đồng bộ'));
+                    return Promise.reject(new Error('Mật khẩu mới và xác thực phải giống nhau!'));
                   },
-                }),
+                })
               ]}
-               hasFeedback
+               
             >
               <Input.Password
                 disabled={isModal.isLoading === true}

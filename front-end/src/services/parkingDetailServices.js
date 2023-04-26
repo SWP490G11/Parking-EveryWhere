@@ -7,6 +7,7 @@ const getParkingByID = async (id, setParking, setLoading) => {
         api.get(`/parking/${id}`)
             .then(res => {
                 setParking(res.data);
+                // console.log(res.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -43,16 +44,16 @@ const updateParkingByID = (id, data, setLoading) => {
             .then(() => {
                 setLoading(false);
                 window.location.href = `/parking-detail/${id}`;
-                Message(TypeMessage.SUCCESS, 'Cập nhật thành công')
+                Message(TypeMessage.SUCCESS, 'Cập nhật bãi đỗ thành công')
             })
             .catch(err => {
-                Message(TypeMessage.ERROR, 'Cập nhật thất bại')
+                Message(TypeMessage.ERROR, 'Cập nhật bãi đỗ thất bại')
                 setLoading(false);
                 console.error(err)
             })
     } catch (error) {
         setLoading(false);
-        Message(TypeMessage.ERROR, 'Cập nhật thất bại')
+        Message(TypeMessage.ERROR, 'Cập nhật bãi đỗ thất bại')
     }
 }
 

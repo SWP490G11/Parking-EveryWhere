@@ -1,18 +1,17 @@
-import { Button, List, Tag } from 'antd';
-import { Role, Status } from '../../../utils/constants';
+import {  List, Tag,Image } from 'antd';
+import {  Status } from '../../../utils/constants';
 import { calDistance, toRoute } from '../../../utils/helpers';
 import { routes } from '../../../utils/routes';
 import config from '../../../config';
-import { ConfirmDelete } from './ConfirmDelete';
-import { useAuthState } from '../../../hooks/authState';
+//import { ConfirmDelete } from './ConfirmDelete';
+//import { useAuthState } from '../../../hooks/authState';
 import { useNavigate } from "react-router-dom";
 import { useLocationState } from '../../../hooks/locationState';
-const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
-    const [authState] = useAuthState()
+const ListParking = ({ search, filter, parkings, setLocation }) => {
+    //const [authState] = useAuthState()
     const [locationState] = useLocationState()
     const navigateTo = useNavigate();
-    const data = parkings
-    .filter((item) => {
+    const data = parkings.filter((item) => {
         if (search) {
             if (
                 item.parkingName.toLowerCase().includes(String(search).toLowerCase())
@@ -40,7 +39,8 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
         } catch(e) {
             return true
         }
-    });
+    })
+   ;
     return (
         <List
             className="parking-list"
@@ -65,12 +65,13 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                             }
                         }
                         setLocation(_loation)
-                    }}
+                    }}  
                     style={{ cursor: 'pointer' }}
                 >
                     <List.Item.Meta
-                        avatar={<img style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px' }} src={item?.imageUrls[0] ? item.imageUrls[0] : config.DEFAULT_IMG_URL} alt='' />}
-                        title={<a onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
+                        avatar={<Image style={{ width: 100, height: 100, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }} src={item?.imageUrls ? item.imageUrls : config.DEFAULT_IMG_URL} alt='' />}
+                        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                        title={<a onClick={()=>navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}>{item.parkingName}</a>}
                         description={<div>
                             <div style={{ marginBottom: '0.25rem' }}>
                                 {item.addressDetail}
@@ -99,13 +100,22 @@ const ListParking = ({ search, filter, parkings, setLocation, setParking }) => {
                         </div> */}
                         <div className='parking-button-wapper'>
                            
-                                    <Button
+                        <Tag color={item.status === Status.Available ? 'green' : 'volcano'} key={'tag'}>
+                                {
+                                    item.status === Status.Available
+                                        ?
+                                        Status.Available
+                                        :
+                                        Status.NotAvailable
+                                }
+                            </Tag>
+                                    {/* <Button
                                         type='primary'
                                         style={{ marginBottom: '0.25rem' }}
                                         onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL, { parkingID: item.parkingID }))}
                                     >
                                         Detail
-                                    </Button>
+                                    </Button> */}
                             
                         </div>
                     </div>

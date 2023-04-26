@@ -9,12 +9,13 @@ import {
   Col,
   Modal,Select,
   notification,
-  Drawer,Empty
+  Drawer,Empty,Descriptions
 } from "antd";
+import dayjs from 'dayjs';
 import {
   EditFilled,
   CloseCircleOutlined,
-  
+  CloseOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
 import api from "../../services/api";
@@ -24,7 +25,6 @@ const MyCar = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [form] = Form.useForm();
-  
   const [form1] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -32,6 +32,7 @@ const MyCar = () => {
     isOpen: false,
     data: {},
   });
+  
   const [carModel,setCarModel]=useState([]);
   //const [loadings, setLoadings] = useState([]);
 //   const enterLoading = (index) => {
@@ -95,7 +96,7 @@ const MyCar = () => {
       key: "status",
     },
     {
-      title: " ",
+      title: "Hành động",
       dataIndex: "action",
       key: "action",
     },
@@ -118,63 +119,67 @@ const MyCar = () => {
         respData.forEach((element) => {
           element.model = element.carModel.model;
           element.discript = element.carModel.discript;
-         
+          element.status = element.status ==='Available' ? 'Khả dụng' : 'Xe đang đỗ'
           element.action = [
-            <EditFilled
-              style={{ fontSize: "25px" }}
-              onClick={() => {
-                showDrawer1();
-                form1.setFieldsValue({
-                  carModelID: element.carModel.id,
-                  carNumber: element.carNumber,
-                
-                });
-            
-                setIdCar(element.id);
-              }}
-            />,
+            <Button onClick={() => {
+              showDrawer1();
+              form1.setFieldsValue({
+                carModelID: element.carModel.id,
+                carNumber: element.carNumber,
+              
+              });
+          
+              setIdCar(element.id);
+            }}>
+            <EditFilled/>
+            </Button>
+            ,
+            <Button disabled={element.status==='Xe đang đỗ'? true : false}
+            className="buttonState"
+           
+            onClick={() => {
+              Modal.confirm({
+                title: "Bạn chắc chứ ?",
+                icon: <CloseCircleOutlined style={{ color: "red" }} />,
+                content: "Bạn muốn xóa thông tin của xe này ? ",
+                okText: "Xóa",
+                cancelText: "Hủy",
+                okButtonProps: {
+                  style: { background: "#e30c18", color: "white" },
+                },
 
-            <CloseCircleOutlined
-              onClick={() => {
-                Modal.confirm({
-                  title: "Bạn chắc chứ ?",
-                  icon: <CloseCircleOutlined style={{ color: "red" }} />,
-                  content: "Bạn muốn xóa thông tin của xe này ? ",
-                  okText: "Xóa",
-                  cancelText: "Hủy",
-                  okButtonProps: {
-                    style: { background: "#e30c18", color: "white" },
-                  },
-
-                  onOk() {
-                    return new Promise((resolve, reject) => {
-                      setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-                      axios
-                        .delete(
-                          `${process.env.REACT_APP_Backend_URI}car/${element.id}`
-                        )
-                        .then(() => {
-                          notification.success({
-                            message: `Xóa thành công`,
-                            description: "Delete a new car model successfully",
-                            placement: "topLeft",
-                          });
-                        })
-                        .catch(() => {
-                          notification.error({
-                            message: `Xóa không thành công`,
-                            description: "Delete a user fail",
-                            placement: "topLeft",
-                          });
+                onOk() {
+                  return new Promise((resolve, reject) => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                    api
+                      .delete(
+                        `car/${element.id}`
+                      )
+                      .then(() => {
+                        notification.success({
+                          message: `Xóa thành công`,
+                          description: "Xóa xe thành công",
+                          placement: "topLeft",
                         });
-                      
-                    });
-                  },
-                  onCancel() {},
-                });
-              }}
-              style={{ color: "red", fontSize: "25px", marginLeft: "10px" }}
-            />,
+                      })
+                      .catch(() => {
+                        notification.error({
+                          message: `Xóa không thành công`,
+                          description: "Không thể xóa xe này",
+                          placement: "topLeft",
+                        });
+                      });
+                    
+                  });
+                },
+                onCancel() {},
+              });
+                
+            }}
+        >
+            <CloseOutlined style={{color: 'red'}}/>
+        </Button>,
+            
           ];
         });
         setData(
@@ -223,7 +228,7 @@ const MyCar = () => {
       setPageSize(pageSize);
     },
     showSizeChanger: true,
-    showTotal: (total) => `Total ${total} Student`,
+    showTotal: (total) => `Tổng ${total} xe`,
   };
   const showDrawer = () => {
     setOpen(true);
@@ -243,8 +248,8 @@ const MyCar = () => {
         onClose();
         notification.success({
           message: `Thành công`,
-          description: "Create new car successfully",
-          placement: "center",
+          description: "Thêm xe cho bản thân thành công",
+          placement: "topLeft",
         });
 
         form.setFieldsValue({
@@ -256,12 +261,14 @@ const MyCar = () => {
       })
       .catch((error) => {
         notification.warning({
-          message: `Fail`,
-          description: "Please check input again",
-          placement: "center",
+          message: `Thất bài`,
+          description: "Vui lòng kiểm tra lại thông tin",
+          placement: "topLeft",
         });
         form.setFieldsValue({
-          carNumber: "",
+          carModelID:"",
+          carNumber:"",
+         
         });
       });
 
@@ -279,7 +286,7 @@ const MyCar = () => {
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
-          description: "Edit this car successfully",
+          description: "Chỉnh sửa thông tin xe thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -292,8 +299,8 @@ const MyCar = () => {
       })
       .catch((error) => {
         notification.warning({
-          message: `Fail`,
-          description: "Please check input again",
+          message: `Thất bại`,
+          description: "Vui lòng kiểm tra lại thông tin",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -315,7 +322,7 @@ const MyCar = () => {
           paddingBottom: "20px",
         }}
       >
-        Car List
+        Danh sách xe
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
         <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
@@ -354,88 +361,35 @@ const MyCar = () => {
 
       <Modal
         open={modal.isOpen}
-        title="Detail Car model"
+        
         onOk={() => {
           setModal({ ...modal, isOpen: false });
         }}
-        style={{ width: 400 }}
-        footer={[
-          <Button
-            style={{ background: "#e30c18", color: "white" }}
-            key="back"
-            onClick={() => {
-              setModal({ ...modal, isOpen: false });
-            }}
-          >
-            Close
-          </Button>,
-        ]}
-        closable={false}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
       >
-        <table>
-          <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Mã xe
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.id}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Biển số xe
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.carNumber}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Loại xe
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.model}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ width: "50px", fontSize: "18px", color: "#838688" }}>
-              Mô tả
-            </td>
-            <td
-              style={{
-                fontSize: "18px",
-                color: "#838688",
-                textAlign: "justify",
-                paddingLeft: "35px",
-              }}
-            >
-              {modal.data.discript}
-            </td>
-          </tr>
-
-          
-        </table>
+        <Descriptions title="Thông tin xe" bordered>
+        <Descriptions.Item label="Mã xe" span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Biển số xe"span={2} >{modal.data.carNumber}</Descriptions.Item>
+    <Descriptions.Item label="Loại xe">{modal.data.model}</Descriptions.Item>
+    <Descriptions.Item label="Mô tả" span={2}>{modal.data.discript}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" >{modal.data.status}</Descriptions.Item>
+   
+     <Descriptions.Item label="Lịch sử gửi xe" span={3}>
+    {modal &&modal?.data?.parkingDetail?.map((e,index)=>(
+       <><h4  style={{ color: " red"}}>{index+1}. Bãi đỗ: {e?.parking?.parkingName}</h4>
+       Ngày đỗ xe: {dayjs(e?.parkingDate).format('DD/MM/YYYY')} <br/> 
+       {e.pickUpDate ? <>Ngày lấy xe: {dayjs(e?.pickUpDate).format('DD/MM/YYYY')}  </>: 'Xe đang đỗ'}
+       <p></p>
+       </>
+    ))}
+   </Descriptions.Item> 
+          </Descriptions>
+    
       </Modal>
 
       {data.length === 0 ? (
@@ -460,10 +414,11 @@ const MyCar = () => {
                     isOpen: true,
                     data: {
                       id: record.id,
+                      status: record.status,
                       carNumber: record.carNumber,
                       model: record.model,
                       discript: record.discript,
-                      
+                      parkingDetail : record.parkingDetail
                     },
                   });
                   console.log(modal.data);
@@ -476,9 +431,11 @@ const MyCar = () => {
                     isOpen: true,
                     data: {
                       id: record.id,
+                      status: record.status,
+                      carNumber: record.carNumber,
                       model: record.model,
-
                       discript: record.discript,
+                      parkingDetail : record?.parkingDetail? record?.parkingDetail :"Không có lịch sử đỗ xe",
                      
                     },
                   });
@@ -515,17 +472,17 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car model id",
+                    message: "Vui lòng chọn loại xe",
                   },
                 ]}
               >
             <Select
-          placeholder="Chọn bãi đỗ"
+          placeholder="Chọn loại xe"
            
           virtual={false}
           >
             
-            {carModel.map((u)=> (
+            {carModel &&carModel?.map((u)=> (
                       <option value={u.id}>
                         {u.model}
                       </option>
@@ -544,7 +501,7 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter car number ",
+                    message: "Vui lòng nhập biển số xe  ",
                   },
                 ]}
               >
@@ -552,7 +509,7 @@ const MyCar = () => {
                   style={{
                     width: "100%",
                   }}
-                  placeholder="Please enter car number "
+                  placeholder="Nhập biển số xe "
                 />
               </Form.Item>
             </Col>
@@ -565,16 +522,16 @@ const MyCar = () => {
                   onClick={() => {
                     onClose();
                     form.setFieldsValue({
-                      model: "",
-                      discript: "",
+                      carModelID:"",
+                      carNumber:"",
                      
                     });
                   }}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button htmlType="submit" type="primary">
-                  Submit
+                  Lưu
                 </Button>
               </Space>
             </Col>
@@ -606,7 +563,7 @@ const MyCar = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car model id",
+                    message: "Vui lòng chọn loại xe",
                   },
                 ]}
               >
@@ -629,15 +586,15 @@ const MyCar = () => {
             <Col span={24}>
               <Form.Item
                 name="carNumber"
-                label="Car Number"
+                label="Biển số xe"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Car Number",
+                    message: "Vui lòng nhập biển số xe",
                   },
                 ]}
               >
-                <Input placeholder="Please enter Car Number" />
+                <Input placeholder="Nhập biển số xe" />
               </Form.Item>
             </Col>
           </Row>
@@ -650,10 +607,10 @@ const MyCar = () => {
                     onClose1();
                   }}
                 >
-                  Cancel
+                  Hủy
                 </Button>
                 <Button onClick={onClose1} htmlType="submit" type="primary">
-                  Submit
+                  Lưu
                 </Button>
               </Space>
             </Col>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Menu,Badge } from 'antd';
-import { HomeOutlined, CarOutlined } from '@ant-design/icons';
+import { HomeOutlined, CarOutlined,SolutionOutlined, DollarOutlined, TeamOutlined} from '@ant-design/icons';
 import { routes } from '../../../utils/routes';
 import {useLocation, useNavigate} from 'react-router-dom';
 import { useAuthState } from '../../../hooks/authState';
@@ -21,24 +21,27 @@ const MenuContainer=()=> {
     const menuOwner = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
         getItem(routes.MANAGERPARKING, 'Quản lý bãi xe', <CarOutlined />),
-        getItem(routes.MANAGE_PARKINGDETAIL, 'Quản lý đỗ xe', <CarOutlined />),
-        getItem(routes.MANAGEPARKINGMANAGER, 'Quản lý nhân viên', <CarOutlined />),
-        getItem(routes.MANAGE_REQUEST, (<Badge count={countState}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />),
+       
+        getItem(routes.MANAGEPARKINGMANAGER, 'Quản lý nhân viên', <TeamOutlined />),
+        getItem(routes.MANAGE_REQUEST, (<Badge count={countState?.data}>Quản lý yêu cầu khách hàng</Badge>), <SolutionOutlined />),
+        getItem(routes.MANAGE_PARKINGDETAIL, 'Thanh toán',<DollarOutlined />),
     ]
     const menuCustomer = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
-        getItem(routes.MY_REQUEST, 'Yêu cầu của tôi', <HomeOutlined />),
-        getItem(routes.MY_CAR, 'Xe của tôi', <HomeOutlined />),
+        getItem(routes.MY_REQUEST, 'Yêu cầu của tôi', <SolutionOutlined />),
+        getItem(routes.MY_CAR, 'Xe của tôi', <CarOutlined />),
     ]
     const menuAdmin = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
-        getItem(routes.APPROVEPARKING, (<Badge count={countState}>Phê duyệt bãi đỗ</Badge>), <CarOutlined />),
+        getItem(routes.MANAGE_USER, 'Quản lí người dùng', <TeamOutlined/>),
         getItem(routes.MANAGECARMODEL, 'Quản lý loại xe', <CarOutlined />),
+        getItem(routes.APPROVEPARKING, (<Badge count={countState?.data}>Phê duyệt bãi đỗ</Badge>), <SolutionOutlined />),
     ]
     const menuPM = [
         getItem(routes.HOME, 'Trang chủ', <HomeOutlined />),
         getItem(routes.MANAGE_SLOT, 'Quán lý chỗ đỗ', <HomeOutlined />),
-        getItem(routes.MANAGE_REQUEST, (<Badge count={countState}>Quản lý yêu cầu khách hàng</Badge>), <CarOutlined />)
+        getItem(routes.MANAGE_REQUEST_PM, (<Badge count={countState?.data}>Quản lý yêu cầu khách hàng</Badge>),  <SolutionOutlined />),
+        getItem(routes.MANAGE_PARKINGDETAIL_PM, 'Thanh toán', <DollarOutlined />),
     ]
     const onClickMenu = (e) => {
         const route = e.key;

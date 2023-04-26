@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
+import { Table, Input, Button, Menu, Dropdown, Row, Col,Descriptions,List,Divider, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
 import {
-  FilterOutlined,
+  FilterOutlined,DeleteOutlined,
   EditFilled,
   CloseSquareOutlined,PlusOutlined,UnorderedListOutlined,SearchOutlined
 } from "@ant-design/icons";
@@ -21,8 +21,17 @@ export default function ManageParking() {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [pageSize, setPageSize] = useState(10);
-  const [status,setStatus]= useState("Status");
-  const [type,setType]= useState("Type");
+  const [page1, setPage1] = useState(1);
+  const [pageSize1, setPageSize1] = useState(5);
+  const [page2, setPage2] = useState(1);
+  const [pageSize2, setPageSize2] = useState(5);
+  const [status,setStatus]= useState("Tất cả");
+  const [type,setType]= useState("Tất cả");
+  const [type1,setType1]= useState("Tất cả");
+  const [slotParking,setSlotParking] =useState([]);
+  const [slotParking1,setSlotParking1] =useState([]);
+const [carModal, setCarModal] = useState(false);
+const [addSlot,setAddSlot]= useState(false)
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -169,7 +178,7 @@ const carColumns = [
         // sessionStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
-          description: "Thêm nhân viên quản lý thành công",
+          description: "Thêm chỗ đỗ thành công",
           placement: "topLeft",
         });
         form.setFieldsValue({
@@ -209,23 +218,45 @@ const carColumns = [
   lastModifyAt: new Date(),
     })
         .then(() => {
+          notification.success({
+            message: `Thành công`,
+            description: "Đã thêm xe vào chỗ đỗ",
+            placement: "topLeft",
+          });
             window.location.reload();
         })
         .catch((err) => {
-
+          notification.warning({
+            message: `Thất bại`,
+            description: "Thêm xe vào chỗ đỗ không thành công",
+            placement: "topLeft",
+          });
         });
 };
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    title: "Notice",
-    content: <p>Do you want to disable student?</p>,
-    footer: (
-      <div style={{ textAlign: "left" }}>
-        <Button className="buttonSave">Disable</Button>
-       
-      </div>
-    ),
+const showPromiseDelete = (id) => {
+  Modal.confirm({
+    title: 'Bạn muốn xóa bãi đỗ này?',
+    content: 'Bãi đỗ này sẽ bị xóa ra khỏi danh sách',
+    onOk() {
+      return new Promise((resolve, reject) => {
+        api.delete(`/parking/${id}`)
+        setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+      }).catch(() => console.log('Oops errors!'));
+    },
+    onCancel() {},
   });
+};
+  // const [deleteModal, setDeleteModal] = useState({
+  //   isOpen: false,
+  //   title: "Notice",
+  //   content: <p>Do you want to disable student?</p>,
+  //   footer: (
+  //     <div style={{ textAlign: "left" }}>
+  //       <Button className="buttonSave">Disable</Button>
+       
+  //     </div>
+  //   ),
+  // });
   const [searchCar, setSearchCar] = useState("");
   const[open1,setOpen1]=useState(false)
  
@@ -236,24 +267,38 @@ const carColumns = [
         setOpen(false);
     };
   
-  const setUpData =(response)=>{
+ 
+
+  useEffect(() => {
+  
+  api.get(`parkings-of-owner`)
+  .then(function (response) {
     let respData = response.data;
       
     respData.forEach((element) => {
      
-      element.status = element.status ==='Available' ? "Khả dụng" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
+      element.status = element.status ==='Available' ? "Đang hoạt động" : ( element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối' )
       element.action = [
-         <Button className='buttonState'
+         <Button className='buttonState' disabled={element.status ==='Đang hoạt động' ? false : true}
          onClick={e => navigateTo(toRoute(routes.PARKING_DETAIL_UPDATE, { parkingID: element.parkingID }))}
                     >
                     <EditFilled/>
             </Button>,
-            <Button  onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
             
             }}><PlusOutlined /></Button>,
-            <Button  onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
-            
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} 
+            onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+              loadSlotParking1(element.parkingID);
             }}><UnorderedListOutlined /></Button>,
+            
+           
+            
+            <Button disabled={element.status ==='Từ chối' ? false : true} onClick={() => 
+              showPromiseDelete(element.parkingID)
+            }><DeleteOutlined /></Button>
+         
+            
       ];
       
     });
@@ -274,34 +319,15 @@ const carColumns = [
         return 0;
       })
     );
-  }
-
-  useEffect(() => {
-  authState?.data?.role === Role.Admin?(
-    api.get(`parkings`)
-    .then(function (response) {
-      setUpData(response)
-    },[])
-    .catch(() => {})
-   
- ):(
-  api.get(`parkings-of-owner`)
-  .then(function (response) {
-    setUpData(response)
   },[])
-  .catch(() => {})
+  .catch(() => {}
  
   
   )  
- 
-   
-      
-   
-   
-   
-  }, [data]);
+
+  }, [data, navigateTo]);
   useEffect(() => {
-    api.get(`cars`)
+    api.get(`cars-available`)
     .then(function(response){
       let respData = response.data;
       respData.forEach((element) => {element.carmodel =element.carModel.model; element.description = element.carModel.discript})
@@ -324,13 +350,11 @@ const carColumns = [
         description: "Tải dữ liệu bị lỗi",
         placement: "topLeft",
       });});
-}, [])
+}, [car])
 
-const [slotParking,setSlotParking] =useState([]);
-const [carModal, setCarModal] = useState(false);
-const [addSlot,setAddSlot]= useState(false)
+
   const dataBystatus =
-  status === "Status" ? data : data.filter((u) => u.status === status);
+  status === "Tất cả" ? data : data.filter((u) => u.status === status);
   const finalData =
     searchText === ""? dataBystatus : (dataBystatus.filter((u) =>
     u.parkingName
@@ -340,8 +364,36 @@ const [addSlot,setAddSlot]= useState(false)
               // || u.id.toLowerCase().includes(searchText.toLowerCase())
         ) 
         );
-  const dataType =
-        type === "Type" ? slotParking : slotParking.filter((u) => u.typeOfSlot === type);    
+  
+            // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+ 
+ const loadSlotParking=(values)=>{
+    console.log(values);
+      api.get(`slots-Roof/${values}`)
+      .then((response) =>{
+        setSlotParking(response.data.sort((a, b) => {
+          if (
+            a.status.trim().toLowerCase() >
+            b.status.trim().toLowerCase() 
+          ) {
+            return 1;
+          }
+          if (
+            b.status.trim().toLowerCase() >
+            a.status.trim().toLowerCase() 
+          ) {
+            return -1;
+          }
+          return 0;
+        }))})
+      .catch((e)=>{notification.warning({
+        message: `Lỗi dữ liệu`,
+      description: "Tải dữ liệu bị lỗi",
+    placement: "topLeft",
+     });});
+            }
+            const dataType =
+        type === 'Tất cả' ? slotParking : slotParking.filter((u) => u.status === type);    
   const finalCar =
         searchCar === ""? car : (car.filter((u) =>
         u.carNumber
@@ -351,22 +403,36 @@ const [addSlot,setAddSlot]= useState(false)
                   // || u.id.toLowerCase().includes(searchText.toLowerCase())
             ) 
             );
-            // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
- 
- const loadSlotParking=(values)=>{
-    console.log(values);
-      api.get(`slots/${values}`)
-      .then((response) =>{
-        setSlotParking(response.data)})
-      .catch((e)=>{notification.warning({
-        message: `Lỗi dữ liệu`,
-      description: "Tải dữ liệu bị lỗi",
-    placement: "topLeft",
-     });});
-            }
+  const loadSlotParking1=(values)=>{
+              console.log(values);
+                api.get(`slots-nonRoof/${values}`)
+                .then((response) =>{
+                  setSlotParking1(response.data.sort((a, b) => {
+                    if (
+                      a.status.trim().toLowerCase() >
+                      b.status.trim().toLowerCase() 
+                    ) {
+                      return 1;
+                    }
+                    if (
+                      b.status.trim().toLowerCase() >
+                      a.status.trim().toLowerCase() 
+                    ) {
+                      return -1;
+                    }
+                    return 0;
+                  }))})
+                .catch((e)=>{notification.warning({
+                  message: `Lỗi dữ liệu`,
+                description: "Tải dữ liệu bị lỗi",
+              placement: "topLeft",
+               });});
+                      }
+  const dataType1 =
+        type1 === 'Tất cả' ? slotParking1 : slotParking1.filter((u) => u.status === type1);    
   const pagination = {
     current: page,
-    PageSize: pageSize,
+    pageSize: pageSize,
     total: finalData.length,
     pageSizeOptions: [5, 10, 15, 20],
     className: "ant-btn-dangerous",
@@ -376,7 +442,35 @@ const [addSlot,setAddSlot]= useState(false)
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+      showTotal: total => `Tổng ${total} bãi dỗ`
+  }; 
+  const paginationSlot = {
+    current: page1,
+    pageSize: pageSize1,
+    total: dataType.length,
+    pageSizeOptions: [5, 10, 15],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page1, pageSize1) => {
+      setPage1(page1);
+      setPageSize1(pageSize1);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Tổng ${total} chỗ dỗ`
+  }; 
+  const paginationSlot1 = {
+    current: page2,
+    pageSize: pageSize2,
+    total: dataType1.length,
+    pageSizeOptions: [5, 10, 15],
+    className: "ant-btn-dangerous",
+    dangerous: true,
+    onChange: (page2, pageSize2) => {
+      setPage2(page2);
+      setPageSize2(pageSize2);
+    },
+   showSizeChanger:true, 
+      showTotal: total => `Tổng ${total} chỗ dỗ`
   }; 
   const pagination1 = {
     current: page,
@@ -394,11 +488,20 @@ const [addSlot,setAddSlot]= useState(false)
   };
   const renderType = () => {
     switch(type) {
-        case 'NONROOF':
-          return 'Không có mái che'
-        case 'ROOFED':
-          return 'Có mái che'
-       
+        case 'Available':
+          return 'Còn chỗ'
+        case 'NotAvailable':
+          return 'Đã có xe'
+        default:
+          return 'Tất cả'
+      }
+  };
+  const renderType1 = () => {
+    switch(type1) {
+        case 'Available':
+          return 'Còn chỗ'
+        case 'NotAvailable':
+          return 'Đã có xe'
         default:
           return 'Tất cả'
       }
@@ -408,7 +511,7 @@ const [addSlot,setAddSlot]= useState(false)
         case 'Status':
           return 'Tất cả'
         case 'Available':
-          return 'Khả dụng'
+          return 'Đang hoạt động'
         case 'Pending':
           return 'Chờ duyệt'
         case 'Cancel':
@@ -430,10 +533,10 @@ const [addSlot,setAddSlot]= useState(false)
           paddingBottom: "20px",
         }}
       >
-        Manage Parking
+        Quản lí bãi đỗ
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-      <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+      <Col span={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -462,16 +565,16 @@ const [addSlot,setAddSlot]= useState(false)
                 <Menu.Item
                 
                   onClick={() => {
-                    setStatus("Khả dụng");
+                    setStatus("Đang hoạt động");
                   }}
                 >
                   {" "}
-                  Khả dụng
+                  Đang hoạt động
                 </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Status");
+                    setStatus("Tất cả");
                   }}
                 >
                   {" "}
@@ -480,15 +583,15 @@ const [addSlot,setAddSlot]= useState(false)
               </Menu>
             }
           > 
-          {renderContent()}
+          {status}
             
           </Dropdown.Button>
             </Form.Item>
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -500,7 +603,7 @@ const [addSlot,setAddSlot]= useState(false)
        
       </Row>
       {/* Delete Modal */}
-      <Modal
+      {/* <Modal
         open={deleteModal.isOpen}
         title={deleteModal.title}
         footer={deleteModal.footer}
@@ -513,79 +616,28 @@ const [addSlot,setAddSlot]= useState(false)
         }
       >
         {deleteModal.content}
-      </Modal>
+      </Modal> */}
       <Modal
-                visible={modal.isOpen}
-                title='Thông tin bãi đỗ'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                // closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Tên Bãi Đỗ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Địa chỉ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.addressDetail}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Thông tin thêm</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.description}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}> Tọa độ</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.latitude} - {modal.data.longitude}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Trạng thái</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Hợp pháp</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{
-                        modal.data.isLegal ===true ? (<>Hợp pháp</>): (<>Không hợp pháp</>)
-                        }</td>
-                    </tr>
-                </table>
-
-
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin bãi đỗ" bordered>
+        <Descriptions.Item label="Tên Bãi Đỗ" span={3}>{modal.data.parkingName}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" >{modal.data.status}</Descriptions.Item>
+    <Descriptions.Item label="Tọa độ" span={2}>{modal.data.latitude} - {modal.data.longitude}</Descriptions.Item>
+    <Descriptions.Item label="Địa chỉ" span={3} >{modal.data.addressDetail}</Descriptions.Item>
+    <Descriptions.Item label="Thông tin thêm" span={3}>{modal.data.description}</Descriptions.Item>
+    <Descriptions.Item label="Nhhân viên" span={3}>{modal.data.parkingManagers && modal?.data?.parkingManagers?.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
+    </Descriptions>
       </Modal>
 
       {finalData.length === 0 ? (
@@ -617,31 +669,11 @@ const [addSlot,setAddSlot]= useState(false)
                       image: record.imageUrls,
                       status: record.status,
                       isLegal: record.isLegal,
+                      parkingManagers: record.parkingManagers
                     },
                   });
                   
-                } else if (
-                  e.target.className ===
-                  "ant-table-cell ant-table-column-sort ant-table-cell-row-hover"
-                ) {
-                  setModal({
-                    ...modal,
-                    isOpen: true,
-                    data: {
-                      parkingName: record.parkingName,
-                      addressDetail: record.addressDetail,
-                      description: record.discription,
-                      latitude: record.lat,
-                      longitude: record.lon,
-                      image: record.imageUrls,
-                      status: record.status,
-                      isLegal: record.isLegal,
-                    },
-                  });
-                  console.log(modal.data);
-                } else {
-                  setModal({ ...modal, isOpen: false });
-                }
+                } 
               },
             };
           }}
@@ -717,11 +749,6 @@ const [addSlot,setAddSlot]= useState(false)
           </Form.Item>
             </Col>
           </Row>
-         
-         
-         
-         
-         
           
           <Form.Item
             name="discription"
@@ -766,7 +793,9 @@ const [addSlot,setAddSlot]= useState(false)
         open={open1}
         closable={true}
       >
-          <Form.Item label={'Loại'}>
+        <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Có mái che</p></Divider>
+        
+          <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
             placement="bottom"
             icon={<FilterOutlined />}
@@ -775,26 +804,26 @@ const [addSlot,setAddSlot]= useState(false)
                 <Menu.Item
                  
                   onClick={() => {
-                    setType('ROOFED');
+                    setType('Available');
                   }}
                 >
                   {" "}
-                  Có mái che
+                  Còn trống
                 </Menu.Item>
                
                 <Menu.Item
                   value="Female"
                   onClick={() => {
-                    setType('NONROOF');
+                    setType('NotAvailable');
                   }}
                 >
                   {" "}
-                  Không mái che
+                  Đã có xe
                 </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setType("Type");
+                    setType("Tất cả");
                   }}
                 >
                   {" "}
@@ -807,34 +836,109 @@ const [addSlot,setAddSlot]= useState(false)
             
           </Dropdown.Button>
             </Form.Item>
-          <Collapse  >{
-            dataType.map((e,index)=>(
-              <Panel icon={e.status}  
-              header={ <>
-              <Row>
-                <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'} - Ví trí {index+1}  </Col>
-               
-                <Col span={8}>
-              {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
-            </Col>
-            <Col span={8}><Tag color={'geekblue'} >
-              Giá {e.price}
-            </Tag></Col>
-              </Row>
+            <List dataSource={dataType} pagination={paginationSlot}
+            renderItem={(e) => (
+              <Collapse  >
+                  <Panel icon={e.status}  
+                  header={ <>
+                  <Row>
+                    <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                   
+                    <Col span={8}>
+                  {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+                </Col>
+                <Col span={8}><Tag color={'geekblue'} >
+                  Giá {e.price}
+                </Tag></Col>
+                  </Row>
+                 
+                  </>}>
+            <p>
+              {e.status !== 'Available' ?  
+            // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+            <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+            :
+            <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+            </p>
+          </Panel>
              
-              </>}>
-        <p>
-          {e.status !== 'Available' ?  
-        // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
-        <>Xe mang biển số: {e.parkingDetail[e.parkingDetail.length -1].car.carNumber}</>
-        :
-        <Button onClick={u=>{setAddSlot(true);setSlotID(e.slotID);console.log(e.slotID)}}>Thêm xe</Button>}
-        </p>
-      </Panel>
-          ))
-          }
-     
-    </Collapse>   
+         
+        </Collapse> 
+            )}/>
+         
+         <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Không có mái che</p></Divider>
+       
+          <Form.Item label={'Trạng thái'}>
+            <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                 
+                  onClick={() => {
+                    setType1('Available');
+                  }}
+                >
+                  {" "}
+                  Còn trống
+                </Menu.Item>
+               
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setType1('NotAvailable');
+                  }}
+                >
+                  {" "}
+                  Đã có xe
+                </Menu.Item>
+               
+                <Menu.Item
+                  onClick={() => {
+                    setType1("Tất cả");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          > 
+          {renderType1()}
+            
+          </Dropdown.Button>
+            </Form.Item>
+            <List dataSource={dataType1} pagination={paginationSlot1}
+            renderItem={(e) => (
+              <Collapse  >
+                  <Panel icon={e.status}  
+                  header={ <>
+                  <Row>
+                    <Col span={8}>Loại: {e.typeOfSlot==='ROOFED' ? 'Có mái che': 'Không có mái che'}</Col>
+                   
+                    <Col span={8}>
+                  {e.status === 'Available' ? <Tag color={'green'} >Còn trống</Tag>: <Tag color={'red'} >Đã có xe</Tag>}
+                </Col>
+                <Col span={8}><Tag color={'geekblue'} >
+                  Giá {e.price}
+                </Tag></Col>
+                  </Row>
+                 
+                  </>}>
+            <p>
+              {e.status !== 'Available' ?  
+            // <Button onClick={u=>{setSlotID(e.parkingDetail[0].id);console.log(e.slotID)}}>Thanh Toán</Button> 
+            <>Xe mang biển số: {e.parkingDetail[e?.parkingDetail?.length -1].car?.carNumber}</>
+            :
+            <Button onClick={u=>{setAddSlot(true);setSlotID(e.id);console.log(e.id)}}>Thêm xe</Button>}
+            </p>
+          </Panel>
+             
+         
+        </Collapse> 
+            )}/>
+    
       </Drawer>
       {/*Thêm xe*/}
       <Modal
@@ -900,15 +1004,20 @@ const [addSlot,setAddSlot]= useState(false)
             <Input.TextArea  />
           </Form.Item>
            
-          <Space>
+            <Row>
+              <Col span={16}></Col>
+              <Col span={8}>
               <Button onClick={()=>{setAddSlot(false); form.setFieldsValue({
                     carID: "",
                  carNumber: "",
                 note: "",})} }>Hủy</Button>
-              <Button htmlType="submit" type="primary">
+              <Button htmlType="submit" type="primary" style={{marginLeft:"10px"}}>
                 Lưu
               </Button>
-              </Space>
+              </Col>
+            
+              
+              </Row>
         
           
         </Form>

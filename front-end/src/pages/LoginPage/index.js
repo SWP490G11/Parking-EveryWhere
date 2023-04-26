@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import {
-    FacebookOutlined,
-    GoogleOutlined,
+import React, { useState } from 'react';
+import { 
     UserOutlined,
-    TwitterOutlined,LockOutlined
+   LockOutlined
   } from "@ant-design/icons";
 import "./LoginPage.css";
-import { Form, Input, Spin } from 'antd';
+import { Form, Input, Spin,notification, Row,Col } from 'antd';
 import { login } from '../../services/authServices';
 import { Message } from '../../utils/helpers';
 import { TypeMessage } from '../../utils/constants';
@@ -22,15 +20,22 @@ const LoginPage = () => {
         setLoading(true);
         const data = await login(username, password);
         if (data) {
-            Message(TypeMessage.SUCCESS, 'Đăng nhập thành công')
+          
+          notification.success({
+            message: `Đăng nhập thành công`,
+            description: "",
+            placement: "topLeft",
+          })
             setAuthState({
                 ...authState,
                 token: data.token
             })
             setLoading(false);
             window.location.replace('/')
-        } else {
-            Message(TypeMessage.ERROR, 'Đăng nhập thất bại')
+        }
+         else {
+         
+         
             setLoading(false);
         }
     };
@@ -46,7 +51,7 @@ const LoginPage = () => {
         <div id="login">
               <Spin spinning={loading} tip="Đang đăng nhập...">
             <section>
-      
+    
       <div className="img-bg">
         <img
           src="https://images.unsplash.com/photo-1470224114660-3f6686c562eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80"
@@ -58,15 +63,10 @@ const LoginPage = () => {
         <div className="form">
           <h2>PARKING EVERYWHERE</h2>
           <Form
-                    style={{
-                        minWidth: 600,
-                    }}
-                    labelCol={{
-                        span: 8,
-                      }}
-                      wrapperCol={{
-                        span: 16,
-                      }}
+                    // style={{
+                    //     minWidth: 600,
+                    // }}
+                   
                     name="normal_login"
                     className="login-form"
                     initialValues={{
@@ -74,7 +74,7 @@ const LoginPage = () => {
                     }}
                     onFinish={onFinish}
                 >
-                    <Form.Item
+                    <Form.Item className="ant-col ant-col-xs-24 ant-col-xl-24"
                         name="username"
                         rules={[
                             {
@@ -83,9 +83,10 @@ const LoginPage = () => {
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value={username} onChange={event => setUsername(event.target.value)} placeholder="Username" />
+                        <Input prefix={<UserOutlined className="site-form-item-icon" />} value={username} onChange={event => setUsername(event.target.value)} placeholder="Tài khoản" />
                     </Form.Item>
                     <Form.Item
+                    className="ant-col ant-col-xs-24 ant-col-xl-24"
                         name="password"
                         rules={[
                             {
@@ -96,37 +97,31 @@ const LoginPage = () => {
                     >
                         <Input.Password
                             prefix={<LockOutlined className="site-form-item-icon" />}
-                            type="password"
+                            //type="password"
                             value={password} onChange={event => setPassword(event.target.value)}
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                         />
+                        
+                        
                     </Form.Item>
+                    <div><a href="/forgot-password" className="ant-col ant-col-xs-24 ant-col-xl-24">Quên mật khẩu ?</a> <br/></div>
                     <div className="input-form">
-                    <Form.Item>
+                      
+                    <Form.Item className="ant-col ant-col-xs-24 ant-col-xl-24">
+                   
                         <input type="submit" className="login-form-button" value=" Đăng nhập" style={{textAlign:"center"}} />
                            
-                        
                     </Form.Item>
                     </div>
                
                 </Form>
-                <div className="input-form">
-              <p>
-                Do not have account ? <a href="/register">Register</a>
+                <div className="input-form ant-col ant-col-xs-24 ant-col-xl-24">
+               
+              <p >
+                Bạn chưa có tài khoản? <a href="/register">Đăng ký</a>
               </p>
             </div>
-          <h3>Login by social account</h3>
-          <ul className="icon-dang-nhap">
-            <li>
-              <FacebookOutlined style={{ scale: "200%" }} />
-            </li>
-            <li>
-              <GoogleOutlined style={{ scale: "200%" }} />
-            </li>
-            <li>
-              <TwitterOutlined style={{ scale: "200%" }} />
-            </li>
-          </ul>
+         
         </div>
       </div>
       

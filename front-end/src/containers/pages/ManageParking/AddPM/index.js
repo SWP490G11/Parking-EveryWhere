@@ -1,5 +1,5 @@
 import { ParkingService } from "../../../../services/parkingServices";
-import { Input, Button,Form,Drawer,Space,notification,AutoComplete,DatePicker,Radio,Select,Modal } from "antd";
+import { Input, Button,Form,Drawer,Space,notification,AutoComplete,DatePicker,Radio,Select } from "antd";
 import api from "../../../../services/api";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
@@ -9,22 +9,11 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
   
   const [parkings, setParking] = useState([]);
  
-  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const onEmailChange = (value) => {
-    if (!value) {
-      setAutoCompleteResult([]);
-    } else {
-      setAutoCompleteResult(
-        ["@gmail.com", "@yahoo.com"].map((domain) => `${value}${domain}`)
-      );
-    }
-  };
-  const emailOptions = autoCompleteResult.map((email) => ({
-    label: email,
-    value: email,
-  }));
+  
+  
+  
   useEffect(() => {
-    ParkingService.getAllParkingOwner(setParking);
+    ParkingService.getAllParkingOwnerAvailable(setParking);
 }, [parkings])
   const onFinish = (fieldsValue) => {
     const values = {
@@ -46,7 +35,9 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
         
       })
       .then((res) => {
-        setInfor({...res.data,fullname: res.data.lastName+ res.data.firstName, password: res.data.userName+"@"+(moment(new Date(res.data.dateOfBirth).toLocaleDateString('en-CA')).format('DDMMYYYY'))})
+        setInfor({...res.data,fullname: res.data.lastName+ res.data.firstName,
+           password: res.data.userName+"@"+(moment(new Date(res.data.dateOfBirth).toLocaleDateString('en-CA')).format('DDMMYYYY')),
+         dateOfBirth:moment(new Date(res.data.dateOfBirth).toLocaleDateString('en-CA')).format('DD/MM/YYYY')})
         setOpenInfor(true);
         notification.success({
           message: `Thành công`,
@@ -108,6 +99,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
                 message: "Vui lòng chọn bãi đỗ",
               },
             ]}
+            hasFeedback
           >
             <Select
           placeholder="Chọn bãi đỗ"
@@ -115,7 +107,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
           virtual={false}
           >
             
-            {parkings.filter((u)=>u.status==='Available').map((u)=> (
+            {parkings.map((u)=> (
                       <option value={u.parkingID}>
                         {u.parkingName}
                       </option>
@@ -123,7 +115,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
           </Select>
           </Form.Item>
           <Form.Item
-            name="firstName"
+            name="lastName"
             label="Họ"
             rules={[
               {
@@ -137,7 +129,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
             <Input />
           </Form.Item>
           <Form.Item
-            name="lastName"
+            name="firstName"
             label="Tên"
             rules={[
               {
@@ -151,24 +143,22 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
             <Input />
           </Form.Item>
          
+         
           <Form.Item
             name="email"
             label="E-mail"
             rules={[
               {
+                required: true,
                 type: "email",
                 message: "E-mail không hợp lệ!",
               },
-              {
-                required: true,
-                message: "Vui lòng nhập E-mail",
-              },
+             
             ]}
             hasFeedback
           >
             <AutoComplete
-              options={emailOptions}
-              onChange={onEmailChange}
+
               placeholder="Email"
             >
               <Input />
@@ -183,6 +173,7 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
                 message: "Vui lòng nhập dữ liệu",
               },
             ]}
+            hasFeedback
           >
             <Input
              
@@ -195,17 +186,26 @@ const AddPM=({open,setOpen,setInfor,setOpenInfor,infor})=>{
             name="dateOfBirth"
             label="Ngày sinh"
             rules={[
-              
               {
-               
+                type: "object",
                 required: true,
-                message: "Vui lòng nhập dữ liệu",
+                message: "Vui lòng nhập ngày sinh của bạn!",
               },
-             
+              {
+                validator(_, value) {
+                    if ((new Date().getFullYear() - new Date(value).getFullYear()) < 15) {
+                        return Promise.reject("Người dùng phải trên 15 tuổi ")
+                    }
+                    return Promise.resolve();
+                }
+            }
             ]}
           >
-            <DatePicker style={{width: 332 }} 
-            format="DD-MM-YYYY" />
+            <DatePicker style={{
+                width: "100%",
+              }}
+              placeholder="Chọn ngày sinh của bạn"
+            format="DD/MM/YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

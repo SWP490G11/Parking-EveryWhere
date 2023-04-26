@@ -75,7 +75,7 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
               },
             ]}
           > <div style={{paddingBottom: 5}}> Kinh độ</div>
-            <Input placeholder='Longitude' disabled={true} value={newParking?.lon ? newParking.lon : ''}/>
+            <Input disabled={true} value={newParking?.lon ? newParking.lon : ''}/>
                             </Form.Item>
                             </Col>
                             <Col span={4}></Col>
@@ -90,7 +90,7 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
               },
             ]}
           > <div style={{paddingBottom: 5}}> Vĩ độ</div>
-            <Input placeholder='Latitude'  disabled={true} value={newParking?.lat ? newParking.lat : ''}/>
+            <Input   disabled={true} value={newParking?.lat ? newParking.lat : ''}/>
                             </Form.Item>
                                    
                                     
@@ -111,7 +111,7 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
               },
             ]}
           > <div style={{paddingBottom: 5}}> Thông tin</div>
-           <TextArea placeholder='Description' style={{margin: "20px 0"}}
+           <TextArea placeholder='Thông tin bãi đỗ' style={{margin: "20px 0"}}
                                 onChange={e => {
                                     setNewParking({
                                         ...newParking,

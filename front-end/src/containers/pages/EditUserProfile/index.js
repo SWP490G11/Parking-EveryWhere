@@ -63,7 +63,7 @@ export const EditProfile=(profile)=> {
         userName: response.data.userName,
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
-         dateOfBirth:dayjs(response.data.dateOfBirth, 'YYYY-MM-DD'),
+         dateOfBirth:dayjs(response.data.dateOfBirth, 'DD-MM-YYY'),
         gender: response.data.gender,
         role: response.data.role,
       });
@@ -97,15 +97,15 @@ export const EditProfile=(profile)=> {
       })
       .then(() => {
         notification.success({
-          message: `Save successfully`,
-          description: 'Updated user profile',
+          message: `Thành công`,
+          description: 'Cập nhật thông tin người dung thành công',
           placement: 'topLeft',
         });
         navigate(`/`);
       }).catch((error)=>{
         notification.warning({
-            message: `Save fail`,
-            description: 'Please check input again',
+            message: `Thất bại`,
+            description: 'Vui lòng thử lại',
             placement: 'topLeft',
           });
       });
@@ -161,27 +161,28 @@ export const EditProfile=(profile)=> {
           }}
           scrollToFirstError
         >
-          
-          <Form.Item
-            name="firstName"
-            label="FirstName"
-             
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
+           <Form.Item
             name="lastName"
-            label="LastName"
+            label="Họ"
            
           >
             <Input  />
           </Form.Item>
+          
+          <Form.Item
+            name="firstName"
+            label="Tên"
+             
+          >
+            <Input />
+          </Form.Item>
+         
 
           <Form.Item
             name="userName"
-            label="UserName"
+            label="Tài khoản"
           >
-            <Input disabled />
+            <Input readOnly />
           </Form.Item>
          
           <Form.Item
@@ -193,7 +194,7 @@ export const EditProfile=(profile)=> {
           </Form.Item>
           <Form.Item
             name="phoneNumber"
-            label="Phone Number"
+            label="Số điện thoại"
            
           >
             <Input            
@@ -202,35 +203,49 @@ export const EditProfile=(profile)=> {
           </Form.Item>
           <Form.Item
             name="dateOfBirth"
-            label="Date of birth"
-            
+            label="Ngày sinh"
+            rules={[
+              {
+                type: "object",
+                required: true,
+                message: "Vui lòng nhập ngày sinh của bạn!",
+              },
+              {
+                validator(_, value) {
+                    if ((new Date().getFullYear() - new Date(value).getFullYear()) < 15) {
+                        return Promise.reject("Người dùng phải trên 15 tuổi ")
+                    }
+                    return Promise.resolve();
+                }
+            }
+            ]}
           >
-            <DatePicker  style={{width: 332}} />
+            <DatePicker  style={{width: 332}} format={'DD/MM/YYYY'} />
           </Form.Item>
           <Form.Item
             name="gender"
-            label="Gender"
+            label="Giới tính"
           >
             <Radio.Group >
-              <Radio value={"Male"}>Male</Radio>
-              <Radio value={"Female"}>FeMale</Radio>
-              <Radio value={'Other'}>Other</Radio>
+              <Radio value={"Male"}>Nam</Radio>
+              <Radio value={"Female"}>Nữ</Radio>
+              <Radio value={'Other'}>Khác</Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
             name="role"
-            label="Role"
+            label="Vị trí"
           >
-            <Input disabled/>
+            <Input readOnly/>
           </Form.Item>
           
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary"  htmlType="submit"
             >
-            Save
+            Lưu
             </Button>
             <Button type="second" onClick={() => navigate(-1)}>
-              Back
+              Quay lại
             </Button>
           </Form.Item>
         </Form>

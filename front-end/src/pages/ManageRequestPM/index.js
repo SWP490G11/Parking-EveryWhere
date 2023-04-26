@@ -1,34 +1,31 @@
-import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Descriptions,Form} from 'antd';
-
+import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form,Empty,Descriptions} from 'antd';
+import { useAuthState } from '../../hooks/authState';
 import React, {useEffect, useState} from 'react';
-import {ExclamationCircleFilled, CloseOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
+import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
 import moment from "moment";
+import { Role } from '../../utils/constants';
 import api from "../../services/api";
- const MyRequest=()=> {
+ const ManageRequestPM=()=> {
     const [data, setData] = useState([])
     const [modal, setModal] = useState({
         isOpen: false,
         data: {},
     });
    
-    
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
-    const [status,setStatus] = useState("Tất cả");
-
- 
-
-  
+    const [status,setStatus] = useState("Status");
+    const [authState] = useAuthState();
     const handleDeleteOk = (id) => {
        
         api
-            .delete(`request/${id}`)
+            .patch(`request/cancel-request/${id}`)
             .then((res) => {
                 
                 notification.success({
                     message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
+                    description: "Bạn đã từ chối yêu cầu ",
                     placement: "topLeft",
                   });
                 //window.location.reload();
@@ -40,15 +37,14 @@ import api from "../../services/api";
                   });
         })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const showPromiseDelete = (id) => {
         Modal.confirm({
-          title: 'Bạn có muốn xóa yêu cầu này?',
+          title: 'Bạn  muốn từ chối yêu cầu ?',
           icon: <ExclamationCircleFilled />,
           okText: 'Đồng ý',
     okType: 'danger',
     cancelText: 'Hủy',
-          content: 'Yêu cầu sẽ bị xóa khi bạn đồng ý',
+          content: 'Bạn sẽ từ chối yêu cầu của khách hàng !',
           onOk() {
             return new Promise((resolve, reject) => {
                 handleDeleteOk(id);
@@ -58,56 +54,103 @@ import api from "../../services/api";
           onCancel() {},
         });
       };
-//===========================================================
-   
+      const showPromiseOk = (id) => {
+        Modal.confirm({
+          title: 'Bạn  muốn chấp thuận yêu cầu ?',
+          icon: <ExclamationCircleFilled />,
+          okText: 'Đồng ý',
     
-  
+            cancelText: 'Hủy',
+          content: 'Bạn sẽ chấp thuận yêu cầu của khách hàng !',
+          onOk() {
+            return new Promise((resolve, reject) => {
+                api
+            .patch(`request/aprove-request/${id}`)
+            .then((res) => {
+                
+                notification.success({
+                    message: `Thành công`,
+                    description: "Yêu cầu đã được bạn chấp thuận",
+                    placement: "topLeft",
+                  });
+                //window.location.reload();
+            }).catch((error) => {
+                notification.warning({
+                    message: `Thât bại`,
+                    description: "Vui lòng thử lại",
+                    placement: "topLeft",
+                  });
+        }) 
+              setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+            }).catch(() => console.log('Oops errors!'));
+          },
+          onCancel() {},
+        });
+      };
+//===========================================================
 //===============================================
 
+const ParkingID =localStorage.getItem("parkingID"); 
+
     useEffect(() => {
-        api
-            .get(`request/myRequest`, {})
-            .then(function(response)  {
-                let respData = response.data
-                respData.forEach((element) => {
-                    //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
-                    element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-                    element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Cancel'? 'Từ chối':'Chấp thuận');
-                    element.parkingName = element.parkingId.parkingName;
-                    
+    //  authState?.data?.role ===Role.ParkingOwner
+    api.get(`pending-request/${ParkingID}`)
+        .then(function(response)  {
+          let respData = response.data
+  respData.forEach((element) => {
+      //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
+      element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
+      element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Done' ? 'Đã duyệt':'Từ chối');
+      element.parkingName = element.parkingId.parkingName;
+     
 
 
-                    element.action = [
-                        
-                        <Button disabled={element.status==="Từ chối" ||element.status==="Chấp thuận"  ? true : false}
-                            className="buttonState"
-                           
-                            onClick={() => {
-                                showPromiseDelete(element.id);
-                                
-                            }}
-                        >
-                            <CloseOutlined/>
-                        </Button>,
-                      
+      element.action = [
+          <Button disabled={(element.status==="Từ chối"||element.status==="Đã duyệt") ? true : false}
+          className="buttonState"
+         
+          onClick={() => {
+              showPromiseOk(element.id);
+              
+          }}
+      >
+         <CheckOutlined style={{color:"green"}} />
+      </Button>,
+          <Button disabled={(element.status==="Từ chối"||element.status==="Đã duyệt")? true : false}
+              className="buttonState"
+             
+              onClick={() => {
+                  showPromiseDelete(element.id);
+                  
+              }}
+          >
+              <CloseOutlined/>
+          </Button>,
+        
 
-                    ]
-                })
-                setData(respData.sort((a, b) => {
-                    if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
-                      return 1;
-                    }
-                    if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
-                      return -1;
-                    }
-                    return 0;
-                  })
-                );
-              }, [])
-            .catch((error) => {
+      ]
+  })
+  setData(respData.sort((a, b) => {
+      if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+        return 1;
+      }
+      if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    })
+  );
+          }, [])
+          .catch(() => {});
+      //   else{
+      //     api.get(`pending-request/${ParkingID}`)
+      // .then(function (response) {
+      //   setUpData(response)
+      // }, [])
+      // .catch(() => {});
+      //   }
 
-            })
-    }, [data, showPromiseDelete])
+}, [data])
 
     const columns = [
         {
@@ -184,17 +227,17 @@ import api from "../../services/api";
             },
         },
         {
-            title: "Hành động",
+            title: "Phê duyệt",
             dataIndex: "action",
             key: "action",
         },
     ];
     const dataByStatus =
-    status === "Tất cả" ? data : data.filter((u) => u.status === status);
-const finalData =
-searchText === ""
-  ? dataByStatus
-  : dataByStatus.filter(
+        status === "Status" ? data : data.filter((u) => u.status === status);
+    const finalData =
+    searchText === ""
+      ? dataByStatus
+      : dataByStatus.filter(
           (u) =>
             u.parkingId.parkingName
             .toLowerCase()
@@ -229,7 +272,7 @@ searchText === ""
       };
     return (
         <>
-         <p
+             <p
         style={{
           display: "block",
           fontSize: "20px",
@@ -240,11 +283,10 @@ searchText === ""
           paddingBottom: "20px",
         }}
       >
-        Danh sách yêu cầu 
+        Quản lý yêu cầu khách hàng
       </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
-        
-        <Col xs={24} xl={8} sm={8}>
+        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -270,19 +312,10 @@ searchText === ""
                   {" "}
                   Từ chối
                 </Menu.Item>
-                 <Menu.Item
-                  value="Female"
-                  onClick={() => {
-                    setStatus("Chấp thuận");
-                  }}
-                >
-                  {" "}
-                  Chấp thuận
-                </Menu.Item>
                
                 <Menu.Item
                   onClick={() => {
-                    setStatus("Tất cả");
+                    setStatus("Status");
                   }}
                 >
                   {" "}
@@ -291,13 +324,13 @@ searchText === ""
               </Menu>
             }
           > 
-          {status}
+          {renderContent()}
             
           </Dropdown.Button>
             </Form.Item>
         
           </Col>
-        <Col xs={24} xl={8} sm={8}>
+        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
             placeholder="Tìm kiếm"
             maxLength={255}
@@ -310,7 +343,6 @@ searchText === ""
         </Col>
         </Row>
         <Modal
-        className="ant-col ant-col-xs-12 ant-col-xl-24"
         open={modal.isOpen}
         
         onOk={() => {
@@ -324,7 +356,7 @@ searchText === ""
         closable={true}
       >
         <Descriptions title="Thông tin yêu cầu" bordered>
-        <Descriptions.Item label="ID" xs={3} xl={3}>{modal.data.id}</Descriptions.Item>
+        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
     {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
@@ -334,17 +366,18 @@ searchText === ""
     <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>
    
     </Descriptions>
+            
+
 
             </Modal>
            
-            
-          
 
 
             <div>
-                
+            {finalData.length === 0 ? (
+        <Empty description={"Không có dữ liệu"}/>
+      ) : (
                 <Table
-                className="ant-col ant-col-xs-24 ant-col-xl-24"
                     columns={columns}
                     pagination={pagination}
                     dataSource={finalData}
@@ -378,11 +411,11 @@ searchText === ""
                     }}
                 >
 
-                </Table>
+                </Table>)}
             </div>
 
 
         </>
     )
 }
-export default MyRequest;
+export default ManageRequestPM;

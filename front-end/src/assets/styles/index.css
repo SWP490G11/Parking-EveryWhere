@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 1.5em;
 }
 
 code {
@@ -13,7 +14,6 @@ code {
 }
 
 .site-layout-content {
-  min-height: 280px;
   padding: 24px;
 }
 
@@ -40,7 +40,12 @@ code {
   display: flex;
   align-items: center;
 }
-
+.footer {
+  
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem
+}
 .text-upper {
   text-transform: uppercase;
 }
@@ -97,9 +102,9 @@ code {
 }
 
 .ant-select-selector,
-.ant-input {
+/* .ant-input {
   border-color: rgb(30, 129, 210) !important;
-}
+} */
 
 .parking-detail-info {
   display: flex;
@@ -180,10 +185,12 @@ code {
   
 }
 .avatar-avatar{
+  display: block;
   width: 15vw;
-  height: 15vh;
+  height: 22vh;
   font-size: 18px;
   margin: 30px;
+  object-fit: contain;
 }
 
 

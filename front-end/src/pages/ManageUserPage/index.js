@@ -6,24 +6,15 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../services/api";
-import AddPM from "../../containers/pages/ManageParking/AddPM";
-export default function ManageParkingManager() {
+
+export default function ManageUser() {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [type, setType] = useState("Tất cả");
   const [disable,setDisable] = useState("Tất cả");
-  const [open, setOpen] = useState(false);
-  const [infor,setInfor]=useState({
-    fullname: "",
-    userName:"",
-    password:"",
-    email:"",
-    dateOfBirth:"",
-
-});
-  const [openInfo,setOpenInfor]=useState(false);
+  const [role,setRole] = useState("Tất cả");
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -79,9 +70,9 @@ export default function ManageParkingManager() {
     },
     
     {
-        title: "Nhân viên của bãi",
-        dataIndex: "parkingName",
-        key: "parkingName",
+        title: "Vai trò",
+        dataIndex: "role",
+        key: "role",
       },
       {
         title: "Trạng thái",
@@ -100,7 +91,7 @@ export default function ManageParkingManager() {
       },
       
     {
-      title: "Đổi trạng thái",
+      title: "Đổi trạng thái ",
       dataIndex: "action",
       key: "action",
       
@@ -132,16 +123,19 @@ export default function ManageParkingManager() {
     });
   };
   useEffect(() => {
-    api.get(`parking-manager-of-owner`)
+    api.get(`api/User/GetAll`)
       .then(function (response) {
         let respData = response.data;
       
 
         respData.forEach((element) => {
             element.fullName = element.lastName + " " + element.firstName;
-            element.role = element.role=== 'ParkingManager' ? 'Nhân viên' : " ";
+            element.role = element.role=== 'ParkingManager' ? 'Nhân viên' :
+            (element.role=== 'ParkingOwner'? 'Chủ bãi đỗ': 
+            (element.role=== 'Admin'? 'Quản trị viên':'Người dùng' ) );
+               //element.gender = element.gender === 'Male' ? 'Nam' : (element.gender === 'Female'? 'Nữ' : 'Khác');
             element.gender = element.gender === 'Male' ? 'Nam' : (element.gender === 'Female'? 'Nữ' : 'Khác');
-            element.parkingName = element?.parking?.parkingName;
+            //element.parkingName = element?.parking?.parkingName;
             element.isDisable = element.isDisable ? "Dừng hoạt động": "Đang hoạt động"
           element.dateOfBirth = moment(
             new Date(element.dateOfBirth).toLocaleDateString("en-US")
@@ -161,6 +155,7 @@ export default function ManageParkingManager() {
             
           ];
         });
+        
         setData(
           respData.sort((a, b) => {
             if (
@@ -183,11 +178,13 @@ export default function ManageParkingManager() {
   }, [data]);
 
   const dataBytype = type === "Tất cả" ? data : data.filter((u) => u.gender === type);
+  
   const dataDisable = disable === "Tất cả" ? dataBytype : dataBytype.filter((u) => u.isDisable === disable);
+  const dataByRole = role === "Tất cả" ? dataDisable : dataDisable.filter((u) => u.role === role);
   const finalData =
     searchText === ""
-      ? dataDisable
-      : (dataDisable.filter(
+      ? dataByRole
+      : (dataByRole.filter(
           (u) =>
             u.userName
               .toLowerCase()
@@ -208,9 +205,10 @@ export default function ManageParkingManager() {
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Tổng ${total} nhân viên`
+      showTotal: total => `Tổng ${total} người dùng`
   };
 
+  
   return (
     <>
       <p
@@ -224,12 +222,12 @@ export default function ManageParkingManager() {
           paddingBottom: "20px",
         }}
       >
-        Danh sách nhân viên
+        Danh sách người dùng
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col span={8}>
+        <Col span={12}>
           <Row>
-            <Col span={12}>
+            <Col span={6}>
             <Form.Item label={'Giới tính'}>
         <Dropdown.Button
             placement="bottom"
@@ -278,7 +276,7 @@ export default function ManageParkingManager() {
           </Dropdown.Button>
           </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
             <Form.Item label={'Trạng thái'}>
         <Dropdown.Button
             placement="bottom"
@@ -320,6 +318,65 @@ export default function ManageParkingManager() {
           </Form.Item>
       
             </Col>
+            <Col span={8}>
+            <Form.Item label={'Vai trò'}>
+        <Dropdown.Button
+            placement="bottom"
+            icon={<FilterOutlined />}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  value="Male"
+                  onClick={() => {
+                    setRole("Quản trị viên");
+                  }}
+                >
+                  {" "}
+                  Quản trị viên
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setRole("Người dùng");
+                  }}
+                >
+                  {" "}
+                  Người dùng
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setRole("Chủ bãi xe");
+                  }}
+                >
+                  {" "}
+                  Chủ bãi xe
+                </Menu.Item>
+                <Menu.Item
+                  value="Female"
+                  onClick={() => {
+                    setRole("Nhân viên");
+                  }}
+                >
+                  {" "}
+                  Nhân viên
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    setRole("Tất cả");
+                  }}
+                >
+                  {" "}
+                  Tất cả
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            {role}
+          </Dropdown.Button>
+          </Form.Item>
+      
+            </Col>
           </Row>
             {/*Filter Gender */}
             
@@ -336,11 +393,7 @@ export default function ManageParkingManager() {
             }}
           />
         </Col>
-        <Col  span={8}>
-          <Button style={{ background: "#33CCFF", color: "white" }} onClick={e => setOpen(true)} >
-          Thêm nhân viên 
-          </Button>
-        </Col>
+       
       </Row>
       
       <Modal
@@ -361,11 +414,14 @@ export default function ManageParkingManager() {
     <Descriptions.Item label="Tài khoản" span={1.5}>{modal.data.userName}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" span={1.5}>{modal.data.isDisable}</Descriptions.Item>
     <Descriptions.Item label="Họ tên"span={1.5} > {modal.data.fullName}</Descriptions.Item>
-    <Descriptions.Item label="Số điện thoại" span={1.5}>{modal.data.phoneNumber}</Descriptions.Item>
-    <Descriptions.Item label="E-mail" span={1.5}>{modal.data.email}</Descriptions.Item>
-    <Descriptions.Item label="Giới tính" span={1.5}>{modal.data.gender}</Descriptions.Item>
-    <Descriptions.Item label="Ngày sinh" span={1.5}>{modal.data.dateOfBirth}</Descriptions.Item>
-    <Descriptions.Item label="Nhân viên bãi đỗ" span={1.5}>{modal.data.parkingName}</Descriptions.Item>
+    <Descriptions.Item label="Số điện thoại" span={1.5}>{modal?.data.phoneNumber}</Descriptions.Item>
+    <Descriptions.Item label="E-mail" span={1.5}>{modal?.data.email}</Descriptions.Item>
+    <Descriptions.Item label="Giới tính" span={1.5}>{modal?.data.gender}</Descriptions.Item>
+    <Descriptions.Item label="Ngày sinh" span={1.5}>{modal?.data.dateOfBirth}</Descriptions.Item>
+    <Descriptions.Item label="Vai trò" span={1.5}>{modal?.data?.role}</Descriptions.Item>
+    {modal?.data?.parking ?   <Descriptions.Item label="Nhân viên bãi đõ" span={3}>{modal?.data?.parking}</Descriptions.Item>: ""}
+    {modal?.data?.parkings ?   <Descriptions.Item label="Chủ bãi đỗ" span={3}>{modal && modal?.data?.parkings.filter(u=>u.status==='Available').map((e,index)=>(
+    <>{index+1}. Bãi đỗ {e.parkingName} - Địa chỉ: {e.addressDetail}  <br/></>)) }</Descriptions.Item>: ""}
    
     </Descriptions>
         
@@ -399,6 +455,9 @@ export default function ManageParkingManager() {
                       fullName: record.lastName+" "+record.firstName,
                       phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
+                      role: record.role,
+                      parkings: record.role==='Chủ bãi đỗ' ? record.parkings:"",
+                      parking: record.role==='Nhân viên' ? record.parking.parkingName:"",
                       gender: record.gender,
                       email: record.email,
                       parkingName: record.parkingName
@@ -416,12 +475,15 @@ export default function ManageParkingManager() {
                         id: record.id,
                         userName: record.userName,
                         isDisable : record.isDisable,
-                        fullName: record.lastName+" "+record.firstName,
-                        phoneNumber: record.phoneNumber,
+                      fullName: record.lastName+" "+record.firstName,
+                      phoneNumber: record.phoneNumber,
                       dateOfBirth: record.dateOfBirth,
+                      role: record.role,
+                      parkings: record.role==='Chủ bãi đỗ' ? record.parkings:"",
+                      parking: record.role==='Nhân viên' ? record.parking.parkingName:"",
                       gender: record.gender,
-                      parkingName: record.parkingName,
                       email: record.email,
+                      parkingName: record.parkingName
                     },
                   });
                   console.log(modal.data);
@@ -433,66 +495,8 @@ export default function ManageParkingManager() {
           }}
         />
       )}
-      {!open ? <></> : 
-      <AddPM setOpen={setOpen} open={open} setInfor={setInfor} setOpenInfor={setOpenInfor} infor={infor} />
-      }
-        <Modal
-        title="Thông tin"
-        open={openInfo}
-        footer={null}
-        onCancel={()=>setOpenInfor(false)}
-        onOk={()=>setOpenInfor(false) }
-      >
-           <Form
-        >
-          <Form.Item
-            name="lastName"
-            label="Họ tên:"
-           
-          > {infor.fullname}
-            {/* <Input disabled /> */}
-          </Form.Item>
-          <Form.Item
-            name="firstName"
-            label="Tài khoản:"
-             
-          >
-              {infor.userName}
-          </Form.Item>
-          
-
-          <Form.Item
-            name="userName"
-            label="Password"
-          >
-            {infor.password}
-          </Form.Item>
-         
-          <Form.Item
-            name="email"
-            label="E-mail :"
-            
-          >        
-             {infor.email}
-          </Form.Item>
-          <Form.Item
-            name="phoneNumber"
-            label="Ngày sinh :"
-           
-          >
-            {infor.dateOfBirth}
-          </Form.Item>
-          
-         
-          
-        </Form>
-        
-              
-               
-                
-               
-               
-      </Modal>
+     
+       
     </>
   );
 }

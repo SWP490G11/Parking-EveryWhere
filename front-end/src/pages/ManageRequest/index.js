@@ -1,4 +1,4 @@
-import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,notification,Menu,Dropdown,Form,Empty,Descriptions} from 'antd';
 import { useAuthState } from '../../hooks/authState';
 import React, {useEffect, useState} from 'react';
 import {ExclamationCircleFilled, CloseOutlined,CheckOutlined, CloseSquareOutlined,FilterOutlined} from "@ant-design/icons";
@@ -25,7 +25,7 @@ import api from "../../services/api";
                 
                 notification.success({
                     message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
+                    description: "Bạn đã từ chối yêu cầu",
                     placement: "topLeft",
                   });
                 //window.location.reload();
@@ -70,11 +70,11 @@ import api from "../../services/api";
                 
                 notification.success({
                     message: `Thành công`,
-                    description: "Bạn đã hủy yêu cầu",
+                    description: "Yêu cầu đã được bạn chấp thuận",
                     placement: "topLeft",
                   });
                 //window.location.reload();
-            }).catch((error) => {
+            }).catch(() => {
                 notification.warning({
                     message: `Thât bại`,
                     description: "Vui lòng thử lại",
@@ -89,18 +89,23 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-const setUpData =(response)=>{
-  let respData = response.data
+
+// const role =localStorage.getItem("role"); 
+    useEffect(() => {
+    //  authState?.data?.role ===Role.ParkingOwner
+        api.get(`pending-request-of-all-parkings-of-owner`,)
+        .then(function(response)  {
+          let respData = response.data
   respData.forEach((element) => {
       //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
       element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
-      element.status = element.status === 'Pending' ? 'Chờ duyệt' : 'Từ chối';
+      element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Done' ? 'Đã duyệt':'Từ chối');
       element.parkingName = element.parkingId.parkingName;
-      
+     
 
 
       element.action = [
-          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận") ? true : false}
+          <Button disabled={(element.status==="Từ chối"||element.status==="Đã duyệt") ? true : false}
           className="buttonState"
          
           onClick={() => {
@@ -110,7 +115,7 @@ const setUpData =(response)=>{
       >
          <CheckOutlined style={{color:"green"}} />
       </Button>,
-          <Button disabled={(element.status==="Từ chối"||element.status==="Chấp nhận")? true : false}
+          <Button disabled={(element.status==="Từ chối"||element.status==="Đã duyệt")? true : false}
               className="buttonState"
              
               onClick={() => {
@@ -134,23 +139,15 @@ const setUpData =(response)=>{
       return 0;
     })
   );
-}
-const ParkingID =localStorage.getItem("parkingID"); 
-const role =localStorage.getItem("role"); 
-    useEffect(() => {
-      if( authState?.data?.role ===Role.ParkingOwner){
-        api.get(`pending-request-of-all-parkings-of-owner`,)
-        .then(function(response)  {
-          setUpData(response);
           }, [])
-          .catch(() => {});}
-        else{
-          api.get(`pending-request/${ParkingID}`)
-      .then(function (response) {
-        setUpData(response)
-      }, [])
-      .catch(() => {});
-        }
+          .catch(() => {});
+      //   else{
+      //     api.get(`pending-request/${ParkingID}`)
+      // .then(function (response) {
+      //   setUpData(response)
+      // }, [])
+      // .catch(() => {});
+      //   }
 
 }, [data])
 
@@ -229,7 +226,7 @@ const role =localStorage.getItem("role");
             },
         },
         {
-            title: "Action",
+            title: "Phê duyệt",
             dataIndex: "action",
             key: "action",
         },
@@ -258,7 +255,7 @@ const role =localStorage.getItem("role");
           setPageSize(pageSize);
         },
        showSizeChanger:true, 
-          showTotal: total => `Total ${total} Request`
+          showTotal: total => `Tổng ${total} yêu cầu`
       };
       const renderContent = () => {
         switch(status) {
@@ -274,8 +271,21 @@ const role =localStorage.getItem("role");
       };
     return (
         <>
+             <p
+        style={{
+          display: "block",
+          fontSize: "20px",
+          margin: "0 auto",
+          textAlign: "left",
+          color: " red",
+          fontWeight: "bold",
+          paddingBottom: "20px",
+        }}
+      >
+        Quản lý yêu cầu khách hàng
+      </p>
         <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col span={8}>
             {/*Filter Gender */}
             <Form.Item label={'Trạng thái'}>
             <Dropdown.Button
@@ -319,9 +329,9 @@ const role =localStorage.getItem("role");
             </Form.Item>
         
           </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col span={8}>
           <Input.Search
-            placeholder="Search User"
+            placeholder="Tìm kiếm"
             maxLength={255}
             allowClear
             onSearch={(e) => {
@@ -331,75 +341,31 @@ const role =localStorage.getItem("role");
           />
         </Col>
         </Row>
-            <Modal
-                visible={modal.isOpen}
-                title='Detail Assignment Information'
-                onCancel={()=>{setModal({...modal,isOpen:false})}}
-                closeIcon={<CloseSquareOutlined style={{color: "red", fontSize: "20px"}}/>}
-                footer={
-                    null
-                }
-            >
-                <table>
-
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>ID</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.id}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Parking Name</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.parkingName}</td>
-                    </tr>
-                    
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request By</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestdBy}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Request At</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.requestAt}</td>
-                    </tr>
-
-                    <tr>
-
-                        <td style={{fontSize: '18px', color: '#838688'}}>Status</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.status}</td>
-                    </tr>
-                    <tr>
-                        <td style={{fontSize: '18px', color: '#838688'}}>Note</td>
-                        <td style={{
-                            fontSize: '18px',
-                            color: '#838688',
-                            textAlign: 'justify',
-                            paddingLeft: '35px'
-                        }}>{modal.data.note}</td>
-                    </tr>
-                </table>
+        <Modal
+        open={modal.isOpen}
+        
+        onOk={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        width={700}
+        onCancel={() => {
+          setModal({ ...modal, isOpen: false });
+        }}
+        footer={null}
+        closable={true}
+      >
+        <Descriptions title="Thông tin yêu cầu" bordered>
+        <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
+    <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
+   
+    {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
+     */}
+    <Descriptions.Item label="Ngày gửi" span={2}>{modal.data.requestAt}</Descriptions.Item>
+    <Descriptions.Item label="Trạng thái" span={1}>{modal.data.status}</Descriptions.Item>
+    <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>
+   
+    </Descriptions>
+            
 
 
             </Modal>
@@ -407,7 +373,9 @@ const role =localStorage.getItem("role");
 
 
             <div>
-                <h1 style={{color: "red", float: "left"}}>Manage Request</h1>
+            {finalData.length === 0 ? (
+        <Empty description={"Không có dữ liệu"}/>
+      ) : (
                 <Table
                     columns={columns}
                     pagination={pagination}
@@ -424,7 +392,7 @@ const role =localStorage.getItem("role");
                                     setModal({
                                         ...modal, isOpen: true
                                         , data: {
-                                            id: record.stt,
+                                            id: record.id,
                                             parkingName: record.parkingName,
                                             requestBy: record.requestBy,
                                             requestAt: record.requestAt,
@@ -442,7 +410,7 @@ const role =localStorage.getItem("role");
                     }}
                 >
 
-                </Table>
+                </Table>)}
             </div>
 
 
