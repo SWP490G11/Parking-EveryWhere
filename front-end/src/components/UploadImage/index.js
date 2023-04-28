@@ -5,6 +5,7 @@ import {
     Form,
     Upload,Button
 } from 'antd';
+import {useState} from 'react'
 import { Message } from '../../utils/helpers';
 import { TypeMessage } from '../../utils/constants';
 const formItemLayout = {
@@ -26,7 +27,7 @@ const normFile = (e) => {
 
 
 const UploadImage = ({ images, setImages,count }) => {
-
+    const [fileLists,setFileLists] = useState([]);
     const dummyRequest = (options) => {
 
         const data = new FormData()
@@ -66,7 +67,7 @@ const UploadImage = ({ images, setImages,count }) => {
             }}
         >
             <Form.Item>
-                <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+                <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} className="ant-col ant-col-xs-12 ant-col-xl-24">
                     <Upload name="files" maxCount={count} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}  >
                     <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                     </Upload>

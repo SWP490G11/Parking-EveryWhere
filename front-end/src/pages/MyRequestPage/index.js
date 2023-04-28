@@ -123,7 +123,7 @@ import api from "../../services/api";
                 }
                 return 0;
             },
-            width: "15%",
+            responsive: ['md'],
         },
         {
             title: "Bãi đỗ",
@@ -138,6 +138,7 @@ import api from "../../services/api";
                 }
                 return 0;
             },
+            responsive: ['xs','sm'],
         },
 
         {
@@ -153,6 +154,7 @@ import api from "../../services/api";
                 }
                 return 0;
             },
+            responsive: ['sm'],
         },
         
         {
@@ -168,6 +170,7 @@ import api from "../../services/api";
                 }
                 return 0;
             },
+            responsive: ['xs','sm'],
         },
         {
             title: "Trạng thái",
@@ -182,8 +185,10 @@ import api from "../../services/api";
                 }
                 return 0;
             },
+            responsive: ['xs','sm'],
         },
         {
+          responsive: ['xs','md'],
             title: "Hành động",
             dataIndex: "action",
             key: "action",
@@ -344,6 +349,7 @@ searchText === ""
             <div>
                 
                 <Table
+                responsive={true}
                 className="ant-col ant-col-xs-24 ant-col-xl-24"
                     columns={columns}
                     pagination={pagination}

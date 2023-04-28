@@ -55,7 +55,7 @@ const MyCar = () => {
       title: "Mã",
       dataIndex: "id",
       key: "id",
-     
+      responsive: ['sm'],
     },
     {
       title: "Biển số",
@@ -69,6 +69,7 @@ const MyCar = () => {
         }
         return 0;
       },
+      responsive: ['xs','sm'],
       
     },
     {
@@ -83,19 +84,23 @@ const MyCar = () => {
         }
         return 0;
       },
+       responsive: ['xs','sm'],
      
     },
     {
       title: "Thông tin",
       dataIndex: "discript",
       key: "discript",
+      responsive: ['sm'],
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
+      responsive: ['xs','sm'],
     },
     {
+      responsive: ['xs','sm'],
       title: "Hành động",
       dataIndex: "action",
       key: "action",
@@ -325,11 +330,11 @@ const MyCar = () => {
         Danh sách xe
       </p>
       <Row gutter={45} style={{ marginBottom: "30px" }}>
-        <Col xs={8} sm={8} md={7} lg={7} xl={6} xxl={5}>
+        <Col xs={0} sm={8} md={7} lg={7} xl={6} xxl={5}>
           {/*Filter Role */}
          
         </Col>
-        <Col xs={8} sm={8} md={7} lg={7} xl={8} xxl={8}>
+        <Col xs={16} sm={8} md={7} lg={7} xl={8} xxl={8}>
           <Input.Search
             placeholder="Tìm thông tin xe"
             maxLength={255}
