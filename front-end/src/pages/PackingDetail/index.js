@@ -28,7 +28,7 @@ function ParkingDetail() {
             )
         }
     //   console.log(parkingDetail)
-    }, [id,parkingDetail]);
+    }, [id]);
     // useEffect(()=> {
        
     // }, [parkingDetail])

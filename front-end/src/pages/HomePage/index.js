@@ -24,7 +24,7 @@ function HomePage() {
         // } else {
              ParkingService.getAllParkingAvailable(setParking, setLoading)
         // }
-    }, [authState])
+    }, [])
     // const finalData =
     // search === ""? parkings : (parkings.filter((u) =>
     // u.parkingName

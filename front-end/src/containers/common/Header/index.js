@@ -82,7 +82,7 @@ function HeaderContainer() {
         } else if (location.pathname !== '/login' && location.pathname !=='/register' && location.pathname !=='/forgot-password') {
             window.location.replace('/login')
         }
-    }, [location.pathname, token,profileState]);
+    }, [location.pathname, token]);
     useEffect(() => {
       if (profileState?.data?.role === 'Admin') {
         api.get(`pending-parkings-number`).then((res)=>{setCountState({...countState,data:res.data})}) 
@@ -92,7 +92,7 @@ function HeaderContainer() {
       }else  if(profileState?.data?.role === 'ParkingManager') {
         api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState({...countState,data:res.data})})
       }
-  }, [profileState]);
+  }, [countState,profileState]);
 
     const navigate = useNavigate();
     const items = [
