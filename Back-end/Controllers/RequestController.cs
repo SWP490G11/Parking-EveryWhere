@@ -29,7 +29,8 @@ namespace Back_end.Controllers
           new {
               r.ID,
               r.Status,
-              RequestbyID = r.Requestby.ID.ToString(),
+              Requestby = r.Requestby,
+              
               r.RequestAt
           }
             ));
@@ -52,6 +53,7 @@ namespace Back_end.Controllers
                 r.Status,
                 ParkingId = r.Parking,
                 r.RequestAt,
+                Requestby = r.Requestby,
             });
         }
 
@@ -71,6 +73,7 @@ namespace Back_end.Controllers
               r.Status,
               ParkingId = r.Parking,
               r.RequestAt,
+              Requestby = r.Requestby,
           } 
             ));
         }
@@ -91,6 +94,7 @@ namespace Back_end.Controllers
               r.Status,
               ParkingId = r.Parking,
               r.RequestAt,
+              Requestby = r.Requestby,
           }
             ));
         }
@@ -153,6 +157,7 @@ namespace Back_end.Controllers
             return Ok(mwi.User.Requests.Select(r=> new
             {
                 r.ID,r.Note,r.Status,ParkingId =r.Parking,r.RequestAt,
+                Requestby = r.Requestby,
             }));
         }
 
