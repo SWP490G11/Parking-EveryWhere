@@ -4,6 +4,7 @@ export const login = async (username, password) => {
     try {
         const response = await api.post('/api/User/Authenticate', { username, password });
         const { token } = response.data;
+        sessionStorage.setItem('token', token);
         localStorage.setItem('token', token);
        
         return response.data;

@@ -34,10 +34,10 @@ function HeaderContainer() {
       });
       //const [Footer, setFooter] = React.useState({});
       const [error, setError] = React.useState("");
-      
+      const role = sessionStorage.getItem('role') ? sessionStorage.getItem('role') : '';
     const location = useLocation();
-    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
-    const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+    const parkingID = sessionStorage.getItem('parkingID') ? sessionStorage.getItem('parkingID') : '';
+    const token = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
     const handleConfirmLogout = () => {
         Modal.confirm({
           title: "Đăng xuất?",
@@ -50,11 +50,13 @@ function HeaderContainer() {
           onOk() {
             return new Promise((resolve, reject) => {
               setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
-              localStorage.removeItem('token');
+              sessionStorage.removeItem('token');
               if(profileState?.data?.role==='ParkingManager'){
-                localStorage.removeItem('parkingID')
+                sessionStorage.removeItem('parkingID')
               }   
-              localStorage.removeItem('userID')
+              sessionStorage.removeItem('userID')
+              
+              sessionStorage.removeItem('role')
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -71,9 +73,10 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
-                localStorage.setItem('userID',profileState.data.id)
+                sessionStorage.setItem('role',profileState.data.role)
+                sessionStorage.setItem('userID',profileState.data.id)
             if(profileState?.data?.role==='ParkingManager'){
-              localStorage.setItem('parkingID',profileState?.data?.parking?.id)
+              sessionStorage.setItem('parkingID',profileState?.data?.parking?.id)
             }   
             
             });

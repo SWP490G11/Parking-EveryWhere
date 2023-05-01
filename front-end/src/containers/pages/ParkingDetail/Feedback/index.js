@@ -29,7 +29,7 @@ export const Feedback = () => {
     const id = param.parkingID;
     const [feedbackID,setFeedbackID] =useState();
     const [value, setValue] = useState(2.5);
-   const userID = localStorage.getItem('userID');
+   const userID = sessionStorage.getItem('userID');
     useEffect(() => {
         api.get(`feedbacks-of-parking/${id}`)
           .then((response) =>{ setFeedbacks(response.data)}).catch((e)=>{notification.warning({
