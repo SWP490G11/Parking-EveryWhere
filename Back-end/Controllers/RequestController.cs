@@ -116,6 +116,7 @@ namespace Back_end.Controllers
               r.Status,
               ParkingId = r.Parking,
               r.RequestAt,
+              r.Requestby
           }
             ));
         }
