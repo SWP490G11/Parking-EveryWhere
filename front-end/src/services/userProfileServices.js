@@ -6,7 +6,7 @@ export const getProfile = async () => {
         return response;
     } catch (error) {
         console.error(error);
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         return null;
     }
 };

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 
-const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+const token = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
 
 if (token !== '') {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

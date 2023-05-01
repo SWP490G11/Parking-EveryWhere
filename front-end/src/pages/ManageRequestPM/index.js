@@ -90,7 +90,7 @@ import api from "../../services/api";
 //===========================================================
 //===============================================
 
-const ParkingID =localStorage.getItem("parkingID"); 
+const ParkingID =sessionStorage.getItem("parkingID"); 
 
     useEffect(() => {
     //  authState?.data?.role ===Role.ParkingOwner

@@ -56,7 +56,7 @@ function App() {
     );
   }
   
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   return (
     <Router>
       <Layout className="layout">

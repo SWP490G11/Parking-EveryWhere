@@ -5,7 +5,7 @@ export const login = async (username, password) => {
         const response = await api.post('/api/User/Authenticate', { username, password });
         const { token } = response.data;
         sessionStorage.setItem('token', token);
-        localStorage.setItem('token', token);
+        sessionStorage.setItem('token', token);
        
         return response.data;
     } catch (error) {
