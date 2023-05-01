@@ -9,6 +9,7 @@ import Logo from '../../../assets/images/logo.png'
 import { Avatar, Dropdown, Layout,Modal,Button,Input,Form,notification } from 'antd';
 import {LogoutOutlined, IdcardOutlined,RedoOutlined,} from "@ant-design/icons";
 import api from "../../../services/api";
+import { useCookie } from 'react-use';
 const { Header } = Layout;
 const formItemLayout = {
   labelCol: {
@@ -34,10 +35,10 @@ function HeaderContainer() {
       });
       //const [Footer, setFooter] = React.useState({});
       const [error, setError] = React.useState("");
-      const role = sessionStorage.getItem('role') ? sessionStorage.getItem('role') : '';
+      const role = localStorage.getItem('role') ? localStorage.getItem('role') : '';
     const location = useLocation();
-    const parkingID = sessionStorage.getItem('parkingID') ? sessionStorage.getItem('parkingID') : '';
-    const token = sessionStorage.getItem('token') ? sessionStorage.getItem('token') : '';
+    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
+    const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
     const handleConfirmLogout = () => {
         Modal.confirm({
           title: "Đăng xuất?",
@@ -50,13 +51,13 @@ function HeaderContainer() {
           onOk() {
             return new Promise((resolve, reject) => {
               setTimeout(Math.random() > 0.5 ? resolve : reject, 5000);
-              sessionStorage.removeItem('token');
+              localStorage.removeItem('token');
               if(profileState?.data?.role==='ParkingManager'){
-                sessionStorage.removeItem('parkingID')
+                localStorage.removeItem('parkingID')
               }   
-              sessionStorage.removeItem('userID')
+              localStorage.removeItem('userID')
               
-              sessionStorage.removeItem('role')
+              localStorage.removeItem('role')
                  setProfileState(null);
               window.location.href = `/login`;
             });
@@ -66,6 +67,7 @@ function HeaderContainer() {
       };
      
     useEffect(() => {
+
         if (token !== '') {
             getProfile().then((data) => {
                 setProfileState({
@@ -73,10 +75,10 @@ function HeaderContainer() {
                     data: data.data,
                     token: token
                 })
-                sessionStorage.setItem('role',profileState.data.role)
-                sessionStorage.setItem('userID',profileState.data.id)
+                localStorage.setItem('role',profileState.data.role)
+                localStorage.setItem('userID',profileState.data.id)
             if(profileState?.data?.role==='ParkingManager'){
-              sessionStorage.setItem('parkingID',profileState?.data?.parking?.id)
+              localStorage.setItem('parkingID',profileState?.data?.parking?.id)
             }   
             
             });

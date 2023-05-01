@@ -28,7 +28,7 @@ const [searchCar, setSearchCar] = useState("");
     const [carID,setCarID]=useState("");
     const [page, setPage] = useState(1);
     const [authState] = useAuthState();
-    const parkingID = sessionStorage.getItem('parkingID') ? sessionStorage.getItem('parkingID') : '';
+    const parkingID = localStorage.getItem('parkingID') ? localStorage.getItem('parkingID') : '';
     const [pageSize, setPageSize] = useState(10);
     const carColumns = [
         {

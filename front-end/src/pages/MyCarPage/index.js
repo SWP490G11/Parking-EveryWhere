@@ -288,7 +288,7 @@ const MyCar = () => {
         
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+        // localStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
           description: "Chỉnh sửa thông tin xe thành công",

@@ -79,7 +79,7 @@ import api from "../../services/api";
       };
 //===========================================================
 //===============================================
-      const parkingID = sessionStorage.getItem('parkingID');
+      const parkingID = localStorage.getItem('parkingID');
     useEffect(() => {
         api.get(`parkingdetails/${parkingID}/GetParkingDetailsByParking`, {})
         .then(function(response)  {

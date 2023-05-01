@@ -200,7 +200,7 @@ import api from "../../services/api";
         lastModifyAt: new Date(),
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+        // localStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
           description: "Tạo loại xe mới thành công",
@@ -239,7 +239,7 @@ import api from "../../services/api";
         lastModifyAt: new Date(),
       })
       .then(() => {
-        // sessionStorage.setItem("changeStatus", true);
+        // localStorage.setItem("changeStatus", true);
         notification.success({
           message: `Thành công`,
           description: "Chỉnh sửa loại xe thành công",
