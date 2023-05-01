@@ -96,7 +96,7 @@ const UserProfile=()=> {
                     </>
     :
     <Row gutter={70}>
-    <Col span={8}>
+    <Col xs={24} xl={8}>
       <Card >
       <div className="avatar">
           <div className="user-avatar">
@@ -122,7 +122,7 @@ const UserProfile=()=> {
           </div>
       </Card>
     </Col>
-    <Col span={16}>
+    <Col xs={24} xl={16}>
       <Card title="Thông tin người dùng" bordered={true}>
       <Form
           {...formItemLayout}

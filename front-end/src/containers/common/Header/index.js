@@ -79,7 +79,8 @@ function HeaderContainer() {
             });
             
           
-        } else if (location.pathname !== '/login' && location.pathname !=='/register' && location.pathname !=='/forgot-password') {
+        } 
+        else if (location.pathname !== '/login' && location.pathname !=='/register' && location.pathname !=='/forgot-password') {
             window.location.replace('/login')
         }
     }, [location.pathname, token]);
@@ -92,7 +93,7 @@ function HeaderContainer() {
       }else  if(profileState?.data?.role === 'ParkingManager') {
         api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState({...countState,data:res.data})})
       }
-  }, [countState,profileState]);
+  }, [countState]);
 
     const navigate = useNavigate();
     const items = [

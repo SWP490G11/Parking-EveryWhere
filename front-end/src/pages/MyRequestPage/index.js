@@ -94,10 +94,10 @@ import api from "../../services/api";
                     ]
                 })
                 setData(respData.sort((a, b) => {
-                    if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+                    if (a.requestAt.trim().toLowerCase() > b.requestAt.trim().toLowerCase()) {
                       return 1;
                     }
-                    if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+                    if (b.requestAt.trim().toLowerCase() > a.requestAt.trim().toLowerCase()) {
                       return -1;
                     }
                     return 0;
@@ -329,7 +329,7 @@ searchText === ""
         closable={true}
       >
         <Descriptions title="Thông tin yêu cầu" bordered>
-        <Descriptions.Item label="ID" xs={3} xl={3}>{modal.data.id}</Descriptions.Item>
+        <Descriptions.Item label="Mã số" xs={3} xl={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
     {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>

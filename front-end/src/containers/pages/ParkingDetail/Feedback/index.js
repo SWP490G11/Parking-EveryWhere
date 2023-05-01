@@ -170,7 +170,7 @@ export const Feedback = () => {
     return (
         <div title="Feedback">
             {authState?.data?.role === 'Customer'?  
-            <Form form={form} onFinish={onFinish} style={{width:"100%"}} layout="vertical" hideRequiredMark>
+            <Form form={form} onFinish={onFinish} layout="vertical" hideRequiredMark>
             <Form.Item className="ant-col ant-col-xs-24 ant-col-xl-24"
             name="rating"
             label="Đánh giá"
@@ -234,7 +234,20 @@ export const Feedback = () => {
            
         ]}
         extra={
-          <Rate allowHalf  disabled value={item.rating} />
+          <div className='parking-content'>
+                       
+          <div className='parking-button-wapper'>
+             
+         
+          <Image   className='ant-col ant-col-xs-14 ant-col-sm-14 ant-col-xl-24'
+style={{ width: 'auto', height: 200, border: 'solid 1px lightgrey', borderRadius: '10px', objectfit: 'contain' }}
+alt="logo"
+src={item.images}
+/>
+              
+          </div>
+      </div>
+
           // <Row>
          
           // <Col xs={24} sm={24} xl={24}>  
@@ -252,21 +265,8 @@ export const Feedback = () => {
           title={item.title}
           description={item.content}
         />
-        
-         <div className='parking-content'>
-                       
-                        <div className='parking-button-wapper'>
-                           
-                       
-                        <Image  
-          style={{ width: 150, height: 200, border: 'solid 1px lightgrey', borderRadius: '5px', objectfit: 'contain' }}
-            alt="logo"
-            src={item.images}
-          />
-                            
-                        </div>
-                    </div>
-       
+         <Rate allowHalf  disabled value={item.rating} />
+      
        
       </List.Item>
     )}

@@ -115,7 +115,7 @@ export const EditProfile=(profile)=> {
   return (
     
     <Row gutter={70}>
-    <Col span={8}>
+    <Col xs={24} xl={8}>
     <Card >
     <div className="avatar">
           <div className="user-avatar">
@@ -146,7 +146,7 @@ export const EditProfile=(profile)=> {
         
     </Card>
     </Col>
-    <Col span={16}>
+    <Col xs={24} xl={16}>
       <Card>
       <Form
           {...formItemLayout}

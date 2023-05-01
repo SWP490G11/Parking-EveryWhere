@@ -62,17 +62,16 @@ const UploadImage = ({ images, setImages,count }) => {
         <Form
             name="validate_other"
             {...formItemLayout}
-            style={{
-                width: 600,
-            }}
+            
         >
-            <Form.Item>
+           
                 <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} className="ant-col ant-col-xs-12 ant-col-xl-24">
-                    <Upload name="files" maxCount={count} customRequest={dummyRequest} action={config.UPLOAD_URL}  style={{ width: 120 }}  >
+                    <Upload name="files" maxCount={count} customRequest={dummyRequest} className="upload-list-inline" listType="picture"
+                     action={config.UPLOAD_URL}    >
                     <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                     </Upload>
                 </Form.Item>
-            </Form.Item>
+          
         </Form>
     )
 };
