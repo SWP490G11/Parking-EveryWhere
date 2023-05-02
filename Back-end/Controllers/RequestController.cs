@@ -33,7 +33,7 @@ namespace Back_end.Controllers
               {
                   r.Requestby.ID,
                   r.Requestby.UserName,
-                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  FullName = r.Requestby.LastName + " " + r.Requestby.FirstName,
                   r.Requestby.PhoneNumber,
                   r.Requestby.Email,
                   r.Requestby.DateOfBirth,
@@ -66,7 +66,7 @@ namespace Back_end.Controllers
                 Requestby = new
                 {
                     r.Requestby.ID,
-                    FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                    FullName = r.Requestby.LastName + " " + r.Requestby.FirstName,
                     r.Requestby.PhoneNumber,
                     r.Requestby.UserName,
                     r.Requestby.Email,
@@ -96,7 +96,7 @@ namespace Back_end.Controllers
               Requestby = new
               {
                   r.Requestby.ID,
-                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  FullName = r.Requestby.LastName +" "+ r.Requestby.FirstName,
                   r.Requestby.PhoneNumber,
                   r.Requestby.UserName,
                   r.Requestby.Email,r.Requestby.DateOfBirth,r.Requestby.Gender,
@@ -126,7 +126,7 @@ namespace Back_end.Controllers
               {
                   r.Requestby.ID,
                   r.Requestby.UserName,
-                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  FullName = r.Requestby.LastName + " " + r.Requestby.FirstName,
                   r.Requestby.PhoneNumber,
                   r.Requestby.Email,
                   r.Requestby.DateOfBirth,
@@ -158,7 +158,7 @@ namespace Back_end.Controllers
               {
                   r.Requestby.ID,
                   r.Requestby.UserName,
-                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  FullName = r.Requestby.LastName + " " + r.Requestby.FirstName,
                   r.Requestby.PhoneNumber,
                   r.Requestby.Email,
                   r.Requestby.DateOfBirth,
