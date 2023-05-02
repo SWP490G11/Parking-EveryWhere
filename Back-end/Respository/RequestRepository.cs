@@ -88,20 +88,20 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Request>> GetAllAsync()
         {
-           return  await _dbContext.Requests.Include(r=>r.Requestby).ToListAsync();
+           return  await _dbContext.Requests.Include(r => r.Requestby).ThenInclude(rb => rb.Image).Include(r => r.Parking).ToListAsync();
         }
 
         public async Task<Request> GetAsync(string idString)
         {
             if (string.IsNullOrEmpty(idString)) throw new ArgumentNullException();
-            return await _dbContext.Requests.Include(r => r.Requestby).Include(r=>r.Parking).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
+            return await _dbContext.Requests.Include(r => r.Requestby).ThenInclude(rb => rb.Image).Include(r=>r.Parking).FirstAsync(c => c.ID.ToString().ToUpper().Trim().
                 Equals(idString.ToUpper().Trim()
                 ));
         }
 
         public async Task<ICollection<Request>> GetRequestToParking(string parkingID)
         {
-            var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
+            var requests = await _dbContext.Requests.Include(x=>x.Requestby).ThenInclude(rb=>rb.Image).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
             .Equals(parkingID.Trim().ToLower())).ToListAsync();
             return requests;
         }
@@ -109,12 +109,12 @@ namespace Back_end.Respository
 
         public async Task<ICollection<Request>> GetRequestPendingToParking(string parkingID)
         {
-            var requests = await _dbContext.Requests.Include(x => x.Requestby).Include(r => r.Parking).ToListAsync();
+            var requests = await _dbContext.Requests.Include(x => x.Requestby).ThenInclude(rb => rb.Image).Include(r => r.Parking).ToListAsync();
             return requests;
         }
          public async Task<ICollection<Request>> GetRequestPendingToParkingNumer(string parkingID)
         {
-            var requests = await _dbContext.Requests.Include(x=>x.Requestby).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
+            var requests = await _dbContext.Requests.Include(x=>x.Requestby).ThenInclude(rb => rb.Image).Include(r => r.Parking).Where(x=>x.Parking.ID.ToString().Trim().ToLower()          
             .Equals(parkingID.Trim().ToLower())).Where(p=>p.Status == Status.Pending).ToListAsync();
             return requests;
         }

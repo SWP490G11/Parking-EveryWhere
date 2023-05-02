@@ -29,8 +29,17 @@ namespace Back_end.Controllers
           new {
               r.ID,
               r.Status,
-              Requestby = r.Requestby,
-              
+              Requestby = new
+              {
+                  r.Requestby.ID,
+                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  r.Requestby.PhoneNumber,
+                  r.Requestby.Email,
+                  r.Requestby.DateOfBirth,
+                  r.Requestby.Gender,
+                  ImageUrl = r.Requestby.Image == null ? "" : r.Requestby.Image.URL
+              },
+
               r.RequestAt
           }
             ));
@@ -53,11 +62,20 @@ namespace Back_end.Controllers
                 r.Status,
                 ParkingId = r.Parking,
                 r.RequestAt,
-                Requestby = r.Requestby,
+                Requestby = new
+                {
+                    r.Requestby.ID,
+                    FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                    r.Requestby.PhoneNumber,
+                    r.Requestby.Email,
+                    r.Requestby.DateOfBirth,
+                    r.Requestby.Gender,
+                    ImageUrl = r.Requestby.Image == null ? "" : r.Requestby.Image.URL
+                },
             });
         }
 
-        [HttpGet("/request/{parkingid}")]
+        [HttpGet("/request-of-parking/{parkingid}")]
 
         [Authorization.Authorize(Role.Admin, Role.Customer, Role.ParkingOwner, Role.ParkingManager)]
         public async Task<IActionResult> GetListRequestOfParking(string parkingid)
@@ -71,9 +89,16 @@ namespace Back_end.Controllers
               r.ID,
               r.Note,
               r.Status,
-              ParkingId = r.Parking,
+              ParkingId = r.Parking.ID,
               r.RequestAt,
-              Requestby = r.Requestby,
+              Requestby = new
+              {
+                  r.Requestby.ID,
+                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  r.Requestby.PhoneNumber,
+                  r.Requestby.Email,r.Requestby.DateOfBirth,r.Requestby.Gender,
+                  ImageUrl = r.Requestby.Image==null ? "" : r.Requestby.Image.URL
+              },
           } 
             ));
         }
@@ -94,7 +119,16 @@ namespace Back_end.Controllers
               r.Status,
               ParkingId = r.Parking,
               r.RequestAt,
-              Requestby = r.Requestby,
+              Requestby = new
+              {
+                  r.Requestby.ID,
+                  FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                  r.Requestby.PhoneNumber,
+                  r.Requestby.Email,
+                  r.Requestby.DateOfBirth,
+                  r.Requestby.Gender,
+                  ImageUrl = r.Requestby.Image == null ? "" : r.Requestby.Image.URL
+              },
           }
             ));
         }
@@ -116,6 +150,7 @@ namespace Back_end.Controllers
               r.Status,
               ParkingId = r.Parking,
               r.RequestAt,
+              Requestby = r.Requestby,
           }
             ));
         }
@@ -157,7 +192,16 @@ namespace Back_end.Controllers
             return Ok(mwi.User.Requests.Select(r=> new
             {
                 r.ID,r.Note,r.Status,ParkingId =r.Parking,r.RequestAt,
-                Requestby = r.Requestby,
+                Requestby = new
+                {
+                    r.Requestby.ID,
+                    FullName = r.Requestby.LastName + r.Requestby.FirstName,
+                    r.Requestby.PhoneNumber,
+                    r.Requestby.Email,
+                    r.Requestby.DateOfBirth,
+                    r.Requestby.Gender,
+                    ImageUrl = r.Requestby.Image == null ? "" : r.Requestby.Image.URL
+                },
             }));
         }
 
