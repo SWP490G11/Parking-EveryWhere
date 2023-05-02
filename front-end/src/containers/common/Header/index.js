@@ -90,15 +90,15 @@ function HeaderContainer() {
         }
     }, [location.pathname, token]);
     useEffect(() => {
-      if (profileState?.data?.role === 'Admin') {
+      if (role === 'Admin') {
         api.get(`pending-parkings-number`).then((res)=>{setCountState({...countState,data:res.data})}) 
         
-      }else if(profileState?.data?.role === 'ParkingOwner') {
+      }else if(role === 'ParkingOwner') {
         api.get(`pending-request-of-all-parkings-of-owner-number`).then((res)=>{setCountState({...countState,data:res.data})})
-      }else  if(profileState?.data?.role === 'ParkingManager') {
+      }else  if(role === 'ParkingManager') {
         api.get(`pending-request-number/${parkingID}`).then((res)=>{setCountState({...countState,data:res.data})})
       }
-  }, [countState]);
+  }, [countState,role]);
 
     const navigate = useNavigate();
     const items = [

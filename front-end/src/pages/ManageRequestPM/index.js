@@ -102,7 +102,7 @@ const ParkingID =localStorage.getItem("parkingID");
       element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
       element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Done' ? 'Đã duyệt':'Từ chối');
       element.parkingName = element.parkingId.parkingName;
-     
+      element.requestBy = element.requestby.userName;
 
 
       element.action = [
@@ -182,6 +182,21 @@ const ParkingID =localStorage.getItem("parkingID");
                 return 0;
             },
         },
+        {
+          title: "Người gửi",
+          dataIndex: "requestBy",
+          key: "requestBy",
+          sorter: (a, b) => {
+              if (a.requestBy > b.requestBy) {
+                  return -1;
+              }
+              if (b.requestBy > a.requestBy) {
+                  return 1;
+              }
+              return 0;
+          },
+      },
+
 
         {
             title: "Ngày gửi yêu cầu",
@@ -359,8 +374,8 @@ const ParkingID =localStorage.getItem("parkingID");
         <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
-    {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
-     */}
+     <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestBy}</Descriptions.Item>
+     
     <Descriptions.Item label="Ngày gửi" span={2}>{modal.data.requestAt}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" span={1}>{modal.data.status}</Descriptions.Item>
     <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>

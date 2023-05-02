@@ -53,7 +53,7 @@ function ParkingDetail() {
                     </Card>
                     
                 </Col>
-                <Col xs={24} sm={10} xl={24} style={{ marginTop: '1rem' }}>
+                <Col xs={24} sm={24} xl={24} style={{ marginTop: '1rem' }}>
                     <Card title="Thông tin bản đồ" style={{ minHeight: '50vh' }} bordered={true}>
                         <MapInfo parking={parkingDetail} destination={destination} />
                     </Card>
