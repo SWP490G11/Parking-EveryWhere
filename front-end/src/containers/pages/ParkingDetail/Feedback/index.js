@@ -260,7 +260,7 @@ src={item.images}
         }
       >
         <List.Item.Meta
-         
+         className="ant-col ant-col-xs-24 ant-col-xl-24"
           avatar={<Avatar src={item.avatar} />}
           title={item.title}
           description={item.content}

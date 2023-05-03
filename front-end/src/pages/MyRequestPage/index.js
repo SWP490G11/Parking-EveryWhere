@@ -315,7 +315,7 @@ searchText === ""
         </Col>
         </Row>
         <Modal
-        className="ant-col ant-col-xs-12 ant-col-xl-24"
+        className="ant-col ant-col-xs-24 ant-col-xl-24"
         open={modal.isOpen}
         
         onOk={() => {

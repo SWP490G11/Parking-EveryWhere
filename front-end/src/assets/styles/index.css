@@ -203,3 +203,9 @@ code {
 .ant-upload-rtl.upload-list-inline .ant-upload-list-item {
   float: right;
 }
+#components-slider-demo-mark h4 {
+  margin: 0 0 16px;
+}
+#components-slider-demo-mark .ant-slider-with-marks {
+  margin-bottom: 44px;
+}

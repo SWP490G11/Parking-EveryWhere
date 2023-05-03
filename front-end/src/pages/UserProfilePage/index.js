@@ -30,6 +30,12 @@ const UserProfile=()=> {
         gender: "",
         role: "",
   });
+  const size={
+    xs: 150,
+    sm: 200,
+    
+    xxl: 225,
+  }
   const formItemLayout = {
     labelCol: {
       xs: {
@@ -102,12 +108,12 @@ const UserProfile=()=> {
           <div className="user-avatar">
            <Space>
               {image.length >0 ? 
-              <Avatar  className="avatar-avatar"
+              <Avatar  className="avatar-avatar" size={size} 
               src={image}
             /> 
               :
               <Avatar className="avatar-avatar" 
-            
+              size={size} 
             src={"https://thumbsnap.com/i/nJ5ET935.jpg"}/>
               }
               

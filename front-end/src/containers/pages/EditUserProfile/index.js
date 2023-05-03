@@ -110,7 +110,12 @@ export const EditProfile=(profile)=> {
           });
       });
   };
-
+  const size={
+    xs: 150,
+    sm: 200,
+    
+    xxl: 225,
+  }
 
   return (
     
@@ -122,10 +127,11 @@ export const EditProfile=(profile)=> {
           <Space>
               {newimage.length >0 ? 
             <Avatar  className="avatar-avatar"
+            size={size}
             src={newimage[0]}
           />
               :
-              <Avatar className="avatar-avatar"
+              <Avatar className="avatar-avatar"   size={size}
              src={profile.image}/>
               
                }
@@ -220,7 +226,7 @@ export const EditProfile=(profile)=> {
             }
             ]}
           >
-            <DatePicker  style={{width: 332}} format={'DD/MM/YYYY'} />
+            <DatePicker  style={{width: '100%'}} format={'DD/MM/YYYY'} />
           </Form.Item>
           <Form.Item
             name="gender"

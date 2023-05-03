@@ -4,7 +4,15 @@ import { Sort } from '../../../utils/constants'
 import { useLocationState } from '../../../hooks/locationState'
 export const Filter = ({filter, setFilter }) => {
     const [locationState] = useLocationState()
-    
+    const marks = {
+        0: '0km',
+        99: {
+          style: {
+            color: '#f50',
+          },
+          label: <strong>100km</strong>,
+        },
+      };
     return (
         <div>
             <div
@@ -15,16 +23,17 @@ export const Filter = ({filter, setFilter }) => {
                     marginBottom: 20
                 }}
             >
-                <div style={{width: '80%'}}>
+                <div style={{width: '70%'}}>
                     
                     <Form.Item label={"Khoảng cách"}>
 
                     <Slider 
                         tooltip={{
                             open: true,
-                            placement:"bottom"
+                            placement:"bottom",
+                           
                           }}
-                        
+                          marks={marks}
                         min={0} 
                         max={100} 
                         step={1} 
