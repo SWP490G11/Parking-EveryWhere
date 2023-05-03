@@ -152,7 +152,10 @@ namespace Back_end.Controllers
               r.ID,
               r.Note,
               r.Status,
-              ParkingId = r.Parking,
+              Parking = new
+              {
+                  r.Parking.ID,r.Parking.ParkingName,r.Parking.AddressDetail,
+              },
               r.RequestAt,
               Requestby = new
               {
