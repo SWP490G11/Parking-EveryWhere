@@ -100,8 +100,8 @@ import api from "../../services/api";
       //element.state = element.state === 'WaitingForAcceptance' ? 'Waiting For Acceptance' : element.state;
       element.requestAt = moment(new Date(element.requestAt).toLocaleDateString("en-US")).format('DD/MM/YYYY');
       element.status = element.status === 'Pending' ? 'Chờ duyệt' : (element.status === 'Done' ? 'Đã duyệt':'Từ chối');
-      element.parkingName = element.parkingId.parkingName;
-     
+      element.parkingName = element.parking.parkingName;
+      element.requestBy = element.requestby.userName;
 
 
       element.action = [
@@ -130,10 +130,10 @@ import api from "../../services/api";
       ]
   })
   setData(respData.sort((a, b) => {
-      if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
+      if (a.parking.parkingName.trim().toLowerCase() > b.parking.parkingName.trim().toLowerCase()) {
         return 1;
       }
-      if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
+      if (b.parking.parkingName.trim().toLowerCase() > a.parking.parkingName.trim().toLowerCase()) {
         return -1;
       }
       return 0;
@@ -181,7 +181,20 @@ import api from "../../services/api";
                 return 0;
             },
         },
-
+        {
+          title: "Người gửi",
+          dataIndex: "requestBy",
+          key: "requestBy",
+          sorter: (a, b) => {
+              if (a.requestBy > b.requestBy) {
+                  return -1;
+              }
+              if (b.requestBy > a.requestBy) {
+                  return 1;
+              }
+              return 0;
+          },
+      },
         {
             title: "Ngày gửi yêu cầu",
             dataIndex: "requestAt",
@@ -358,8 +371,9 @@ import api from "../../services/api";
         <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
-    {/* <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestdBy}</Descriptions.Item>
-     */}
+     <Descriptions.Item label="Thông tin người gửi"span={3} ><strong>{modal.data.useName}</strong><br/>{modal.data.fullName} - {modal.data.phone}
+     <br/>{modal.data.email} </Descriptions.Item>
+     
     <Descriptions.Item label="Ngày gửi" span={2}>{modal.data.requestAt}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" span={1}>{modal.data.status}</Descriptions.Item>
     <Descriptions.Item label="Nội dung" span={3}>{modal.data.note}</Descriptions.Item>
@@ -394,10 +408,13 @@ import api from "../../services/api";
                                         , data: {
                                             id: record.id,
                                             parkingName: record.parkingName,
-                                            requestBy: record.requestBy,
+                                            fullName: record.requestby.fullName,
+                                            phone: record.requestby.phoneNumber,
+                                            email: record.requestby.email,
                                             requestAt: record.requestAt,
                                             status: record.status,
-                                            note: record.note
+                                            note: record.note,
+                                            useName: record.requestBy,
                                         }
 
                                     });

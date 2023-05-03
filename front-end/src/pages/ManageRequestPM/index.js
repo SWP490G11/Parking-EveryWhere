@@ -374,7 +374,8 @@ const ParkingID =localStorage.getItem("parkingID");
         <Descriptions.Item label="ID" span={3}>{modal.data.id}</Descriptions.Item>
     <Descriptions.Item label="Bãi đỗ"span={3} >{modal.data.parkingName}</Descriptions.Item>
    
-     <Descriptions.Item label="Người gửi yêu cầu"span={2} >{modal.data.requestBy}</Descriptions.Item>
+    <Descriptions.Item label="Thông tin người gửi"span={3} ><strong>{modal.data.useName}</strong><br/>{modal.data.fullName} - {modal.data.phone}
+     <br/>{modal.data.email} </Descriptions.Item>
      
     <Descriptions.Item label="Ngày gửi" span={2}>{modal.data.requestAt}</Descriptions.Item>
     <Descriptions.Item label="Trạng thái" span={1}>{modal.data.status}</Descriptions.Item>
@@ -408,12 +409,15 @@ const ParkingID =localStorage.getItem("parkingID");
                                     setModal({
                                         ...modal, isOpen: true
                                         , data: {
-                                            id: record.id,
-                                            parkingName: record.parkingName,
-                                            requestBy: record.requestBy,
-                                            requestAt: record.requestAt,
-                                            status: record.status,
-                                            note: record.note
+                                          id: record.id,
+                                          parkingName: record.parkingName,
+                                          fullName: record.requestby.fullName,
+                                          phone: record.requestby.phoneNumber,
+                                          email: record.requestby.email,
+                                          requestAt: record.requestAt,
+                                          status: record.status,
+                                          note: record.note,
+                                          useName: record.requestBy,
                                         }
 
                                     });

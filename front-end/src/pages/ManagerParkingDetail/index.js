@@ -122,7 +122,7 @@ import api from "../../services/api";
         .catch((error) => {
 
         })
-}, [])
+}, [data])
 
     const columns = [
         {
