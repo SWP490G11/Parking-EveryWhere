@@ -1,4 +1,4 @@
-import {Table, Modal, Button,Row,Col,Input,Empty,Descriptions,notification} from 'antd';
+import {Table, Modal, Button,Row,Col,Input,Empty,Descriptions,notification,Spin} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {CheckOutlined, CloseOutlined,FilterOutlined} from "@ant-design/icons";
 import api from "../../services/api";
@@ -11,6 +11,7 @@ import api from "../../services/api";
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalCancelVisible, setIsModalCancelVisible] = useState(false);
     //const [status,setStatus] = useState("Tất cả");
+    const [loading, setLoading] = useState(true);
     const [idCompleted, setIdCompleted] = useState();
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -108,10 +109,11 @@ import api from "../../services/api";
                     ]
                 })
                 setData(response.data);
-
+                setLoading(false);
 
             })
-            .catch((error) => {
+            .catch(() => {
+                setLoading(false);
 
             })
     }, [data])
@@ -223,6 +225,7 @@ import api from "../../services/api";
     //   };
     return (
         <>
+         <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
          <p
         style={{
           display: "block",
@@ -389,7 +392,7 @@ import api from "../../services/api";
       )}
             </div>
 
-
+                    </Spin>
         </>
     )
 }

@@ -10,7 +10,7 @@ import api from "../../services/api";
         isOpen: false,
         data: {},
     });
-   
+    const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
@@ -108,6 +108,8 @@ import api from "../../services/api";
 
                 ]
             })
+            setLoading(false);
+
             setData(respData.sort((a, b) => {
                 if (a.id.trim().toLowerCase() > b.id.trim().toLowerCase()) {
                   return 1;
@@ -119,7 +121,8 @@ import api from "../../services/api";
               })
             );
           }, [])
-        .catch((error) => {
+        .catch(() => {
+          setLoading(false);
 
         })
 }, [data])
@@ -249,6 +252,7 @@ import api from "../../services/api";
      
     return (
         <>
+        <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
              <p
         style={{
           display: "block",
@@ -456,6 +460,7 @@ import api from "../../services/api";
                
                
       </Modal>
+      </Spin>
         </>
     )
 }

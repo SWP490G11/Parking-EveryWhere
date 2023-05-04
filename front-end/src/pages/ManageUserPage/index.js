@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Descriptions, Row, Col, Modal,Empty,notification,Form } from "antd";
+import { Table, Input, Button, Menu, Dropdown,Descriptions, Row, Col, Modal,Empty,notification,Form,Spin } from "antd";
 import {
   FilterOutlined,
   RedoOutlined,ExclamationCircleFilled
@@ -15,6 +15,7 @@ export default function ManageUser() {
   const [type, setType] = useState("Tất cả");
   const [disable,setDisable] = useState("Tất cả");
   const [role,setRole] = useState("Tất cả");
+  const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -155,7 +156,7 @@ export default function ManageUser() {
             
           ];
         });
-        
+        setLoading(false);
         setData(
           respData.sort((a, b) => {
             if (
@@ -174,7 +175,7 @@ export default function ManageUser() {
           })
         );
       }, [])
-      .catch(() => {});
+      .catch(() => {     setLoading(false);});
   }, [data]);
 
   const dataBytype = type === "Tất cả" ? data : data.filter((u) => u.gender === type);
@@ -211,6 +212,7 @@ export default function ManageUser() {
   
   return (
     <>
+     <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
       <p
         style={{
           display: "block",
@@ -496,7 +498,7 @@ export default function ManageUser() {
         />
       )}
      
-       
+       </Spin>
     </>
   );
 }
