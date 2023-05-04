@@ -37,6 +37,8 @@ const [addSlot,setAddSlot]= useState(false)
     data: {},
   });
   const [loading, setLoading] = useState(true);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [authState] = useAuthState();
   const [slotID,setSlotID] =useState("")
   const [parkingID,setParkingID] = useState("");
@@ -284,12 +286,13 @@ const showPromiseDelete = (id) => {
                     >
                     <EditFilled/>
             </Button>,
-            <Button disabled={element.status ==='Đang hoạt động' ? false : true} onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
+            <Button disabled={element.status ==='Đang hoạt động' ? false : true} 
+            onClick={e => {setOpen(true);setParkingID(element.parkingID);setParkingName(element.parkingName);
             
             }}><PlusOutlined /></Button>,
             <Button disabled={element.status ==='Đang hoạt động' ? false : true} 
-            onClick={e => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
-              loadSlotParking1(element.parkingID);
+            onClick={() => {setOpen1(true);loadSlotParking(element.parkingID);setParkingName(element.parkingName);
+              loadSlotParking1(element.parkingID);setLoading1(true); setLoading2(true);
             }}><UnorderedListOutlined /></Button>,
             
            
@@ -374,6 +377,7 @@ const showPromiseDelete = (id) => {
     console.log(values);
       api.get(`slots-Roof/${values}`)
       .then((response) =>{
+        setLoading1(false);
         setSlotParking(response.data.sort((a, b) => {
           if (
             a.status.trim().toLowerCase() >
@@ -389,7 +393,8 @@ const showPromiseDelete = (id) => {
           }
           return 0;
         }))})
-      .catch((e)=>{notification.warning({
+      .catch((e)=>{setLoading1(false);
+        notification.warning({
         message: `Lỗi dữ liệu`,
       description: "Tải dữ liệu bị lỗi",
     placement: "topLeft",
@@ -410,6 +415,7 @@ const showPromiseDelete = (id) => {
               console.log(values);
                 api.get(`slots-nonRoof/${values}`)
                 .then((response) =>{
+                  setLoading2(false);
                   setSlotParking1(response.data.sort((a, b) => {
                     if (
                       a.status.trim().toLowerCase() >
@@ -425,7 +431,9 @@ const showPromiseDelete = (id) => {
                     }
                     return 0;
                   }))})
-                .catch((e)=>{notification.warning({
+                .catch((e)=>{
+                  setLoading2(false);
+                  notification.warning({
                   message: `Lỗi dữ liệu`,
                 description: "Tải dữ liệu bị lỗi",
               placement: "topLeft",
@@ -788,7 +796,9 @@ const showPromiseDelete = (id) => {
           
         </Form>
         </Drawer>
+        
         {/* Danh sách slot*/}
+        
         <Drawer
         title={`Danh sách chỗ đỗ của bãi ${parkingName}`}
         placement="right"
@@ -797,6 +807,7 @@ const showPromiseDelete = (id) => {
         open={open1}
         closable={true}
       >
+        
         <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Có mái che</p></Divider>
         
           <Form.Item label={'Trạng thái'}>
@@ -840,6 +851,7 @@ const showPromiseDelete = (id) => {
             
           </Dropdown.Button>
             </Form.Item>
+            <Spin spinning={loading1} size="large" tip="Vui lòng đợi..."> 
             <List dataSource={dataType} pagination={paginationSlot}
             renderItem={(e) => (
               <Collapse  >
@@ -869,7 +881,7 @@ const showPromiseDelete = (id) => {
          
         </Collapse> 
             )}/>
-         
+          </Spin>
          <Divider orientation="left"><p style={{color:'red',fontWeight: "bold" }}>Không có mái che</p></Divider>
        
           <Form.Item label={'Trạng thái'}>
@@ -913,6 +925,7 @@ const showPromiseDelete = (id) => {
             
           </Dropdown.Button>
             </Form.Item>
+            <Spin spinning={loading2} size="large" tip="Vui lòng đợi..."> 
             <List dataSource={dataType1} pagination={paginationSlot1}
             renderItem={(e) => (
               <Collapse  >
@@ -942,8 +955,10 @@ const showPromiseDelete = (id) => {
          
         </Collapse> 
             )}/>
-    
+            </Spin>
+   
       </Drawer>
+      
       {/*Thêm xe*/}
       <Modal
         title="Thêm xe vào bãi đỗ"

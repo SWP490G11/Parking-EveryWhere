@@ -26,7 +26,7 @@ export const CreateParking = ({open, setOpen, setParking, parkings = []}) => {
  
     return(
         
-            <Drawer title="Create Parking Car" placement="right" onClose={onClose} open={open} width={"70vw"}>
+            <Drawer title="Tạo bãi đỗ mới" placement="right" onClose={onClose} open={open} width={"70vw"}>
                <Row>
                     <Col span={12}>
                     <Form.Item
