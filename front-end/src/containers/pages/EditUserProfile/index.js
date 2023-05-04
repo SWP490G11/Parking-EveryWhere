@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import {getProfile} from "../../../services/userProfileServices";
 import api from "../../../services/api";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 // import config from '../../../config';
 // import { Message } from '../../../utils/helpers';
@@ -63,7 +64,7 @@ export const EditProfile=(profile)=> {
         userName: response.data.userName,
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
-         dateOfBirth:dayjs(response.data.dateOfBirth, 'DD-MM-YYY'),
+        dateOfBirth:moment(new Date(response.data.dateOfBirth).toLocaleDateString('en-CA')).format('DD/MM/YYYY'),
         gender: response.data.gender,
         role: response.data.role,
       });
@@ -188,7 +189,7 @@ export const EditProfile=(profile)=> {
             name="userName"
             label="Tài khoản"
           >
-            <Input readOnly />
+            <Input disabled />
           </Form.Item>
          
           <Form.Item
@@ -242,7 +243,7 @@ export const EditProfile=(profile)=> {
             name="role"
             label="Vị trí"
           >
-            <Input readOnly/>
+            <Input disabled/>
           </Form.Item>
           
           <Form.Item {...tailFormItemLayout}>

@@ -506,7 +506,7 @@ import api from "../../services/api";
               <Col span={24}>
                 <Form.Item
                   name="discript"
-                  label="Giá"
+                  label="Thông tin"
                   rules={[
                     {
                       required: true,
