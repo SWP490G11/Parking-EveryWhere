@@ -56,7 +56,7 @@ const GoogleMapComponent = ({ location, parkings = [], destination = null, child
                
                 onLoad={onMapLoad}
             >   
-                <PlaceInfo parkings={parkings}  />
+                <PlaceInfo parkings={parkings} location={location} />
                 {
                     children
                 }
@@ -94,7 +94,7 @@ export const AutocompleteMap = ({ setLocation,disabled, defaultValue = "" }) => 
                                 lng: place.getPlace().geometry.location.lng()
                                  }
                         }
-                     //   setLocation(location);
+                        setLocation(location);
                         console.log(location);
                     } else {
                         setLocation(null);

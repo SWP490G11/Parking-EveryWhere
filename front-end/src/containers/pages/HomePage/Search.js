@@ -13,7 +13,7 @@ export const Search = ({setSearch}) => {
                 style={{
                     marginBottom: 20
                 }}
-                placeholder="Search parking car"
+                placeholder="Tìm kiếm"
             />
         </div>
     )
