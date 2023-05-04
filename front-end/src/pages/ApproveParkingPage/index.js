@@ -334,14 +334,19 @@ import api from "../../services/api";
                 <p style={{textAlign: "center"}}>Bạn đồng ý phê duyệt cho bãi đỗ này</p>
             </Modal>
             <Modal
-                title="Từ chối" visible={isModalCancelVisible} okText="Yes" cancelText="No" onOk={handleDeleteOk}
+                okText="Từ chối"
+                cancelText="Đóng"
+                onOk={handleDeleteOk}
                 onCancel={handleCancelModal}
-                footer={[
-                    <div style={{textAlign: "right"}}>
-                        <Button key="Yes" onClick={handleDeleteOk} className="buttonSave">Từ chối</Button>
-                        <Button key="No" onClick={handleCancelModal} className=' buttonCancel'>Đóng</Button>
-                    </div>
-                ]}>
+                title="Từ chối" visible={isModalCancelVisible} 
+                
+                footer={
+                    null
+                    // <div style={{textAlign: "right"}}>
+                    //     <Button key="Yes" onClick={handleDeleteOk} className="buttonSave">Từ chối</Button>
+                    //     <Button key="No" onClick={handleCancelModal} className='buttonCancel'>Đóng</Button>
+                    // </div>
+                }>
                  <p style={{textAlign: "center"}}>Bạn từ chối phê duyệt cho bãi đỗ này</p>
             </Modal>
           

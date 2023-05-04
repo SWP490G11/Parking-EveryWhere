@@ -131,12 +131,12 @@ import api from "../../services/api";
   })
   setData(respData.sort((a, b) => {
       
-      if (new Date(b.requestAt).getDate().toLocaleString() > new Date(a.requestAt).getDate().toLocaleString()
-       && new Date(b.requestAt).getMonth().toLocaleString() > new Date(a.requestAt).getMonth().toLocaleString()  ) {
+      if ( b.status > a.status
+       ) {
           return -1;
       }
-      if (new Date(a.requestAt).getMonth().toLocaleString() > new Date(b.requestAt).getMonth().toLocaleString() 
-      && new Date(a.requestAt).getDate().toLocaleString() > new Date(b.requestAt).getDate().toLocaleString() ) {
+      if (  a.status > b.status
+      ) {
           return 1;
       }
      

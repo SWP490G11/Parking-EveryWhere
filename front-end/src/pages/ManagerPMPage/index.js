@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown,Descriptions, Row, Col, Modal,Empty,notification,Form } from "antd";
+import { Table, Input, Button, Menu, Dropdown,Descriptions, Row, Col, Modal,Empty,notification,Form,Spin} from "antd";
 import {
   FilterOutlined,
   RedoOutlined,ExclamationCircleFilled
@@ -24,6 +24,7 @@ export default function ManageParkingManager() {
 
 });
   const [openInfo,setOpenInfor]=useState(false);
+  const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState({
     isOpen: false,
     data: {},
@@ -111,10 +112,12 @@ export default function ManageParkingManager() {
     Modal.confirm({
       title: 'Thay đổi trạng thái của người dùng',
       icon: <ExclamationCircleFilled />,
+      okText:"Thay đổi ",
+      cancelText:"Đóng",
       content: 'Bạn có muốn thay đổi trạng thái của người này không',
       onOk() {
         return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 2000);
           api.patch(`api/User/DisableOrActive?id=${ID}`).then(()=>{notification.success({
             message: `Thành công`,
             description: 'Thay đổi trạng thái thành công',
@@ -161,6 +164,7 @@ export default function ManageParkingManager() {
             
           ];
         });
+        setLoading(false);
         setData(
           respData.sort((a, b) => {
             if (
@@ -179,7 +183,7 @@ export default function ManageParkingManager() {
           })
         );
       }, [])
-      .catch(() => {});
+      .catch(() => {setLoading(false);});
   }, [data]);
 
   const dataBytype = type === "Tất cả" ? data : data.filter((u) => u.gender === type);
@@ -213,6 +217,7 @@ export default function ManageParkingManager() {
 
   return (
     <>
+    <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
       <p
         style={{
           display: "block",
@@ -493,6 +498,7 @@ export default function ManageParkingManager() {
                
                
       </Modal>
+      </Spin>
     </>
   );
 }

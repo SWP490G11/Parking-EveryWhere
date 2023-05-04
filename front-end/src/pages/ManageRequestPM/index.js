@@ -131,14 +131,15 @@ const ParkingID =localStorage.getItem("parkingID");
       ]
   })
   setData(respData.sort((a, b) => {
-    if (new Date(b.requestAt).getDate().toLocaleString() > new Date(a.requestAt).getDate().toLocaleString()
-    && new Date(b.requestAt).getMonth().toLocaleString() > new Date(a.requestAt).getMonth().toLocaleString()  ) {
-       return -1;
-   }
-   if (new Date(a.requestAt).getMonth().toLocaleString() > new Date(b.requestAt).getMonth().toLocaleString() 
-   && new Date(a.requestAt).getDate().toLocaleString() > new Date(b.requestAt).getDate().toLocaleString() ) {
-       return 1;
-   }
+     
+    if ( b.status > a.status
+      ) {
+         return -1;
+     }
+     if (  a.status > b.status
+     ) {
+         return 1;
+     }
   
    return 0;
     })

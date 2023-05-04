@@ -103,10 +103,12 @@ export default function ManageUser() {
     Modal.confirm({
       title: 'Thay đổi trạng thái của người dùng',
       icon: <ExclamationCircleFilled />,
+      okText:"Thay đổi",
+      cancelText:"Đóng",
       content: 'Bạn có muốn thay đổi trạng thái của người này không',
       onOk() {
         return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 2000);
           api.patch(`api/User/DisableOrActive?id=${ID}`).then(()=>{notification.success({
             message: `Thành công`,
             description: 'Thay đổi trạng thái thành công',
