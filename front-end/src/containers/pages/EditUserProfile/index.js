@@ -64,7 +64,7 @@ export const EditProfile=(profile)=> {
         userName: response.data.userName,
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
-        dateOfBirth:moment(new Date(response.data.dateOfBirth).toLocaleDateString('en-CA')).format('DD/MM/YYYY'),
+        dateOfBirth:response.data.dateOfBirth,
         gender: response.data.gender,
         role: response.data.role,
       });
@@ -134,10 +134,7 @@ export const EditProfile=(profile)=> {
               :
               <Avatar className="avatar-avatar"   size={size}
              src={profile.image}/>
-              
                }
-              
-              
               </Space>
           </div>
 
