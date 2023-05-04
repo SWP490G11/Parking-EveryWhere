@@ -61,8 +61,8 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                             images.length > 0 &&
                             images.map((item, index) =>{
                                 return (
-                                    <Col span={8} style={{padding: 5, position: 'relative'}}>
-                                        <Image src={item} style={contentStyle} />
+                                    <Col xs={8} sm={8} xl={8} style={{padding: 5, position: 'relative'}}>
+                                        <Image src={item} style={contentStyle} className="ant-col ant-col-xs-12 ant-col-sm-12 ant-col-xl-24" />
                                         <CloseCircleFilled 
                                             style={{
                                                 position: 'absolute',

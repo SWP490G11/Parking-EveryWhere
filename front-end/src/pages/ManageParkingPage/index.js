@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Menu, Dropdown, Row, Col,Descriptions,List,Divider, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
+import { Table, Input, Button, Menu, Dropdown,Spin, Row, Col,Descriptions,List,Divider, Modal,Empty,Drawer,Form,Radio,Space,notification,Collapse,InputNumber,Tag } from "antd";
 import {
   FilterOutlined,DeleteOutlined,
   EditFilled,
@@ -36,7 +36,7 @@ const [addSlot,setAddSlot]= useState(false)
     isOpen: false,
     data: {},
   });
-  
+  const [loading, setLoading] = useState(true);
   const [authState] = useAuthState();
   const [slotID,setSlotID] =useState("")
   const [parkingID,setParkingID] = useState("");
@@ -294,7 +294,7 @@ const showPromiseDelete = (id) => {
             
            
             
-            <Button disabled={element.status ==='Từ chối' ? false : true} onClick={() => 
+            <Button disabled={(element.status ==='Từ chối'|| element.status ==='Chờ duyệt') ? false : true} onClick={() => 
               showPromiseDelete(element.parkingID)
             }><DeleteOutlined /></Button>
          
@@ -302,17 +302,18 @@ const showPromiseDelete = (id) => {
       ];
       
     });
+    setLoading(false);
     setData(
       respData.sort((a, b) => {
         if (
-          a.parkingName.trim().toLowerCase() >
-          b.parkingName.trim().toLowerCase()
+          a.status.trim().toLowerCase() >
+          b.status.trim().toLowerCase()
         ) {
           return 1;
         }
         if (
-          b.parkingName.trim().toLowerCase() >
-          a.parkingName.trim().toLowerCase()
+          b.status.trim().toLowerCase() >
+          a.status.trim().toLowerCase()
         ) {
           return -1;
         }
@@ -320,12 +321,14 @@ const showPromiseDelete = (id) => {
       })
     );
   },[])
-  .catch(() => {}
+  .catch(() => {
+    setLoading(true);
+  }
  
   
   )  
 
-  }, [data, navigateTo]);
+  }, [data]);
   useEffect(() => {
     api.get(`cars-available`)
     .then(function(response){
@@ -522,6 +525,7 @@ const showPromiseDelete = (id) => {
   };
   return (
     <>
+     <Spin spinning={loading} size="large" tip="Vui lòng đợi..."> 
       <p
         style={{
           display: "block",
@@ -1058,7 +1062,7 @@ const showPromiseDelete = (id) => {
                 />
       </Modal>
     
-     
+     </Spin>
     </>
   );
 }

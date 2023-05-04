@@ -57,22 +57,22 @@ const ParkingInfo = (props) => {
     return (
         <div className="parking-detail-info">
            <Row>
-            <Col xs={24} sm={12} xl={10}>
-            {
-                !isUpdate && 
-                // <div className="info-left ant-col ant-col-xs-24 ant-col-xl-24">
-                    <ImageCarousel listImage={parkingImages} />
-                // </div>
-            }
-            </Col>
-            <Col xs={24} sm={12} xl={14}>
-            <div >
-                {isUpdate ?
-                    <>
-                        <UpdateParkingInfo parkingImages={parkingImages} parking={props.parking} setLoading={props.setLoading}/>
-                    </>
-                    :
-                    <div className="info-right ant-col ant-col-xs-24 ant-col-xl-24">
+           {
+                isUpdate ?
+                <>
+                <Col  xs={24} sm={12} xl={24}></Col>
+                <UpdateParkingInfo parkingImages={parkingImages} parking={props.parking} setLoading={props.setLoading}/>
+            </>
+               : <>
+                   <Col xs={24} sm={12} xl={10}>
+           
+               
+           <ImageCarousel listImage={parkingImages} />
+      
+  
+   </Col>
+   <Col xs={24} sm={12} xl={14}>
+   <div className="info-right ant-col ant-col-xs-24 ant-col-xl-24">
                         
                         <div className="right-parking-name">
                             
@@ -141,9 +141,19 @@ const ParkingInfo = (props) => {
                            </Col>
                        </Row>
                         </div>
+   </Col>
+   </> 
+         
+             }
+            {/* <Col xs={24} sm={12} xl={14}>
+            <div >
+                {isUpdate ?
+                   
+                    :
+                   
                 }
             </div>
-            </Col>
+            </Col> */}
            </Row>
            
 
