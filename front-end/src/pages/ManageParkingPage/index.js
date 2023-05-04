@@ -640,7 +640,7 @@ const showPromiseDelete = (id) => {
     <Descriptions.Item label="Tọa độ" span={2}>{modal.data.latitude} - {modal.data.longitude}</Descriptions.Item>
     <Descriptions.Item label="Địa chỉ" span={3} >{modal.data.addressDetail}</Descriptions.Item>
     <Descriptions.Item label="Thông tin thêm" span={3}>{modal.data.description}</Descriptions.Item>
-    <Descriptions.Item label="Nhhân viên" span={3}>{modal.data.parkingManagers && modal?.data?.parkingManagers?.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
+    <Descriptions.Item label="Nhân viên" span={3}>{modal.data.parkingManagers && modal?.data?.parkingManagers?.map((e,index)=>(<>Nhân viên {index+1}: {e.fullName} - {e.phoneNumber} - {e.email} <br/></>))}</Descriptions.Item>
     </Descriptions>
       </Modal>
 
