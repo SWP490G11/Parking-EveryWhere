@@ -130,13 +130,18 @@ import api from "../../services/api";
       ]
   })
   setData(respData.sort((a, b) => {
-      if (a.parking.parkingName.trim().toLowerCase() > b.parking.parkingName.trim().toLowerCase()) {
-        return 1;
+      
+      if (new Date(b.requestAt).getDate().toLocaleString() > new Date(a.requestAt).getDate().toLocaleString()
+       && new Date(b.requestAt).getMonth().toLocaleString() > new Date(a.requestAt).getMonth().toLocaleString()  ) {
+          return -1;
       }
-      if (b.parking.parkingName.trim().toLowerCase() > a.parking.parkingName.trim().toLowerCase()) {
-        return -1;
+      if (new Date(a.requestAt).getMonth().toLocaleString() > new Date(b.requestAt).getMonth().toLocaleString() 
+      && new Date(a.requestAt).getDate().toLocaleString() > new Date(b.requestAt).getDate().toLocaleString() ) {
+          return 1;
       }
+     
       return 0;
+  
     })
   );
           }, [])
@@ -200,13 +205,15 @@ import api from "../../services/api";
             dataIndex: "requestAt",
             key: "requestAt",
             sorter: (a, b) => {
-                if (a.requestAt > b.requestAt) {
+                if (
+                  (new Date(a.requestAt).getTime() - new Date(b.requestAt).getTime()) > 0) {
                     return -1;
                 }
-                if (b.requestAt > a.requestAt) {
+                if ((new Date(b.requestAt).getTime() - new Date(a.requestAt).getTime()) >0 ) 
+                {
                     return 1;
-                }
-                return 0;
+                 }
+                 return 0;
             },
         },
         

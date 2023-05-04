@@ -131,13 +131,16 @@ const ParkingID =localStorage.getItem("parkingID");
       ]
   })
   setData(respData.sort((a, b) => {
-      if (a.parkingId.parkingName.trim().toLowerCase() > b.parkingId.parkingName.trim().toLowerCase()) {
-        return 1;
-      }
-      if (b.parkingId.parkingName.trim().toLowerCase() > a.parkingId.parkingName.trim().toLowerCase()) {
-        return -1;
-      }
-      return 0;
+    if (new Date(b.requestAt).getDate().toLocaleString() > new Date(a.requestAt).getDate().toLocaleString()
+    && new Date(b.requestAt).getMonth().toLocaleString() > new Date(a.requestAt).getMonth().toLocaleString()  ) {
+       return -1;
+   }
+   if (new Date(a.requestAt).getMonth().toLocaleString() > new Date(b.requestAt).getMonth().toLocaleString() 
+   && new Date(a.requestAt).getDate().toLocaleString() > new Date(b.requestAt).getDate().toLocaleString() ) {
+       return 1;
+   }
+  
+   return 0;
     })
   );
           }, [])
@@ -203,14 +206,16 @@ const ParkingID =localStorage.getItem("parkingID");
             dataIndex: "requestAt",
             key: "requestAt",
             sorter: (a, b) => {
-                if (a.requestAt > b.requestAt) {
-                    return -1;
-                }
-                if (b.requestAt > a.requestAt) {
-                    return 1;
-                }
-                return 0;
-            },
+              if (
+                (new Date(a.requestAt).getTime() - new Date(b.requestAt).getTime()) > 0) {
+                  return -1;
+              }
+              if ((new Date(b.requestAt).getTime() - new Date(a.requestAt).getTime()) >0 ) 
+              {
+                  return 1;
+               }
+               return 0;
+          },
         },
         
         {
