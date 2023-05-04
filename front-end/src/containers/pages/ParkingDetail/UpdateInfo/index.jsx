@@ -87,7 +87,7 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                 <Col span={12}>
                     <div style={{padding: 15}}>
                         Parking name
-                        <Input placeholder='Parking name' style={{margin: "20px 0"}}
+                        <Input placeholder='Tên bãi đỗ' style={{margin: "20px 0"}}
                             value={updateParking?.parkingName}
                             onChange={e => {
                                 setupdateParking({
@@ -96,21 +96,21 @@ export const UpdateParkingInfo = ({ parking, parkingImages,setLoading,}) => {
                                 })
                             }}
                         />
-                        Address Detail
+                        Địa chỉ 
                         <AutocompleteMap setLocation={setLocation} defaultValue={parking?.addressDetail} disabled={true}/>
                         <Row>
                             <Col span={10} >
-                                Longitude
-                                <Input placeholder='Longitude' style={{margin: "20px 0"}} disabled={true} value={updateParking?.lon ? updateParking.lon : parking?.lon}/>
+                                Kinh độ
+                                <Input placeholder='Kinh độ' style={{margin: "20px 0"}} disabled={true} value={updateParking?.lon ? updateParking.lon : parking?.lon}/>
                             </Col>
                             <Col span={4}></Col>
                             <Col span={10}>
-                                Latitude
-                                <Input placeholder='Latitude' style={{margin: "20px 0"}} disabled={true} value={updateParking?.lat ? updateParking.lat : parking?.lat}/>
+                                Vĩ độ
+                                <Input placeholder='Vĩ độ' style={{margin: "20px 0"}} disabled={true} value={updateParking?.lat ? updateParking.lat : parking?.lat}/>
                             </Col>
                         </Row>
-                        Description
-                        <TextArea placeholder='Description' style={{margin: "20px 0"}}
+                        Mô tả
+                        <TextArea placeholder='Mô tả' style={{margin: "20px 0"}}
                             value={updateParking?.discription}
                             onChange={e => {
                                 setupdateParking({

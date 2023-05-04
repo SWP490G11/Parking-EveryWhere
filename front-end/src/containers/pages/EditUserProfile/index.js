@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import {getProfile} from "../../../services/userProfileServices";
 import api from "../../../services/api";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 // import config from '../../../config';
 // import { Message } from '../../../utils/helpers';
@@ -64,7 +63,7 @@ export const EditProfile=(profile)=> {
         userName: response.data.userName,
         email: response.data.email,
         phoneNumber: response.data.phoneNumber,
-        dateOfBirth:response.data.dateOfBirth,
+         dateOfBirth:dayjs(response.data.dateOfBirth),
         gender: response.data.gender,
         role: response.data.role,
       });
@@ -134,7 +133,10 @@ export const EditProfile=(profile)=> {
               :
               <Avatar className="avatar-avatar"   size={size}
              src={profile.image}/>
+              
                }
+              
+              
               </Space>
           </div>
 
