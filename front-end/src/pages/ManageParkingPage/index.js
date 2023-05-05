@@ -495,7 +495,7 @@ const showPromiseDelete = (id) => {
       setPageSize(pageSize);
     },
    showSizeChanger:true, 
-      showTotal: total => `Total ${total} Student`
+      showTotal: total => `Tổng ${total} xe`
   };
   const renderType = () => {
     switch(type) {
@@ -1048,7 +1048,7 @@ const showPromiseDelete = (id) => {
         footer={null}
         onCancel={()=>setCarModal(false)}
       > <Input.Search
-      placeholder="Search User"
+      placeholder="Tìm xe"
       maxLength={255}
       allowClear
       onSearch={(e) => {
