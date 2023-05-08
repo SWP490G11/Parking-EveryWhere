@@ -104,9 +104,9 @@ const ListParking = ({ search, filter, parkings, setLocation }) => {
                                 {
                                     item.status === Status.Available
                                         ?
-                                        Status.Available
+                                        'Đang hoạt động'
                                         :
-                                        Status.NotAvailable
+                                        'Dừng hoạt động'
                                 }
                             </Tag>
                                     {/* <Button
