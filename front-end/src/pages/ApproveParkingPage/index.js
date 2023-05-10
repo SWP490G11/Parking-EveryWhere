@@ -208,8 +208,10 @@ import api from "../../services/api";
           setPage(page);
           setPageSize(pageSize);
         },
+       
+        
        showSizeChanger:true, 
-          showTotal: total => `Total ${total} Request`
+          showTotal: total => `Tổng ${total} yêu cầu`
       };
     //   const renderContent = () => {
     //     switch(status) {
