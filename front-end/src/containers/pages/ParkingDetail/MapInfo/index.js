@@ -17,9 +17,8 @@ const ContactInfo = (props) => {
     }, [parking, props.parking?.lat, props.parking?.lon])
 
     return (
-        <Spin spinning={loading} size="small">
+        
             <GoogleMapComponent location={location} parkings={parkings} destination={{ lat: props.parking?.lat, lng: props.parking?.lon }} />
-        </Spin>
     )
 }
 
